@@ -44,4 +44,9 @@ crashlytics-build.properties
 fabric.properties
 
 #Gedcom
-.*.ged
+*.ged
+
+#IntelliJ
+.idea/
+target/
+*.iml
