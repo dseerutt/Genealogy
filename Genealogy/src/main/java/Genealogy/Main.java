@@ -17,6 +17,9 @@ public class Main {
         tree.parseContents();
         //System.out.println("Header : " + tree.getHeader());
         //System.out.println("Auteur : " + tree.getAuthor());
-        System.out.println("Persons : " + tree.getPersons());
+        //System.out.println("Persons : " + tree.getPersons());
+        /*for (int i = 0 ; i < tree.getPersons().size() ; i++){
+            System.out.println(tree.getPersons().get(i).printPerson() + "\n");
+        }*/
     }
 }

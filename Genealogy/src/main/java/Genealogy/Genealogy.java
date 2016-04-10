@@ -96,7 +96,6 @@ public class Genealogy {
             index = maxFamillyIndex;
         }
         root = persons.get(0);
-        JTree tree = new JTree();
 
         prepareDirectAncestors(root);
     }

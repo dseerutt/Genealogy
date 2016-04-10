@@ -116,4 +116,10 @@ public class AuxMethods {
         cal.setTime(date);
         return cal.get(Calendar.YEAR);
     }
+
+    public static int getDay(Date date){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal.get(Calendar.DAY_OF_MONTH);
+    }
 }

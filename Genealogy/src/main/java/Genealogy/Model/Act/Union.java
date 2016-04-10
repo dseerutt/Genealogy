@@ -51,4 +51,22 @@ public class Union extends Act {
                 return State.MARIAGE_HETERO;
         }
     }
+
+    public Person getPartner() {
+        return partner;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public Person getOtherPerson(Person person){
+        if (citizen.getId().equals(person.getId())){
+            return partner;
+        } else if (partner.getId().equals(person.getId())){
+            return citizen;
+        } else {
+            return null;
+        }
+    }
 }

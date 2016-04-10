@@ -18,8 +18,32 @@ public class FullDate extends MyDate {
             date =  format.parse(input);
     }
 
+    public FullDate(long timestamp){
+        date = new Date(timestamp);
+    }
+
     @Override
     public String toString() {
         return AuxMethods.getStringDate(date);
+    }
+
+    public long getYear(){
+        return AuxMethods.getYear(date);
+    }
+
+    public Date getDate(){
+        try {
+            return date;
+        } catch (Exception e) {
+            System.out.println("Impossible de créer un timestamp de FullDate " + AuxMethods.getStringDate(date));
+            return null;
+        }
+    }
+
+    public String descriptionDate(){
+        int day = AuxMethods.getDay(date);
+        int month = AuxMethods.getMonth(date);
+        int year = AuxMethods.getYear(date);
+        return "le " + day + " " + getMonthForInt(month) + " " + year;
     }
 }

@@ -25,4 +25,24 @@ public class MonthDate extends MyDate {
     public String toString() {
         return month + "/" + year;
     }
+
+    public long getYear(){
+        return year;
+    }
+
+    public Date getDate(){
+        String DATE_FORMAT2 = "dd MM yyyy";
+        SimpleDateFormat SDF = new SimpleDateFormat(DATE_FORMAT2, Locale.ENGLISH);
+        String input = "01 " + month + " " + year;
+        try {
+            return SDF.parse(input);
+        } catch (ParseException e) {
+            System.out.println("Impossible de créer un timestamp de MonthDate " + month + " " + year);
+            return null;
+        }
+    }
+
+    public String descriptionDate(){
+        return "en " + getMonthForInt(month-1) + " " + year;
+    }
 }

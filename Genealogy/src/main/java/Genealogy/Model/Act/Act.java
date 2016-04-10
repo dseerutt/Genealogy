@@ -20,4 +20,16 @@ public abstract class Act {
         this.date = date;
         this.town = town;
     }
+
+    public Person getCitizen() {
+        return citizen;
+    }
+
+    public MyDate getDate() {
+        return date;
+    }
+
+    public Town getTown() {
+        return town;
+    }
 }

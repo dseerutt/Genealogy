@@ -18,7 +18,7 @@ public class MyGedcomReader {
 
             BufferedReader br = null;
             String sCurrentLine;
-            br = new BufferedReader(new InputStreamReader(new FileInputStream("C:\\Users\\Dan\\Desktop\\Programmation\\IntelliJ\\Genealogy\\src\\main\\resources\\famille1.ged"), "Cp1252"));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream("C:\\Users\\Dan\\Desktop\\Programmation\\IntelliJ\\Genealogy\\Genealogy\\src\\main\\resources\\famille1.ged"), "Cp1252"));
             while ((sCurrentLine = br.readLine()) != null) {
                 String[] temp = sCurrentLine.split(" ");
                 if (temp.length == 2){
