@@ -20,6 +20,7 @@ public class Genealogy {
     private Header header;
     private String author;
     private ArrayList<Person> persons = new ArrayList<Person>();
+    public static Genealogy genealogy;
 
     public Genealogy() {
     }

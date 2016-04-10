@@ -9,16 +9,13 @@ import java.util.ArrayList;
  * Created by Dan on 04/04/2016.
  */
 public class MyGedcomReader {
-
-    public Genealogy read(String name){
+    public Genealogy read(String path) throws IOException {
 
         Genealogy genealogy = new Genealogy();
         ArrayList<Structure> structureList = new ArrayList<Structure>();
-        try {
-
             BufferedReader br = null;
             String sCurrentLine;
-            br = new BufferedReader(new InputStreamReader(new FileInputStream("C:\\Users\\Dan\\Desktop\\Programmation\\IntelliJ\\Genealogy\\Genealogy\\src\\main\\resources\\famille1.ged"), "Cp1252"));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(path), "Cp1252"));
             while ((sCurrentLine = br.readLine()) != null) {
                 String[] temp = sCurrentLine.split(" ");
                 if (temp.length == 2){
@@ -34,9 +31,6 @@ public class MyGedcomReader {
                 }
                 genealogy.setContents(structureList);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return genealogy;
     }
 }
