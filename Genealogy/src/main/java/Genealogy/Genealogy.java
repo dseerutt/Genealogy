@@ -7,8 +7,9 @@ import Genealogy.Model.Person;
 import Genealogy.Model.Structure;
 import Genealogy.Model.Town;
 
-import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by Dan on 05/04/2016.
@@ -54,6 +55,17 @@ public class Genealogy {
         return "Genealogy.Genealogy{" +
                 "contents=" + contents +
                 '}';
+    }
+
+    public class NameComparator implements Comparator<Person> {
+        @Override
+        public int compare(Person o1, Person o2) {
+            return o1.getName4Comparator().compareTo(o2.getName4Comparator());
+        }
+    }
+
+    public void sortPersons(){
+        Collections.sort(persons, new Genealogy.NameComparator());
     }
 
     public void parseContents(){

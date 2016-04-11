@@ -64,7 +64,8 @@ public class WelcomeScreen extends JFrame{
                         MyGedcomReader myGedcomReader = new MyGedcomReader();
                         Genealogy.genealogy = myGedcomReader.read(filePath.getText());
                         Genealogy.genealogy.parseContents();
-                        System.out.println(Genealogy.genealogy.getPersons());
+                        setVisible(false);
+                        MainScreen mainScreen = new MainScreen("Ma Généalogie");
                     }
                     catch (Exception exception){
                         exception.printStackTrace();

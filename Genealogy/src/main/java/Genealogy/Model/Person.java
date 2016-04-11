@@ -1,10 +1,7 @@
 package Genealogy.Model;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import Genealogy.AuxMethods;
@@ -117,6 +114,18 @@ public class Person {
 
     public String getFullName(){
         return surname + " " + name;
+    }
+
+    public String getFullNameInverted(){
+        return name + " " + surname;
+    }
+
+    public String getName4Comparator(){
+        String txt = "";
+        if ((name.equals("..."))||(surname.equals("..."))){
+            txt = "z";
+        }
+        return txt + name + " " + surname;
     }
 
     @Override
@@ -380,7 +389,7 @@ public class Person {
                 txt += "\n" + pronoun + marie + " avec " +
                         partner.getFullName();
             } else {
-
+                foundText = true;
                 txt += marie + " avec " +
                         partner.getFullName();
             }
