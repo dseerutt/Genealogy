@@ -138,12 +138,20 @@ public class Person {
                 ", surname='" + surname + '\'' +
                 ", birth=" + birth +
                 ", death=" + death +
-                ", profession='" + profession + '\'' +
-                ", note='" + note + '\'' +
+                ", profession='" + profession + '\'';
+
+
+        if (mother != null){
+            res += ", mother='" + mother.getFullName() + '\'';
+        }
+        if (father != null){
+            res += ", father='" + father.getFullName() + '\'';
+        }
+
+        res += ", note='" + note + '\'' +
                 ", unions=" + unions + '\'' +
                 ", directAncestor=" + directAncestor + '\'' +
                 ", children={";
-
 
         if (!children.isEmpty()){
             res += children.get(0).getFullName();

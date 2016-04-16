@@ -3,6 +3,7 @@ package Genealogy.GUI;
 import Genealogy.Genealogy;
 import Genealogy.Main;
 import Genealogy.Model.Person;
+import Genealogy.Model.Town;
 import Genealogy.MyGedcomReader;
 
 import javax.swing.*;

@@ -7,11 +7,16 @@ import Genealogy.Model.Act.Union;
 import Genealogy.Model.Person;
 import Genealogy.Model.Town;
 import edu.emory.mathcs.backport.java.util.Collections;
+import Genealogy.MyGedcomReader;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -33,8 +38,9 @@ public class MainScreen extends JFrame{
     private JTextArea naissances;
     private JTextArea unions;
     private JTextArea deces;
+    private JPanel printPanel;
 
-    public MainScreen(String title) {
+    public MainScreen(String title) throws IOException {
         super(title);
 
         initButtons();
@@ -45,9 +51,15 @@ public class MainScreen extends JFrame{
         pack();
         setLocationRelativeTo(null);
 
+
+
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+        /*
+        BufferedImage bufferedImage = createImage(printPanel);
+        File outputfile = new File("C:\\Users\\Dan\\Desktop\\image.jpg");
+        ImageIO.write(bufferedImage, "jpg", outputfile);*/
     }
 
     private void initTab1() {
@@ -95,6 +107,9 @@ public class MainScreen extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
                 WelcomeScreen welcomeScreen = new WelcomeScreen("Ma généalogie");
+                for (int i = 0 ; i < Town.getTowns().size() ; i++){
+                    System.out.println(Town.getTowns().get(i) + " " + Town.getTowns().get(i).printCoordinates());
+                }
             }
         });
         voirLesActesButton.addActionListener(new ActionListener() {
@@ -135,7 +150,26 @@ public class MainScreen extends JFrame{
         });
     }
 
-    public static void main(String[] args){
-        MainScreen mainScreen = new MainScreen("Ma Généalogie");
+    public static void main(String[] args) throws IOException {
+        /*MyGedcomReader myGedcomReader = new MyGedcomReader();
+        String path = "C:\\Users\\Dan\\Desktop\\Programmation\\IntelliJ\\Genealogy\\Genealogy\\src\\main\\resources\\famille1.ged";
+
+        Genealogy.genealogy = myGedcomReader.read(path);
+        Genealogy.genealogy.parseContents();
+        MainScreen mainScreen = new MainScreen("Ma Généalogie");*/
+    }
+
+    public BufferedImage createImage(JPanel panel) {
+
+        int w = panel.getWidth();
+        int h = panel.getHeight();
+        BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = bi.createGraphics();
+        panel.paint(g);
+        return bi;
+    }
+
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
     }
 }
