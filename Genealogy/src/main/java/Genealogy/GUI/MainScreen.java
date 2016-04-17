@@ -39,6 +39,7 @@ public class MainScreen extends JFrame{
     private JTextArea unions;
     private JTextArea deces;
     private JPanel printPanel;
+    private JButton carteButton;
 
     public MainScreen(String title) throws IOException {
         super(title);
