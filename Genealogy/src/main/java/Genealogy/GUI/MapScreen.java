@@ -41,18 +41,23 @@ public class MapScreen extends JFrame{
     private JRadioButton actesDeDecesRadioButton;
     private JRadioButton actesDeMariageRadioButton;
     private JRadioButton actesDeNaissanceRadioButton;
+    private JRadioButton tousLesActesRadioButton;
+    private JRadioButton tousLesAncetresRadioButton;
+    private JRadioButton toutesLesPersonnesRadioButton;
     private JXMapKit jXMapKit;
     private ArrayList<MapPoint> mapPoints;
     private MapFrame mapFrame;
     private GeoPosition initPosition = new GeoPosition(47.41022,2.925037);
     private int zoom = 11;
+    private boolean allPeople = false;
 
     public MapScreen(){
-        super("Carte généalogique dans le temps");
+        super("Répartition territoriale dans le temps");
 
         initRadioButtons();
         initComboBox();
         initButtons();
+        initListeners();
 
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         pack();
@@ -62,6 +67,30 @@ public class MapScreen extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         panelForMap.setPreferredSize(new Dimension(5000,5000));
         setVisible(true);
+    }
+
+    private void initListeners() {
+        tousLesAncetresRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (tousLesAncetresRadioButton.isSelected()){
+                    allPeople = false;
+                } else {
+                    allPeople = true;
+                }
+            }
+        });
+
+        toutesLesPersonnesRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (toutesLesPersonnesRadioButton.isSelected()){
+                    allPeople = true;
+                } else {
+                    allPeople = true;
+                }
+            }
+        });
     }
 
     private void initMap() {
@@ -97,13 +126,17 @@ public class MapScreen extends JFrame{
         button.add(actesDeNaissanceRadioButton);
         button.add(actesDeMariageRadioButton);
         button.add(actesDeDecesRadioButton);
+        button.add(tousLesActesRadioButton);
         generationAutomatiqueRadioButton.doClick();
+
+        ButtonGroup button2 = new ButtonGroup();
+        button2.add(tousLesAncetresRadioButton);
+        button2.add(toutesLesPersonnesRadioButton);
+        tousLesAncetresRadioButton.doClick();
     }
 
     public void removeTooltip(){
-        for (int i = 2 ; i < jXMapKit.getMainMap().getComponentCount() ; i++){
-            jXMapKit.getMainMap().remove(i);
-        }
+        jXMapKit.getMainMap().removeAll();
     }
 
     public void addMarkers(ArrayList<MapPoint> mapPoints){
@@ -124,13 +157,12 @@ public class MapScreen extends JFrame{
         map.setOverlayPainter(waypointPainter);
     }
 
-    private ArrayList<MapPoint> getBirth(){
-        ArrayList<MapPoint> fullMapPoints = new ArrayList<>();
+    private ArrayList<MapPoint> getItAll(){
         HashMap<MyCoordinate,ActStructure> map = new HashMap<>();
         ArrayList<Person> persons = Genealogy.genealogy.getPersons();
         for (int i = 0; i < persons.size() ; i++){
             Person p = persons.get(i);
-            if (p.isDirectAncestor()){
+            if ((allPeople)||(p.isDirectAncestor())){
                 if ((p.getBirth() != null)&&(p.getBirth().getDate() != null)&&(p.getBirth().getTown() != null)&&(p.getBirth().getTown().getName() != null)){
                     Town town = p.getBirth().getTown();
                     MyCoordinate coo = town.findCoordinate();
@@ -140,26 +172,8 @@ public class MapScreen extends JFrame{
                         map.put(coo,new ActStructure(p.getFullName(),p.getBirth().getTown().getName()));
                     }
                 }
-            }
-        }
-        for(Map.Entry<MyCoordinate, ActStructure> entry : map.entrySet()) {
-            ActStructure actStructure = entry.getValue();
-            MapPoint mapPoint = new MapPoint(actStructure.getTooltip(), entry.getKey(),
-                    actStructure.getNombre(), AuxMethods.getColor2(actStructure.getNombre()), 0);
-            fullMapPoints.add(mapPoint);
-        }
-        return fullMapPoints;
-    }
-
-    private ArrayList<MapPoint> getDeath(){
-        ArrayList<MapPoint> fullMapPoints = new ArrayList<>();
-        HashMap<MyCoordinate,ActStructure> map = new HashMap<>();
-        ArrayList<Person> persons = Genealogy.genealogy.getPersons();
-        for (int i = 0; i < persons.size() ; i++){
-            Person p = persons.get(i);
-            if ((p.getDeath() != null)&&(p.getDeath().getDate() != null)&&(p.getDeath().getTown() != null)&&(p.getDeath().getTown().getName() != null)){
-                Town town = p.getDeath().getTown();
-                if (p.isDirectAncestor()) {
+                if ((p.getDeath() != null)&&(p.getDeath().getDate() != null)&&(p.getDeath().getTown() != null)&&(p.getDeath().getTown().getName() != null)){
+                    Town town = p.getDeath().getTown();
                     MyCoordinate coo = town.findCoordinate();
                     if (map.containsKey(coo)){
                         map.get(coo).addNom(p.getFullName());
@@ -167,24 +181,6 @@ public class MapScreen extends JFrame{
                         map.put(coo,new ActStructure(p.getFullName(),p.getDeath().getTown().getName()));
                     }
                 }
-            }
-        }
-        for(Map.Entry<MyCoordinate, ActStructure> entry : map.entrySet()) {
-            ActStructure actStructure = entry.getValue();
-            MapPoint mapPoint = new MapPoint(actStructure.getTooltip(), entry.getKey(),
-                    actStructure.getNombre(), AuxMethods.getColor2(actStructure.getNombre()), 0);
-            fullMapPoints.add(mapPoint);
-        }
-        return fullMapPoints;
-    }
-
-    private ArrayList<MapPoint> getUnions(){
-        ArrayList<MapPoint> fullMapPoints = new ArrayList<>();
-        HashMap<MyCoordinate,ActStructure> map = new HashMap<>();
-        ArrayList<Person> persons = Genealogy.genealogy.getPersons();
-        for (int i = 0; i < persons.size() ; i++){
-            Person p = persons.get(i);
-            if (p.isDirectAncestor()) {
                 for (int j = 0 ; j < p.getUnions().size() ; j++){
                     Union union = p.getUnions().get(j);
                     if ((union != null)&&(union.getDate() != null)&&(union.getTown() != null)&&(union.getTown().getName() != null)){
@@ -201,6 +197,33 @@ public class MapScreen extends JFrame{
                 }
             }
         }
+
+        return convertStructureToMapPoints(map);
+    }
+
+    private ArrayList<MapPoint> getBirth(){
+        HashMap<MyCoordinate,ActStructure> map = new HashMap<>();
+        ArrayList<Person> persons = Genealogy.genealogy.getPersons();
+        for (int i = 0; i < persons.size() ; i++){
+            Person p = persons.get(i);
+            if ((allPeople)||(p.isDirectAncestor())){
+                if ((p.getBirth() != null)&&(p.getBirth().getDate() != null)&&(p.getBirth().getTown() != null)&&(p.getBirth().getTown().getName() != null)){
+                    Town town = p.getBirth().getTown();
+                    MyCoordinate coo = town.findCoordinate();
+                    if (map.containsKey(coo)){
+                        map.get(coo).addNom(p.getFullName());
+                    } else {
+                        map.put(coo,new ActStructure(p.getFullName(),p.getBirth().getTown().getName()));
+                    }
+                }
+            }
+        }
+
+        return convertStructureToMapPoints(map);
+    }
+
+    private ArrayList<MapPoint> convertStructureToMapPoints(HashMap<MyCoordinate,ActStructure> map){
+        ArrayList<MapPoint> fullMapPoints = new ArrayList<>();
         for(Map.Entry<MyCoordinate, ActStructure> entry : map.entrySet()) {
             ActStructure actStructure = entry.getValue();
             MapPoint mapPoint = new MapPoint(actStructure.getTooltip(), entry.getKey(),
@@ -210,9 +233,54 @@ public class MapScreen extends JFrame{
         return fullMapPoints;
     }
 
+    private ArrayList<MapPoint> getDeath(){
+        HashMap<MyCoordinate,ActStructure> map = new HashMap<>();
+        ArrayList<Person> persons = Genealogy.genealogy.getPersons();
+        for (int i = 0; i < persons.size() ; i++){
+            Person p = persons.get(i);
+            if ((allPeople)||(p.isDirectAncestor())){
+                if ((p.getDeath() != null)&&(p.getDeath().getDate() != null)&&(p.getDeath().getTown() != null)&&(p.getDeath().getTown().getName() != null)){
+                    Town town = p.getDeath().getTown();
+                    MyCoordinate coo = town.findCoordinate();
+                    if (map.containsKey(coo)){
+                        map.get(coo).addNom(p.getFullName());
+                    } else {
+                        map.put(coo,new ActStructure(p.getFullName(),p.getDeath().getTown().getName()));
+                    }
+                }
+            }
+        }
+        return convertStructureToMapPoints(map);
+    }
+
+    private ArrayList<MapPoint> getUnions(){
+        ArrayList<MapPoint> fullMapPoints = new ArrayList<>();
+        HashMap<MyCoordinate,ActStructure> map = new HashMap<>();
+        ArrayList<Person> persons = Genealogy.genealogy.getPersons();
+        for (int i = 0; i < persons.size() ; i++){
+            Person p = persons.get(i);
+            if ((allPeople)||(p.isDirectAncestor())){
+                for (int j = 0 ; j < p.getUnions().size() ; j++){
+                    Union union = p.getUnions().get(j);
+                    if ((union != null)&&(union.getDate() != null)&&(union.getTown() != null)&&(union.getTown().getName() != null)){
+                        Town town = union.getTown();
+                        if (p.isDirectAncestor()) {
+                            MyCoordinate coo = town.findCoordinate();
+                            if (map.containsKey(coo)){
+                                map.get(coo).addNom(p.getFullName() + " - " + union.getPartner().getFullName());
+                            } else {
+                                map.put(coo,new ActStructure(p.getFullName() + " - " + union.getPartner().getFullName(),union.getTown().getName()));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return convertStructureToMapPoints(map);
+    }
+
     public void setSituation(ArrayList<MapStructure> mapStructure){
         if ((mapStructure == null)||(mapStructure.isEmpty())){
-            removeMarkers();
             return;
         }
         ArrayList<MapPoint> mapPoints = convertMapPoints(mapStructure);
@@ -225,9 +293,16 @@ public class MapScreen extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 removeTooltip();
+                removeMarkers();
                 if (generationALaDateRadioButton.isSelected()){
                     int year = (int) comboDate.getSelectedItem();
-                    ArrayList<MapStructure> mapStructure = Person.getPeriods().get(year);
+                    ArrayList<MapStructure> mapStructure = null;
+                    if (tousLesAncetresRadioButton.isSelected()){
+                        mapStructure = Person.getPeriodsDirectAncestors().get(year);
+                    } else {
+                        mapStructure = Person.getPeriods().get(year);
+                    }
+
                     setSituation(mapStructure);
                 } else if (actesDeNaissanceRadioButton.isSelected()){
                     ArrayList<MapPoint> mapPoints = getBirth();
@@ -237,6 +312,9 @@ public class MapScreen extends JFrame{
                     addMarkers(mapPoints);
                 } else if (actesDeDecesRadioButton.isSelected()){
                     ArrayList<MapPoint> mapPoints = getDeath();
+                    addMarkers(mapPoints);
+                } else if (tousLesActesRadioButton.isSelected()){
+                    ArrayList<MapPoint> mapPoints = getItAll();
                     addMarkers(mapPoints);
                 } else if (generationEntreLaDateRadioButton.isSelected()){
                     int date1 = (int) comboDate1.getSelectedItem();

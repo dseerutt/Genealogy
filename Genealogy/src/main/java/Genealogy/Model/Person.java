@@ -44,11 +44,20 @@ public class Person {
     private boolean directAncestor = false;
     private int age;
     private static HashMap<Integer,ArrayList<MapStructure>> periods = new HashMap<>();
+    private static HashMap<Integer,ArrayList<MapStructure>> periodsDirectAncestors = new HashMap<>();
     private boolean stillAlive = false;
 
 
     public static HashMap<Integer,ArrayList<MapStructure>> getPeriods() {
         return periods;
+    }
+
+    public static HashMap<Integer, ArrayList<MapStructure>> getPeriodsDirectAncestors() {
+        return periodsDirectAncestors;
+    }
+
+    public boolean isStillAlive() {
+        return stillAlive;
     }
 
     public static Sex parseSex(String s){
@@ -138,11 +147,37 @@ public class Person {
         return txt + name + " " + surname;
     }
 
-    public void initPeriods(){
-        if (!directAncestor){
-            return;
+    public void initPeriods2(ArrayList<Pair<MyDate,Town>> tempPeriods){
+        //System.out.println(tempPeriods);
+        if (tempPeriods.size() >= 1){
+            if (tempPeriods.size() == 1){
+                Date date = new Date(tempPeriods.get(0).getKey().getDate().getTime());
+                MapStructure mapStructure =
+                        new MapStructure(tempPeriods.get(0).getValue(),getFullName(),getAge(date,0));
+                addPeriod((int) tempPeriods.get(0).getKey().getYear(),mapStructure);
+            } else {
+                for (int i = 0 ; i < tempPeriods.size()-1 ; i++){
+                    int date1 = (int) tempPeriods.get(i).getKey().getYear();
+                    int date2 = (int) tempPeriods.get(i+1).getKey().getYear();
+                    int index = 0;
+                    for (int k = date1 ; k < date2 ; k++){
+                        Date date = new Date(tempPeriods.get(i).getKey().getDate().getTime());
+                        MapStructure mapStructure =
+                                new MapStructure(tempPeriods.get(i).getValue(),getFullName(),getAge(date,index));
+                        addPeriod(k,mapStructure);
+                        //System.out.println(periods);
+                        index++;
+                    }
+                }
+                Date date = new Date(tempPeriods.get(tempPeriods.size()-1).getKey().getDate().getTime());
+                MapStructure mapStructure =
+                        new MapStructure(tempPeriods.get(tempPeriods.size()-1).getValue(),getFullName(),getAge(date,0));
+                addPeriod((int) tempPeriods.get(tempPeriods.size()-1).getKey().getYear(),mapStructure);
+            }
         }
+    }
 
+    public ArrayList<Pair<MyDate,Town>> initPeriods1(){
         ArrayList<Pair<MyDate,Town>> tempPeriods = new ArrayList<>();
 
         //Naissance
@@ -193,33 +228,11 @@ public class Person {
                 tempPeriods.add(new Pair<MyDate, Town>(new FullDate(),tempPeriods.get(tempPeriods.size()-1).getValue()));
             }
         }
-        //System.out.println(tempPeriods);
-        if (tempPeriods.size() >= 1){
-            if (tempPeriods.size() == 1){
-                Date date = new Date(tempPeriods.get(0).getKey().getDate().getTime());
-                MapStructure mapStructure =
-                        new MapStructure(tempPeriods.get(0).getValue(),getFullName(),getAge(date,0));
-                addPeriod((int) tempPeriods.get(0).getKey().getYear(),mapStructure);
-            } else {
-                for (int i = 0 ; i < tempPeriods.size()-1 ; i++){
-                    int date1 = (int) tempPeriods.get(i).getKey().getYear();
-                    int date2 = (int) tempPeriods.get(i+1).getKey().getYear();
-                    int index = 0;
-                    for (int k = date1 ; k < date2 ; k++){
-                        Date date = new Date(tempPeriods.get(i).getKey().getDate().getTime());
-                        MapStructure mapStructure =
-                                new MapStructure(tempPeriods.get(i).getValue(),getFullName(),getAge(date,index));
-                        addPeriod(k,mapStructure);
-                        //System.out.println(periods);
-                        index++;
-                    }
-                }
-                Date date = new Date(tempPeriods.get(tempPeriods.size()-1).getKey().getDate().getTime());
-                MapStructure mapStructure =
-                        new MapStructure(tempPeriods.get(tempPeriods.size()-1).getValue(),getFullName(),getAge(date,0));
-                addPeriod((int) tempPeriods.get(tempPeriods.size()-1).getKey().getYear(),mapStructure);
-            }
-        }
+        return tempPeriods;
+    }
+
+    public void initPeriods(){
+        initPeriods2(initPeriods1());
     }
 
     public void addPeriod(int year, MapStructure mapStructure){
@@ -229,6 +242,15 @@ public class Person {
             ArrayList<MapStructure> structure = new ArrayList<>();
             structure.add(mapStructure);
             periods.put(year,structure);
+        }
+        if (directAncestor){
+            if (periodsDirectAncestors.containsKey(year)){
+                periodsDirectAncestors.get(year).add(mapStructure);
+            } else {
+                ArrayList<MapStructure> structure = new ArrayList<>();
+                structure.add(mapStructure);
+                periodsDirectAncestors.put(year,structure);
+            }
         }
     }
 
