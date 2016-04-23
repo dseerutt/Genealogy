@@ -13,7 +13,10 @@ import Genealogy.Model.Date.MonthDate;
 import Genealogy.Model.Date.MyDate;
 import Genealogy.Model.Date.YearDate;
 import javafx.scene.Parent;
+import javafx.util.Pair;
+import org.joda.time.DateTime;
 import org.joda.time.Interval;
+import org.joda.time.Period;
 
 /**
  * Created by Dan on 05/04/2016.
@@ -21,6 +24,7 @@ import org.joda.time.Interval;
 public class Person {
 
     private String id;
+
     public enum Sex {
         HOMME,
         FEMME,
@@ -39,7 +43,13 @@ public class Person {
     private ArrayList<Person> children = new ArrayList<Person>();
     private boolean directAncestor = false;
     private int age;
+    private static HashMap<Integer,ArrayList<MapStructure>> periods = new HashMap<>();
+    private boolean stillAlive = false;
 
+
+    public static HashMap<Integer,ArrayList<MapStructure>> getPeriods() {
+        return periods;
+    }
 
     public static Sex parseSex(String s){
         switch (s){
@@ -128,6 +138,115 @@ public class Person {
         return txt + name + " " + surname;
     }
 
+    public void initPeriods(){
+        if (!directAncestor){
+            return;
+        }
+
+        ArrayList<Pair<MyDate,Town>> tempPeriods = new ArrayList<>();
+
+        //Naissance
+        if ((birth != null)&&(birth.getTown() != null)&&(birth.getTown().getName() != null)&&(birth.getDate() != null)){
+            tempPeriods.add(new Pair<MyDate, Town>(birth.getDate(),birth.getTown()));
+        }
+
+        //Unions
+        for (int i = 0 ; i < unions.size() ; i++){
+            if ((unions.get(i).getDate() != null)&&(unions.get(i).getTown()!=null)&&(unions.get(i).getTown().getName()!=null)){
+                tempPeriods.add(new Pair<MyDate, Town>(unions.get(i).getDate(),unions.get(i).getTown()));
+            }
+        }
+
+        //Enfants
+        for (int i = 0 ; i < children.size() ; i++){
+            if ((children.get(i).getBirth() != null) &&
+                    (children.get(i).getBirth().getDate() != null)&&
+                    (children.get(i).getBirth().getTown()!=null)&&
+                    (children.get(i).getBirth().getTown().getName()!=null)){
+                tempPeriods.add(new Pair<MyDate, Town>(children.get(i).getBirth().getDate(),children.get(i).getBirth().getTown()));
+            }
+        }
+
+        //Décès
+        if ((death != null)&&(death.getTown() != null)&&(death.getTown().getName() != null)&&(death.getDate() != null)){
+            tempPeriods.add(new Pair<MyDate, Town>(death.getDate(),death.getTown()));
+
+            Collections.sort(tempPeriods, new Comparator<Pair<MyDate, Town>>() {
+                @Override
+                public int compare(Pair<MyDate, Town> o1, Pair<MyDate, Town> o2) {
+                    return o1.getKey().getDate().compareTo(o2.getKey().getDate());
+                }
+            });
+
+            //Cas des enfants nés après la mort
+            while (tempPeriods.get(tempPeriods.size()-1).getKey().getDate().getTime() > death.getDate().getDate().getTime()){
+                tempPeriods.remove(tempPeriods.size()-1);
+            }
+        } else {
+            Collections.sort(tempPeriods, new Comparator<Pair<MyDate, Town>>() {
+                @Override
+                public int compare(Pair<MyDate, Town> o1, Pair<MyDate, Town> o2) {
+                    return o1.getKey().getDate().compareTo(o2.getKey().getDate());
+                }
+            });
+            if ((stillAlive)&&(!tempPeriods.isEmpty())){
+                tempPeriods.add(new Pair<MyDate, Town>(new FullDate(),tempPeriods.get(tempPeriods.size()-1).getValue()));
+            }
+        }
+        //System.out.println(tempPeriods);
+        if (tempPeriods.size() >= 1){
+            if (tempPeriods.size() == 1){
+                Date date = new Date(tempPeriods.get(0).getKey().getDate().getTime());
+                MapStructure mapStructure =
+                        new MapStructure(tempPeriods.get(0).getValue(),getFullName(),getAge(date,0));
+                addPeriod((int) tempPeriods.get(0).getKey().getYear(),mapStructure);
+            } else {
+                for (int i = 0 ; i < tempPeriods.size()-1 ; i++){
+                    int date1 = (int) tempPeriods.get(i).getKey().getYear();
+                    int date2 = (int) tempPeriods.get(i+1).getKey().getYear();
+                    int index = 0;
+                    for (int k = date1 ; k < date2 ; k++){
+                        Date date = new Date(tempPeriods.get(i).getKey().getDate().getTime());
+                        MapStructure mapStructure =
+                                new MapStructure(tempPeriods.get(i).getValue(),getFullName(),getAge(date,index));
+                        addPeriod(k,mapStructure);
+                        //System.out.println(periods);
+                        index++;
+                    }
+                }
+                Date date = new Date(tempPeriods.get(tempPeriods.size()-1).getKey().getDate().getTime());
+                MapStructure mapStructure =
+                        new MapStructure(tempPeriods.get(tempPeriods.size()-1).getValue(),getFullName(),getAge(date,0));
+                addPeriod((int) tempPeriods.get(tempPeriods.size()-1).getKey().getYear(),mapStructure);
+            }
+        }
+    }
+
+    public void addPeriod(int year, MapStructure mapStructure){
+        if (periods.containsKey(year)){
+            periods.get(year).add(mapStructure);
+        } else {
+            ArrayList<MapStructure> structure = new ArrayList<>();
+            structure.add(mapStructure);
+            periods.put(year,structure);
+        }
+    }
+
+    public int getAge(Date date, int years){
+        if ((birth != null)&&(birth.getDate() != null)){
+            Date d0 = birth.getDate().getDate();
+            long diff = date.getTime() - birth.getDate().getDate().getTime();
+            int days = (int) TimeUnit.DAYS.toDays(diff);
+            int a = days/365;
+            DateTime dateTime0 = new DateTime(birth.getDate().getDate().getTime());
+            DateTime dateTime1 = new DateTime(date.getTime());
+            Period period = new Period(dateTime0, dateTime1);
+            return period.getYears() + years;
+        } else {
+            return -1;
+        }
+    }
+
     @Override
     public String toString() {
         String res =  "Person{" +
@@ -213,7 +332,7 @@ public class Person {
 
             Town deathTown = null;
             try {
-                deathTown = new Town(AuxMethods.findField(list,"PLAC",indexBirthday,indexBirthday+2));
+                deathTown = new Town(AuxMethods.findField(list,"PLAC",indexDeath,indexBirthday+2));
             } catch (Exception e) {
                 //System.out.println("Impossible de parser la ville de décès de " + id);
             }
@@ -269,12 +388,16 @@ public class Person {
     private void calculateAge() {
         if ((birth == null)||(death == null)){
             age = -1;
+            if ((death == null)&&(birth != null)&&(birth.getDate() != null)&&(AuxMethods.getYear(birth.getDate().getDate()) > 1916)){
+                stillAlive = true;
+            }
         } else if ((birth.getDate() == null)||(death.getDate() == null)){
             age = -1;
         } else {
             Date birthDate = birth.getDate().getDate();
             Date deathDate = death.getDate().getDate();
             age = getDiffYears(birthDate,deathDate);
+            String res = "";
         }
     }
 

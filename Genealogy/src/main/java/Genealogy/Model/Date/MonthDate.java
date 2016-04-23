@@ -33,7 +33,7 @@ public class MonthDate extends MyDate {
     public Date getDate(){
         String DATE_FORMAT2 = "dd MM yyyy";
         SimpleDateFormat SDF = new SimpleDateFormat(DATE_FORMAT2, Locale.ENGLISH);
-        String input = "01 " + month + " " + year;
+        String input = "30 " + month + " " + year;
         try {
             return SDF.parse(input);
         } catch (ParseException e) {

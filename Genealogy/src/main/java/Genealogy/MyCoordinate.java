@@ -22,6 +22,29 @@ public class MyCoordinate implements Serializable{
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MyCoordinate)) return false;
+
+        MyCoordinate that = (MyCoordinate) o;
+
+        if (Double.compare(that.getLattitude(), getLattitude()) != 0) return false;
+        return Double.compare(that.getLongitude(), getLongitude()) == 0;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        temp = Double.doubleToLongBits(getLattitude());
+        result = (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(getLongitude());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
     public double getLattitude() {
         return lattitude;
     }

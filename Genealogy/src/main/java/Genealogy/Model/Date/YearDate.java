@@ -27,7 +27,7 @@ public class YearDate extends MyDate {
     public Date getDate(){
         String DATE_FORMAT2 = "dd MM yyyy";
         SimpleDateFormat SDF = new SimpleDateFormat(DATE_FORMAT2, Locale.ENGLISH);
-        String input = "01 01 " + year;
+        String input = "31 12 " + year;
         try {
             return SDF.parse(input);
         } catch (ParseException e) {

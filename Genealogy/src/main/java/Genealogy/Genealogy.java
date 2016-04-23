@@ -26,6 +26,12 @@ public class Genealogy {
     public Genealogy() {
     }
 
+    public void initPersonsPeriods() {
+        for (int i = 0 ; i < persons.size() ; i++){
+            persons.get(i).initPeriods();
+        }
+    }
+
     public ArrayList<Structure> getContents() {
         return contents;
     }

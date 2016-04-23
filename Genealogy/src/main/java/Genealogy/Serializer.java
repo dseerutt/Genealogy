@@ -75,6 +75,6 @@ public class Serializer {
         System.out.println(Town.getTowns());
         saveTown(Town.getTowns());
         //ArrayList<Town> townsInFile = readTowns();
-        //System.out.println(getNullCoordinatesCities(Town.getTowns()));
+        System.out.println(getNullCoordinatesCities(Town.getTowns()));
     }
 }

@@ -3,6 +3,7 @@ package Genealogy;
 import Genealogy.Model.Person;
 import Genealogy.Model.Structure;
 
+import java.awt.*;
 import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,6 +22,7 @@ public class AuxMethods {
     public static SimpleDateFormat SDF2 = new SimpleDateFormat(DATE_FORMAT2, Locale.ENGLISH);
     public static SimpleDateFormat SDF3 = new SimpleDateFormat(DATE_FORMAT3, Locale.ENGLISH);
     public static SimpleDateFormat SDF4 = new SimpleDateFormat(DATE_FORMAT3, Locale.ENGLISH);
+    public static Color slowRed = new Color(244,89,81);
 
     public static String findField(ArrayList<Structure> list, String field){
         return findField(list,field,0,list.size());
@@ -118,5 +120,89 @@ public class AuxMethods {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         return cal.get(Calendar.DAY_OF_MONTH);
+    }
+
+    public static Color getColor(int age){
+        if (age > 100){
+            return new Color(16,52,166);
+        } else if (age > 90){
+            return new Color(16,80,166);
+        } else if (age > 80){
+            return new Color(21,96,189);
+        } else if (age > 70){
+            return new Color(49,140,231);
+        } else if (age > 60){
+            return new Color(10,186,181);
+        } else if (age > 55){
+            return new Color(9,106,9);
+        } else if (age > 50){
+            return new Color(20,148,20);
+        } else if (age > 45){
+            return new Color(0,255,0);
+        } else if (age > 40){
+            return new Color(1,215,88);
+        } else if (age > 35){
+            return new Color(135,233,144);
+        } else if (age > 30){
+            return new Color(205,205,13);
+        } else if (age > 20){
+            return new Color(255,255,0);
+        } else if (age > 10){
+            return new Color(239,155,15);
+        } else if (age > 05){
+            return new Color(231,62,1);
+        } else {
+            return new Color(255,0,0);
+        }
+    }
+
+    public static Color getColor2(int age){
+        if (age > 30){
+            return new Color(21,96,189);
+        } else if (age > 25){
+            return new Color(49,140,231);
+        } else if (age > 18){
+            return new Color(10,186,181);
+        } else if (age > 16){
+            return new Color(116,208,241);
+        } else if (age > 14){
+            return new Color(169,234,234);
+        } else if (age > 12){
+            return new Color(9,106,9);
+        } else if (age > 10){
+            return new Color(86,130,3);
+        } else if (age > 9){
+            return new Color(20,148,20);
+        } else if (age > 7){
+            return new Color(0,255,0);
+        } else if (age > 5){
+            return new Color(1,215,88);
+        } else if (age > 4){
+            return new Color(135,233,144);
+        } else if (age > 3){
+            return new Color(205,205,13);
+        } else if (age > 2){
+            return new Color(255,255,0);
+        } else if (age > 1){
+            return new Color(255,203,96);
+        } else {
+            return new Color(239,155,15);
+        }
+    }
+
+    public static Color oldGetColor(int age){
+        if (age == -1){
+            return Color.YELLOW;
+        }
+        Color firstCol = Color.CYAN;
+        Color secondCol = Color.RED;
+        double p = 100*1./100;
+        if (age < 100){
+            p = 1.*age/100;
+        }
+        int R = new Double(firstCol.getRed() * p + secondCol.getRed() * (1 - p)).intValue();
+        int G = new Double(firstCol.getGreen() * p + secondCol.getGreen() * (1 - p)).intValue();
+        int B = new Double(firstCol.getBlue() * p + secondCol.getBlue() * (1 - p)).intValue();
+        return new Color(R,G,B);
     }
 }

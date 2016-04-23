@@ -28,15 +28,15 @@ public class MapFrame
 {
     public JXMapKit jXMapKit;
 
-    public MapFrame(ArrayList<MapPoint> mapPoints, GeoPosition finalPosition) {
+    public MapFrame(ArrayList<MapPoint> mapPoints, GeoPosition finalPosition, int zoom) {
         initMap();
-        init(mapPoints,finalPosition);
+        init(mapPoints,finalPosition,zoom);
     }
 
     public JXMapKit getjXMapKit() {
         return jXMapKit;
     }
-
+/*
     public static void main(String[] args)
     {
         ArrayList<MapPoint> mapPoints = new ArrayList<>();
@@ -51,7 +51,7 @@ public class MapFrame
         MapFrame mapFrame = new MapFrame(mapPoints,finalPosition);
         mapFrame.finishFrame();
     }
-
+*/
     public void initMap(){
         jXMapKit = new JXMapKit();
         TileFactoryInfo info = new OSMTileFactoryInfo();
@@ -71,8 +71,11 @@ public class MapFrame
         return waypoints;
     }
 
-    public void init(ArrayList<MapPoint> list2, GeoPosition finalPosition)
+    public void init(ArrayList<MapPoint> list2, GeoPosition finalPosition, int zoom)
     {
+        jXMapKit.setZoom(zoom);
+        jXMapKit.setAddressLocation(finalPosition);
+
         Set<MyWaypoint> waypoints = addCities(list2);
         // Create a waypoint painter that takes all the waypoints
         WaypointPainter<MyWaypoint> waypointPainter = new WaypointPainter<MyWaypoint>();
@@ -92,14 +95,13 @@ public class MapFrame
         frame.setVisible(true);
     }
 
+
+
     public void addTooltip(String text, final GeoPosition geoPosition){
         final JToolTip tooltip = new JToolTip();
         tooltip.setTipText(text);
         tooltip.setComponent(jXMapKit.getMainMap());
         jXMapKit.getMainMap().add(tooltip);
-
-        jXMapKit.setZoom(11);
-        jXMapKit.setAddressLocation(geoPosition);
 
         jXMapKit.getMainMap().addMouseMotionListener(new MouseMotionListener() {
             @Override

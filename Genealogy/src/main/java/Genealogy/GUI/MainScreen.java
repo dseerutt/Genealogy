@@ -23,7 +23,7 @@ import java.util.Collection;
 /**
  * Created by Dan on 10/04/2016.
  */
-public class MainScreen extends JFrame{
+public class MainScreen extends JFrame {
     private JTabbedPane tabbedPane1;
     private JButton retourButton;
     private JPanel mainPanel;
@@ -40,6 +40,11 @@ public class MainScreen extends JFrame{
     private JTextArea deces;
     private JPanel printPanel;
     private JButton carteButton;
+    private static MainScreen INSTANCE;
+
+    public static MainScreen getINSTANCE() {
+        return INSTANCE;
+    }
 
     public MainScreen(String title) throws IOException {
         super(title);
@@ -52,11 +57,10 @@ public class MainScreen extends JFrame{
         pack();
         setLocationRelativeTo(null);
 
-
-
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+        INSTANCE = this;
         /*
         BufferedImage bufferedImage = createImage(printPanel);
         File outputfile = new File("C:\\Users\\Dan\\Desktop\\image.jpg");
@@ -89,7 +93,6 @@ public class MainScreen extends JFrame{
     }
 
     private void initComboBox() {
-        Genealogy.genealogy.sortPersons();
         Town.sortTowns();
         for (int i = 0 ; i  < Genealogy.genealogy.getPersons().size() ; i++){
             ancestors.addItem(Genealogy.genealogy.getPersons().get(i).getFullNameInverted());
@@ -113,6 +116,15 @@ public class MainScreen extends JFrame{
                 }
             }
         });
+
+        carteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MapScreen mapScreen = new MapScreen();
+                setVisible(false);
+            }
+        });
+
         voirLesActesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -149,15 +161,6 @@ public class MainScreen extends JFrame{
                 }
             }
         });
-    }
-
-    public static void main(String[] args) throws IOException {
-        /*MyGedcomReader myGedcomReader = new MyGedcomReader();
-        String path = "C:\\Users\\Dan\\Desktop\\Programmation\\IntelliJ\\Genealogy\\Genealogy\\src\\main\\resources\\famille1.ged";
-
-        Genealogy.genealogy = myGedcomReader.read(path);
-        Genealogy.genealogy.parseContents();
-        MainScreen mainScreen = new MainScreen("Ma Généalogie");*/
     }
 
     public BufferedImage createImage(JPanel panel) {

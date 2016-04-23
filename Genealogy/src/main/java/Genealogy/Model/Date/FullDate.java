@@ -18,6 +18,10 @@ public class FullDate extends MyDate {
             date =  format.parse(input);
     }
 
+    public FullDate(){
+        date = new Date();
+    }
+
     public FullDate(long timestamp){
         date = new Date(timestamp);
     }

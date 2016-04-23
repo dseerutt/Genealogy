@@ -2,6 +2,7 @@ package Genealogy.Model;
 
 import Genealogy.Maps.MyHttpURLConnection;
 import Genealogy.Model.Act.Act;
+import Genealogy.Model.Date.MyDate;
 import Genealogy.Serializer;
 import javafx.geometry.Point2D;
 import org.json.JSONArray;
@@ -107,6 +108,15 @@ public class Town implements Serializable{
         return null;
     }
 
+    public MyCoordinate findCoordinate(){
+        for (int i = 0 ; i < Town.getTowns().size() ; i++){
+            if (towns.get(i).getFullName().equals(this.getFullName())){
+                return towns.get(i).getCoordinates();
+            }
+        }
+        return null;
+    }
+
     public static void setCoordinates(){
         //Alias villes qui ont changé de nom
         HashMap<String,String> alias = new HashMap<String,String>();
@@ -115,6 +125,7 @@ public class Town implements Serializable{
         alias.put("Paris, 17e Paris","Paris 17th arrondissement");
         alias.put("Brisée Verdière Mauritius","Brisee Verdiere Mauritius");
         alias.put("Centre de Flacq Mauritius","Central Flacq Mauritius");
+        alias.put("Grenoble Isère","Grenoble Isere");
 
 
         ArrayList<Town> townsInFile = Serializer.readTowns();
