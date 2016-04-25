@@ -4,7 +4,10 @@ package Genealogy.MapViewer;
  * Created by Dan on 17/04/2016.
  */
 
-import Genealogy.MyCoordinate;
+import Genealogy.MapViewer.Structures.FancyWaypointRenderer;
+import Genealogy.MapViewer.Structures.MapPoint;
+import Genealogy.MapViewer.Structures.MyWaypoint;
+import Genealogy.MapViewer.Structures.MyCoordinate;
 import org.jdesktop.swingx.JXMapKit;
 import org.jdesktop.swingx.JXMapViewer;
 import org.jdesktop.swingx.OSMTileFactoryInfo;

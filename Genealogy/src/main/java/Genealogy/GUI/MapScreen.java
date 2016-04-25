@@ -1,17 +1,17 @@
 package Genealogy.GUI;
 
 import Genealogy.Genealogy;
-import Genealogy.MapViewer.FancyWaypointRenderer;
+import Genealogy.MapViewer.Structures.FancyWaypointRenderer;
 import Genealogy.MapViewer.MapFrame;
-import Genealogy.MapViewer.MapPoint;
-import Genealogy.MapViewer.MyWaypoint;
+import Genealogy.MapViewer.Structures.MapPoint;
+import Genealogy.MapViewer.Structures.MyWaypoint;
 import Genealogy.Model.Act.Act;
 import Genealogy.Model.Act.Union;
 import Genealogy.Model.Date.ActStructure;
-import Genealogy.Model.MapStructure;
+import Genealogy.MapViewer.Structures.MapStructure;
 import Genealogy.Model.Person;
 import Genealogy.Model.Town;
-import Genealogy.MyCoordinate;
+import Genealogy.MapViewer.Structures.MyCoordinate;
 import Genealogy.AuxMethods;
 import org.jdesktop.swingx.JXMapKit;
 import org.jdesktop.swingx.JXMapViewer;

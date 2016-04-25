@@ -1,6 +1,4 @@
-package Genealogy.MapViewer;
-
-import Genealogy.MyCoordinate;
+package Genealogy.MapViewer.Structures;
 
 import java.awt.*;
 

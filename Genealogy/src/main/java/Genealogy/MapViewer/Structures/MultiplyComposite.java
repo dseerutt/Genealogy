@@ -1,5 +1,5 @@
 
-package Genealogy.MapViewer;
+package Genealogy.MapViewer.Structures;
 
 import java.awt.Composite;
 import java.awt.CompositeContext;

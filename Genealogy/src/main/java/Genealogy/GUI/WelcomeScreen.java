@@ -2,15 +2,16 @@ package Genealogy.GUI;
 
 import Genealogy.Genealogy;
 import Genealogy.Main;
-import Genealogy.Model.Person;
 import Genealogy.Model.Town;
-import Genealogy.MyGedcomReader;
+import Genealogy.Parsing.MyGedcomReader;
+import Genealogy.URLConnection.Serializer;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * Created by Dan on 10/04/2016.
@@ -40,7 +41,14 @@ public class WelcomeScreen extends JFrame{
         selFichierButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFileChooser c = new JFileChooser(Main.myFolder);
+                JFileChooser c;
+                Serializer serializer = new Serializer(true);
+                if (serializer.isJar()){
+                    c = new JFileChooser(Main.myJarFolfer);
+                } else {
+                    c = new JFileChooser(Main.myFolder);
+                }
+
                 // Demonstrate "Open" dialog:
                 int rVal = c.showOpenDialog(WelcomeScreen.this);
                 if (rVal == JFileChooser.APPROVE_OPTION) {
@@ -67,7 +75,9 @@ public class WelcomeScreen extends JFrame{
                         Genealogy.genealogy.parseContents();
                         Genealogy.genealogy.sortPersons();
                         Town.setCoordinates();
-                        System.out.println(Town.getTowns());
+                        //System.out.println(Town.getTowns());
+                        Serializer.getSerializer().saveTown(Town.getTowns());
+                        System.out.println(Serializer.getNullCoordinatesCities(Town.getTowns()));
                         Genealogy.genealogy.initPersonsPeriods();
                         setVisible(false);
                         MainScreen mainScreen = new MainScreen("Ma Généalogie");

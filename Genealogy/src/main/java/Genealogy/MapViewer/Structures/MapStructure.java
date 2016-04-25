@@ -1,4 +1,6 @@
-package Genealogy.Model;
+package Genealogy.MapViewer.Structures;
+
+import Genealogy.Model.Town;
 
 /**
  * Created by Dan on 19/04/2016.

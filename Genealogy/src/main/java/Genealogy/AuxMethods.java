@@ -1,10 +1,9 @@
 package Genealogy;
 
+import Genealogy.Parsing.ParsingStructure;
 import Genealogy.Model.Person;
-import Genealogy.Model.Structure;
 
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -24,11 +23,11 @@ public class AuxMethods {
     public static SimpleDateFormat SDF4 = new SimpleDateFormat(DATE_FORMAT3, Locale.ENGLISH);
     public static Color slowRed = new Color(244,89,81);
 
-    public static String findField(ArrayList<Structure> list, String field){
+    public static String findField(ArrayList<ParsingStructure> list, String field){
         return findField(list,field,0,list.size());
     }
 
-    public static String findField(ArrayList<Structure> list, String field, int offset, int maxValue){
+    public static String findField(ArrayList<ParsingStructure> list, String field, int offset, int maxValue){
         if (offset > list.size()){
             System.out.println("Erreur dans le parsing, l'index est trop grand");
             return "";
@@ -41,7 +40,7 @@ public class AuxMethods {
         return "";
     }
 
-    public static int findIndexNumberInteger(ArrayList<Structure> list, int number, int offset){
+    public static int findIndexNumberInteger(ArrayList<ParsingStructure> list, int number, int offset){
         if (offset > list.size()){
             System.out.println("Erreur dans le parsing, l'index est trop grand");
             return -1;
@@ -54,11 +53,11 @@ public class AuxMethods {
         return -1;
     }
 
-    public static int findIndexNumberInteger(ArrayList<Structure> list, int number){
+    public static int findIndexNumberInteger(ArrayList<ParsingStructure> list, int number){
         return findIndexNumberInteger(list,number,0);
     }
 
-    public static int findIndexNumberString(ArrayList<Structure> list, String field, int offset, int maxIndex){
+    public static int findIndexNumberString(ArrayList<ParsingStructure> list, String field, int offset, int maxIndex){
         if (offset > list.size()){
             System.out.println("Erreur dans le parsing, l'index est trop grand");
             return -1;
@@ -71,7 +70,7 @@ public class AuxMethods {
         return -1;
     }
 
-    public static void printList(ArrayList<Structure> contents, int index) {
+    public static void printList(ArrayList<ParsingStructure> contents, int index) {
         for (int i = index ; i < contents.size() ; i++){
             System.out.println(contents.get(i).toString2());
         }

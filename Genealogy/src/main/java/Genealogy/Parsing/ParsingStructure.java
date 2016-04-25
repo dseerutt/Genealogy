@@ -1,16 +1,16 @@
-package Genealogy.Model;
+package Genealogy.Parsing;
 
 import Genealogy.Genealogy;
 
 /**
  * Created by Dan on 04/04/2016.
  */
-public class Structure {
+public class ParsingStructure {
     private int number;
     private String id;
     private String text;
 
-    public Structure(int number, String id, String text) {
+    public ParsingStructure(int number, String id, String text) {
         this.number = number;
         this.id = id;
         this.text = text;
@@ -18,7 +18,7 @@ public class Structure {
 
     @Override
     public String toString() {
-        return "Structure{" +
+        return "ParsingStructure{" +
                 "number=" + number +
                 ", id='" + id + '\'' +
                 ", text='" + text + '\'' +

@@ -3,8 +3,8 @@ package Genealogy;
 import Genealogy.Model.Act.Union;
 import Genealogy.Model.Date.MyDate;
 import Genealogy.Model.Header;
+import Genealogy.Parsing.ParsingStructure;
 import Genealogy.Model.Person;
-import Genealogy.Model.Structure;
 import Genealogy.Model.Town;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import java.util.Comparator;
  */
 public class Genealogy {
 
-    private ArrayList<Structure> contents;
+    private ArrayList<ParsingStructure> contents;
     private Person root;
     private Header header;
     private String author;
@@ -32,11 +32,11 @@ public class Genealogy {
         }
     }
 
-    public ArrayList<Structure> getContents() {
+    public ArrayList<ParsingStructure> getContents() {
         return contents;
     }
 
-    public void setContents(ArrayList<Structure> contents) {
+    public void setContents(ArrayList<ParsingStructure> contents) {
         this.contents = contents;
     }
 
@@ -75,7 +75,7 @@ public class Genealogy {
     }
 
     public void parseContents(){
-        ArrayList<Structure> fileHeader = new ArrayList<Structure>();
+        ArrayList<ParsingStructure> fileHeader = new ArrayList<ParsingStructure>();
         int index = 0;
         //Entête
         for (int i = 0 ; i < contents.size() ; i++){
@@ -132,7 +132,7 @@ public class Genealogy {
         }
     }
 
-    private void handleWedding(ArrayList<Person> persons, ArrayList<Structure> contents, int index, int maxIndex) {
+    private void handleWedding(ArrayList<Person> persons, ArrayList<ParsingStructure> contents, int index, int maxIndex) {
         String husbId = AuxMethods.findField(contents,"HUSB",index,maxIndex);
         int husbIndex = AuxMethods.findIDInStructure(persons,husbId);
         String wifeId = AuxMethods.findField(contents,"WIFE",index,maxIndex);

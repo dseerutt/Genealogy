@@ -1,6 +1,7 @@
 package Genealogy.Model;
 
 import Genealogy.AuxMethods;
+import Genealogy.Parsing.ParsingStructure;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,7 +38,7 @@ public class Header {
                 '}';
     }
 
-    public Header(ArrayList<Structure> fileHeader) {
+    public Header(ArrayList<ParsingStructure> fileHeader) {
         software = AuxMethods.findField(fileHeader,"NAME");
         version = AuxMethods.findField(fileHeader,"VERS");
         String lastModifiedDate0 = AuxMethods.findField(fileHeader,"DATE");

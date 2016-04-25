@@ -1,12 +1,11 @@
-package Genealogy.Maps;
+package Genealogy.URLConnection;
 
 /**
  * Created by Dan on 15/04/2016.
  */
 
 import Genealogy.Model.Town;
-import Genealogy.MyCoordinate;
-import javafx.geometry.Point2D;
+import Genealogy.MapViewer.Structures.MyCoordinate;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

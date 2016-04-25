@@ -1,14 +1,12 @@
 package Genealogy.Model;
 
-import Genealogy.Maps.MyHttpURLConnection;
+import Genealogy.URLConnection.MyHttpURLConnection;
 import Genealogy.Model.Act.Act;
-import Genealogy.Model.Date.MyDate;
-import Genealogy.Serializer;
-import javafx.geometry.Point2D;
+import Genealogy.URLConnection.Serializer;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import Genealogy.MyCoordinate;
+import Genealogy.MapViewer.Structures.MyCoordinate;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -36,11 +34,13 @@ public class Town implements Serializable{
     }
 
     public static MyCoordinate parseJsonArray(String jsonObject, String city){
-        String[] tab = city.toLowerCase().split(" ");
-        String input = jsonObject.toLowerCase();
-        for (int i = 0 ; i < tab.length ; i++){
-            if (!input.contains(tab[i])){
-                return null;
+        if (Serializer.getSerializer().isJar()){
+            String[] tab = city.toLowerCase().split(" ");
+            String input = jsonObject.toLowerCase();
+            for (int i = 0 ; i < tab.length ; i++){
+                if (!input.contains(tab[i])){
+                    return null;
+                }
             }
         }
         JSONObject jsonObj = new JSONObject(jsonObject);
@@ -128,7 +128,7 @@ public class Town implements Serializable{
         alias.put("Grenoble Isère","Grenoble Isere");
 
 
-        ArrayList<Town> townsInFile = Serializer.readTowns();
+        ArrayList<Town> townsInFile = Serializer.getSerializer().getTowns();
         if ((townsInFile == null)||(townsInFile.isEmpty())){
             //Si le fichier init est vide
             for (Town thisTown : towns) {

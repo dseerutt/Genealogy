@@ -1,21 +1,18 @@
 package Genealogy.Model;
 
-import java.text.ParseException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import Genealogy.AuxMethods;
+import Genealogy.MapViewer.Structures.MapStructure;
 import Genealogy.Model.Act.Birth;
 import Genealogy.Model.Act.Death;
 import Genealogy.Model.Act.Union;
 import Genealogy.Model.Date.FullDate;
-import Genealogy.Model.Date.MonthDate;
 import Genealogy.Model.Date.MyDate;
-import Genealogy.Model.Date.YearDate;
-import javafx.scene.Parent;
+import Genealogy.Parsing.ParsingStructure;
 import javafx.util.Pair;
 import org.joda.time.DateTime;
-import org.joda.time.Interval;
 import org.joda.time.Period;
 
 /**
@@ -304,7 +301,7 @@ public class Person {
         return res + "}}";
     }
 
-    public Person(ArrayList<Structure> list, int offset, int indexMax) {
+    public Person(ArrayList<ParsingStructure> list, int offset, int indexMax) {
         int index = offset;
         if (offset >= indexMax) {
             System.out.println("Erreur dans le parsing de personne, offset >= indexMax");

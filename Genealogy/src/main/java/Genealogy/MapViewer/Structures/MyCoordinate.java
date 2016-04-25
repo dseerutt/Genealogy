@@ -1,4 +1,4 @@
-package Genealogy;
+package Genealogy.MapViewer.Structures;
 
 import java.io.Serializable;
 

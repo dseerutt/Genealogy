@@ -4,21 +4,16 @@ import Genealogy.Genealogy;
 import Genealogy.Model.Act.Act;
 import Genealogy.Model.Act.Birth;
 import Genealogy.Model.Act.Union;
-import Genealogy.Model.Person;
 import Genealogy.Model.Town;
 import edu.emory.mathcs.backport.java.util.Collections;
-import Genealogy.MyGedcomReader;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Created by Dan on 10/04/2016.
