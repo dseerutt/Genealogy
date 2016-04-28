@@ -42,6 +42,7 @@ public class Person {
     private int age;
     private static HashMap<Integer,ArrayList<MapStructure>> periods = new HashMap<>();
     private static HashMap<Integer,ArrayList<MapStructure>> periodsDirectAncestors = new HashMap<>();
+    private static int minimumPeriod = 10000;
     private boolean stillAlive = false;
 
 
@@ -228,11 +229,18 @@ public class Person {
         return tempPeriods;
     }
 
+    public static int getMinimumPeriod() {
+        return minimumPeriod;
+    }
+
     public void initPeriods(){
         initPeriods2(initPeriods1());
     }
 
     public void addPeriod(int year, MapStructure mapStructure){
+        if (year < minimumPeriod){
+            minimumPeriod = year;
+        }
         if (periods.containsKey(year)){
             periods.get(year).add(mapStructure);
         } else {

@@ -2,10 +2,12 @@ package Genealogy.MapViewer.Structures;
 
 import Genealogy.Model.Town;
 
+import java.io.Serializable;
+
 /**
  * Created by Dan on 19/04/2016.
  */
-public class MapStructure {
+public class MapStructure implements Serializable {
     private Town town;
     private String name;
     private int age;

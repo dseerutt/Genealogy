@@ -5,6 +5,7 @@ import Genealogy.MapViewer.Structures.FancyWaypointRenderer;
 import Genealogy.MapViewer.MapFrame;
 import Genealogy.MapViewer.Structures.MapPoint;
 import Genealogy.MapViewer.Structures.MyWaypoint;
+import Genealogy.MapViewer.Worker;
 import Genealogy.Model.Act.Act;
 import Genealogy.Model.Act.Union;
 import Genealogy.Model.Date.ActStructure;
@@ -28,6 +29,7 @@ import java.util.*;
  * Created by Dan on 17/04/2016.
  */
 public class MapScreen extends JFrame{
+    private static MapScreen INSTANCE;
     private JButton lancerButton;
     private JRadioButton generationAutomatiqueRadioButton;
     private JRadioButton generationALaDateRadioButton;
@@ -44,12 +46,16 @@ public class MapScreen extends JFrame{
     private JRadioButton tousLesActesRadioButton;
     private JRadioButton tousLesAncetresRadioButton;
     private JRadioButton toutesLesPersonnesRadioButton;
+    private JButton stopButton;
+    private JButton effacerMarqueursButton;
     private JXMapKit jXMapKit;
     private ArrayList<MapPoint> mapPoints;
     private MapFrame mapFrame;
     private GeoPosition initPosition = new GeoPosition(47.41022,2.925037);
     private int zoom = 11;
     private boolean allPeople = false;
+    private static final int maxDate = 2017;
+    private static Worker currentWorker = null;
 
     public MapScreen(){
         super("Répartition territoriale dans le temps");
@@ -58,6 +64,7 @@ public class MapScreen extends JFrame{
         initComboBox();
         initButtons();
         initListeners();
+        INSTANCE = this;
 
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         pack();
@@ -67,6 +74,10 @@ public class MapScreen extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         panelForMap.setPreferredSize(new Dimension(5000,5000));
         setVisible(true);
+    }
+
+    public JComboBox getComboDate1() {
+        return comboDate1;
     }
 
     private void initListeners() {
@@ -111,7 +122,7 @@ public class MapScreen extends JFrame{
     }
 
     private void initComboBox() {
-        for (int i = Act.getMinimumYear(); i < 2017 ; i++){
+        for (int i = Person.getMinimumPeriod(); i < maxDate ; i++){
             comboDate.addItem(i);
             comboDate1.addItem(i);
             comboDate2.addItem(i);
@@ -302,7 +313,6 @@ public class MapScreen extends JFrame{
                     } else {
                         mapStructure = Person.getPeriods().get(year);
                     }
-
                     setSituation(mapStructure);
                 } else if (actesDeNaissanceRadioButton.isSelected()){
                     ArrayList<MapPoint> mapPoints = getBirth();
@@ -326,16 +336,14 @@ public class MapScreen extends JFrame{
                         date1 = date2;
                         date2 = temp;
                     }
-                    for (int i = date1 ; i <= date2 ; i++){
-                        ArrayList<MapStructure> mapStructure = Person.getPeriods().get(i);
-                        setSituation(mapStructure);
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
+                    handleWorker(date1,date2);
+                    comboDate1.setSelectedItem(date1);
                 } else if (generationAutomatiqueRadioButton.isSelected()){
+                    int date1 = Person.getMinimumPeriod();
+                    int date2 = maxDate;
+                    comboDate2.setSelectedItem(maxDate-1);
+                    handleWorker(date1,date2);
+                    comboDate1.setSelectedItem(date1);
                 }
             }
         });
@@ -348,6 +356,44 @@ public class MapScreen extends JFrame{
 
             }
         });
+
+        stopButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (currentWorker != null){
+                    currentWorker.cancel(true);
+                }
+                removeTooltip();
+                removeMarkers();
+                generationEntreLaDateRadioButton.setSelected(true);
+            }
+        });
+
+        effacerMarqueursButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                removeTooltip();
+                removeMarkers();
+            }
+        });
+    }
+
+    private void handleWorker(int date1, int date2){
+        if (currentWorker != null){
+            currentWorker.cancel(true);
+            currentWorker = null;
+            removeTooltip();
+            removeMarkers();
+        }
+        Worker worker = new Worker();
+        currentWorker = worker;
+        if (toutesLesPersonnesRadioButton.isSelected()){
+            worker.setDirectAncestors(false);
+        }
+        worker.setMapScreen(INSTANCE);
+        worker.setYear1(date1);
+        worker.setYear2(date2);
+        worker.execute();
     }
 
     private static int getMapStructure(ArrayList<MapPoint> list, MyCoordinate coo){
