@@ -49,6 +49,7 @@ fabric.properties
 #IntelliJ
 .idea/
 target/
+out/
 *.jar
 *.iml
 Genealogy.jar

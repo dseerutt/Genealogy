@@ -14,15 +14,20 @@ import Genealogy.Model.Person;
 import Genealogy.Model.Town;
 import Genealogy.MapViewer.Structures.MyCoordinate;
 import Genealogy.AuxMethods;
+import Genealogy.URLConnection.Serializer;
 import org.jdesktop.swingx.JXMapKit;
 import org.jdesktop.swingx.JXMapViewer;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 import org.jdesktop.swingx.mapviewer.WaypointPainter;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -48,6 +53,7 @@ public class MapScreen extends JFrame{
     private JRadioButton toutesLesPersonnesRadioButton;
     private JButton stopButton;
     private JButton effacerMarqueursButton;
+    private JPanel captionPanel;
     private JXMapKit jXMapKit;
     private ArrayList<MapPoint> mapPoints;
     private MapFrame mapFrame;
@@ -56,6 +62,9 @@ public class MapScreen extends JFrame{
     private boolean allPeople = false;
     private static final int maxDate = 2017;
     private static Worker currentWorker = null;
+    private ImageIcon image1;
+    private ImageIcon image2;
+    private JLabel labelImage;
 
     public MapScreen(){
         super("Répartition territoriale dans le temps");
@@ -131,9 +140,10 @@ public class MapScreen extends JFrame{
 
     private void initRadioButtons() {
         ButtonGroup button = new ButtonGroup();
-        button.add(generationALaDateRadioButton);
         button.add(generationAutomatiqueRadioButton);
+        button.add(generationALaDateRadioButton);
         button.add(generationEntreLaDateRadioButton);
+
         button.add(actesDeNaissanceRadioButton);
         button.add(actesDeMariageRadioButton);
         button.add(actesDeDecesRadioButton);
@@ -144,6 +154,63 @@ public class MapScreen extends JFrame{
         button2.add(tousLesAncetresRadioButton);
         button2.add(toutesLesPersonnesRadioButton);
         tousLesAncetresRadioButton.doClick();
+
+        tousLesActesRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (tousLesActesRadioButton.isSelected()){
+                    changePicture(image1);
+                }
+            }
+        });
+        actesDeMariageRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (actesDeMariageRadioButton.isSelected()){
+                    changePicture(image1);
+                }
+            }
+        });
+        actesDeNaissanceRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (actesDeNaissanceRadioButton.isSelected()){
+                    changePicture(image1);
+                }
+            }
+        });
+        actesDeDecesRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (actesDeDecesRadioButton.isSelected()){
+                    changePicture(image1);
+                }
+            }
+        });
+        generationAutomatiqueRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (generationAutomatiqueRadioButton.isSelected()){
+                    changePicture(image2);
+                }
+            }
+        });
+        generationEntreLaDateRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (generationEntreLaDateRadioButton.isSelected()){
+                    changePicture(image2);
+                }
+            }
+        });
+        generationALaDateRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (generationALaDateRadioButton.isSelected()){
+                    changePicture(image2);
+                }
+            }
+        });
     }
 
     public void removeTooltip(){
@@ -337,11 +404,10 @@ public class MapScreen extends JFrame{
                         date2 = temp;
                     }
                     handleWorker(date1,date2);
-                    comboDate1.setSelectedItem(date1);
                 } else if (generationAutomatiqueRadioButton.isSelected()){
                     int date1 = Person.getMinimumPeriod();
                     int date2 = maxDate;
-                    comboDate2.setSelectedItem(maxDate-1);
+                    comboDate2.setSelectedItem(maxDate);
                     handleWorker(date1,date2);
                     comboDate1.setSelectedItem(date1);
                 }
@@ -353,7 +419,6 @@ public class MapScreen extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
                 MainScreen.getINSTANCE().setVisible(true);
-
             }
         });
 
@@ -376,6 +441,12 @@ public class MapScreen extends JFrame{
                 removeMarkers();
             }
         });
+    }
+
+    private void changePicture(ImageIcon image){
+        removeTooltip();
+        removeMarkers();
+        labelImage.setIcon(image);
     }
 
     private void handleWorker(int date1, int date2){
@@ -446,6 +517,18 @@ public class MapScreen extends JFrame{
     private void createUIComponents() {
         // TODO: place custom component creation code here
         initMap();
+        initCaptions();
+        labelImage = new JLabel("", image2, JLabel.CENTER);
+        captionPanel = new JPanel(new BorderLayout());
+        captionPanel.add( labelImage, BorderLayout.CENTER);
+    }
+
+    private void initCaptions() {
+        URL resource1 = getClass().getResource("maximum.png");
+        URL resource2 = getClass().getResource("actes.png");
+        image2 = new ImageIcon(resource1);
+        image1 = new ImageIcon(resource2);
+
     }
 
     public static void main(String[] args){

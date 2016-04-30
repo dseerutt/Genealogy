@@ -122,70 +122,72 @@ public class AuxMethods {
     }
 
     public static Color getColor(int age){
-        if (age > 100){
+        if (age >= 100){
             return new Color(16,52,166);
-        } else if (age > 90){
+        } else if (age >= 90){
             return new Color(16,80,166);
-        } else if (age > 80){
+        } else if (age >= 80){
             return new Color(21,96,189);
-        } else if (age > 70){
+        } else if (age >= 70){
             return new Color(49,140,231);
-        } else if (age > 60){
+        } else if (age >= 60){
             return new Color(10,186,181);
-        } else if (age > 55){
+        } else if (age >= 55){
             return new Color(9,106,9);
-        } else if (age > 50){
+        } else if (age >= 50){
             return new Color(20,148,20);
-        } else if (age > 45){
+        } else if (age >= 45){
             return new Color(0,255,0);
-        } else if (age > 40){
+        } else if (age >= 40){
             return new Color(1,215,88);
-        } else if (age > 35){
+        } else if (age >= 35){
             return new Color(135,233,144);
-        } else if (age > 30){
+        } else if (age >= 30){
             return new Color(205,205,13);
-        } else if (age > 20){
+        } else if (age >= 20){
             return new Color(255,255,0);
-        } else if (age > 10){
+        } else if (age >= 10){
             return new Color(239,155,15);
-        } else if (age > 05){
+        } else if (age >= 05){
             return new Color(231,62,1);
-        } else {
+        } else if (age >= 0){
             return new Color(255,0,0);
+        } else {
+            return Color.lightGray;
         }
     }
 
     public static Color getColor2(int age){
-        if (age > 30){
+        if (age >= 30){
             return new Color(21,96,189);
-        } else if (age > 25){
+        } else if (age >= 25){
             return new Color(49,140,231);
-        } else if (age > 18){
+        } else if (age >= 18){
             return new Color(10,186,181);
-        } else if (age > 16){
+        } else if (age >= 16){
             return new Color(116,208,241);
-        } else if (age > 14){
+        } else if (age >= 14){
             return new Color(169,234,234);
-        } else if (age > 12){
+        } else if (age >= 12){
             return new Color(9,106,9);
-        } else if (age > 10){
+        } else if (age >= 10){
             return new Color(86,130,3);
-        } else if (age > 9){
+        } else if (age >= 8){
             return new Color(20,148,20);
-        } else if (age > 7){
+        } else if (age >= 6){
             return new Color(0,255,0);
-        } else if (age > 5){
+        } else if (age >= 5){
             return new Color(1,215,88);
-        } else if (age > 4){
-            return new Color(135,233,144);
-        } else if (age > 3){
+        } else if (age >= 4){
             return new Color(205,205,13);
-        } else if (age > 2){
+        } else if (age >= 3){
             return new Color(255,255,0);
-        } else if (age > 1){
+        } else if (age >= 2){
             return new Color(255,203,96);
-        } else {
+        } else if (age >= 1){
             return new Color(239,155,15);
+        } else {
+            return Color.lightGray;
         }
     }
 

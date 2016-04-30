@@ -19,7 +19,7 @@ public class Worker extends SwingWorker<String, Object> {
 
     @Override
     protected String doInBackground() throws Exception {
-        for (int i = year1 ; i <= year2 ; i++){
+        for (int i = year1 ; i <= year2+1 ; i++){
             publish(i);
             try {
                 Thread.sleep(1000);
@@ -34,9 +34,13 @@ public class Worker extends SwingWorker<String, Object> {
     protected void process(List<Object> item) {
         //This updates the UI
         //textArea1.append(item + "\n");*
+        int i = (int) item.get(0);
+        if (i == year2+1){
+            mapScreen.getComboDate1().setSelectedItem(year1);
+            return;
+        }
         mapScreen.removeTooltip();
         mapScreen.removeMarkers();
-        int i = (int) item.get(0);
         ArrayList<MapStructure> mapStructure;
         if (directAncestors){
             mapStructure = Person.getPeriodsDirectAncestors().get(i);
