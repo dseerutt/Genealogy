@@ -1,6 +1,8 @@
 package Genealogy.Parsing;
 
 import Genealogy.Genealogy;
+import Genealogy.Model.Date.YearDate;
+import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -9,6 +11,7 @@ import java.util.ArrayList;
  * Created by Dan on 04/04/2016.
  */
 public class MyGedcomReader {
+    final static Logger logger = Logger.getLogger(MyGedcomReader.class);
     public Genealogy read(String path) throws IOException {
 
         Genealogy genealogy = new Genealogy();
@@ -27,7 +30,7 @@ public class MyGedcomReader {
                     ParsingStructure parsingStructure = new ParsingStructure(Integer.parseInt(value),id,sCurrentLine.substring(offset));
                     parsingStructureList.add(parsingStructure);
                 } else {
-                    System.out.println("Erreur dans le parsing du fichier Gedcom");
+                    logger.error("Erreur dans le parsing du fichier Gedcom");
                 }
                 genealogy.setContents(parsingStructureList);
             }

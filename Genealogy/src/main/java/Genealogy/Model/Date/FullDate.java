@@ -1,6 +1,7 @@
 package Genealogy.Model.Date;
 
 import Genealogy.AuxMethods;
+import org.apache.log4j.Logger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,6 +13,7 @@ import java.util.Locale;
  */
 public class FullDate extends MyDate {
     private Date date;
+    final static Logger logger = Logger.getLogger(FullDate.class);
 
     public FullDate(String input) throws ParseException {
             SimpleDateFormat format = new SimpleDateFormat(AuxMethods.DATE_FORMAT2, Locale.ENGLISH);
@@ -39,7 +41,7 @@ public class FullDate extends MyDate {
         try {
             return date;
         } catch (Exception e) {
-            System.out.println("Impossible de créer un timestamp de FullDate " + AuxMethods.getStringDate(date));
+            logger.error("Impossible de créer un timestamp de FullDate " + AuxMethods.getStringDate(date));
             return null;
         }
     }

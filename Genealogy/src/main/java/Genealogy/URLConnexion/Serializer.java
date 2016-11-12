@@ -1,11 +1,14 @@
-package Genealogy.URLConnection;
+package Genealogy.URLConnexion;
 
-import Genealogy.Genealogy;
+import Genealogy.AuxMethods;
 import Genealogy.Model.Town;
 import Genealogy.Parsing.MyGedcomReader;
+import org.apache.log4j.Logger;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -13,10 +16,14 @@ import java.util.List;
  */
 public class Serializer {
 
+    final static Logger logger = Logger.getLogger(Serializer.class);
     private static Serializer serializer = new Serializer();
     private ArrayList<Town> towns;
+    private static HashMap<String,String> townAssociation;
     private String path;
     private boolean jar = false;
+    private static final String citiesFile = "cities.ser";
+    private static final String townAssociationFile = "City names.txt";
 
     public static Serializer getSerializer() {
         return serializer;
@@ -26,29 +33,45 @@ public class Serializer {
         return towns;
     }
 
+    public static HashMap<String, String> getTownAssociation() {
+        return townAssociation;
+    }
+
     public Serializer(boolean x) {
         initPath();
     }
 
     public Serializer() {
         initPath();
-        File f = new File(path);
+        File f = new File(path + citiesFile);
 
         if(f.exists()){
-            System.out.println("Serializer file found for reading");
+            logger.info("Serializer file found");
             try {
                 towns = new ArrayList<>();
-                InputStream file = new FileInputStream(path);
+                InputStream file = new FileInputStream(path + citiesFile);
                 InputStream buffer = new BufferedInputStream(file);
                 ObjectInput input = new ObjectInputStream (buffer);
                 //deserialize the List
                 towns = (ArrayList<Town>) input.readObject();
+                logger.info("Serializer file well read");
+            }
+            catch(InvalidClassException ex){
+                logger.error("Serializer Class not OK");
+                ex.printStackTrace();
             }
             catch(Exception ex){
                 ex.printStackTrace();
             }
         }else{
-            System.out.println("Serializer file not found");
+            logger.info("Serializer file not found");
+        }
+        //Gestion des associations
+        try {
+            initTownAssociation();
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("Problème dans le parsing du fichier d'associations de ville");
         }
     }
 
@@ -58,34 +81,51 @@ public class Serializer {
 
     private void initPath() {
         path = System.getProperty("user.dir") + File.separator + "src" + File.separator + "main" +
-                File.separator + "resources" + File.separator + "cities.ser";
+                File.separator + "resources" + File.separator;
         String className = Serializer.class.getName().replace('.', '/');
         String classJar = Serializer.class.getClass().getResource("/" + className + ".class").toString();
         if (classJar.startsWith("jar:")) {
-            //System.out.println("*** running from jar!");
             jar = true;
-            path = System.getProperty("user.dir") + File.separator + "Properties" + File.separator + "cities.ser";
+            path = System.getProperty("user.dir") + File.separator + "Properties" + File.separator;
+        }
+    }
+
+    public void initTownAssociation() throws Exception {
+        townAssociation = new HashMap<String,String>();
+        File f = new File(path + townAssociationFile);
+        if(f.exists()) {
+            logger.info("City Association found");
+
+            BufferedReader br = null;
+            String sCurrentLine;
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(path + townAssociationFile), "UTF-8"));
+            while ((sCurrentLine = br.readLine()) != null) {
+                String[] temp = sCurrentLine.split("----");
+                townAssociation.put(temp[0],temp[1]);
+            }
+        } else {
+            logger.error("City Association not found");
         }
     }
 
     public void saveTown(List<Town> town){
         try
         {
-            File file0 = new File(path);
+            File file0 = new File(path + citiesFile);
             if(file0.exists()){
-                System.out.println("Serializer file found for saving");
+                logger.info("Serializer file found for saving");
             }else{
-                System.out.println("Serializer file not found for saving");
+                logger.info("Serializer file not found for saving");
                 file0.createNewFile();
-                System.out.println("Serialized file created for saving");
+                logger.info("Serialized file created for saving");
             }
-            BufferedReader br = new BufferedReader(new FileReader(path));
+            BufferedReader br = new BufferedReader(new FileReader(path + citiesFile));
             FileOutputStream fileOut = new FileOutputStream(file0.getAbsolutePath());
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(town);
             out.close();
             fileOut.close();
-            System.out.println("Saved serialized list of town with success");
+            logger.info("Saved serialized list of town with success");
         }catch(IOException i)
         {
             i.printStackTrace();

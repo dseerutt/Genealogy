@@ -1,5 +1,7 @@
 package Genealogy.Model.Date;
 
+import org.apache.log4j.Logger;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,6 +12,7 @@ import java.util.Locale;
  */
 public class YearDate extends MyDate {
     public int year;
+    final static Logger logger = Logger.getLogger(YearDate.class);
 
     public YearDate(String year0) {
         year = Integer.parseInt(year0);
@@ -31,7 +34,7 @@ public class YearDate extends MyDate {
         try {
             return SDF.parse(input);
         } catch (ParseException e) {
-            System.out.println("Impossible de créer un timestamp de YearDate " + year);
+            logger.error("Impossible de créer un timestamp de YearDate " + year);
             return null;
         }
     }

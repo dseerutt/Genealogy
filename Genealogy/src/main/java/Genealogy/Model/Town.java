@@ -1,8 +1,8 @@
 package Genealogy.Model;
 
-import Genealogy.URLConnection.MyHttpURLConnection;
+import Genealogy.URLConnexion.MyHttpURLConnexion;
 import Genealogy.Model.Act.Act;
-import Genealogy.URLConnection.Serializer;
+import Genealogy.URLConnexion.Serializer;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,10 +23,24 @@ public class Town implements Serializable{
     private MyCoordinate coordinates;
     private static HashMap<Town,ArrayList<Act>> listOfTown = new HashMap<Town, ArrayList<Act>>();
     private static ArrayList<Town> towns = new ArrayList<Town>();
+    private static ArrayList<Town> townsToSave = new ArrayList<Town>();
+    private static ArrayList<String> lostTowns = new ArrayList<String>();
 
     public Town(String name, String detail) {
         this.name = name;
         this.detail = detail;
+    }
+
+    public static ArrayList<Town> getTownsToSave() {
+        return townsToSave;
+    }
+
+    public static void addLostTowns(String town){
+        lostTowns.add(town);
+    }
+
+    public static ArrayList<String> getLostTowns(){
+        return lostTowns;
     }
 
     public String getFullName(){
@@ -117,16 +131,10 @@ public class Town implements Serializable{
         return null;
     }
 
-    public static void setCoordinates(){
+    public static void setCoordinates() throws Exception {
+        lostTowns = new ArrayList<String>();
         //Alias villes qui ont changé de nom
-        HashMap<String,String> alias = new HashMap<String,String>();
-        alias.put("Brienon l'archevêque Yonne","Brienon sur Armançon Yonne");
-        alias.put("Châtillon sur Loing Loiret","Châtillon Coligny Loiret");
-        alias.put("Paris, 17e Paris","Paris 17th arrondissement");
-        alias.put("Brisée Verdière Mauritius","Brisee Verdiere Mauritius");
-        alias.put("Centre de Flacq Mauritius","Central Flacq Mauritius");
-        alias.put("Grenoble Isère","Grenoble Isere");
-
+        HashMap<String,String> alias = Serializer.getTownAssociation();
 
         ArrayList<Town> townsInFile = Serializer.getSerializer().getTowns();
         if ((townsInFile == null)||(townsInFile.isEmpty())){
@@ -137,7 +145,10 @@ public class Town implements Serializable{
                 if (alias.containsKey(thisTown.getFullName())) {
                     newName = alias.get(thisTown.getFullName());
                 }
-                    coo = Town.parseJsonArray((new MyHttpURLConnection()).sendAddressRequest(newName),newName);
+                    coo = Town.parseJsonArray((new MyHttpURLConnexion()).sendAddressRequest(newName),newName);
+                if (!lostTowns.contains(newName)){
+                    townsToSave.add(thisTown);
+                }
 
                 if (coo != null) {
                     thisTown.setCoordinates(coo);
@@ -147,15 +158,22 @@ public class Town implements Serializable{
             for (Town thisTown : towns){
                 Town town = findTown(townsInFile, thisTown);
                 String aliasName = thisTown.getFullName();
-                if (alias.containsKey(thisTown.getFullName())){
+                if (alias.containsKey(aliasName)){
                     aliasName = alias.get(thisTown.getFullName());
                 }
                 if ((town != null)&&(town.getCoordinates() != null)){
                     thisTown.setCoordinates(town.getCoordinates());
+                    if (!lostTowns.contains(aliasName)){
+                        townsToSave.add(thisTown);
+                    }
                 } else {
-                    MyCoordinate coo = Town.parseJsonArray((new MyHttpURLConnection()).sendAddressRequest(aliasName),aliasName);
+                    //Ajouter la ville
+                    MyCoordinate coo = Town.parseJsonArray((new MyHttpURLConnexion()).sendAddressRequest(aliasName),aliasName);
                     if (coo != null) {
                         thisTown.setCoordinates(coo);
+                    }
+                    if (!lostTowns.contains(aliasName)){
+                        townsToSave.add(thisTown);
                     }
                 }
             }

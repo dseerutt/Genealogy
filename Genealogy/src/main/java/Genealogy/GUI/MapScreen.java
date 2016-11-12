@@ -6,7 +6,6 @@ import Genealogy.MapViewer.MapFrame;
 import Genealogy.MapViewer.Structures.MapPoint;
 import Genealogy.MapViewer.Structures.MyWaypoint;
 import Genealogy.MapViewer.Worker;
-import Genealogy.Model.Act.Act;
 import Genealogy.Model.Act.Union;
 import Genealogy.Model.Date.ActStructure;
 import Genealogy.MapViewer.Structures.MapStructure;
@@ -14,19 +13,17 @@ import Genealogy.Model.Person;
 import Genealogy.Model.Town;
 import Genealogy.MapViewer.Structures.MyCoordinate;
 import Genealogy.AuxMethods;
-import Genealogy.URLConnection.Serializer;
+import Genealogy.URLConnexion.MyHttpURLConnexion;
+import Genealogy.URLConnexion.URLException;
 import org.jdesktop.swingx.JXMapKit;
 import org.jdesktop.swingx.JXMapViewer;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 import org.jdesktop.swingx.mapviewer.WaypointPainter;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.net.URL;
 import java.util.*;
 
@@ -66,7 +63,7 @@ public class MapScreen extends JFrame{
     private ImageIcon image2;
     private JLabel labelImage;
 
-    public MapScreen(){
+    public MapScreen() throws Exception{
         super("Répartition territoriale dans le temps");
 
         initRadioButtons();
@@ -82,8 +79,10 @@ public class MapScreen extends JFrame{
         setContentPane(mapPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         panelForMap.setPreferredSize(new Dimension(5000,5000));
+        //throw new Exception();
         setVisible(true);
     }
+
 
     public JComboBox getComboDate1() {
         return comboDate1;
@@ -529,9 +528,5 @@ public class MapScreen extends JFrame{
         image2 = new ImageIcon(resource1);
         image1 = new ImageIcon(resource2);
 
-    }
-
-    public static void main(String[] args){
-        System.out.println("Hello");
     }
 }

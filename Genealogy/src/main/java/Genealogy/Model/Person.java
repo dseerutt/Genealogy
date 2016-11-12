@@ -12,6 +12,7 @@ import Genealogy.Model.Date.FullDate;
 import Genealogy.Model.Date.MyDate;
 import Genealogy.Parsing.ParsingStructure;
 import javafx.util.Pair;
+import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 
@@ -44,6 +45,7 @@ public class Person {
     private static HashMap<Integer,ArrayList<MapStructure>> periodsDirectAncestors = new HashMap<>();
     private static int minimumPeriod = 10000;
     private boolean stillAlive = false;
+    final static Logger logger = Logger.getLogger(Person.class);
 
 
     public static HashMap<Integer,ArrayList<MapStructure>> getPeriods() {
@@ -312,7 +314,7 @@ public class Person {
     public Person(ArrayList<ParsingStructure> list, int offset, int indexMax) {
         int index = offset;
         if (offset >= indexMax) {
-            System.out.println("Erreur dans le parsing de personne, offset >= indexMax");
+            logger.error("Erreur dans le parsing de personne, offset >= indexMax");
             return;
         }
             id = list.get(index++).getId();

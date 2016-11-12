@@ -1,6 +1,7 @@
 package Genealogy.Model.Date;
 
 import Genealogy.AuxMethods;
+import org.apache.log4j.Logger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,6 +14,7 @@ import java.util.Locale;
 public class MonthDate extends MyDate {
     private int month;
     private int year;
+    final static Logger logger = Logger.getLogger(MonthDate.class);
 
     public MonthDate(String input) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat(AuxMethods.DATE_FORMAT4, Locale.ENGLISH);
@@ -37,7 +39,7 @@ public class MonthDate extends MyDate {
         try {
             return SDF.parse(input);
         } catch (ParseException e) {
-            System.out.println("Impossible de créer un timestamp de MonthDate " + month + " " + year);
+            logger.error("Impossible de créer un timestamp de MonthDate " + month + " " + year);
             return null;
         }
     }

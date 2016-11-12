@@ -5,7 +5,10 @@ import Genealogy.Model.Act.Act;
 import Genealogy.Model.Act.Birth;
 import Genealogy.Model.Act.Union;
 import Genealogy.Model.Town;
+import Genealogy.URLConnexion.MyHttpURLConnexion;
+import Genealogy.URLConnexion.URLException;
 import edu.emory.mathcs.backport.java.util.Collections;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,6 +39,7 @@ public class MainScreen extends JFrame {
     private JPanel printPanel;
     private JButton carteButton;
     private static MainScreen INSTANCE;
+    final static Logger logger = Logger.getLogger(MainScreen.class);
 
     public static MainScreen getINSTANCE() {
         return INSTANCE;
@@ -107,7 +111,7 @@ public class MainScreen extends JFrame {
                 setVisible(false);
                 WelcomeScreen welcomeScreen = new WelcomeScreen("Ma généalogie");
                 for (int i = 0 ; i < Town.getTowns().size() ; i++){
-                    System.out.println(Town.getTowns().get(i) + " " + Town.getTowns().get(i).printCoordinates());
+                    logger.info(Town.getTowns().get(i) + " " + Town.getTowns().get(i).printCoordinates());
                 }
             }
         });
@@ -115,8 +119,19 @@ public class MainScreen extends JFrame {
         carteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MapScreen mapScreen = new MapScreen();
-                setVisible(false);
+                try {
+                    //Test connexion internet
+                    if (!MyHttpURLConnexion.testInternetConnexion()){
+                        throw new URLException("Impossible d'afficher la carte sans connexion internet");
+                    }
+                    MapScreen mapScreen = new MapScreen();
+                    setVisible(false);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                    JOptionPane.showMessageDialog(mainPanel,e1.getMessage(),
+                            "Erreur",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 

@@ -6,6 +6,7 @@ import Genealogy.Model.Header;
 import Genealogy.Parsing.ParsingStructure;
 import Genealogy.Model.Person;
 import Genealogy.Model.Town;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,6 +23,7 @@ public class Genealogy {
     private String author;
     private ArrayList<Person> persons = new ArrayList<Person>();
     public static Genealogy genealogy;
+    final static Logger logger = Logger.getLogger(Genealogy.class);
 
     public Genealogy() {
     }
@@ -86,7 +88,7 @@ public class Genealogy {
             fileHeader.add(contents.get(i));
         }
         if (index == 0){
-            System.out.println("Erreur dans le parsing");
+            logger.error("Erreur dans le parsing");
             return ;
         }
         header = new Header(fileHeader);
