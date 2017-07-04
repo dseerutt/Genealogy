@@ -89,7 +89,10 @@ public class WelcomeScreen extends JFrame{
                             logger.error("Les villes suivantes n'ont pas été trouvées : "+ txt);
                         }
                         Serializer.getSerializer().saveTown(Town.getTownsToSave());
-                        logger.warn("Villes avec Coordonnées nulles : " + Serializer.getNullCoordinatesCities(Town.getTowns()));
+                        ArrayList<Town> myEmptyTowns = Serializer.getNullCoordinatesCities(Town.getTowns());
+                        if (!myEmptyTowns.isEmpty()){
+                            logger.warn("Villes avec Coordonnées nulles : " + myEmptyTowns);
+                        }
                         Genealogy.genealogy.initPersonsPeriods();
                         setVisible(false);
                         MainScreen mainScreen = new MainScreen("Ma Généalogie");

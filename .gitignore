@@ -49,7 +49,9 @@ fabric.properties
 #IntelliJ
 .idea/
 target/
+log/
 out/
 *.jar
 *.iml
 Genealogy.jar
+City names.txt
