@@ -1,5 +1,3 @@
 # Genealogy
-## Package to read gedcom files
-## GUI and statistics available too.
-
-externaliser les logs
+## Application that shows in a map your ancestors
+## Data about each and every ancestors

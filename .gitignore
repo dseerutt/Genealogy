@@ -51,6 +51,7 @@ fabric.properties
 target/
 log/
 out/
+*.ser
 *.jar
 *.iml
 Genealogy.jar
