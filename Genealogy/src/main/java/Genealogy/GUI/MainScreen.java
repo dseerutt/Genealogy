@@ -4,6 +4,7 @@ import Genealogy.Genealogy;
 import Genealogy.Model.Act.Act;
 import Genealogy.Model.Act.Birth;
 import Genealogy.Model.Act.Union;
+import Genealogy.Model.Person;
 import Genealogy.Model.Town;
 import Genealogy.URLConnexion.MyHttpURLConnexion;
 import Genealogy.URLConnexion.URLException;
@@ -38,6 +39,10 @@ public class MainScreen extends JFrame {
     private JTextArea deces;
     private JPanel printPanel;
     private JButton carteButton;
+    private JComboBox NotFoundPlaces;
+    private JTextField TownQuery;
+    private JTextField TownAnswer;
+    private JPanel mapPanel;
     private static MainScreen INSTANCE;
     final static Logger logger = Logger.getLogger(MainScreen.class);
 
@@ -60,24 +65,28 @@ public class MainScreen extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         INSTANCE = this;
-        /*
-        BufferedImage bufferedImage = createImage(printPanel);
-        File outputfile = new File("C:\\Users\\Dan\\Desktop\\image.jpg");
-        ImageIO.write(bufferedImage, "jpg", outputfile);*/
     }
 
+    /**
+     * Fonction initTab1
+     * initialise la liste des ancêtres directs
+     */
     private void initTab1() {
         voirLaFicheButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int index = 0;
                 int res = directAncestors.getSelectedIndex();
-                for (int i = 0 ; i < Genealogy.genealogy.getPersons().size() ; i++){
-                    if (Genealogy.genealogy.getPersons().get(i).isDirectAncestor()){
-                        if (index == res){
-                            textArea1.setText(Genealogy.genealogy.getPersons().get(i).printPerson());
-                        }
+                ArrayList<Person> persons = Genealogy.genealogy.getPersons();
+                if (persons != null){
+                    for (int i = 0; i < persons.size() ; i++){
+                        if (persons.get(i).isDirectAncestor()){
+                            Person p = persons.get(i);
+                            if ((p != null) && (index == res)){
+                                textArea1.setText(p.printPerson());
+                            }
                             index++;
+                        }
                     }
                 }
             }
@@ -91,12 +100,19 @@ public class MainScreen extends JFrame {
         });
     }
 
+    /**
+     * Fonction initComboBox
+     * Initialise les combobox ancestors, directAncestors et towns
+     */
     private void initComboBox() {
         Town.sortTowns();
         for (int i = 0 ; i  < Genealogy.genealogy.getPersons().size() ; i++){
-            ancestors.addItem(Genealogy.genealogy.getPersons().get(i).getFullNameInverted());
-            if (Genealogy.genealogy.getPersons().get(i).isDirectAncestor()){
-                directAncestors.addItem(Genealogy.genealogy.getPersons().get(i).getFullNameInverted());
+            Person person = Genealogy.genealogy.getPersons().get(i);
+            if ((person !=null)&&(person.isPrintable())){
+                ancestors.addItem(person.getFullNameInverted());
+                if (person.isDirectAncestor()){
+                    directAncestors.addItem(Genealogy.genealogy.getPersons().get(i).getFullNameInverted());
+                }
             }
         }
         for (int i = 0 ; i < Town.getTowns().size() ; i++){
@@ -110,9 +126,6 @@ public class MainScreen extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
                 WelcomeScreen welcomeScreen = new WelcomeScreen("Ma généalogie");
-                for (int i = 0 ; i < Town.getTowns().size() ; i++){
-                    logger.info(Town.getTowns().get(i) + " " + Town.getTowns().get(i).printCoordinates());
-                }
             }
         });
 

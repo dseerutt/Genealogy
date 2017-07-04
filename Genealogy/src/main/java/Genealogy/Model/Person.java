@@ -135,8 +135,15 @@ public class Person {
         return surname + " " + name;
     }
 
+    /**
+     * Fonction getFullNameInverted
+     * @return le nom puis le prénom
+     */
     public String getFullNameInverted(){
-        return name + " " + surname;
+        if ((name != null)&&(!name.equals(""))){
+            return name + " " + surname;
+        }
+        return surname;
     }
 
     public String getName4Comparator(){
@@ -237,6 +244,14 @@ public class Person {
 
     public void initPeriods(){
         initPeriods2(initPeriods1());
+    }
+
+    /**
+     * isPrintable retourne vrai si la personne a un prénom et un nom de famille différent de ...
+     * @return
+     */
+    public boolean isPrintable(){
+        return (name!=null) && (surname!=null) && (!name.equals("...")) && (!surname.equals("..."));
     }
 
     public void addPeriod(int year, MapStructure mapStructure){
