@@ -7,6 +7,7 @@ import Genealogy.Model.Act.Union;
 import Genealogy.Model.Person;
 import Genealogy.Model.Town;
 import Genealogy.URLConnexion.MyHttpURLConnexion;
+import Genealogy.URLConnexion.Serializer;
 import Genealogy.URLConnexion.URLException;
 import edu.emory.mathcs.backport.java.util.Collections;
 import org.apache.log4j.Logger;
@@ -18,6 +19,8 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Dan on 10/04/2016.
@@ -27,13 +30,10 @@ public class MainScreen extends JFrame {
     private JButton retourButton;
     private JPanel mainPanel;
     private JComboBox directAncestors;
-    private JButton voirLaFicheButton1;
     private JComboBox ancestors;
-    private JButton voirLaFicheButton2;
     private JComboBox towns;
     private JTextArea textArea1;
     private JTextArea textArea2;
-    private JButton voirLesActesButton;
     private JTextArea naissances;
     private JTextArea unions;
     private JTextArea deces;
@@ -41,8 +41,9 @@ public class MainScreen extends JFrame {
     private JButton carteButton;
     private JComboBox NotFoundPlaces;
     private JTextField TownQuery;
-    private JTextField TownAnswer;
-    private JPanel mapPanel;
+    private JTextField textField1;
+    private JButton remplacerButton;
+    private JButton rechercherButton;
     private static MainScreen INSTANCE;
     final static Logger logger = Logger.getLogger(MainScreen.class);
 
@@ -56,6 +57,7 @@ public class MainScreen extends JFrame {
         initButtons();
         initComboBox();
         initTab1();
+        initMissingCitiesTab();
 
         setPreferredSize(new Dimension(700,500));
         pack();
@@ -72,7 +74,7 @@ public class MainScreen extends JFrame {
      * initialise la liste des ancêtres directs
      */
     private void initTab1() {
-        voirLaFicheButton1.addActionListener(new ActionListener() {
+        directAncestors.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int index = 0;
@@ -91,8 +93,15 @@ public class MainScreen extends JFrame {
                 }
             }
         });
+            ArrayList<Person> persons = Genealogy.genealogy.getPersons();
+            if (persons != null && persons.size() > 0){
+            Person p = persons.get(0);
+            if (p != null){
+                textArea1.setText(p.printPerson());
+            }
+        }
 
-        voirLaFicheButton2.addActionListener(new ActionListener() {
+        ancestors.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 textArea2.setText(Genealogy.genealogy.getPersons().get(ancestors.getSelectedIndex()).printPerson());
@@ -148,7 +157,7 @@ public class MainScreen extends JFrame {
             }
         });
 
-        voirLesActesButton.addActionListener(new ActionListener() {
+        towns.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 naissances.setText("");
@@ -194,6 +203,19 @@ public class MainScreen extends JFrame {
         Graphics2D g = bi.createGraphics();
         panel.paint(g);
         return bi;
+    }
+
+    private void initMissingCitiesTab() {
+        final HashMap<String, String> townAssociation = Serializer.getTownAssociation();
+        for (Map.Entry<String, String> association : townAssociation.entrySet()){
+            NotFoundPlaces.addItem(association.getKey());
+        }
+        NotFoundPlaces.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TownQuery.setText(townAssociation.get(NotFoundPlaces.getSelectedItem().toString()));
+            }
+        });
     }
 
     private void createUIComponents() {
