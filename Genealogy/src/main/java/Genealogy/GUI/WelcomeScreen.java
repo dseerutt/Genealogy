@@ -102,10 +102,10 @@ public class WelcomeScreen extends JFrame{
                     catch (Exception exception){
                         exception.printStackTrace();
                         JOptionPane.showMessageDialog(welcomePanel,
-                                "Impossible d'importer le fichier : \n" + exception.getMessage(),
+                                "Impossible d'importer le fichier",
                                 "Erreur",
                                 JOptionPane.ERROR_MESSAGE);
-                        logger.error("Impossible d'importer le fichier");
+                        logger.error("Impossible d'importer le fichier" + exception.getMessage());
                     }
                 }
             }

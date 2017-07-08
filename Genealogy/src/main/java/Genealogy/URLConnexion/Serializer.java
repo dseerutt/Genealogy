@@ -10,6 +10,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Dan on 15/04/2016.
@@ -90,6 +91,12 @@ public class Serializer {
         }
     }
 
+    /**
+     * Fonction initTownAssociation
+     * Initialise la liste des associations de villes
+     * Permet de gérer les alias
+     * @throws Exception Si le fichier n'est pas trouvé
+     */
     public void initTownAssociation() throws Exception {
         townAssociation = new HashMap<String,String>();
         File f = new File(path + townAssociationFile);
@@ -105,6 +112,27 @@ public class Serializer {
             }
         } else {
             logger.error("City Association not found");
+        }
+    }
+
+    /**
+     * Fonction saveTownAssociation
+     * Met à jour le fichier des associations d'alias de villes
+     * @param townAssociation
+     */
+    public void saveTownAssociation(HashMap<String,String> townAssociation){
+        String content = "";
+        for(Map.Entry<String, String> entry : townAssociation.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            content += key + "----" + value + "\n";
+        }
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(path + townAssociationFile))) {
+            bw.write(content);
+            logger.info("Town Association file updated");
+        } catch (IOException e) {
+            e.printStackTrace();
+            logger.info("Town Association file update failed");
         }
     }
 

@@ -1,6 +1,7 @@
 package Genealogy.GUI;
 
 import Genealogy.Genealogy;
+import Genealogy.MapViewer.Structures.MyCoordinate;
 import Genealogy.Model.Act.Act;
 import Genealogy.Model.Act.Birth;
 import Genealogy.Model.Act.Union;
@@ -41,11 +42,12 @@ public class MainScreen extends JFrame {
     private JButton carteButton;
     private JComboBox NotFoundPlaces;
     private JTextField TownQuery;
-    private JTextField textField1;
+    private JTextField searchField;
     private JButton remplacerButton;
     private JButton rechercherButton;
     private static MainScreen INSTANCE;
     final static Logger logger = Logger.getLogger(MainScreen.class);
+    private MyHttpURLConnexion HTTPConnexion;
 
     public static MainScreen getINSTANCE() {
         return INSTANCE;
@@ -58,6 +60,7 @@ public class MainScreen extends JFrame {
         initComboBox();
         initTab1();
         initMissingCitiesTab();
+        HTTPConnexion = new MyHttpURLConnexion();
 
         setPreferredSize(new Dimension(700,500));
         pack();
@@ -205,15 +208,67 @@ public class MainScreen extends JFrame {
         return bi;
     }
 
+    private void updateMissingCityTab(HashMap<String, String> townAssociation){
+        if (!townAssociation.isEmpty()){
+            TownQuery.setText(townAssociation.get(NotFoundPlaces.getSelectedItem().toString()));
+        }
+    }
+
     private void initMissingCitiesTab() {
         final HashMap<String, String> townAssociation = Serializer.getTownAssociation();
-        for (Map.Entry<String, String> association : townAssociation.entrySet()){
-            NotFoundPlaces.addItem(association.getKey());
+        if (townAssociation != null){
+            for (Map.Entry<String, String> association : townAssociation.entrySet()){
+                NotFoundPlaces.addItem(association.getKey());
+            }
+            NotFoundPlaces.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    TownQuery.setText(townAssociation.get(NotFoundPlaces.getSelectedItem().toString()));
+                }
+            });
+            updateMissingCityTab(townAssociation);
         }
-        NotFoundPlaces.addActionListener(new ActionListener() {
+        TownQuery.setEditable(false);
+        rechercherVilleNonTrouvee();
+        remplacerAction();
+    }
+
+    private void remplacerAction(){
+        remplacerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TownQuery.setText(townAssociation.get(NotFoundPlaces.getSelectedItem().toString()));
+                String key = (String) NotFoundPlaces.getSelectedItem();
+                String value = searchField.getText();
+                Serializer.getTownAssociation().remove(key);
+                Serializer.getTownAssociation().put(key,value);
+                Serializer.getSerializer().saveTownAssociation(Serializer.getTownAssociation());
+                updateMissingCityTab(Serializer.getTownAssociation());
+                JOptionPane.showMessageDialog(tabbedPane1,
+                        "Mise à jour d'alias de ville effectuée avec succès",
+                        "Information",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+    }
+
+    private void rechercherVilleNonTrouvee(){
+        rechercherButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String search = searchField.getText();
+                if (search != null && search != ""){
+                    try {
+                        MyCoordinate result = Town.parseJsonArray(HTTPConnexion.sendAddressRequest(search),search);
+                        logger.info("Coordonnées de la ville " + search + " : " + result);
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                        logger.error("Erreur lors de la recherche de ville");
+                        JOptionPane.showMessageDialog(tabbedPane1,
+                                "Erreur lors de la recherche de ville",
+                                "Erreur",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                }
             }
         });
     }
