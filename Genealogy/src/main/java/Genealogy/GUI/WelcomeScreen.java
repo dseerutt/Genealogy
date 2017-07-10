@@ -41,22 +41,37 @@ public class WelcomeScreen extends JFrame{
         setVisible(true);
     }
 
+    private void initTownAssociation(Serializer serializer){
+        //Gestion des associations
+        try {
+            Town.setTownAssociation(serializer.initAssociation());
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("Problème dans le parsing du fichier d'associations de ville");
+        }
+    }
+
+    private JFileChooser initSerializer(){
+        Serializer<Town> serializer = new Serializer<Town>(Town.class);
+        if (serializer.isJar()){
+            return new JFileChooser(Main.myJarFolfer);
+        } else {
+            return new JFileChooser(Main.myFolder);
+        }
+    }
+
     private void initButtons() {
         selFichierButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFileChooser c;
-                Serializer serializer = new Serializer(true);
-                if (serializer.isJar()){
-                    c = new JFileChooser(Main.myJarFolfer);
-                } else {
-                    c = new JFileChooser(Main.myFolder);
-                }
+
+                JFileChooser c = initSerializer();
 
                 // Demonstrate "Open" dialog:
                 int rVal = c.showOpenDialog(WelcomeScreen.this);
                 if (rVal == JFileChooser.APPROVE_OPTION) {
                     filePath.setText(c.getCurrentDirectory().toString() + File.separator + c.getSelectedFile().getName());
+                    initTownAssociation(Serializer.getSerializer());
                 }
                 if (rVal == JFileChooser.CANCEL_OPTION) {
                 }

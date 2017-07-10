@@ -215,7 +215,7 @@ public class MainScreen extends JFrame {
     }
 
     private void initMissingCitiesTab() {
-        final HashMap<String, String> townAssociation = Serializer.getTownAssociation();
+        final HashMap<String, String> townAssociation = Town.getTownAssociation();
         if (townAssociation != null){
             for (Map.Entry<String, String> association : townAssociation.entrySet()){
                 NotFoundPlaces.addItem(association.getKey());
@@ -239,10 +239,11 @@ public class MainScreen extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String key = (String) NotFoundPlaces.getSelectedItem();
                 String value = searchField.getText();
-                Serializer.getTownAssociation().remove(key);
-                Serializer.getTownAssociation().put(key,value);
-                Serializer.getSerializer().saveTownAssociation(Serializer.getTownAssociation());
-                updateMissingCityTab(Serializer.getTownAssociation());
+                HashMap<String, String> townAssociation = Town.getTownAssociation();
+                townAssociation.remove(key);
+                townAssociation.put(key,value);
+                Serializer.getSerializer().saveTownAssociation(townAssociation);
+                updateMissingCityTab(townAssociation);
                 JOptionPane.showMessageDialog(tabbedPane1,
                         "Mise à jour d'alias de ville effectuée avec succès",
                         "Information",
@@ -256,7 +257,7 @@ public class MainScreen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String search = searchField.getText();
-                if (search != null && search != ""){
+                if (search != null && !search.equals("")){
                     try {
                         MyCoordinate result = Town.parseJsonArray(HTTPConnexion.sendAddressRequest(search),search);
                         logger.info("Coordonnées de la ville " + search + " : " + result);

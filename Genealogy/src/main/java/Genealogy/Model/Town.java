@@ -25,6 +25,8 @@ public class Town implements Serializable{
     private static ArrayList<Town> towns = new ArrayList<Town>();
     private static ArrayList<Town> townsToSave = new ArrayList<Town>();
     private static ArrayList<String> lostTowns = new ArrayList<String>();
+    private static HashMap<String,String> townAssociation;
+    private ArrayList<Town> serializerTowns;
 
     public Town(String name, String detail) {
         this.name = name;
@@ -41,6 +43,14 @@ public class Town implements Serializable{
 
     public static ArrayList<String> getLostTowns(){
         return lostTowns;
+    }
+
+    public static HashMap<String, String> getTownAssociation() {
+        return townAssociation;
+    }
+
+    public static void setTownAssociation(HashMap<String, String> townAssociation) {
+        Town.townAssociation = townAssociation;
     }
 
     public String getFullName(){
@@ -134,7 +144,7 @@ public class Town implements Serializable{
     public static void setCoordinates() throws Exception {
         lostTowns = new ArrayList<String>();
         //Alias villes qui ont changé de nom
-        HashMap<String,String> alias = Serializer.getTownAssociation();
+        HashMap<String,String> alias = Town.getTownAssociation();
 
         ArrayList<Town> townsInFile = Serializer.getSerializer().getTowns();
         if ((townsInFile == null)||(townsInFile.isEmpty())){
@@ -178,6 +188,14 @@ public class Town implements Serializable{
                 }
             }
         }
+    }
+
+    public ArrayList<Town> getSerializerTowns() {
+        return serializerTowns;
+    }
+
+    public void setSerializerTowns(ArrayList<Town> serializerTowns) {
+        this.serializerTowns = serializerTowns;
     }
 
     public static class TownComparator implements Comparator<Town> {
