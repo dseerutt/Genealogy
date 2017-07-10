@@ -2,11 +2,15 @@ package Genealogy.GUI;
 
 import Genealogy.Genealogy;
 import Genealogy.Main;
+import Genealogy.MapViewer.MapFrame;
+import Genealogy.MapViewer.Structures.MapPoint;
 import Genealogy.Model.Town;
 import Genealogy.Parsing.MyGedcomReader;
 import Genealogy.URLConnexion.MyHttpURLConnexion;
 import Genealogy.URLConnexion.Serializer;
 import org.apache.log4j.Logger;
+import org.jdesktop.swingx.JXMapKit;
+import org.jdesktop.swingx.mapviewer.GeoPosition;
 
 import javax.swing.*;
 import java.awt.*;

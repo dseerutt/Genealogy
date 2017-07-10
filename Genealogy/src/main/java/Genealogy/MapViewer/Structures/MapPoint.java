@@ -20,6 +20,13 @@ public class MapPoint {
         this.maxAge = maxAge;
     }
 
+    public MapPoint(MyCoordinate myCoordinate, String tooltip) {
+        this.tooltip = tooltip;
+        this.myCoordinate = myCoordinate;
+        this.color = Color.YELLOW;
+        this.nbPeople = 1;
+    }
+
     public int getMaxAge() {
         return maxAge;
     }

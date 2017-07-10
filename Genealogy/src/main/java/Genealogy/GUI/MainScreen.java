@@ -1,7 +1,11 @@
 package Genealogy.GUI;
 
 import Genealogy.Genealogy;
+import Genealogy.MapViewer.MapFrame;
+import Genealogy.MapViewer.Structures.FancyWaypointRenderer;
+import Genealogy.MapViewer.Structures.MapPoint;
 import Genealogy.MapViewer.Structures.MyCoordinate;
+import Genealogy.MapViewer.Structures.MyWaypoint;
 import Genealogy.Model.Act.Act;
 import Genealogy.Model.Act.Birth;
 import Genealogy.Model.Act.Union;
@@ -12,6 +16,10 @@ import Genealogy.URLConnexion.Serializer;
 import Genealogy.URLConnexion.URLException;
 import edu.emory.mathcs.backport.java.util.Collections;
 import org.apache.log4j.Logger;
+import org.jdesktop.swingx.JXMapKit;
+import org.jdesktop.swingx.JXMapViewer;
+import org.jdesktop.swingx.mapviewer.GeoPosition;
+import org.jdesktop.swingx.mapviewer.WaypointPainter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,6 +30,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Dan on 10/04/2016.
@@ -45,6 +54,11 @@ public class MainScreen extends JFrame {
     private JTextField searchField;
     private JButton remplacerButton;
     private JButton rechercherButton;
+    private JPanel mapPanel;
+    private JPanel panelForMap;
+    private JXMapKit jXMapKit;
+    private ArrayList<MapPoint> mapPoints;
+    private MapFrame mapFrame;
     private static MainScreen INSTANCE;
     final static Logger logger = Logger.getLogger(MainScreen.class);
     private MyHttpURLConnexion HTTPConnexion;
@@ -70,6 +84,24 @@ public class MainScreen extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         INSTANCE = this;
+    }
+
+    private void initMap() {
+        if (mapPoints == null){
+            mapPoints = new ArrayList<>();
+        }
+        GeoPosition initPosition = new GeoPosition(47.41022,2.925037);
+        int zoom = 13;
+        ArrayList<MapPoint> mapPoints = new ArrayList<>();
+        mapFrame = new MapFrame(mapPoints,initPosition,zoom);
+        panelForMap = new JPanel();
+        panelForMap.setLayout(new BorderLayout());
+        panelForMap.add(mapFrame.getjXMapKit());
+        mapPanel = new JPanel();
+        mapPanel.setLayout(new FlowLayout());
+        mapPanel.add(panelForMap);
+        jXMapKit = mapFrame.getjXMapKit();
+        GeoPosition initPosition2 = new GeoPosition(1,1);
     }
 
     /**
@@ -101,6 +133,17 @@ public class MainScreen extends JFrame {
             Person p = persons.get(0);
             if (p != null){
                 textArea1.setText(p.printPerson());
+            }
+        }
+
+        for (int i = 0 ; i  < Genealogy.genealogy.getPersons().size() ; i++){
+            Person person = Genealogy.genealogy.getPersons().get(i);
+            if ((person !=null)&&(person.isPrintable())){
+                ancestors.addItem(person.getFullNameInverted());
+                if (person.isDirectAncestor()){
+                    textArea2.setText(Genealogy.genealogy.getPersons().get(ancestors.getSelectedIndex()).printPerson());
+                    break;
+                }
             }
         }
 
@@ -208,9 +251,26 @@ public class MainScreen extends JFrame {
         return bi;
     }
 
-    private void updateMissingCityTab(HashMap<String, String> townAssociation){
+    private void updateMissingCityTab(HashMap<String, String> townAssociation, String city){
         if (!townAssociation.isEmpty()){
-            TownQuery.setText(townAssociation.get(NotFoundPlaces.getSelectedItem().toString()));
+            TownQuery.setText(townAssociation.get(city));
+            MyCoordinate coordinate = Town.findCoordinate(city);
+            GeoPosition geoPosition = new GeoPosition(coordinate.getLattitude(),coordinate.getLongitude());
+            jXMapKit.setCenterPosition(geoPosition);
+            ArrayList<MapPoint> list = new ArrayList<>();
+            list.add(new MapPoint(coordinate,city));
+            addMarkers(list);
+        }
+    }
+
+    private void updateMissingCityTab(HashMap<String, String> townAssociation, String city, MyCoordinate coordinate){
+        if (!townAssociation.isEmpty()){
+            TownQuery.setText(townAssociation.get(city));
+            GeoPosition geoPosition = new GeoPosition(coordinate.getLattitude(),coordinate.getLongitude());
+            jXMapKit.setCenterPosition(geoPosition);
+            ArrayList<MapPoint> list = new ArrayList<>();
+            list.add(new MapPoint(coordinate,city));
+            addMarkers(list);
         }
     }
 
@@ -223,31 +283,49 @@ public class MainScreen extends JFrame {
             NotFoundPlaces.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    TownQuery.setText(townAssociation.get(NotFoundPlaces.getSelectedItem().toString()));
+                    String town = NotFoundPlaces.getSelectedItem().toString();
+                    TownQuery.setText(townAssociation.get(town));
+                    updateMissingCityTab(townAssociation,town);
                 }
             });
-            updateMissingCityTab(townAssociation);
+            updateMissingCityTab(townAssociation,NotFoundPlaces.getSelectedItem().toString());
         }
         TownQuery.setEditable(false);
         rechercherVilleNonTrouvee();
         remplacerAction();
     }
 
+    public void addMarkers(ArrayList<MapPoint> mapPoints){
+        Set<MyWaypoint> waypoints =  mapFrame.addCities(mapPoints);
+        WaypointPainter<MyWaypoint> waypointPainter = new WaypointPainter<MyWaypoint>();
+        waypointPainter.setWaypoints(waypoints);
+        waypointPainter.setRenderer(new FancyWaypointRenderer());
+        JXMapViewer map = jXMapKit.getMainMap();
+        map.setOverlayPainter(waypointPainter);
+    }
+
     private void remplacerAction(){
         remplacerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String key = (String) NotFoundPlaces.getSelectedItem();
-                String value = searchField.getText();
-                HashMap<String, String> townAssociation = Town.getTownAssociation();
-                townAssociation.remove(key);
-                townAssociation.put(key,value);
-                Serializer.getSerializer().saveTownAssociation(townAssociation);
-                updateMissingCityTab(townAssociation);
-                JOptionPane.showMessageDialog(tabbedPane1,
+                try {
+                    String key = (String) NotFoundPlaces.getSelectedItem();
+                    String value = searchField.getText();
+                    MyCoordinate result = Town.parseJsonArray(HTTPConnexion.sendAddressRequest(value),value);
+                    Town.setCoordinates(result,key);
+                    HashMap<String, String> townAssociation = Town.getTownAssociation();
+                    townAssociation.remove(key);
+                    townAssociation.put(key,value);
+                    Serializer.getSerializer().saveTownAssociation(townAssociation);
+                    String city = NotFoundPlaces.getSelectedItem().toString();
+                    updateMissingCityTab(townAssociation,city);
+                    JOptionPane.showMessageDialog(tabbedPane1,
                         "Mise à jour d'alias de ville effectuée avec succès",
                         "Information",
                         JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
             }
         });
     }
@@ -261,6 +339,11 @@ public class MainScreen extends JFrame {
                     try {
                         MyCoordinate result = Town.parseJsonArray(HTTPConnexion.sendAddressRequest(search),search);
                         logger.info("Coordonnées de la ville " + search + " : " + result);
+                        if (result != null){
+                            String city = search;
+                            HashMap<String, String> townAssociation = Town.getTownAssociation();
+                            updateMissingCityTab(townAssociation,city,result);
+                        }
                     } catch (Exception e1) {
                         e1.printStackTrace();
                         logger.error("Erreur lors de la recherche de ville");
@@ -276,5 +359,6 @@ public class MainScreen extends JFrame {
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
+        initMap();
     }
 }

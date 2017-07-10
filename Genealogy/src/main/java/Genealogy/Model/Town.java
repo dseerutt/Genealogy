@@ -141,6 +141,15 @@ public class Town implements Serializable{
         return null;
     }
 
+    public static MyCoordinate findCoordinate(String city){
+        for (int i = 0 ; i < Town.getTowns().size() ; i++){
+            if (towns.get(i).getFullName().equals(city)){
+                return towns.get(i).getCoordinates();
+            }
+        }
+        return null;
+    }
+
     public static void setCoordinates() throws Exception {
         lostTowns = new ArrayList<String>();
         //Alias villes qui ont changé de nom
@@ -215,6 +224,17 @@ public class Town implements Serializable{
 
     public void setCoordinates(MyCoordinate coordinates) {
         this.coordinates = coordinates;
+    }
+
+    public static void setCoordinates(MyCoordinate coordinates, String city) {
+        Town thisTown;
+        for (Town town : towns){
+            if (town.getFullName().equals(city)){
+                thisTown =  town;
+                thisTown.setCoordinates(coordinates);
+                return;
+            }
+        }
     }
 
     public String getName() {

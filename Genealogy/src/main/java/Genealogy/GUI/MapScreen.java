@@ -362,7 +362,6 @@ public class MapScreen extends JFrame{
         }
         ArrayList<MapPoint> mapPoints = convertMapPoints(mapStructure);
         addMarkers(mapPoints);
-        //setMapParameter(initPosition,zoom);
     }
 
     public void initButtons(){
@@ -373,7 +372,7 @@ public class MapScreen extends JFrame{
                 removeMarkers();
                 if (generationALaDateRadioButton.isSelected()){
                     int year = (int) comboDate.getSelectedItem();
-                    ArrayList<MapStructure> mapStructure = null;
+                    ArrayList<MapStructure> mapStructure;
                     if (tousLesAncetresRadioButton.isSelected()){
                         mapStructure = Person.getPeriodsDirectAncestors().get(year);
                     } else {
