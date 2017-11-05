@@ -22,7 +22,7 @@ public class MyHttpURLConnexion {
     private static final String testingInternetConnexion = "http://whatthecommit.com/";
     final static Logger logger = Logger.getLogger(MyHttpURLConnexion.class);
     // HTTP GET request
-    private String sendGet(String url) throws Exception {
+    public String sendGet(String url) throws Exception {
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
