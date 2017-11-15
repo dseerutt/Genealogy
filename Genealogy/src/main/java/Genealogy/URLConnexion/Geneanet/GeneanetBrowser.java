@@ -2,6 +2,7 @@ package Genealogy.URLConnexion.Geneanet;
 
 import Genealogy.URLConnexion.MyHttpURLConnexion;
 import Genealogy.URLConnexion.Serializer;
+import org.apache.commons.codec.binary.StringUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -37,6 +38,12 @@ public class GeneanetBrowser {
     public Map<String, String> cookie;
     private String path;
     private boolean jar = false;
+    private GeneanetConverter geneanetConverter;
+
+    public GeneanetBrowser() throws  Exception{
+        initConnexion();
+        geneanetConverter = new GeneanetConverter();
+    }
 
     /**
      * Fonction initPath
@@ -69,6 +76,14 @@ public class GeneanetBrowser {
             username = prop.getProperty("u2");
             password = prop.getProperty("p2");
             formRegex = prop.getProperty("formRegex");
+            geneanetConverter.setXpathFirstName(prop.getProperty("XpathFirstName"));
+            geneanetConverter.setXpathFamilyName(prop.getProperty("XpathFamilyName"));
+            geneanetConverter.setXpathBirth(prop.getProperty("XpathBirth"));
+            geneanetConverter.setXpathDeath(prop.getProperty("XpathDeath"));
+            geneanetConverter.setXpathFather(prop.getProperty("XpathFather"));
+            geneanetConverter.setXpathMother(prop.getProperty("XpathMother"));
+            geneanetConverter.setXpathWeddingAndChildren(prop.getProperty("XpathWeddingAndChildren"));
+            geneanetConverter.setXpathBrotherhood(prop.getProperty("XpathBrotherhood"));
         } catch (IOException ex) {
             ex.printStackTrace();
         } finally {
@@ -199,15 +214,55 @@ public class GeneanetBrowser {
         return null;
     }
 
+    private GeneanetPerson search(String url){
+        try {
+            Document inputDocument = connect(url);
+            GeneanetPerson person = geneanetConverter.parseDocument(inputDocument, url);
+            return person;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Erreur lors de la recherche de l'url " + url);
+        }
+        return null;
+    }
+
+
+    public static void main2(String[] args) {
+        try {
+            GeneanetBrowser browser = new GeneanetBrowser();
+            Document doc = browser.connect("https://gw.geneanet.org/slebruman?lang=fr&iz=6847&p=georges+auguste+louis&n=leroy");
+            String pattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/ul/li/text()";
+            String result = Xsoup.compile(pattern).evaluate(doc).get();
+            //String result = browser.findXPath(doc,"Georges Auguste Louis LEROY");
+            System.out.println(result);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) {
         try {
+            String url = "https://gw.geneanet.org/slebruman?lang=fr&iz=6847&p=georges+auguste+louis&n=leroy";
             GeneanetBrowser browser = new GeneanetBrowser();
-            browser.initConnexion();
-            Document doc = browser.connect("https://gw.geneanet.org/slebruman?lang=fr&iz=6847&p=georges+auguste+louis&n=leroy");
-            String pattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/ul[4]";
-            String result = Xsoup.compile(pattern).evaluate(doc).get();
-            //String result = browser.findXPath(doc,"Georges Auguste Louis LEROY");
+            //Document doc = browser.connect(url);
+            GeneanetPerson person = browser.search(url);
+            System.out.println(person);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void main0(String[] args) {
+        try {
+            String regex = "(.*?),.*";
+            String birth = "Né le 11 février 1855 (dimanche) - Nehou, , Manche, , France";
+            System.out.println(birth);
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(birth);
+            System.out.println(matcher.find());
+            String result = matcher.group(1);
             System.out.println(result);
         }
         catch (Exception e){
