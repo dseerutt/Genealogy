@@ -21,6 +21,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -256,14 +258,28 @@ public class GeneanetBrowser {
 
     public static void main0(String[] args) {
         try {
-            String regex = "(.*?),.*";
-            String birth = "Né le 11 février 1855 (dimanche) - Nehou, , Manche, , France";
-            System.out.println(birth);
+            String birth = "Né le 11 février 1855 (dimanche)";
+            //Remove the day surrounded by parenthesis
+            String[] parenthesisTab = birth.split(" \\(");
+            String resultDate = parenthesisTab[0];
+            //String chaine = formater.format(date0);
+
+            //remove Né le
+            String[] dateTab = resultDate.split("Né le ");
+            if (dateTab.length != 1){
+                resultDate = dateTab[1];
+            }
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.FRANCE);
+            //SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE dd MMM yyyy", Locale.FRANCE);
+            Date date0 = dateFormat.parse(resultDate);
+
+
+            /*System.out.println(birth);
             Pattern pattern = Pattern.compile(regex);
             Matcher matcher = pattern.matcher(birth);
             System.out.println(matcher.find());
-            String result = matcher.group(1);
-            System.out.println(result);
+            String result = matcher.group(1);*/
+            System.out.println(date0);
         }
         catch (Exception e){
             e.printStackTrace();

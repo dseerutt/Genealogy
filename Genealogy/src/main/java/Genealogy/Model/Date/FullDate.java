@@ -19,6 +19,9 @@ public class FullDate extends MyDate {
             SimpleDateFormat format = new SimpleDateFormat(AuxMethods.DATE_FORMAT2, Locale.ENGLISH);
             date =  format.parse(input);
     }
+    public FullDate(Date input){
+        date = input;
+    }
 
     public FullDate(){
         date = new Date();

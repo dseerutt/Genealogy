@@ -15,7 +15,7 @@ public class GeneanetPerson {
     private String firstName;
     private String familyName;
     private MyDate birthDate;
-    private Town placeOfBirth;
+    private String placeOfBirth;
     private MyDate deathDate;
     private Town placeOfDeath;
     private String father;
@@ -54,11 +54,11 @@ public class GeneanetPerson {
         this.birthDate = birthDate;
     }
 
-    public Town getPlaceOfBirth() {
+    public String getPlaceOfBirth() {
         return placeOfBirth;
     }
 
-    public void setPlaceOfBirth(Town placeOfBirth) {
+    public void setPlaceOfBirth(String placeOfBirth) {
         this.placeOfBirth = placeOfBirth;
     }
 

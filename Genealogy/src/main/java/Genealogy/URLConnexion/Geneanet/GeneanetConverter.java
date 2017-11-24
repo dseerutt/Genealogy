@@ -1,9 +1,15 @@
 package Genealogy.URLConnexion.Geneanet;
 
+import Genealogy.Model.Date.FullDate;
+import Genealogy.Model.Date.MyDate;
 import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import us.codecraft.xsoup.Xsoup;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -101,7 +107,7 @@ public class GeneanetConverter {
         return null;
     }
 
-    public void setBirth(Document doc){
+    public void setBirth(Document doc, GeneanetPerson person){
         String regex = "(.*?),.*";
         String birth = Xsoup.compile(XpathBirth).evaluate(doc).get();
         Pattern pattern = Pattern.compile(regex);
@@ -112,17 +118,43 @@ public class GeneanetConverter {
             if (tab != null && tab.length > 1){
                 String date = tab[0];
                 String city = tab[1];
-                System.out.println(date);
-                System.out.println(city);
+                person.setPlaceOfBirth(city);
+
+                //Remove the day surrounded by parenthesis
+                String[] parenthesisTab = date.split(" \\(");
+                String resultDate = parenthesisTab[0];
+
+                //remove Né le
+                String[] dateTab = resultDate.split("Né le ");
+                if (dateTab.length != 1){
+                    resultDate = dateTab[1];
+                }
+                Character space = (char) 160;
+                resultDate = resultDate.replace(space,' ');
+                System.out.println(resultDate);
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.FRANCE);
+                //SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE dd MMM yyyy", Locale.FRANCE);
+                try {
+                    Date date0 = dateFormat.parse(resultDate);
+                    MyDate myDate = new FullDate(date0);
+                    person.setBirthDate(myDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         }
+
+    }
+
+    public MyDate parseDate(String input){
+        return null;
     }
 
     public GeneanetPerson parseDocument(Document doc, String url){
         String firstName = getFirstName(doc);
         String name = getName(doc);
         GeneanetPerson person = new GeneanetPerson(url,firstName,name);
-        setBirth(doc);
+        setBirth(doc, person);
         return person;
     }
 
