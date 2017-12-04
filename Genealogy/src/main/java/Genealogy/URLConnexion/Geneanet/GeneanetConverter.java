@@ -2,6 +2,7 @@ package Genealogy.URLConnexion.Geneanet;
 
 import Genealogy.Model.Date.FullDate;
 import Genealogy.Model.Date.MyDate;
+import org.apache.commons.lang.StringUtils;
 import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import us.codecraft.xsoup.Xsoup;
@@ -18,14 +19,21 @@ import java.util.regex.Pattern;
  */
 public class GeneanetConverter {
 
+    private static String XpathGender;
     private static String XpathFirstName;
     private static String XpathFamilyName;
     private static String XpathBirth;
     private static String XpathDeath;
     private static String XpathFather;
     private static String XpathMother;
-    private static String XpathWeddingAndChildren;
-    private static String XpathBrotherhood;
+    private static String XpathFamily;
+    private static String geneanetSearchURL;
+    private Document doc;
+    private GeneanetPerson person;
+
+    public GeneanetConverter(Document document){
+        doc = document;
+    }
 
     public static String getXpathFirstName() {
         return XpathFirstName;
@@ -75,20 +83,44 @@ public class GeneanetConverter {
         XpathMother = xpathMother;
     }
 
-    public static String getXpathWeddingAndChildren() {
-        return XpathWeddingAndChildren;
+    public static String getXpathFamily() {
+        return XpathFamily;
     }
 
-    public static void setXpathWeddingAndChildren(String xpathWeddingAndChildren) {
-        XpathWeddingAndChildren = xpathWeddingAndChildren;
+    public static void setXpathFamily(String xpathFamily) {
+        XpathFamily = xpathFamily;
     }
 
-    public static String getXpathBrotherhood() {
-        return XpathBrotherhood;
+    public static void setXpathGender(String xpathGender) {
+        XpathGender = xpathGender;
     }
 
-    public static void setXpathBrotherhood(String xpathBrotherhood) {
-        XpathBrotherhood = xpathBrotherhood;
+    public static String getXpathGender() {
+        return XpathGender;
+    }
+
+    public static String getGeneanetSearchURL() {
+        return geneanetSearchURL;
+    }
+
+    public static void setGeneanetSearchURL(String GeneanetSearchURL) {
+        geneanetSearchURL = GeneanetSearchURL;
+    }
+
+    public Document getDoc() {
+        return doc;
+    }
+
+    public void setDoc(Document doc) {
+        this.doc = doc;
+    }
+
+    public GeneanetPerson getPerson() {
+        return person;
+    }
+
+    public void setPerson(GeneanetPerson person) {
+        this.person = person;
     }
 
     public String getFirstName(Document doc){
@@ -107,7 +139,7 @@ public class GeneanetConverter {
         return null;
     }
 
-    public void setBirth(Document doc, GeneanetPerson person){
+    public void setBirth(){
         String regex = "(.*?),.*";
         String birth = Xsoup.compile(XpathBirth).evaluate(doc).get();
         Pattern pattern = Pattern.compile(regex);
@@ -119,43 +151,107 @@ public class GeneanetConverter {
                 String date = tab[0];
                 String city = tab[1];
                 person.setPlaceOfBirth(city);
-
-                //Remove the day surrounded by parenthesis
-                String[] parenthesisTab = date.split(" \\(");
-                String resultDate = parenthesisTab[0];
-
-                //remove Né le
-                String[] dateTab = resultDate.split("Né le ");
-                if (dateTab.length != 1){
-                    resultDate = dateTab[1];
-                }
-                Character space = (char) 160;
-                resultDate = resultDate.replace(space,' ');
-                System.out.println(resultDate);
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.FRANCE);
-                //SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE dd MMM yyyy", Locale.FRANCE);
-                try {
-                    Date date0 = dateFormat.parse(resultDate);
-                    MyDate myDate = new FullDate(date0);
-                    person.setBirthDate(myDate);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                person.setBirthDate(parseBirthDate(date,person.getGender()));
             }
         }
-
     }
 
-    public MyDate parseDate(String input){
+    public void setDeath(){
+        String regex = "(.*?),.*";
+        String death = Xsoup.compile(XpathDeath).evaluate(doc).get();
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(death);
+        if (matcher != null && matcher.find()){
+            String dateAndCity = matcher.group(1);
+            String[] tab = dateAndCity.split(" - ");
+            if (tab != null && tab.length > 1){
+                String date = tab[0];
+                String city = tab[1];
+                person.setPlaceOfDeath(city);
+                person.setDeathDate(parseDeathDate(date,person.getGender()));
+            }
+        }
+    }
+
+    public MyDate parseBirthDate(String input, Gender gender){
+        if (gender == Gender.Female){
+            return parseDate(input,"Née le ");
+        }
+        return parseDate(input,"Né le ");
+    }
+
+    public MyDate parseDeathDate(String input, Gender gender){
+        if (gender == Gender.Female){
+            return parseDate(input,"Décédée le ");
+        }
+        return parseDate(input,"Décédé le ");
+    }
+
+    public static int compareString(String s1, String s2){
+        return StringUtils.indexOfDifference(s1,s2);
+    }
+
+    public MyDate parseDate(String input, String regex){
+
+        //Remove the day surrounded by parenthesis
+        String[] parenthesisTab = input.split(" \\(");
+        String resultDate = parenthesisTab[0];
+
+        //gestion des espaces
+        Character space = (char) 160;
+        resultDate = resultDate.replace(space,' ');
+
+        //remove Né le
+        regex = regex.replace(space,' ');
+        String[] dateTab = resultDate.split(regex);
+        if (dateTab.length != 1){
+            resultDate = dateTab[1];
+        }
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.FRANCE);
+        //SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE dd MMM yyyy", Locale.FRANCE);
+        try {
+            Date date0 = dateFormat.parse(resultDate);
+            return new FullDate(date0);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
-    public GeneanetPerson parseDocument(Document doc, String url){
+    public void setFamily(){
+        int startIndex = 3;
+    }
+
+    public void parseDocument(Document document, String url){
+        doc = document;
         String firstName = getFirstName(doc);
         String name = getName(doc);
-        GeneanetPerson person = new GeneanetPerson(url,firstName,name);
-        setBirth(doc, person);
-        return person;
+        person = new GeneanetPerson(url,firstName,name);
+        setGender();
+        setBirth();
+        setDeath();
+        setFather();
+        setMother();
+        setFamily();
+    }
+
+    private void setGender() {
+        String gender = Xsoup.compile(XpathGender).evaluate(doc).get();
+        person.setGender(Gender.getGender(gender));
+    }
+
+    private boolean setMother() {
+        String xpath =(XpathFamily + XpathMother).replace("XXX","2");
+        String motherURL = Xsoup.compile(xpath).evaluate(doc).get();
+        person.setMother(geneanetSearchURL + motherURL);
+        return person.getMother() != null;
+    }
+
+    private boolean setFather() {
+        String xpath =(XpathFamily + XpathFather).replace("XXX","2");
+        String fatherURL = Xsoup.compile(xpath).evaluate(doc).get();
+        person.setFather(geneanetSearchURL + fatherURL);
+        return person.getFather() != null;
     }
 
 }

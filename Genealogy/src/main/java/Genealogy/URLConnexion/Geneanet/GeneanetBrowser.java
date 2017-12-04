@@ -43,8 +43,8 @@ public class GeneanetBrowser {
     private GeneanetConverter geneanetConverter;
 
     public GeneanetBrowser() throws  Exception{
-        initConnexion();
-        geneanetConverter = new GeneanetConverter();
+        Document doc = initConnexion();
+        geneanetConverter = new GeneanetConverter(doc);
     }
 
     /**
@@ -73,19 +73,20 @@ public class GeneanetBrowser {
         try {
             input = new FileInputStream(path + "geneanet.properties");
             prop.load(input);
-            geneanetURL = prop.getProperty("geneanetURL");
-            geneanetURLpart2 = prop.getProperty("geneanetURLpart2");
+            geneanetURL = prop.getProperty("geneanetConnexionURL");
+            geneanetURLpart2 = prop.getProperty("geneanetConnexionURLpart2");
             username = prop.getProperty("u2");
             password = prop.getProperty("p2");
             formRegex = prop.getProperty("formRegex");
+            geneanetConverter.setXpathGender(prop.getProperty("XpathGender"));
             geneanetConverter.setXpathFirstName(prop.getProperty("XpathFirstName"));
             geneanetConverter.setXpathFamilyName(prop.getProperty("XpathFamilyName"));
             geneanetConverter.setXpathBirth(prop.getProperty("XpathBirth"));
             geneanetConverter.setXpathDeath(prop.getProperty("XpathDeath"));
             geneanetConverter.setXpathFather(prop.getProperty("XpathFather"));
             geneanetConverter.setXpathMother(prop.getProperty("XpathMother"));
-            geneanetConverter.setXpathWeddingAndChildren(prop.getProperty("XpathWeddingAndChildren"));
-            geneanetConverter.setXpathBrotherhood(prop.getProperty("XpathBrotherhood"));
+            geneanetConverter.setXpathFamily(prop.getProperty("XpathFamily"));
+            geneanetConverter.setGeneanetSearchURL(prop.getProperty("geneanetSearchURL"));
         } catch (IOException ex) {
             ex.printStackTrace();
         } finally {
@@ -104,7 +105,7 @@ public class GeneanetBrowser {
      * initialise les propriétés et la connexion
      * @throws Exception
      */
-    public void initConnexion() throws Exception{
+    public Document initConnexion() throws Exception{
             initProperties();
             String csrfValue = "";
             Connection.Response loginForm = Jsoup.connect(geneanetURL)
@@ -133,6 +134,7 @@ public class GeneanetBrowser {
                 throw new Exception("fail to login");
             }
             cookie = res.cookies();
+        return doc;
     }
 
     /**
@@ -219,8 +221,8 @@ public class GeneanetBrowser {
     private GeneanetPerson search(String url){
         try {
             Document inputDocument = connect(url);
-            GeneanetPerson person = geneanetConverter.parseDocument(inputDocument, url);
-            return person;
+            geneanetConverter.parseDocument(inputDocument, url);
+            return geneanetConverter.getPerson();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Erreur lors de la recherche de l'url " + url);
@@ -232,11 +234,23 @@ public class GeneanetBrowser {
     public static void main2(String[] args) {
         try {
             GeneanetBrowser browser = new GeneanetBrowser();
-            Document doc = browser.connect("https://gw.geneanet.org/slebruman?lang=fr&iz=6847&p=georges+auguste+louis&n=leroy");
-            String pattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/ul/li/text()";
+            Document doc = browser.connect("https://gw.geneanet.org/dil?lang=fr&iz=0&p=louis&n=thierry&oc=1");
+            String pattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div/h1/img/@title";
             String result = Xsoup.compile(pattern).evaluate(doc).get();
-            //String result = browser.findXPath(doc,"Georges Auguste Louis LEROY");
             System.out.println(result);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void main3(String[] args) {
+        try {
+            String url = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louis&n=thierry&oc=1";
+            GeneanetBrowser browser = new GeneanetBrowser();
+            Document doc = browser.connect(url);
+            String data = browser.findXPath(doc,"Louis");
+            System.out.println(data);
         }
         catch (Exception e){
             e.printStackTrace();
@@ -245,41 +259,11 @@ public class GeneanetBrowser {
 
     public static void main(String[] args) {
         try {
-            String url = "https://gw.geneanet.org/slebruman?lang=fr&iz=6847&p=georges+auguste+louis&n=leroy";
+            String url = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louis&n=thierry&oc=1";
             GeneanetBrowser browser = new GeneanetBrowser();
             //Document doc = browser.connect(url);
             GeneanetPerson person = browser.search(url);
             System.out.println(person);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    public static void main0(String[] args) {
-        try {
-            String birth = "Né le 11 février 1855 (dimanche)";
-            //Remove the day surrounded by parenthesis
-            String[] parenthesisTab = birth.split(" \\(");
-            String resultDate = parenthesisTab[0];
-            //String chaine = formater.format(date0);
-
-            //remove Né le
-            String[] dateTab = resultDate.split("Né le ");
-            if (dateTab.length != 1){
-                resultDate = dateTab[1];
-            }
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.FRANCE);
-            //SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE dd MMM yyyy", Locale.FRANCE);
-            Date date0 = dateFormat.parse(resultDate);
-
-
-            /*System.out.println(birth);
-            Pattern pattern = Pattern.compile(regex);
-            Matcher matcher = pattern.matcher(birth);
-            System.out.println(matcher.find());
-            String result = matcher.group(1);*/
-            System.out.println(date0);
         }
         catch (Exception e){
             e.printStackTrace();

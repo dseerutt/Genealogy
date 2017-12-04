@@ -12,16 +12,17 @@ import java.util.HashMap;
  */
 public class GeneanetPerson {
     private String url;
+    private Gender gender;
     private String firstName;
     private String familyName;
     private MyDate birthDate;
     private String placeOfBirth;
     private MyDate deathDate;
-    private Town placeOfDeath;
+    private String placeOfDeath;
     private String father;
     private String mother;
-    private ArrayList<GeneanetPerson> siblings;
-    private ArrayList<GeneanetPerson> children;
+    private ArrayList<String> siblings;
+    private ArrayList<String> children;
     private HashMap<GeneanetPerson,HashMap<MyDate,Town>> marriage;
 
     public GeneanetPerson(String url, String firstName, String familyName) {
@@ -70,11 +71,11 @@ public class GeneanetPerson {
         this.deathDate = deathDate;
     }
 
-    public Town getPlaceOfDeath() {
+    public String getPlaceOfDeath() {
         return placeOfDeath;
     }
 
-    public void setPlaceOfDeath(Town placeOfDeath) {
+    public void setPlaceOfDeath(String placeOfDeath) {
         this.placeOfDeath = placeOfDeath;
     }
 
@@ -94,19 +95,19 @@ public class GeneanetPerson {
         this.mother = mother;
     }
 
-    public ArrayList<GeneanetPerson> getSiblings() {
+    public ArrayList<String> getSiblings() {
         return siblings;
     }
 
-    public void setSiblings(ArrayList<GeneanetPerson> siblings) {
+    public void setSiblings(ArrayList<String> siblings) {
         this.siblings = siblings;
     }
 
-    public ArrayList<GeneanetPerson> getChildren() {
+    public ArrayList<String> getChildren() {
         return children;
     }
 
-    public void setChildren(ArrayList<GeneanetPerson> children) {
+    public void setChildren(ArrayList<String> children) {
         this.children = children;
     }
 
@@ -126,12 +127,21 @@ public class GeneanetPerson {
         this.url = url;
     }
 
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
     @Override
     public String toString() {
         return "GeneanetPerson{" +
                 "url='" + url + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", familyName='" + familyName + '\'' +
+                ", gender='" + gender + '\'' +
                 ", birthDate=" + birthDate +
                 ", placeOfBirth=" + placeOfBirth +
                 ", deathDate=" + deathDate +
