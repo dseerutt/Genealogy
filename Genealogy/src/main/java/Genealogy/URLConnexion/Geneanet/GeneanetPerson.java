@@ -22,6 +22,7 @@ public class GeneanetPerson {
     private String father;
     private String mother;
     private ArrayList<String> siblings;
+    private ArrayList<String> halfSiblings;
     private ArrayList<String> children;
     private HashMap<GeneanetPerson,HashMap<MyDate,Town>> marriage;
 
@@ -29,6 +30,8 @@ public class GeneanetPerson {
         this.url = url;
         this.firstName = firstName;
         this.familyName = familyName;
+        siblings = new ArrayList<>();
+        halfSiblings = new ArrayList<>();
     }
 
     public String getFirstName() {
@@ -149,8 +152,17 @@ public class GeneanetPerson {
                 ", father='" + father + '\'' +
                 ", mother='" + mother + '\'' +
                 ", siblings=" + siblings +
+                ", halfSiblings=" + halfSiblings +
                 ", children=" + children +
                 ", marriage=" + marriage +
                 '}';
+    }
+
+    public void addSibling(String personString) {
+        siblings.add(personString);
+    }
+
+    public void addHalfSibling(String personString) {
+        halfSiblings.add(personString);
     }
 }

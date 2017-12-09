@@ -27,9 +27,16 @@ public class GeneanetConverter {
     private static String XpathFather;
     private static String XpathMother;
     private static String XpathFamily;
+    private static String XpathSection;
     private static String geneanetSearchURL;
+    private static String XpathMarriageDate;
+    private static String XpathMarriagePartner;
+    private static String XpathBrother;
+    private static String XpathHalfBrother;
+    private static String XpathUrl;
     private Document doc;
     private GeneanetPerson person;
+    private final static Character space = (char) 160;
 
     public GeneanetConverter(Document document){
         doc = document;
@@ -91,6 +98,14 @@ public class GeneanetConverter {
         XpathFamily = xpathFamily;
     }
 
+    public static String getXpathUrl() {
+        return XpathUrl;
+    }
+
+    public static void setXpathUrl(String xpathUrl) {
+        XpathUrl = xpathUrl;
+    }
+
     public static void setXpathGender(String xpathGender) {
         XpathGender = xpathGender;
     }
@@ -113,6 +128,46 @@ public class GeneanetConverter {
 
     public void setDoc(Document doc) {
         this.doc = doc;
+    }
+
+    public static String getXpathMarriageDate() {
+        return XpathMarriageDate;
+    }
+
+    public static void setXpathMarriageDate(String xpathMarriageDate) {
+        XpathMarriageDate = xpathMarriageDate;
+    }
+
+    public static String getXpathMarriagePartner() {
+        return XpathMarriagePartner;
+    }
+
+    public static void setXpathMarriagePartner(String xpathMarriagePartner) {
+        XpathMarriagePartner = xpathMarriagePartner;
+    }
+
+    public static String getXpathBrother() {
+        return XpathBrother;
+    }
+
+    public static void setXpathBrother(String xpathBrother) {
+        XpathBrother = xpathBrother;
+    }
+
+    public static String getXpathHalfBrother() {
+        return XpathHalfBrother;
+    }
+
+    public static void setXpathHalfBrother(String xpathHalfBrother) {
+        XpathHalfBrother = xpathHalfBrother;
+    }
+
+    public static String getXpathSection() {
+        return XpathSection;
+    }
+
+    public static void setXpathSection(String xpathSection) {
+        XpathSection = xpathSection;
     }
 
     public GeneanetPerson getPerson() {
@@ -198,7 +253,6 @@ public class GeneanetConverter {
         String resultDate = parenthesisTab[0];
 
         //gestion des espaces
-        Character space = (char) 160;
         resultDate = resultDate.replace(space,' ');
 
         //remove Né le
@@ -219,7 +273,73 @@ public class GeneanetConverter {
     }
 
     public void setFamily(){
-        int startIndex = 3;
+        int index = 2;
+        String category = Xsoup.compile(XpathSection.replace("XXX","" + index)).evaluate(doc).get();
+        if (category.equals("Union(s) et enfant(s)")){
+            setMarriageAndChildren(index+1);
+            index++;
+        }
+        category = Xsoup.compile(XpathSection.replace("XXX","" + index)).evaluate(doc).get();
+        if (category.equals("Fratrie")){
+            setBrotherhood(index+1);
+            index++;
+        } else if (category.equals("Demi-frères et demi-sœurs")) {
+            setHalfBrotherhood();
+            index++;
+        }
+
+        category = Xsoup.compile(XpathSection.replace("XXX","" + index)).evaluate(doc).get();
+        if (category.equals("Fratrie")){
+            setBrotherhood(index+1);
+            index++;
+        } else if (category.equals("Demi-frères et demi-sœurs")) {
+            setHalfBrotherhood();
+            index++;
+        }
+    }
+
+    private void setBrotherhood(int index) {
+        int siblingNumber = 1;
+        String personString;
+        do {
+            personString = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathBrother.replace("XXX","" + siblingNumber)).evaluate(doc).get();
+            if (personString != null&&!personString.equals(person.getUrl())){
+                person.addSibling(personString);
+            }
+            siblingNumber++;
+        } while (personString != null);
+    }
+
+    private void setHalfBrotherhood() {
+        int siblingNumber = 1;
+        int siblingBranch = 1;
+        boolean exit = false;
+        String personString;
+        do {
+            do {
+                personString = Xsoup.compile(XpathHalfBrother.replace("XXX","" + siblingBranch).replace("YYY","" + siblingNumber)).evaluate(doc).get();
+                if (personString != null&&!personString.equals(person.getUrl())){
+                    person.addHalfSibling(personString);
+                } else if (siblingNumber == 1) {
+                    exit = true;
+                }
+                siblingNumber++;
+            } while (personString != null);
+            siblingBranch++;
+            siblingNumber = 1;
+            personString = "";
+        } while (!exit&&personString != null);
+    }
+
+    private void setMarriageAndChildren(int index) {
+        int wifeNumber = 1;
+        String dateAndCity;
+        String person;
+        do {
+            dateAndCity = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathMarriageDate.replace("XXX","" + wifeNumber)).evaluate(doc).get();
+            person = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathMarriagePartner.replace("XXX","" + wifeNumber)).evaluate(doc).get();
+            wifeNumber++;
+        } while (dateAndCity != null && person != null);
     }
 
     public void parseDocument(Document document, String url){
@@ -232,7 +352,13 @@ public class GeneanetConverter {
         setDeath();
         setFather();
         setMother();
+        setUrl();
         setFamily();
+    }
+
+    private void setUrl() {
+        String url = Xsoup.compile(XpathUrl).evaluate(doc).get();
+        person.setUrl(url);
     }
 
     private void setGender() {

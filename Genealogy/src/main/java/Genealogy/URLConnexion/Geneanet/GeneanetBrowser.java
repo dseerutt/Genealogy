@@ -87,6 +87,12 @@ public class GeneanetBrowser {
             geneanetConverter.setXpathMother(prop.getProperty("XpathMother"));
             geneanetConverter.setXpathFamily(prop.getProperty("XpathFamily"));
             geneanetConverter.setGeneanetSearchURL(prop.getProperty("geneanetSearchURL"));
+            geneanetConverter.setXpathSection(prop.getProperty("XpathSection"));
+            geneanetConverter.setXpathMarriageDate(prop.getProperty("XpathMarriageDate"));
+            geneanetConverter.setXpathMarriagePartner(prop.getProperty("XpathMarriagePartner"));
+            geneanetConverter.setXpathBrother(prop.getProperty("XpathBrother"));
+            geneanetConverter.setXpathHalfBrother(prop.getProperty("XpathHalfBrother"));
+            geneanetConverter.setXpathUrl(prop.getProperty("XpathUrl"));
         } catch (IOException ex) {
             ex.printStackTrace();
         } finally {
@@ -234,8 +240,8 @@ public class GeneanetBrowser {
     public static void main2(String[] args) {
         try {
             GeneanetBrowser browser = new GeneanetBrowser();
-            Document doc = browser.connect("https://gw.geneanet.org/dil?lang=fr&iz=0&p=louis&n=thierry&oc=1");
-            String pattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div/h1/img/@title";
+            Document doc = browser.connect("https://gw.geneanet.org/dil?lang=fr&iz=0&p=louise&n=vincent");
+            String pattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/em/a/@href";
             String result = Xsoup.compile(pattern).evaluate(doc).get();
             System.out.println(result);
         }
@@ -246,10 +252,10 @@ public class GeneanetBrowser {
 
     public static void main3(String[] args) {
         try {
-            String url = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louis&n=thierry&oc=1";
+            String url = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louis&n=thierry";
             GeneanetBrowser browser = new GeneanetBrowser();
             Document doc = browser.connect(url);
-            String data = browser.findXPath(doc,"Louis");
+            String data = browser.findXPath(doc,"<em class=\"sosa\">Sosa&nbsp;: <a href=\"dil?lang=fr&iz=0&m=RL&i1=677&i2=0&b1=1&b2=189\">189</a></em><br /");
             System.out.println(data);
         }
         catch (Exception e){
@@ -259,7 +265,7 @@ public class GeneanetBrowser {
 
     public static void main(String[] args) {
         try {
-            String url = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louis&n=thierry&oc=1";
+            String url = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louise&n=vincent";
             GeneanetBrowser browser = new GeneanetBrowser();
             //Document doc = browser.connect(url);
             GeneanetPerson person = browser.search(url);
