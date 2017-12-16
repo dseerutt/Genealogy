@@ -24,7 +24,7 @@ public class GeneanetPerson {
     private ArrayList<String> siblings;
     private ArrayList<String> halfSiblings;
     private ArrayList<String> children;
-    private HashMap<GeneanetPerson,HashMap<MyDate,Town>> marriage;
+    private HashMap<String,HashMap<MyDate,String>> marriage;
 
     public GeneanetPerson(String url, String firstName, String familyName) {
         this.url = url;
@@ -32,6 +32,7 @@ public class GeneanetPerson {
         this.familyName = familyName;
         siblings = new ArrayList<>();
         halfSiblings = new ArrayList<>();
+        marriage = new HashMap<>();
     }
 
     public String getFirstName() {
@@ -114,12 +115,20 @@ public class GeneanetPerson {
         this.children = children;
     }
 
-    public HashMap<GeneanetPerson, HashMap<MyDate, Town>> getMarriage() {
+    public HashMap<String, HashMap<MyDate, String>> getMarriage() {
         return marriage;
     }
 
-    public void setMarriage(HashMap<GeneanetPerson, HashMap<MyDate, Town>> marriage) {
+    public void setMarriage(HashMap<String, HashMap<MyDate, String>> marriage) {
         this.marriage = marriage;
+    }
+
+    public ArrayList<String> getHalfSiblings() {
+        return halfSiblings;
+    }
+
+    public void setHalfSiblings(ArrayList<String> halfSiblings) {
+        this.halfSiblings = halfSiblings;
     }
 
     public String getUrl() {
@@ -164,5 +173,11 @@ public class GeneanetPerson {
 
     public void addHalfSibling(String personString) {
         halfSiblings.add(personString);
+    }
+
+    public void addMarriage(String personString, MyDate date, String city) {
+        HashMap<MyDate, String> partnerMap = new HashMap<MyDate, String>();
+        partnerMap.put(date,city);
+        marriage.put(personString, partnerMap);
     }
 }
