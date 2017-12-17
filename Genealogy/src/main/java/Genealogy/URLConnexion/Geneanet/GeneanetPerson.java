@@ -33,6 +33,7 @@ public class GeneanetPerson {
         siblings = new ArrayList<>();
         halfSiblings = new ArrayList<>();
         marriage = new HashMap<>();
+        children = new ArrayList<>();
     }
 
     public String getFirstName() {
@@ -173,6 +174,11 @@ public class GeneanetPerson {
 
     public void addHalfSibling(String personString) {
         halfSiblings.add(personString);
+    }
+
+
+    public void addChild(String child) {
+        children.add(child);
     }
 
     public void addMarriage(String personString, MyDate date, String city) {

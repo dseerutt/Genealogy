@@ -1,8 +1,11 @@
 package Genealogy.URLConnexion.Geneanet;
 
+import Genealogy.AuxMethods;
 import Genealogy.URLConnexion.MyHttpURLConnexion;
 import Genealogy.URLConnexion.Serializer;
 import org.apache.commons.codec.binary.StringUtils;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -21,6 +24,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -41,8 +45,9 @@ public class GeneanetBrowser {
     private String path;
     private boolean jar = false;
     private GeneanetConverter geneanetConverter;
+    final static Logger logger = Logger.getLogger(GeneanetBrowser.class);
 
-    public GeneanetBrowser() throws  Exception{
+    public GeneanetBrowser() throws Exception {
         Document doc = initConnexion();
         geneanetConverter = new GeneanetConverter(doc);
     }
@@ -66,7 +71,7 @@ public class GeneanetBrowser {
      * Fonction initProperties
      * initialise les propriétés de la classe GeneanetBrowser
      */
-    public void initProperties(){
+    public void initProperties() {
         initPath();
         Properties prop = new Properties();
         InputStream input = null;
@@ -92,6 +97,7 @@ public class GeneanetBrowser {
             geneanetConverter.setXpathMarriagePartner(prop.getProperty("XpathMarriagePartner"));
             geneanetConverter.setXpathBrother(prop.getProperty("XpathBrother"));
             geneanetConverter.setXpathHalfBrother(prop.getProperty("XpathHalfBrother"));
+            geneanetConverter.setXpathChildren(prop.getProperty("XpathChildren"));
             geneanetConverter.setXpathUrl(prop.getProperty("XpathUrl"));
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -109,47 +115,61 @@ public class GeneanetBrowser {
     /**
      * Méthode initConnexion
      * initialise les propriétés et la connexion
+     *
      * @throws Exception
      */
-    public Document initConnexion() throws Exception{
-            initProperties();
-            String csrfValue = "";
-            Connection.Response loginForm = Jsoup.connect(geneanetURL)
-                    .method(Connection.Method.GET)
-                    .execute();
-            Document doc = loginForm.parse();
-
-            Pattern pattern = Pattern.compile(formRegex);
-            Matcher matcher = pattern.matcher(doc.toString());
-            while(matcher.find()) {
-                csrfValue = matcher.group(1);
+    public Document initConnexion() throws Exception {
+        initProperties();
+        String csrfValue = "";
+        Connection.Response loginForm = null;
+        int cptConnexion = 1;
+        do {
+            logger.info("Connexion " + cptConnexion + " to " + geneanetURL);
+            try {
+                loginForm = Jsoup.connect(geneanetURL)
+                        .method(Connection.Method.GET)
+                        .execute();
+            } catch (Exception exception) {
+                logger.info("Failed to connect " + exception.getMessage());
+                cptConnexion++;
             }
+        }
+        while (loginForm == null || cptConnexion == 5);
+        Document doc = loginForm.parse();
 
-            Connection.Response res = Jsoup.connect(geneanetURL + geneanetURLpart2)
-                    .data("_username", username)
-                    .data("_password", password)
-                    .data("_remember_me", "1")
-                    .data("_submit", "")
-                    .data("_csrf_token", csrfValue)
-                    .cookies(loginForm.cookies())
-                    .method(Connection.Method.POST)
-                    .execute();
+        Pattern pattern = Pattern.compile(formRegex);
+        Matcher matcher = pattern.matcher(doc.toString());
+        while (matcher.find()) {
+            csrfValue = matcher.group(1);
+        }
 
-            //login OK
-            if (res.cookies().isEmpty()) {
-                throw new Exception("fail to login");
-            }
-            cookie = res.cookies();
+        Connection.Response res;
+        res = Jsoup.connect(geneanetURL + geneanetURLpart2)
+                .data("_username", username)
+                .data("_password", password)
+                .data("_remember_me", "1")
+                .data("_submit", "")
+                .data("_csrf_token", csrfValue)
+                .cookies(loginForm.cookies())
+                .method(Connection.Method.POST)
+                .execute();
+
+        //login OK
+        if (res.cookies().isEmpty()) {
+            throw new Exception("fail to login");
+        }
+        cookie = res.cookies();
         return doc;
     }
 
     /**
      * Fonction connect
+     *
      * @param url de connexion
      * @return
      * @throws Exception
      */
-    public Document connect(String url) throws Exception{
+    public Document connect(String url) throws Exception {
         Connection.Response res2 = Jsoup.connect(url)
                 .cookies(cookie)
                 .method(Connection.Method.POST)
@@ -160,18 +180,19 @@ public class GeneanetBrowser {
     /**
      * Fonction findXPath
      * Détermine le Xpath du String text dans le document
+     *
      * @param document
      * @param text
      * @return
      */
-    public String findXPath(Document document, String text){
+    public String findXPath(Document document, String text) {
         String result = null;
-        for (Node node : document.childNodes()){
-            result = findXPath2(node,text);
-            if (result != null && (node instanceof Element)){
+        for (Node node : document.childNodes()) {
+            result = findXPath2(node, text);
+            if (result != null && (node instanceof Element)) {
                 Element e = (Element) node;
                 String tag = e.tag() + "";
-                return "/" + tag + "/" +  result;
+                return "/" + tag + "/" + result;
             }
         }
         return "";
@@ -180,51 +201,51 @@ public class GeneanetBrowser {
     /**
      * Fonction findXPath2
      * Détermine le Xpath du String text dans le document de façon récursive
+     *
      * @param document
      * @param text
      * @return
      */
-    public String findXPath2(Node document, String text){
-        HashMap<String,Integer> tagList = new HashMap<String,Integer>();
-        if (document.toString().contains(text)){
-            if (document.childNodes().size() != 0){
-                for (Node node : document.childNodes()){
-                    if (node instanceof Element){
+    public String findXPath2(Node document, String text) {
+        HashMap<String, Integer> tagList = new HashMap<String, Integer>();
+        if (document.toString().contains(text)) {
+            if (document.childNodes().size() != 0) {
+                for (Node node : document.childNodes()) {
+                    if (node instanceof Element) {
                         Element e = (Element) node;
-                        String value = findXPath2(node,text);
+                        String value = findXPath2(node, text);
                         String tag = e.tag() + "";
-                        if (tagList.containsKey(tag)){
-                            tagList.put(tag,tagList.get(tag)+1);
+                        if (tagList.containsKey(tag)) {
+                            tagList.put(tag, tagList.get(tag) + 1);
                         } else {
-                            tagList.put(tag,1);
+                            tagList.put(tag, 1);
                         }
                         String separator = "/";
-                        if (value != null && value.equals("")){
+                        if (value != null && value.equals("")) {
                             separator = "";
                         }
-                        if (value != null){
-                            if ((tagList.containsKey(e.tag() + ""))&& (tagList.get(tag) != 1)){
-                                return  e.tag() + "[" + tagList.get(tag) + "]" + separator + value;
+                        if (value != null) {
+                            if ((tagList.containsKey(e.tag() + "")) && (tagList.get(tag) != 1)) {
+                                return e.tag() + "[" + tagList.get(tag) + "]" + separator + value;
                             } else {
-                                return  e.tag() + separator + value;
+                                return e.tag() + separator + value;
                             }
                         }
-                    } else if (node instanceof TextNode){
-                        if (node.toString().equals(text)){
+                    } else if (node instanceof TextNode) {
+                        if (node.toString().equals(text)) {
                             return "";
                         }
                     }
                 }
             }
-        }
-        else {
+        } else {
             return null;
         }
 
         return null;
     }
 
-    private GeneanetPerson search(String url){
+    private GeneanetPerson search(String url) {
         try {
             Document inputDocument = connect(url);
             geneanetConverter.parseDocument(inputDocument, url);
@@ -237,41 +258,39 @@ public class GeneanetBrowser {
     }
 
 
-    public static void main2(String[] args) {
+    public static void main3(String[] args) {
         try {
             GeneanetBrowser browser = new GeneanetBrowser();
-            Document doc = browser.connect("https://gw.geneanet.org/dil?lang=fr&iz=0&p=louise&n=vincent");
-            String pattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/em/a/@href";
+            Document doc = browser.connect("https://gw.geneanet.org/dil?lang=fr&iz=0&p=louis&n=thierry");
+            String pattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/ul[3]/li/ul/li[2]/a/@href";
             String result = Xsoup.compile(pattern).evaluate(doc).get();
             System.out.println(result);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void main3(String[] args) {
+    public static void main2(String[] args) {
         try {
-            String url = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louis&n=thierry";
+            String url = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louise&n=vincent";
             GeneanetBrowser browser = new GeneanetBrowser();
             Document doc = browser.connect(url);
-            String data = browser.findXPath(doc,"<em class=\"sosa\">Sosa&nbsp;: <a href=\"dil?lang=fr&iz=0&m=RL&i1=677&i2=0&b1=1&b2=189\">189</a></em><br /");
+            String data = browser.findXPath(doc, "1805-1844/");
             System.out.println(data);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public static void main(String[] args) {
+        BasicConfigurator.configure();
         try {
             String url = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louis&n=thierry";
             GeneanetBrowser browser = new GeneanetBrowser();
             //Document doc = browser.connect(url);
             GeneanetPerson person = browser.search(url);
             System.out.println(person);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

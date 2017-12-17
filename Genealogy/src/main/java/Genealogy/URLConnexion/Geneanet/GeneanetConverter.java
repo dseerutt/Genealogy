@@ -34,6 +34,7 @@ public class GeneanetConverter {
     private static String XpathMarriagePartner;
     private static String XpathBrother;
     private static String XpathHalfBrother;
+    private static String XpathChildren;
     private static String XpathUrl;
     private Document doc;
     private GeneanetPerson person;
@@ -163,6 +164,14 @@ public class GeneanetConverter {
         XpathBrother = xpathBrother;
     }
 
+    public static String getXpathChildren() {
+        return XpathChildren;
+    }
+
+    public static void setXpathChildren(String xpathChildren) {
+        XpathChildren = xpathChildren;
+    }
+
     public static String getXpathHalfBrother() {
         return XpathHalfBrother;
     }
@@ -288,7 +297,6 @@ public class GeneanetConverter {
             resultDate = dateTab[1];
         }
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.FRANCE);
-        //SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE dd MMM yyyy", Locale.FRANCE);
         try {
             Date date0 = dateFormat.parse(resultDate);
             return new FullDate(date0);
@@ -366,7 +374,7 @@ public class GeneanetConverter {
         String dateAndCity = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathMarriageDate.replace("XXX","" + partnerNumber)).evaluate(doc).get();
         String personString = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathMarriagePartner.replace("XXX","" + partnerNumber).replace("YYY","" + aNumber)).evaluate(doc).get();
 
-        while (dateAndCity != null && person != null) {
+        while (dateAndCity != null && personString != null) {
             if (!personString.contains("&p=")){
                 aNumber++;
                 personString = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathMarriagePartner.replace("XXX","" + partnerNumber).replace("YYY","" + aNumber)).evaluate(doc).get();
@@ -375,14 +383,27 @@ public class GeneanetConverter {
             //unknown date case
             if (!dateAndCity.contains("avant")&&!dateAndCity.contains("après")){
                 date = parseMarriageDate(dateAndCity, person.getGender());
-                city = parseMarriageCity(dateAndCity, person.getGender());
             }
+            city = parseMarriageCity(dateAndCity, person.getGender());
             person.addMarriage(geneanetSearchURL + personString,date,city);
+
+            //Enfants
+            int children = 1;
+            String child = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathChildren.replace("XXX","" + partnerNumber).replace("YYY","" + aNumber).replace("ZZZ","" + children)).evaluate(doc).get();
+            while (child != null){
+                if (!child.contains("&p=")){
+                    aNumber++;
+                    child = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathChildren.replace("XXX","" + partnerNumber).replace("YYY","" + aNumber).replace("ZZZ","" + children)).evaluate(doc).get();
+                }
+                person.addChild(geneanetSearchURL + child);
+                children++;
+                aNumber = 1;
+                child = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathChildren.replace("XXX","" + partnerNumber).replace("YYY","" + aNumber).replace("ZZZ","" + children)).evaluate(doc).get();
+            }
             partnerNumber++;
             dateAndCity = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathMarriageDate.replace("XXX","" + partnerNumber)).evaluate(doc).get();
             personString = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathMarriagePartner.replace("XXX","" + partnerNumber).replace("YYY","" + aNumber)).evaluate(doc).get();
         }
-        //Children
     }
 
     public void parseDocument(Document document, String url){
