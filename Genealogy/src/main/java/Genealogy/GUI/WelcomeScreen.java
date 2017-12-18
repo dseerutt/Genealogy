@@ -29,6 +29,8 @@ public class WelcomeScreen extends JFrame{
     private JPanel welcomePanel;
     private JTextArea filePath;
     private JButton chargerFichierButton;
+    private JPanel loadingPanel;
+    private JProgressBar progressBar1;
     final static Logger logger = Logger.getLogger(WelcomeScreen.class);
 
     public WelcomeScreen(String title) {
@@ -39,6 +41,7 @@ public class WelcomeScreen extends JFrame{
         setPreferredSize(new Dimension(500,300));
         pack();
         setLocationRelativeTo(null);
+        progressBar1.setVisible(false);
 
         setContentPane(welcomePanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -93,39 +96,53 @@ public class WelcomeScreen extends JFrame{
                             JOptionPane.INFORMATION_MESSAGE);
                     logger.error("Le fichier gedcom n'a pas été renseigné");
                 } else {
-                    try{
-                        MyGedcomReader myGedcomReader = new MyGedcomReader();
-                        Genealogy.genealogy = myGedcomReader.read(filePath.getText());
-                        Genealogy.genealogy.parseContents();
-                        Genealogy.genealogy.sortPersons();
-                        Town.setCoordinates();
-                        //Traitement de villes non trouvées
-                        ArrayList<String> lostTowns = Town.getLostTowns();
-                        if ((lostTowns != null)&&(!lostTowns.isEmpty())){
-                            String txt = lostTowns.toString();
-                            JOptionPane.showMessageDialog(welcomePanel,
-                                    "Les villes suivantes n'ont pas été trouvées : \n" + txt,
-                                    "Erreur",
-                                    JOptionPane.ERROR_MESSAGE);
-                            logger.error("Les villes suivantes n'ont pas été trouvées : "+ txt);
+                    progressBar1.setIndeterminate(true);
+                    progressBar1.setVisible(true);
+                    new SwingWorker<Void, String>() {
+                        @Override
+                        protected Void doInBackground() throws Exception {
+                            // Worken hard or hardly worken...
+                            try{
+                                MyGedcomReader myGedcomReader = new MyGedcomReader();
+                                Genealogy.genealogy = myGedcomReader.read(filePath.getText());
+                                Genealogy.genealogy.parseContents();
+                                Genealogy.genealogy.sortPersons();
+                                Town.setCoordinates();
+                                //Traitement de villes non trouvées
+                                ArrayList<String> lostTowns = Town.getLostTowns();
+                                if ((lostTowns != null)&&(!lostTowns.isEmpty())){
+                                    String txt = lostTowns.toString();
+                                    JOptionPane.showMessageDialog(welcomePanel,
+                                            "Les villes suivantes n'ont pas été trouvées : \n" + txt,
+                                            "Erreur",
+                                            JOptionPane.ERROR_MESSAGE);
+                                    logger.error("Les villes suivantes n'ont pas été trouvées : "+ txt);
+                                }
+                                Serializer.getSerializer().saveTown(Town.getTownsToSave());
+                                ArrayList<Town> myEmptyTowns = Serializer.getNullCoordinatesCities(Town.getTowns());
+                                if (!myEmptyTowns.isEmpty()){
+                                    logger.warn("Villes avec Coordonnées nulles : " + myEmptyTowns);
+                                }
+                                Genealogy.genealogy.initPersonsPeriods();
+                                setVisible(false);
+                                MainScreen mainScreen = new MainScreen("Ma Généalogie");
+                            }
+                            catch (Exception exception){
+                                exception.printStackTrace();
+                                JOptionPane.showMessageDialog(welcomePanel,
+                                        "Impossible d'importer le fichier",
+                                        "Erreur",
+                                        JOptionPane.ERROR_MESSAGE);
+                                logger.error("Impossible d'importer le fichier" + exception.getMessage());
+                            }
+                            return null;
                         }
-                        Serializer.getSerializer().saveTown(Town.getTownsToSave());
-                        ArrayList<Town> myEmptyTowns = Serializer.getNullCoordinatesCities(Town.getTowns());
-                        if (!myEmptyTowns.isEmpty()){
-                            logger.warn("Villes avec Coordonnées nulles : " + myEmptyTowns);
+
+                        @Override
+                        protected void done() {
                         }
-                        Genealogy.genealogy.initPersonsPeriods();
-                        setVisible(false);
-                        MainScreen mainScreen = new MainScreen("Ma Généalogie");
-                    }
-                    catch (Exception exception){
-                        exception.printStackTrace();
-                        JOptionPane.showMessageDialog(welcomePanel,
-                                "Impossible d'importer le fichier",
-                                "Erreur",
-                                JOptionPane.ERROR_MESSAGE);
-                        logger.error("Impossible d'importer le fichier" + exception.getMessage());
-                    }
+                    }.execute();
+
                 }
             }
         });
@@ -134,10 +151,6 @@ public class WelcomeScreen extends JFrame{
     private void initText() {
         filePath.setText("Fichier à charger");
         filePath.setEditable(false);
-    }
-
-    public static void main(String[] args){
-        WelcomeScreen welcomeScreen = new WelcomeScreen("Ma généalogie");
     }
 
 }

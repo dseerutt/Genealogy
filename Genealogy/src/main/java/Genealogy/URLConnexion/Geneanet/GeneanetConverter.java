@@ -296,9 +296,13 @@ public class GeneanetConverter {
         if (dateTab.length != 1){
             resultDate = dateTab[1];
         }
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.FRANCE);
+        return parseDate(resultDate);
+    }
+
+    private MyDate parseDate(String resultDate) {
+        SimpleDateFormat dateFormatFullMonth = new SimpleDateFormat("dd MMMM yyyy", Locale.FRANCE);
         try {
-            Date date0 = dateFormat.parse(resultDate);
+            Date date0 = dateFormatFullMonth.parse(resultDate);
             return new FullDate(date0);
         } catch (ParseException e) {
             e.printStackTrace();

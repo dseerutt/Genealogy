@@ -533,21 +533,29 @@ public class Person {
             }
         }
 
+        //Vivant ?
+        String singularForm = "est";
+        String pluralForm = "sont";
+        if (death != null){
+            singularForm = "était";
+            pluralForm = "étaient";
+        }
         //Métier
         if ((profession == null)||(!profession.equals(""))){
             foundText = true;
             String prof = getProfession();
             if (prof.indexOf(',') == -1){
+                //Case where nothing was written before except names
                 if (txt.equals(surname + " " + name)){
-                    txt += " était " + prof;
+                    txt += " " + singularForm + " " + prof;
                 } else {
-                    txt += "\nSon métier était " + prof;
+                    txt += "\nSon métier " + singularForm + " " + prof;
                 }
             } else {
                 if (txt.equals(surname + " " + name)){
-                    txt += " était " + prof;
+                    txt += " " + pluralForm + " " + prof;
                 } else {
-                    txt += "\nSes métiers étaient " + prof;
+                    txt += "\nSes métiers " + pluralForm + " " + prof;
                 }
             }
         }

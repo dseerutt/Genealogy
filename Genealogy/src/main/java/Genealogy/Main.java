@@ -3,6 +3,7 @@ package Genealogy;
 import Genealogy.GUI.WelcomeScreen;
 import Genealogy.Parsing.MyGedcomReader;
 import Genealogy.URLConnexion.MyHttpURLConnexion;
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -19,6 +20,7 @@ public class Main {
     final static Logger logger = Logger.getLogger(Main.class);
 
     public static void main(String[] args) throws ParseException, IOException {
+        BasicConfigurator.configure();
         logger.info("Init app");
         WelcomeScreen welcomeScreen = new WelcomeScreen("Ma généalogie");
     }

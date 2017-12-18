@@ -285,7 +285,7 @@ public class GeneanetBrowser {
     public static void main(String[] args) {
         BasicConfigurator.configure();
         try {
-            String url = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louis&n=thierry";
+            String url = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louis+claude&n=vincent";
             GeneanetBrowser browser = new GeneanetBrowser();
             //Document doc = browser.connect(url);
             GeneanetPerson person = browser.search(url);

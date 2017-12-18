@@ -27,10 +27,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Dan on 10/04/2016.
@@ -255,11 +252,19 @@ public class MainScreen extends JFrame {
         if (!townAssociation.isEmpty()){
             TownQuery.setText(townAssociation.get(city));
             MyCoordinate coordinate = Town.findCoordinate(city);
-            GeoPosition geoPosition = new GeoPosition(coordinate.getLattitude(),coordinate.getLongitude());
-            jXMapKit.setCenterPosition(geoPosition);
-            ArrayList<MapPoint> list = new ArrayList<>();
-            list.add(new MapPoint(coordinate,city));
-            addMarkers(list);
+            if (coordinate != null){
+                GeoPosition geoPosition = new GeoPosition(coordinate.getLattitude(),coordinate.getLongitude());
+                jXMapKit.setCenterPosition(geoPosition);
+                ArrayList<MapPoint> list = new ArrayList<>();
+                list.add(new MapPoint(coordinate,city));
+                removeMarkers();
+                addMarkers(list);
+            } else {
+                JOptionPane.showMessageDialog(tabbedPane1,
+                        "Impossible de trouver la coordonnée dans le fichier",
+                        "Information",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
         }
     }
 
@@ -270,6 +275,7 @@ public class MainScreen extends JFrame {
             jXMapKit.setCenterPosition(geoPosition);
             ArrayList<MapPoint> list = new ArrayList<>();
             list.add(new MapPoint(coordinate,city));
+            removeMarkers();
             addMarkers(list);
         }
     }
@@ -302,6 +308,16 @@ public class MainScreen extends JFrame {
         waypointPainter.setRenderer(new FancyWaypointRenderer());
         JXMapViewer map = jXMapKit.getMainMap();
         map.setOverlayPainter(waypointPainter);
+    }
+
+    public void removeMarkers(){
+        Set<MyWaypoint> waypoints =  new HashSet<>();
+        WaypointPainter<MyWaypoint> waypointPainter = new WaypointPainter<MyWaypoint>();
+        waypointPainter.setWaypoints(waypoints);
+        waypointPainter.setRenderer(new FancyWaypointRenderer());
+        JXMapViewer map = jXMapKit.getMainMap();
+        map.setOverlayPainter(waypointPainter);
+        jXMapKit.getMainMap().removeAll();
     }
 
     private void remplacerAction(){
