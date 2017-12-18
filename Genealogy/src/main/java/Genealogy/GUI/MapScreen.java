@@ -51,13 +51,17 @@ public class MapScreen extends JFrame{
     private JButton stopButton;
     private JButton effacerMarqueursButton;
     private JPanel captionPanel;
+    private JTextField FrenchHistoryText;
+    private JTextField MauritianHistoryText;
+    private JPanel FrenchHistoryPanel;
+    private JPanel MauritianHistoryPanel;
     private JXMapKit jXMapKit;
     private ArrayList<MapPoint> mapPoints;
     private MapFrame mapFrame;
     private GeoPosition initPosition = new GeoPosition(47.41022,2.925037);
     private int zoom = 11;
     private boolean allPeople = false;
-    private static final int maxDate = 2017;
+    private static final int maxDate = Calendar.getInstance().get(Calendar.YEAR);;
     private static Worker currentWorker = null;
     private ImageIcon image1;
     private ImageIcon image2;
@@ -130,11 +134,12 @@ public class MapScreen extends JFrame{
     }
 
     private void initComboBox() {
-        for (int i = Person.getMinimumPeriod(); i < maxDate ; i++){
+        for (int i = Person.getMinimumPeriod(); i < maxDate + 1 ; i++){
             comboDate.addItem(i);
             comboDate1.addItem(i);
             comboDate2.addItem(i);
         }
+        comboDate2.setSelectedItem(maxDate);
     }
 
     private void initRadioButtons() {
