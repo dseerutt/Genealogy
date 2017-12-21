@@ -42,8 +42,6 @@ public class GeneanetBrowser {
     public static String password;
     public static String formRegex;
     public Map<String, String> cookie;
-    private String path;
-    private boolean jar = false;
     private GeneanetConverter geneanetConverter;
     final static Logger logger = Logger.getLogger(GeneanetBrowser.class);
 
@@ -53,30 +51,20 @@ public class GeneanetBrowser {
     }
 
     /**
-     * Fonction initPath
-     * gère le path des propriétés
-     */
-    private void initPath() {
-        path = System.getProperty("user.dir") + File.separator + "src" + File.separator + "main" +
-                File.separator + "resources" + File.separator;
-        String className = Serializer.class.getName().replace('.', '/');
-        String classJar = Serializer.class.getClass().getResource("/" + className + ".class").toString();
-        if (classJar.startsWith("jar:")) {
-            jar = true;
-            path = System.getProperty("user.dir") + File.separator + "Properties" + File.separator;
-        }
-    }
-
-    /**
-     * Fonction initProperties
+     * Fonction initGovernors
      * initialise les propriétés de la classe GeneanetBrowser
      */
-    public void initProperties() {
-        initPath();
+    public void initProperties() throws Exception {
         Properties prop = new Properties();
         InputStream input = null;
         try {
-            input = new FileInputStream(path + "geneanet.properties");
+            String path = Serializer.getPath();
+            if (path == null){
+                Serializer serializer = new Serializer();
+                path = Serializer.getPath()
+;
+            }
+            input = new FileInputStream(Serializer.getPath() + "geneanet.properties");
             prop.load(input);
             geneanetURL = prop.getProperty("geneanetConnexionURL");
             geneanetURLpart2 = prop.getProperty("geneanetConnexionURLpart2");
@@ -99,8 +87,12 @@ public class GeneanetBrowser {
             geneanetConverter.setXpathHalfBrother(prop.getProperty("XpathHalfBrother"));
             geneanetConverter.setXpathChildren(prop.getProperty("XpathChildren"));
             geneanetConverter.setXpathUrl(prop.getProperty("XpathUrl"));
+            if (geneanetURL == null){
+                throw new Exception("Impossible de récupérer le fichier de propriétés");
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
+            throw new Exception("Impossible de lire le fichier de propriétés");
         } finally {
             if (input != null) {
                 try {

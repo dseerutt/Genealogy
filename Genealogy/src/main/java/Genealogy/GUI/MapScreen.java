@@ -9,12 +9,12 @@ import Genealogy.MapViewer.Worker;
 import Genealogy.Model.Act.Union;
 import Genealogy.Model.Date.ActStructure;
 import Genealogy.MapViewer.Structures.MapStructure;
+import Genealogy.Model.Date.Governor;
+import Genealogy.Model.Governors;
 import Genealogy.Model.Person;
 import Genealogy.Model.Town;
 import Genealogy.MapViewer.Structures.MyCoordinate;
 import Genealogy.AuxMethods;
-import Genealogy.URLConnexion.MyHttpURLConnexion;
-import Genealogy.URLConnexion.URLException;
 import org.jdesktop.swingx.JXMapKit;
 import org.jdesktop.swingx.JXMapViewer;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
@@ -61,11 +61,14 @@ public class MapScreen extends JFrame{
     private GeoPosition initPosition = new GeoPosition(47.41022,2.925037);
     private int zoom = 11;
     private boolean allPeople = false;
-    private static final int maxDate = Calendar.getInstance().get(Calendar.YEAR);;
+    private static final int maxDate = Calendar.getInstance().get(Calendar.YEAR);
     private static Worker currentWorker = null;
     private ImageIcon image1;
     private ImageIcon image2;
+    private ImageIcon frenchGovernorPicture;
     private JLabel labelImage;
+    private Governors frenchGovernors;
+    private JLabel labelImageGovernors;
 
     public MapScreen() throws Exception{
         super("Répartition territoriale dans le temps");
@@ -74,6 +77,8 @@ public class MapScreen extends JFrame{
         initComboBox();
         initButtons();
         initListeners();
+        initGovernorsPanel();
+        initGovernorsPictures();
         INSTANCE = this;
 
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -85,6 +90,12 @@ public class MapScreen extends JFrame{
         panelForMap.setPreferredSize(new Dimension(5000,5000));
         //throw new Exception();
         setVisible(true);
+    }
+
+    private void initGovernorsPanel() {
+        frenchGovernors = new Governors("FrenchGovernors");
+        int minDate = (Integer) comboDate1.getItemAt(0);
+        updateFrenchGovernors(minDate);
     }
 
 
@@ -378,6 +389,7 @@ public class MapScreen extends JFrame{
                 if (generationALaDateRadioButton.isSelected()){
                     int year = (int) comboDate.getSelectedItem();
                     ArrayList<MapStructure> mapStructure;
+                    updateFrenchGovernors(year);
                     if (tousLesAncetresRadioButton.isSelected()){
                         mapStructure = Person.getPeriodsDirectAncestors().get(year);
                     } else {
@@ -406,11 +418,13 @@ public class MapScreen extends JFrame{
                         date1 = date2;
                         date2 = temp;
                     }
+                    updateFrenchGovernors(date1);
                     handleWorker(date1,date2);
                 } else if (generationAutomatiqueRadioButton.isSelected()){
                     int date1 = Person.getMinimumPeriod();
                     int date2 = maxDate;
                     comboDate2.setSelectedItem(maxDate);
+                    updateFrenchGovernors(date1);
                     handleWorker(date1,date2);
                     comboDate1.setSelectedItem(date1);
                 }
@@ -452,6 +466,11 @@ public class MapScreen extends JFrame{
         labelImage.setIcon(image);
     }
 
+    private void updateGovernorPicture(String filename){
+        ImageIcon image = frenchGovernors.getImage(filename);
+        labelImageGovernors.setIcon(image);
+    }
+
     private void handleWorker(int date1, int date2){
         if (currentWorker != null){
             currentWorker.cancel(true);
@@ -468,6 +487,20 @@ public class MapScreen extends JFrame{
         worker.setYear1(date1);
         worker.setYear2(date2);
         worker.execute();
+    }
+
+    public Governors getFrenchGovernors() {
+        return frenchGovernors;
+    }
+
+    public void setFrenchGovernors(Governors frenchGovernors) {
+        this.frenchGovernors = frenchGovernors;
+    }
+
+    public void updateFrenchGovernors(int date){
+        String frenchGovernorName = frenchGovernors.getGovernor(date);
+        FrenchHistoryText.setText(frenchGovernorName);
+        updateGovernorPicture(frenchGovernorName);
     }
 
     private static int getMapStructure(ArrayList<MapPoint> list, MyCoordinate coo){
@@ -524,6 +557,10 @@ public class MapScreen extends JFrame{
         labelImage = new JLabel("", image2, JLabel.CENTER);
         captionPanel = new JPanel(new BorderLayout());
         captionPanel.add( labelImage, BorderLayout.CENTER);
+
+        labelImageGovernors = new JLabel("", frenchGovernorPicture, JLabel.CENTER);
+        FrenchHistoryPanel = new JPanel(new BorderLayout());
+        FrenchHistoryPanel.add( labelImageGovernors, BorderLayout.CENTER);
     }
 
     private void initCaptions() {
@@ -531,6 +568,19 @@ public class MapScreen extends JFrame{
         URL resource2 = getClass().getResource("actes.png");
         image2 = new ImageIcon(resource1);
         image1 = new ImageIcon(resource2);
+    }
 
+    private void initGovernorsPictures() {
+        String path = "FrenchGovernors/";
+        String extension = ".jpg";
+        for (Governor governor : frenchGovernors.getGovernors()){
+            String name = governor.getName();
+            URL resource = getClass().getResource(path + name + extension);
+            ImageIcon image = new ImageIcon(resource);
+            governor.addImage(image,200,200);
+        }
+        int minDate = frenchGovernors.getBeginningDate();
+        String governor = frenchGovernors.getMappingDate().get(minDate);
+        updateGovernorPicture(governor);
     }
 }

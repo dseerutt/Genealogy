@@ -33,7 +33,6 @@ public class Worker extends SwingWorker<String, Object> {
 
     protected void process(List<Object> item) {
         //This updates the UI
-        //textArea1.append(item + "\n");*
         int i = (int) item.get(0);
         if (i == year2+1){
             mapScreen.getComboDate1().setSelectedItem(year1);
@@ -49,6 +48,7 @@ public class Worker extends SwingWorker<String, Object> {
         }
         mapScreen.setSituation(mapStructure);
         mapScreen.getComboDate1().setSelectedItem(i);
+        mapScreen.updateFrenchGovernors(i);
     }
 
     public void setMapScreen(MapScreen mapScreen) {

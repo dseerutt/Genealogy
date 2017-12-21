@@ -17,8 +17,8 @@ public class Serializer<T> {
     final static Logger logger = Logger.getLogger(Serializer.class);
     private static Serializer serializer;
     private ArrayList<T> serializedData;
-    private String path;
-    private boolean jar = false;
+    private static String path;
+    private static boolean jar = false;
     private static String serializerType;
     private static String townAssociationFile;
 
@@ -30,8 +30,20 @@ public class Serializer<T> {
         return serializedData;
     }
 
+    public static String getPath() {
+        return path;
+    }
+
+    public static void setPath(String path) {
+        Serializer.path = path;
+    }
+
+    public static void setJar(boolean jar) {
+        Serializer.jar = jar;
+    }
+
     /**
-     * Fonction initProperties
+     * Fonction initGovernors
      * initialise les propriétés de la classe Serializer
      */
     public void initProperties(){
@@ -55,7 +67,7 @@ public class Serializer<T> {
         }
     }
 
-    public Serializer(boolean x) {
+    public Serializer() {
         initPath();
         initProperties();
         Serializer.serializer = this;
