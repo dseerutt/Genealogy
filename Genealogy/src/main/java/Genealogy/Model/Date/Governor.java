@@ -52,19 +52,9 @@ public class Governor {
     }
 
     public void addImage(ImageIcon image, int height, int width){
-        if (height != 0 &&width != 0){
-            int imageHeight = image.getIconHeight();
-            int imageWidth = image.getIconWidth();
-            if (imageHeight > imageWidth){
-                int newWidth = Math.round(height*imageWidth/imageHeight);
-                Image newImage = image.getImage().getScaledInstance(height,newWidth, Image.SCALE_DEFAULT);
-                image.setImage(newImage);
-            } else {
-                int newHeight = Math.round(width*imageHeight/imageWidth);
-                Image newImage = image.getImage().getScaledInstance(newHeight,width, Image.SCALE_DEFAULT);
-                image.setImage(newImage);
-            }
-            this.image = image;
+        if (height != 0 && width != 0){
+            Image newImage = image.getImage().getScaledInstance(height,width, Image.SCALE_DEFAULT);
+            this.image = new ImageIcon(newImage);
         } else {
             System.out.println("Erreur : les dimensions de l'image ne sont pas correctes");
         }
