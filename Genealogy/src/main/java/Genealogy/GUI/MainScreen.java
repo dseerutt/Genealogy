@@ -333,6 +333,7 @@ public class MainScreen extends JFrame {
                     townAssociation.remove(key);
                     townAssociation.put(key,value);
                     Serializer.getSerializer().saveTownAssociation(townAssociation);
+                    Serializer.getSerializer().saveTown(Town.getTowns());
                     String city = NotFoundPlaces.getSelectedItem().toString();
                     updateMissingCityTab(townAssociation,city);
                     JOptionPane.showMessageDialog(tabbedPane1,
