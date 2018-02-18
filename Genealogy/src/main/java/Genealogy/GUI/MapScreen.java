@@ -66,9 +66,12 @@ public class MapScreen extends JFrame{
     private ImageIcon image1;
     private ImageIcon image2;
     private ImageIcon frenchGovernorPicture;
+    private ImageIcon mauritianGovernorPicture;
     private JLabel labelImage;
     private Governors frenchGovernors;
-    private JLabel labelImageGovernors;
+    private Governors mauritianGovernors;
+    private JLabel labelImageFrenchGovernors;
+    private JLabel labelImageMauritianGovernors;
 
     public MapScreen() throws Exception{
         super("Répartition territoriale dans le temps");
@@ -96,6 +99,8 @@ public class MapScreen extends JFrame{
         frenchGovernors = new Governors("FrenchGovernors");
         int minDate = (Integer) comboDate1.getItemAt(0);
         updateFrenchGovernors(minDate);
+        mauritianGovernors = new Governors("MauritianGovernors");
+        updateMauritianGovernors(minDate);
     }
 
 
@@ -390,6 +395,7 @@ public class MapScreen extends JFrame{
                     int year = (int) comboDate.getSelectedItem();
                     ArrayList<MapStructure> mapStructure;
                     updateFrenchGovernors(year);
+                    updateMauritianGovernors(year);
                     if (tousLesAncetresRadioButton.isSelected()){
                         mapStructure = Person.getPeriodsDirectAncestors().get(year);
                     } else {
@@ -419,12 +425,14 @@ public class MapScreen extends JFrame{
                         date2 = temp;
                     }
                     updateFrenchGovernors(date1);
+                    updateMauritianGovernors(date1);
                     handleWorker(date1,date2);
                 } else if (generationAutomatiqueRadioButton.isSelected()){
                     int date1 = Person.getMinimumPeriod();
                     int date2 = maxDate;
                     comboDate2.setSelectedItem(maxDate);
                     updateFrenchGovernors(date1);
+                    updateMauritianGovernors(date1);
                     handleWorker(date1,date2);
                     comboDate1.setSelectedItem(date1);
                 }
@@ -466,9 +474,14 @@ public class MapScreen extends JFrame{
         labelImage.setIcon(image);
     }
 
-    private void updateGovernorPicture(String filename){
+    private void updateFrenchGovernorPicture(String filename){
         ImageIcon image = frenchGovernors.getImage(filename);
-        labelImageGovernors.setIcon(image);
+        labelImageFrenchGovernors.setIcon(image);
+    }
+
+    private void updateMauritianGovernorPicture(String filename){
+        ImageIcon image = mauritianGovernors.getImage(filename);
+        labelImageMauritianGovernors.setIcon(image);
     }
 
     private void handleWorker(int date1, int date2){
@@ -497,10 +510,24 @@ public class MapScreen extends JFrame{
         this.frenchGovernors = frenchGovernors;
     }
 
+    public Governors getMauritianGovernors() {
+        return mauritianGovernors;
+    }
+
+    public void setMauritianGovernors(Governors mauritianGovernors) {
+        this.mauritianGovernors = mauritianGovernors;
+    }
+
+    public void updateMauritianGovernors(int date){
+        String mauritianGovernorName = mauritianGovernors.getGovernor(date);
+        MauritianHistoryText.setText(mauritianGovernorName);
+        updateMauritianGovernorPicture(mauritianGovernorName);
+    }
+
     public void updateFrenchGovernors(int date){
         String frenchGovernorName = frenchGovernors.getGovernor(date);
         FrenchHistoryText.setText(frenchGovernorName);
-        updateGovernorPicture(frenchGovernorName);
+        updateFrenchGovernorPicture(frenchGovernorName);
     }
 
     private static int getMapStructure(ArrayList<MapPoint> list, MyCoordinate coo){
@@ -558,9 +585,12 @@ public class MapScreen extends JFrame{
         captionPanel = new JPanel(new BorderLayout());
         captionPanel.add( labelImage, BorderLayout.CENTER);
 
-        labelImageGovernors = new JLabel("", frenchGovernorPicture, JLabel.CENTER);
+        labelImageFrenchGovernors = new JLabel("", frenchGovernorPicture, JLabel.CENTER);
         FrenchHistoryPanel = new JPanel(new BorderLayout());
-        FrenchHistoryPanel.add( labelImageGovernors, BorderLayout.CENTER);
+        FrenchHistoryPanel.add(labelImageFrenchGovernors, BorderLayout.CENTER);
+        labelImageMauritianGovernors = new JLabel("", mauritianGovernorPicture, JLabel.CENTER);
+        MauritianHistoryPanel = new JPanel(new BorderLayout());
+        MauritianHistoryPanel.add(labelImageMauritianGovernors, BorderLayout.CENTER);
     }
 
     private void initCaptions() {
@@ -570,7 +600,12 @@ public class MapScreen extends JFrame{
         image1 = new ImageIcon(resource2);
     }
 
-    private void initGovernorsPictures() {
+    private void initGovernorsPictures() throws Exception {
+        initFrenchGovernorsPictures();
+        initMauritianGovernorsPictures();
+    }
+
+    private void initFrenchGovernorsPictures() {
         String path = "FrenchGovernors/";
         String extension = ".jpg";
         for (Governor governor : frenchGovernors.getGovernors()){
@@ -579,8 +614,28 @@ public class MapScreen extends JFrame{
             ImageIcon image = new ImageIcon(resource);
             governor.addImage(image,200,200);
         }
-        int minDate = frenchGovernors.getBeginningDate();
+        //mindate is periods mindate used by comboDate1
+        int minDate = (int) comboDate1.getSelectedItem();
         String governor = frenchGovernors.getMappingDate().get(minDate);
-        updateGovernorPicture(governor);
+        updateFrenchGovernorPicture(governor);
+    }
+
+    private void initMauritianGovernorsPictures() throws Exception {
+        String path = "MauritianGovernors/";
+        String extension = ".jpg";
+        for (Governor governor : mauritianGovernors.getGovernors()){
+            String name = governor.getName();
+            URL resource = getClass().getResource(path + name + extension);
+            if (resource != null) {
+                ImageIcon image = new ImageIcon(resource);
+                governor.addImage(image,200,200);
+            } else {
+                throw new Exception("Impossible de retrouver la ressource " + path + name + extension);
+            }
+        }
+        //mindate is periods mindate used by comboDate1
+        int minDate = (int) comboDate1.getSelectedItem();
+        String governor = mauritianGovernors.getMappingDate().get(minDate);
+        updateMauritianGovernorPicture(governor);
     }
 }

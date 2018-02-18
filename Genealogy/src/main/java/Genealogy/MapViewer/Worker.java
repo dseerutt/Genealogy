@@ -49,6 +49,7 @@ public class Worker extends SwingWorker<String, Object> {
         mapScreen.setSituation(mapStructure);
         mapScreen.getComboDate1().setSelectedItem(i);
         mapScreen.updateFrenchGovernors(i);
+        mapScreen.updateMauritianGovernors(i);
     }
 
     public void setMapScreen(MapScreen mapScreen) {
