@@ -53,6 +53,15 @@ public class MainScreen extends JFrame {
     private JButton rechercherButton;
     private JPanel mapPanel;
     private JPanel panelForMap;
+    private JButton retrouverTousLesPDFButton;
+    private JButton voirButton;
+    private JButton remplacerPDFButton;
+    private JRadioButton naissanceRadioButton;
+    private JRadioButton mariageRadioButton;
+    private JRadioButton décèsRadioButton;
+    private JComboBox numeroActePDF;
+    private JButton ajouterPDFButton;
+    private JButton verifierLesPDFButton;
     private JXMapKit jXMapKit;
     private ArrayList<MapPoint> mapPoints;
     private MapFrame mapFrame;
@@ -148,6 +157,75 @@ public class MainScreen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 textArea2.setText(Genealogy.genealogy.getPersons().get(ancestors.getSelectedIndex()).printPerson());
+            }
+        });
+
+        initPDFButtons();
+    }
+
+    /**
+     * Fonction initPDFRadioButton
+     * Initialise les radiobuttons de gestion de PDF
+     */
+    private void initPDFRadioButton(){
+        naissanceRadioButton.setSelected(true);
+        naissanceRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mariageRadioButton.setSelected(false);
+                décèsRadioButton.setSelected(false);
+            }
+        });
+        mariageRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                naissanceRadioButton.setSelected(false);
+                décèsRadioButton.setSelected(false);
+            }
+        });
+        décèsRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mariageRadioButton.setSelected(false);
+                naissanceRadioButton.setSelected(false);
+            }
+        });
+    }
+
+    /**
+     * Fonction initPDFButtons
+     * Initialise les boutons de gestion de PDF
+     */
+    private void initPDFButtons(){
+        initPDFRadioButton();
+        ajouterPDFButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //TODO
+            }
+        });
+        remplacerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //TODO
+            }
+        });
+        voirButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //TODO
+            }
+        });
+        retrouverTousLesPDFButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //TODO
+            }
+        });
+        remplacerPDFButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //TODO
             }
         });
     }
