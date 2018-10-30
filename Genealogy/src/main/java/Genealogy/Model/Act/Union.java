@@ -38,6 +38,7 @@ public class Union extends Act {
                 ", date=" + date +
                 ", town=" + town +
                 ", state=" + state +
+                ", proof=" + proofs +
                 '}';
     }
 

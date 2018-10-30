@@ -26,6 +26,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -58,8 +59,8 @@ public class MainScreen extends JFrame {
     private JButton remplacerPDFButton;
     private JRadioButton naissanceRadioButton;
     private JRadioButton mariageRadioButton;
-    private JRadioButton décèsRadioButton;
-    private JComboBox numeroActePDF;
+    private JRadioButton deathRadioButton;
+    private JComboBox ActePDF;
     private JButton ajouterPDFButton;
     private JButton verifierLesPDFButton;
     private JXMapKit jXMapKit;
@@ -173,23 +174,36 @@ public class MainScreen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mariageRadioButton.setSelected(false);
-                décèsRadioButton.setSelected(false);
+                deathRadioButton.setSelected(false);
             }
         });
         mariageRadioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 naissanceRadioButton.setSelected(false);
-                décèsRadioButton.setSelected(false);
+                deathRadioButton.setSelected(false);
             }
         });
-        décèsRadioButton.addActionListener(new ActionListener() {
+        deathRadioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mariageRadioButton.setSelected(false);
                 naissanceRadioButton.setSelected(false);
             }
         });
+    }
+
+    protected static JFileChooser initJFileChooser(){
+        Serializer<Town> serializer = new Serializer<Town>(Town.class);
+        String myFolder = "D:\\Genealogie\\Preuves\\";
+        String myJarFolder = System.getProperty("user.dir") + File.separator + "Preuves" + File.separator;
+
+        if (serializer.isJar()){
+
+            return new JFileChooser(myJarFolder);
+        } else {
+            return new JFileChooser(myFolder);
+        }
     }
 
     /**
@@ -201,7 +215,30 @@ public class MainScreen extends JFrame {
         ajouterPDFButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO
+                try {
+                    //get file
+                    String file = null;
+                    JFileChooser c = initJFileChooser();
+                    // Demonstrate "Open" dialog:
+                    int rVal = c.showOpenDialog(MainScreen.this);
+                    if (rVal == JFileChooser.APPROVE_OPTION) {
+                        file = c.getSelectedFile().getName();
+                    }
+                    if (rVal == JFileChooser.CANCEL_OPTION) {
+                    }
+                    //handle file
+                    Person person = Genealogy.genealogy.getPersons().get(ancestors.getSelectedIndex());
+                    if (naissanceRadioButton.isSelected()){
+                        person.addProof(Act.TypeActe.Birth,file);
+                    } else if (mariageRadioButton.isSelected()) {
+                        person.addProof(Act.TypeActe.Mariage,"",person.getProofUnionSize());
+                        //TODO
+                    } else if (deathRadioButton.isSelected()) {
+                        person.addProof(Act.TypeActe.Death,file);
+                    }
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
             }
         });
         remplacerButton.addActionListener(new ActionListener() {
@@ -213,7 +250,19 @@ public class MainScreen extends JFrame {
         voirButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO
+                try {
+                    Person person = Genealogy.genealogy.getPersons().get(ancestors.getSelectedIndex());
+                    if (naissanceRadioButton.isSelected()){
+                        String file = person.getBirth().getProofs().get(0);
+                    } else if (mariageRadioButton.isSelected()) {
+                        person.addProof(Act.TypeActe.Mariage,"",person.getProofUnionSize());
+                        //TODO
+                    } else if (deathRadioButton.isSelected()) {
+                        String file = person.getDeath().getProofs().get(0);
+                    }
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
             }
         });
         retrouverTousLesPDFButton.addActionListener(new ActionListener() {

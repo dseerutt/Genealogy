@@ -2,6 +2,7 @@ package Genealogy.URLConnexion.Geneanet;
 
 import Genealogy.Model.Date.FullDate;
 import Genealogy.Model.Date.MyDate;
+import fr.followthecode.republican.date.utils.RepublicanCalendarDateConverter;
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
@@ -9,9 +10,7 @@ import us.codecraft.xsoup.Xsoup;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -299,15 +298,21 @@ public class GeneanetConverter {
         return parseDate(resultDate);
     }
 
-    private MyDate parseDate(String resultDate) {
+    private MyDate parseDate(String inputDate) {
         SimpleDateFormat dateFormatFullMonth = new SimpleDateFormat("dd MMMM yyyy", Locale.FRANCE);
         try {
-            Date date0 = dateFormatFullMonth.parse(resultDate);
+            Date date0 = dateFormatFullMonth.parse(inputDate);
             return new FullDate(date0);
         } catch (ParseException e) {
-            e.printStackTrace();
+            GeneanetBrowser.logger.debug("Could not convert with Gregorian calendar " + inputDate);
+            return parseRepublicanDate(inputDate);
         }
-        return null;
+    }
+
+    private MyDate parseRepublicanDate(String inputDate){
+        RepublicanCalendarDateConverter converter = RepublicanCalendarDateConverter.getConverter();
+        Date date = converter.convertAsDate(inputDate);
+        return new FullDate(date);
     }
 
     public void setFamily(){
@@ -342,7 +347,8 @@ public class GeneanetConverter {
         do {
             personString = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathBrother.replace("XXX","" + siblingNumber)).evaluate(doc).get();
             if (personString != null&&!(geneanetSearchURL + personString).equals(person.getUrl())){
-                person.addSibling(geneanetSearchURL + personString);
+                GeneanetPerson sibling = new GeneanetPerson(geneanetSearchURL + personString);
+                person.addSibling(sibling);
             }
             siblingNumber++;
         } while (personString != null);
@@ -357,7 +363,8 @@ public class GeneanetConverter {
             do {
                 personString = Xsoup.compile(XpathHalfBrother.replace("XXX","" + siblingBranch).replace("YYY","" + siblingNumber)).evaluate(doc).get();
                 if (personString != null&&!(geneanetSearchURL + personString).equals(person.getUrl())){
-                    person.addHalfSibling(geneanetSearchURL + personString);
+                    GeneanetPerson halfSibling = new GeneanetPerson(geneanetSearchURL + personString);
+                    person.addHalfSibling(halfSibling);
                 } else if (siblingNumber == 1) {
                     exit = true;
                 }
@@ -399,7 +406,8 @@ public class GeneanetConverter {
                     aNumber++;
                     child = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathChildren.replace("XXX","" + partnerNumber).replace("YYY","" + aNumber).replace("ZZZ","" + children)).evaluate(doc).get();
                 }
-                person.addChild(geneanetSearchURL + child);
+                GeneanetPerson childPerson = new GeneanetPerson(geneanetSearchURL + child);
+                person.addChild(childPerson);
                 children++;
                 aNumber = 1;
                 child = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathChildren.replace("XXX","" + partnerNumber).replace("YYY","" + aNumber).replace("ZZZ","" + children)).evaluate(doc).get();
@@ -422,6 +430,7 @@ public class GeneanetConverter {
         setMother();
         setUrl();
         setFamily();
+        person.setSearched(true);
     }
 
     private void setUrl() {
@@ -442,7 +451,8 @@ public class GeneanetConverter {
             xpath =(XpathFamily.replace("XXX","2") + XpathMother.replace("XXX",nbmother + ""));
         }
         String motherURL = Xsoup.compile(xpath).evaluate(doc).get();
-        person.setMother(geneanetSearchURL + motherURL);
+        GeneanetPerson mother = new GeneanetPerson(geneanetSearchURL + motherURL);
+        person.setMother(mother);
         return person.getMother() != null;
     }
 
@@ -454,7 +464,8 @@ public class GeneanetConverter {
             xpath =(XpathFamily.replace("XXX","2") + XpathFather.replace("XXX",nbfather + ""));
         }
         String fatherURL = Xsoup.compile(xpath).evaluate(doc).get();
-        person.setFather(geneanetSearchURL + fatherURL);
+        GeneanetPerson father = new GeneanetPerson(geneanetSearchURL + fatherURL);
+        person.setFather(father);
         return person.getFather() != null;
     }
 

@@ -73,7 +73,6 @@ public class WelcomeScreen extends JFrame{
             public void actionPerformed(ActionEvent e) {
 
                 JFileChooser c = initSerializer();
-
                 // Demonstrate "Open" dialog:
                 int rVal = c.showOpenDialog(WelcomeScreen.this);
                 if (rVal == JFileChooser.APPROVE_OPTION) {

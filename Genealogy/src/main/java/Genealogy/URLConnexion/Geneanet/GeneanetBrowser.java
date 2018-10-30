@@ -25,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.UnknownHostException;
+import java.security.spec.ECField;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -41,11 +42,18 @@ public class GeneanetBrowser {
     public static String username;
     public static String password;
     public static String formRegex;
+    public String url;
     public Map<String, String> cookie;
     private GeneanetConverter geneanetConverter;
+    public GeneanetPerson rootPerson;
     final static Logger logger = Logger.getLogger(GeneanetBrowser.class);
 
-    public GeneanetBrowser() throws Exception {
+    public GeneanetBrowser(String url0) throws Exception {
+        url = url0;
+        init();
+    }
+
+    public void init() throws Exception {
         Document doc = initConnexion();
         geneanetConverter = new GeneanetConverter(doc);
     }
@@ -237,7 +245,12 @@ public class GeneanetBrowser {
         return null;
     }
 
-    private GeneanetPerson search(String url) {
+    public void searchTree(){
+        rootPerson =  searchPerson(url);
+        //Call others
+    }
+
+    private GeneanetPerson searchPerson(String url) {
         try {
             Document inputDocument = connect(url);
             geneanetConverter.parseDocument(inputDocument, url);
@@ -252,7 +265,7 @@ public class GeneanetBrowser {
 
     public static void main3(String[] args) {
         try {
-            GeneanetBrowser browser = new GeneanetBrowser();
+            GeneanetBrowser browser = new GeneanetBrowser("");
             Document doc = browser.connect("https://gw.geneanet.org/dil?lang=fr&iz=0&p=louis&n=thierry");
             String pattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/ul[3]/li/ul/li[2]/a/@href";
             String result = Xsoup.compile(pattern).evaluate(doc).get();
@@ -265,7 +278,7 @@ public class GeneanetBrowser {
     public static void main2(String[] args) {
         try {
             String url = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louise&n=vincent";
-            GeneanetBrowser browser = new GeneanetBrowser();
+            GeneanetBrowser browser = new GeneanetBrowser(url);
             Document doc = browser.connect(url);
             String data = browser.findXPath(doc, "1805-1844/");
             System.out.println(data);
@@ -277,11 +290,13 @@ public class GeneanetBrowser {
     public static void main(String[] args) {
         BasicConfigurator.configure();
         try {
-            String url = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louis+claude&n=vincent";
-            GeneanetBrowser browser = new GeneanetBrowser();
+            //String url = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louis+claude&n=vincent";
+            String url = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louise&n=vincent";
+            GeneanetBrowser browser = new GeneanetBrowser(url);
+            browser.init();
             //Document doc = browser.connect(url);
-            GeneanetPerson person = browser.search(url);
-            System.out.println(person);
+            browser.searchTree();
+            System.out.println(browser.rootPerson);
         } catch (Exception e) {
             e.printStackTrace();
         }

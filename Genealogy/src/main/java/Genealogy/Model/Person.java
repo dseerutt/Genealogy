@@ -1,15 +1,20 @@
 package Genealogy.Model;
 
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import Genealogy.AuxMethods;
 import Genealogy.MapViewer.Structures.MapStructure;
+import Genealogy.Model.Act.Act;
 import Genealogy.Model.Act.Birth;
 import Genealogy.Model.Act.Death;
 import Genealogy.Model.Act.Union;
 import Genealogy.Model.Date.FullDate;
 import Genealogy.Model.Date.MyDate;
+import Genealogy.Parsing.PDFStructure;
 import Genealogy.Parsing.ParsingStructure;
 import javafx.util.Pair;
 import org.apache.log4j.Logger;
@@ -35,6 +40,7 @@ public class Person {
     private Death death;
     private String profession;
     private String note;
+    private PDFStructure pdfStructure;
     private ArrayList<Union> unions = new ArrayList<Union>();
     private Person father;
     private Person mother;
@@ -46,7 +52,6 @@ public class Person {
     private static int minimumPeriod = 10000;
     private boolean stillAlive = false;
     final static Logger logger = Logger.getLogger(Person.class);
-
 
     public static HashMap<Integer,ArrayList<MapStructure>> getPeriods() {
         return periods;
@@ -238,6 +243,79 @@ public class Person {
         return tempPeriods;
     }
 
+
+    public int getProofUnionSize(){
+        int nbUnions = 0;
+        for (Union union : unions){
+            nbUnions += union.getProofs().size();
+        }
+        return nbUnions;
+    }
+
+    /**
+     * Fonction removePDFStructure
+     * Remove PDFStructure in note
+     */
+    public void removePDFStructure(){
+        String PDFStructureRegex = "¤PDF" + id + "¤";
+        if (note.contains(PDFStructureRegex)){
+            String PDFRegex = "(.*)" + PDFStructureRegex + "{.*}(.*)";
+            Pattern pattern = Pattern.compile(PDFRegex,Pattern.DOTALL);
+            Matcher matcher = pattern.matcher(note);
+            if (matcher.find() && matcher.groupCount() == 2){
+                note = matcher.group(1) + matcher.group(2);
+            }
+        }
+    }
+
+    public void savePDFStructure(){
+        note += pdfStructure;
+    }
+
+    /**
+     * Fonction addProof
+     * @param typeActe Birth, Mariage, Death
+     * @param proof Nom du PDF String
+     * @param unionIndex numéro de l'union
+     */
+    public void addProof(Act.TypeActe typeActe, String proof, int unionIndex) throws Exception {
+        switch (typeActe){
+            case Birth:
+                removePDFStructure();
+                birth.addProof(proof);
+                pdfStructure.addToPDFBirthList(proof);
+                savePDFStructure();
+                break;
+            case Mariage:
+                removePDFStructure();
+                if (unionIndex < unions.size()){
+                    unions.get(unionIndex).addProof(proof);
+                    pdfStructure.addToPDFMarriageList(proof);
+                    savePDFStructure();
+                } else {
+                    throw new Exception("Index trop élevé");
+                }
+                break;
+            case Death:
+                removePDFStructure();
+                death.addProof(proof);
+                pdfStructure.addToPDGDeathList(proof);
+                savePDFStructure();
+                break;
+            default:
+                return;
+        }
+    }
+
+    /**
+     * Fonction addProof except marriage
+     * @param typeActe Birth, Death
+     * @param proof Nom du PDF String
+     */
+    public void addProof(Act.TypeActe typeActe, String proof) throws Exception {
+        addProof(typeActe,proof,0);
+    }
+
     public static int getMinimumPeriod() {
         return minimumPeriod;
     }
@@ -360,6 +438,7 @@ public class Person {
         sex = parseSex(AuxMethods.findField(list,"SEX",offset,indexMax));
         profession = AuxMethods.findField(list,"OCCU",offset,indexMax);
         note = AuxMethods.findField(list,"NOTE",offset,indexMax);
+        pdfStructure = PDFStructure.parsePDFStucture(note,id);
 
         int indexDeath = AuxMethods.findIndexNumberString(list,"DEAT",index,indexMax);
 

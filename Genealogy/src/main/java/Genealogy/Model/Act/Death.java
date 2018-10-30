@@ -26,6 +26,7 @@ public class Death extends Act{
                 "citizen=" + citizen.getFullName() +
                 ", date=" + date +
                 ", town=" + town +
+                ", proof=" + proofs +
                 '}';
     }
 }

@@ -19,12 +19,13 @@ public class GeneanetPerson {
     private String placeOfBirth;
     private MyDate deathDate;
     private String placeOfDeath;
-    private String father;
-    private String mother;
-    private ArrayList<String> siblings;
-    private ArrayList<String> halfSiblings;
-    private ArrayList<String> children;
-    private HashMap<String,HashMap<MyDate,String>> marriage;
+    private GeneanetPerson father;
+    private GeneanetPerson mother;
+    private ArrayList<GeneanetPerson> siblings;
+    private ArrayList<GeneanetPerson> halfSiblings;
+    private ArrayList<GeneanetPerson> children;
+    private HashMap<GeneanetPerson,HashMap<MyDate,String>> marriage;
+    private boolean searched = false;
 
     public GeneanetPerson(String url, String firstName, String familyName) {
         this.url = url;
@@ -34,6 +35,22 @@ public class GeneanetPerson {
         halfSiblings = new ArrayList<>();
         marriage = new HashMap<>();
         children = new ArrayList<>();
+    }
+
+    public GeneanetPerson(String url) {
+        this.url = url;
+        siblings = new ArrayList<>();
+        halfSiblings = new ArrayList<>();
+        marriage = new HashMap<>();
+        children = new ArrayList<>();
+    }
+
+    public void setSearched(boolean searched) {
+        this.searched = searched;
+    }
+
+    public boolean isSearched() {
+        return searched;
     }
 
     public String getFirstName() {
@@ -84,51 +101,51 @@ public class GeneanetPerson {
         this.placeOfDeath = placeOfDeath;
     }
 
-    public String getFather() {
+    public GeneanetPerson getFather() {
         return father;
     }
 
-    public void setFather(String father) {
+    public void setFather(GeneanetPerson father) {
         this.father = father;
     }
 
-    public String getMother() {
+    public GeneanetPerson getMother() {
         return mother;
     }
 
-    public void setMother(String mother) {
+    public void setMother(GeneanetPerson mother) {
         this.mother = mother;
     }
 
-    public ArrayList<String> getSiblings() {
+    public ArrayList<GeneanetPerson> getSiblings() {
         return siblings;
     }
 
-    public void setSiblings(ArrayList<String> siblings) {
+    public void setSiblings(ArrayList<GeneanetPerson> siblings) {
         this.siblings = siblings;
     }
 
-    public ArrayList<String> getChildren() {
+    public ArrayList<GeneanetPerson> getChildren() {
         return children;
     }
 
-    public void setChildren(ArrayList<String> children) {
+    public void setChildren(ArrayList<GeneanetPerson> children) {
         this.children = children;
     }
 
-    public HashMap<String, HashMap<MyDate, String>> getMarriage() {
+    public HashMap<GeneanetPerson, HashMap<MyDate, String>> getMarriage() {
         return marriage;
     }
 
-    public void setMarriage(HashMap<String, HashMap<MyDate, String>> marriage) {
+    public void setMarriage(HashMap<GeneanetPerson, HashMap<MyDate, String>> marriage) {
         this.marriage = marriage;
     }
 
-    public ArrayList<String> getHalfSiblings() {
+    public ArrayList<GeneanetPerson> getHalfSiblings() {
         return halfSiblings;
     }
 
-    public void setHalfSiblings(ArrayList<String> halfSiblings) {
+    public void setHalfSiblings(ArrayList<GeneanetPerson> halfSiblings) {
         this.halfSiblings = halfSiblings;
     }
 
@@ -150,40 +167,47 @@ public class GeneanetPerson {
 
     @Override
     public String toString() {
-        return "GeneanetPerson{" +
-                "url='" + url + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", familyName='" + familyName + '\'' +
-                ", gender='" + gender + '\'' +
-                ", birthDate=" + birthDate +
-                ", placeOfBirth=" + placeOfBirth +
-                ", deathDate=" + deathDate +
-                ", placeOfDeath=" + placeOfDeath +
-                ", father='" + father + '\'' +
-                ", mother='" + mother + '\'' +
-                ", siblings=" + siblings +
-                ", halfSiblings=" + halfSiblings +
-                ", children=" + children +
-                ", marriage=" + marriage +
-                '}';
+        if (firstName != null ) {
+            return "GeneanetPerson{" +
+                    "url='" + url + '\'' +
+                    ", firstName='" + firstName + '\'' +
+                    ", familyName='" + familyName + '\'' +
+                    ", gender='" + gender + '\'' +
+                    ", birthDate=" + birthDate +
+                    ", placeOfBirth=" + placeOfBirth +
+                    ", deathDate=" + deathDate +
+                    ", placeOfDeath=" + placeOfDeath +
+                    ", father='" + father + '\'' +
+                    ", mother='" + mother + '\'' +
+                    ", siblings=" + siblings +
+                    ", halfSiblings=" + halfSiblings +
+                    ", children=" + children +
+                    ", marriage=" + marriage +
+                    ", searched=" + searched +
+                    '}';
+        } else {
+            return  "url='" + url;
+        }
+
     }
 
-    public void addSibling(String personString) {
+    public void addSibling(GeneanetPerson personString) {
         siblings.add(personString);
     }
 
-    public void addHalfSibling(String personString) {
+    public void addHalfSibling(GeneanetPerson personString) {
         halfSiblings.add(personString);
     }
 
 
-    public void addChild(String child) {
+    public void addChild(GeneanetPerson child) {
         children.add(child);
     }
 
     public void addMarriage(String personString, MyDate date, String city) {
         HashMap<MyDate, String> partnerMap = new HashMap<MyDate, String>();
         partnerMap.put(date,city);
-        marriage.put(personString, partnerMap);
+        GeneanetPerson person = new GeneanetPerson(personString);
+        marriage.put(person, partnerMap);
     }
 }

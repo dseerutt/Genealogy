@@ -5,8 +5,7 @@ import Genealogy.Model.Date.MyDate;
 import Genealogy.Model.Person;
 import Genealogy.Model.Town;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 /**
  * Created by Dan on 06/04/2016.
@@ -15,7 +14,11 @@ public abstract class Act {
     protected Person citizen;
     protected MyDate date;
     protected Town town;
-    protected static int minimumYear = 2016;
+    protected static int minimumYear = Calendar.getInstance().get(Calendar.YEAR);
+    protected List<String> proofs = new ArrayList<>();
+    public enum TypeActe {
+        Birth, Mariage, Death
+    }
 
     public Act(Person citizen, MyDate date, Town town) {
         this.citizen = citizen;
@@ -43,5 +46,13 @@ public abstract class Act {
 
     public static int getMinimumYear() {
         return minimumYear;
+    }
+
+    public void addProof(String proof){
+        proofs.add(proof);
+    }
+
+    public List<String> getProofs(){
+        return proofs;
     }
 }
