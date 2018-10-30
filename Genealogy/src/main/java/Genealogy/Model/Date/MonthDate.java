@@ -23,6 +23,11 @@ public class MonthDate extends MyDate {
         year = AuxMethods.getYear(date);
     }
 
+    public MonthDate(int month0, int year0){
+        month = month0;
+        year = year0;
+    }
+
     @Override
     public String toString() {
         return month + "/" + year;

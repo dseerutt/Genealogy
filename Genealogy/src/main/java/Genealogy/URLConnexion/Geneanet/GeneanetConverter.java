@@ -1,7 +1,9 @@
 package Genealogy.URLConnexion.Geneanet;
 
 import Genealogy.Model.Date.FullDate;
+import Genealogy.Model.Date.MonthDate;
 import Genealogy.Model.Date.MyDate;
+import Genealogy.Model.Date.YearDate;
 import fr.followthecode.republican.date.utils.RepublicanCalendarDateConverter;
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.helper.StringUtil;
@@ -10,6 +12,9 @@ import us.codecraft.xsoup.Xsoup;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,7 +41,6 @@ public class GeneanetConverter {
     private static String XpathChildren;
     private static String XpathUrl;
     private Document doc;
-    private GeneanetPerson person;
     private final static Character space = (char) 160;
     private static ArrayList<String> wrongCities;
 
@@ -187,13 +191,6 @@ public class GeneanetConverter {
         XpathSection = xpathSection;
     }
 
-    public GeneanetPerson getPerson() {
-        return person;
-    }
-
-    public void setPerson(GeneanetPerson person) {
-        this.person = person;
-    }
 
     public String getFirstName(Document doc){
         String firstName = Xsoup.compile(XpathFirstName).evaluate(doc).get();
@@ -211,7 +208,7 @@ public class GeneanetConverter {
         return null;
     }
 
-    public void setBirth(){
+    public void setBirth(GeneanetPerson person){
         String regex = "(.*?),.*";
         String birth = Xsoup.compile(XpathBirth).evaluate(doc).get();
         Pattern pattern = Pattern.compile(regex);
@@ -228,9 +225,12 @@ public class GeneanetConverter {
         }
     }
 
-    public void setDeath(){
+    public void setDeath(GeneanetPerson person){
         String regex = "(.*?),.*";
         String death = Xsoup.compile(XpathDeath).evaluate(doc).get();
+        if (death == null){
+            return ;
+        }
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(death);
         if (matcher != null && matcher.find()){
@@ -286,8 +286,14 @@ public class GeneanetConverter {
         String[] parenthesisTab = input.split(" \\(");
         String resultDate = parenthesisTab[0];
 
+        //gestion des er
+        resultDate = resultDate.replace("1er","1");
+
         //gestion des espaces
         resultDate = resultDate.replace(space,' ');
+
+        //gestion des en
+        resultDate = resultDate.replace("en ","");
 
         //remove Né le
         regex = regex.replace(space,' ');
@@ -300,13 +306,34 @@ public class GeneanetConverter {
 
     private MyDate parseDate(String inputDate) {
         SimpleDateFormat dateFormatFullMonth = new SimpleDateFormat("dd MMMM yyyy", Locale.FRANCE);
+        SimpleDateFormat dateFormatFullMonthOnly = new SimpleDateFormat("MMMM yyyy", Locale.FRANCE);
+        SimpleDateFormat dateFormatYear = new SimpleDateFormat("yyyy", Locale.FRANCE);
+        dateFormatFullMonthOnly.setTimeZone(TimeZone.getTimeZone("UTC"));
+        dateFormatYear.setTimeZone(TimeZone.getTimeZone("UTC"));
         try {
             Date date0 = dateFormatFullMonth.parse(inputDate);
             return new FullDate(date0);
         } catch (ParseException e) {
-            GeneanetBrowser.logger.debug("Could not convert with Gregorian calendar " + inputDate);
+        }
+        try {
+            Date date0 = dateFormatFullMonthOnly.parse(inputDate);
+            LocalDate localDate = date0.toInstant().atZone(ZoneOffset.UTC).toLocalDate();
+            int year  = localDate.getYear();
+            int month = localDate.getMonthValue();
+            return new MonthDate(year,month);
+        } catch (ParseException e) {
+        }
+
+        try {
+            Date date0 = dateFormatYear.parse(inputDate);
+            LocalDate localDate = date0.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            int year  = localDate.getYear();
+            return new YearDate(year);
+        } catch (ParseException e) {
+            //GeneanetBrowser.logger.debug("Could not convert with Gregorian calendar " + inputDate);
             return parseRepublicanDate(inputDate);
         }
+
     }
 
     private MyDate parseRepublicanDate(String inputDate){
@@ -315,33 +342,32 @@ public class GeneanetConverter {
         return new FullDate(date);
     }
 
-    public void setFamily(){
-        int index = 2;
+    public void setFamily(int index, GeneanetPerson person){
         String category = Xsoup.compile(XpathSection.replace("XXX","" + index)).evaluate(doc).get();
-        if (category.equals("Union(s) et enfant(s)")){
-            setMarriageAndChildren(index+1);
+        if (category != null && category.equals("Union(s) et enfant(s)")){
+            setMarriageAndChildren(index+1, person);
             index++;
         }
         category = Xsoup.compile(XpathSection.replace("XXX","" + index)).evaluate(doc).get();
-        if (category.equals("Fratrie")){
-            setBrotherhood(index+1);
+        if (category != null && category.equals("Fratrie")){
+            setBrotherhood(index+1, person);
             index++;
-        } else if (category.equals("Demi-frères et demi-sœurs")) {
-            setHalfBrotherhood();
+        } else if (category != null && category.equals("Demi-frères et demi-sœurs")) {
+            setHalfBrotherhood(person);
             index++;
         }
 
         category = Xsoup.compile(XpathSection.replace("XXX","" + index)).evaluate(doc).get();
-        if (category.equals("Fratrie")){
-            setBrotherhood(index+1);
+        if (category != null && category.equals("Fratrie")){
+            setBrotherhood(index+1, person);
             index++;
-        } else if (category.equals("Demi-frères et demi-sœurs")) {
-            setHalfBrotherhood();
+        } else if (category != null && category.equals("Demi-frères et demi-sœurs")) {
+            setHalfBrotherhood(person);
             index++;
         }
     }
 
-    private void setBrotherhood(int index) {
+    private void setBrotherhood(int index, GeneanetPerson person) {
         int siblingNumber = 1;
         String personString;
         do {
@@ -354,7 +380,7 @@ public class GeneanetConverter {
         } while (personString != null);
     }
 
-    private void setHalfBrotherhood() {
+    private void setHalfBrotherhood(GeneanetPerson person) {
         int siblingNumber = 1;
         int siblingBranch = 1;
         boolean exit = false;
@@ -376,7 +402,7 @@ public class GeneanetConverter {
         } while (!exit&&personString != null);
     }
 
-    private void setMarriageAndChildren(int index) {
+    private void setMarriageAndChildren(int index, GeneanetPerson person) {
         //Marriage
         int partnerNumber = 1;
         int aNumber = 1;
@@ -418,32 +444,44 @@ public class GeneanetConverter {
         }
     }
 
-    public void parseDocument(Document document, String url){
+    public void parseDocument(Document document, String url, GeneanetPerson person){
         doc = document;
         String firstName = getFirstName(doc);
         String name = getName(doc);
-        person = new GeneanetPerson(url,firstName,name);
-        setGender();
-        setBirth();
-        setDeath();
-        setFather();
-        setMother();
-        setUrl();
-        setFamily();
+        person.setFirstName(firstName);
+        person.setFamilyName(name);
+        setGender(person);
+        person.setUrl(url);
+       //setUrl();
+        setBirth(person);
+        setDeath(person);
+        int offset = setParents(person);
+        setFamily(2 + offset,person);
         person.setSearched(true);
     }
 
-    private void setUrl() {
-        String url = Xsoup.compile(XpathUrl).evaluate(doc).get();
-        person.setUrl(geneanetSearchURL + url);
+    private int setParents(GeneanetPerson person){
+        String category = Xsoup.compile(XpathSection.replace("XXX","" + 1)).evaluate(doc).get();
+        if (category != null && category.equals("Parents")){
+            setFather(person);
+            setMother(person);
+            return 0;
+        } else {
+            return -1;
+        }
     }
 
-    private void setGender() {
+    /*private void setUrl() {
+        String url = Xsoup.compile(XpathUrl).evaluate(doc).get();
+        person.setUrl(geneanetSearchURL + url);
+    }*/
+
+    private void setGender(GeneanetPerson person) {
         String gender = Xsoup.compile(XpathGender).evaluate(doc).get();
         person.setGender(Gender.getGender(gender));
     }
 
-    private boolean setMother() {
+    private boolean setMother(GeneanetPerson person) {
         int nbmother = 1;
         String xpath =(XpathFamily.replace("XXX","2") + XpathMother.replace("XXX",nbmother + ""));
         if (!xpath.contains("&p=")){
@@ -451,12 +489,14 @@ public class GeneanetConverter {
             xpath =(XpathFamily.replace("XXX","2") + XpathMother.replace("XXX",nbmother + ""));
         }
         String motherURL = Xsoup.compile(xpath).evaluate(doc).get();
-        GeneanetPerson mother = new GeneanetPerson(geneanetSearchURL + motherURL);
-        person.setMother(mother);
+        if (motherURL != null){
+            GeneanetPerson mother = new GeneanetPerson(geneanetSearchURL + motherURL);
+            person.setMother(mother);
+        }
         return person.getMother() != null;
     }
 
-    private boolean setFather() {
+    private boolean setFather(GeneanetPerson person) {
         int nbfather = 1;
         String xpath =(XpathFamily.replace("XXX","2") + XpathFather.replace("XXX",nbfather + ""));
         if (!xpath.contains("&p=")){
@@ -464,8 +504,10 @@ public class GeneanetConverter {
             xpath =(XpathFamily.replace("XXX","2") + XpathFather.replace("XXX",nbfather + ""));
         }
         String fatherURL = Xsoup.compile(xpath).evaluate(doc).get();
-        GeneanetPerson father = new GeneanetPerson(geneanetSearchURL + fatherURL);
-        person.setFather(father);
+        if (fatherURL != null){
+            GeneanetPerson father = new GeneanetPerson(geneanetSearchURL + fatherURL);
+            person.setFather(father);
+        }
         return person.getFather() != null;
     }
 

@@ -18,6 +18,10 @@ public class YearDate extends MyDate {
         year = Integer.parseInt(year0);
     }
 
+    public YearDate(int year0) {
+        year = year0;
+    }
+
     @Override
     public String toString() {
         return "" + year;

@@ -1,6 +1,7 @@
 package Genealogy.URLConnexion.Geneanet;
 
 import Genealogy.AuxMethods;
+import Genealogy.Model.Date.MyDate;
 import Genealogy.URLConnexion.MyHttpURLConnexion;
 import Genealogy.URLConnexion.Serializer;
 import org.apache.commons.codec.binary.StringUtils;
@@ -245,24 +246,95 @@ public class GeneanetBrowser {
         return null;
     }
 
-    public void searchTree(){
-        rootPerson =  searchPerson(url);
+    public void searchTree(GeneanetPerson person){
+        searchPerson(person);
         //Call others
+        searchFather(person);
+        searchMother(person);
+        //searchPartner(person);
     }
 
-    private GeneanetPerson searchPerson(String url) {
+    public void searchRoot(){
+        rootPerson =  new GeneanetPerson(url);
+        searchPerson(rootPerson);
+        searchFather(rootPerson);
+        searchMother(rootPerson);
+    }
+
+    public void searchFather(GeneanetPerson person){
+        GeneanetPerson father = person.getFather();
+        if (father != null && !father.getUrl().equals("") && !father.isSearched()){
+            String fatherUrl = father.getUrl();
+            searchTree(father);
+            rootPerson.setFather(father);
+        }
+    }
+
+    public void searchMother(GeneanetPerson person){
+        GeneanetPerson mother = person.getMother();
+        if (mother != null && !mother.getUrl().equals("") && !mother.isSearched()) {
+            String motherUrl = mother.getUrl();
+            searchTree( mother);
+            rootPerson.setFather(mother);
+        }
+    }
+
+    public void searchPartner(GeneanetPerson person){
+        HashMap<GeneanetPerson, HashMap<MyDate, String>> marriage = person.getMarriage();
+        for (GeneanetPerson partner : marriage.keySet()){
+            if (!partner.getUrl().equals("") && !partner.isSearched()) {
+                String partnerUrl = partner.getUrl();
+                //rootPerson.setMarriage(searchTree(partnerUrl, partner));
+            }
+        }
+
+    }
+
+    private void searchPerson(GeneanetPerson person) {
         try {
+            String url = person.getUrl();
             Document inputDocument = connect(url);
-            geneanetConverter.parseDocument(inputDocument, url);
-            return geneanetConverter.getPerson();
+            geneanetConverter.parseDocument(inputDocument, url, person);
+            logger.info("Searched " + person.getFirstName() + " " + person.getFamilyName() + " : " + person);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Erreur lors de la recherche de l'url " + url);
         }
-        return null;
     }
 
 
+    public static void main44(String[] args) {
+        BasicConfigurator.configure();
+        try {
+            //String url = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louis+claude&n=vincent";
+            String url = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louise&n=vincent";
+            GeneanetBrowser browser = new GeneanetBrowser(url);
+            //Document doc = browser.connect(url);
+            browser.searchRoot();
+            System.out.println(browser.rootPerson);
+            //System.out.println(browser.rootPerson.getFather());
+            //System.out.println(browser.rootPerson.getMother());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void main(String[] args) {
+        BasicConfigurator.configure();
+        try {
+            //String url = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louis+claude&n=vincent";
+            String url = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=pierre&n=collet";
+            GeneanetBrowser browser = new GeneanetBrowser(url);
+            browser.init();
+            //Document doc = browser.connect(url);
+            browser.searchPerson(new GeneanetPerson(url));
+            System.out.println(browser.rootPerson);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+/*
     public static void main3(String[] args) {
         try {
             GeneanetBrowser browser = new GeneanetBrowser("");
@@ -285,20 +357,5 @@ public class GeneanetBrowser {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static void main(String[] args) {
-        BasicConfigurator.configure();
-        try {
-            //String url = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louis+claude&n=vincent";
-            String url = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louise&n=vincent";
-            GeneanetBrowser browser = new GeneanetBrowser(url);
-            browser.init();
-            //Document doc = browser.connect(url);
-            browser.searchTree();
-            System.out.println(browser.rootPerson);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    }*/
 }
