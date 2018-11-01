@@ -40,6 +40,7 @@ public class GeneanetConverter {
     private static String XpathHalfBrother;
     private static String XpathChildren;
     private static String XpathUrl;
+    private static ArrayList<String> geneanetTrees;
     private Document doc;
     private final static Character space = (char) 160;
     private static ArrayList<String> wrongCities;
@@ -135,6 +136,14 @@ public class GeneanetConverter {
         geneanetSearchURL = GeneanetSearchURL;
     }
 
+    public static ArrayList<String> getGeneanetTrees() {
+        return geneanetTrees;
+    }
+
+    public static void setGeneanetTrees(ArrayList<String> geneanetTrees) {
+        GeneanetConverter.geneanetTrees = geneanetTrees;
+    }
+
     public Document getDoc() {
         return doc;
     }
@@ -209,7 +218,7 @@ public class GeneanetConverter {
     }
 
     public void setBirth(GeneanetPerson person){
-        String regex = "(.*?),.*";
+        String regex = "(.*?)$|,.*";
         String birth = Xsoup.compile(XpathBirth).evaluate(doc).get();
         if (birth == null){
             return ;
@@ -223,6 +232,9 @@ public class GeneanetConverter {
                 String date = tab[0];
                 String city = tab[1];
                 person.setPlaceOfBirth(city);
+                person.setBirthDate(parseBirthDate(date,person.getGender()));
+            } else if (tab != null && tab.length == 1){
+                String date = tab[0];
                 person.setBirthDate(parseBirthDate(date,person.getGender()));
             }
         }
@@ -296,7 +308,7 @@ public class GeneanetConverter {
         resultDate = resultDate.replace(space,' ');
 
         //gestion des en
-        resultDate = resultDate.replace("en ","");
+        resultDate = resultDate.replace("en ","le ");
 
         //remove Né le
         regex = regex.replace(space,' ');
@@ -454,7 +466,6 @@ public class GeneanetConverter {
         person.setFirstName(firstName);
         person.setFamilyName(name);
         setGender(person);
-        person.setUrl(person.getUrl());
         setGeneanetUrl(person);
         setBirth(person);
         setDeath(person);
@@ -474,6 +485,11 @@ public class GeneanetConverter {
         }
     }
 
+    /**
+     * Search Geneanet person special url
+     * if does not exist, the person does not appear on brothers list (nominal)
+     * @param person
+     */
     private void setGeneanetUrl(GeneanetPerson person) {
         String url = Xsoup.compile(XpathUrl).evaluate(doc).get();
         if (url != null){
