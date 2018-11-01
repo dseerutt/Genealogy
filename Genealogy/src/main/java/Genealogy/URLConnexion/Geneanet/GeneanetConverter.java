@@ -211,6 +211,9 @@ public class GeneanetConverter {
     public void setBirth(GeneanetPerson person){
         String regex = "(.*?),.*";
         String birth = Xsoup.compile(XpathBirth).evaluate(doc).get();
+        if (birth == null){
+            return ;
+        }
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(birth);
         if (matcher != null && matcher.find()){
@@ -372,7 +375,7 @@ public class GeneanetConverter {
         String personString;
         do {
             personString = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathBrother.replace("XXX","" + siblingNumber)).evaluate(doc).get();
-            if (personString != null&&!(geneanetSearchURL + personString).equals(person.getUrl())){
+            if (personString != null&&!(geneanetSearchURL + personString).equals(person.getGeneanetUrl())){
                 GeneanetPerson sibling = new GeneanetPerson(geneanetSearchURL + personString);
                 person.addSibling(sibling);
             }
@@ -388,7 +391,7 @@ public class GeneanetConverter {
         do {
             do {
                 personString = Xsoup.compile(XpathHalfBrother.replace("XXX","" + siblingBranch).replace("YYY","" + siblingNumber)).evaluate(doc).get();
-                if (personString != null&&!(geneanetSearchURL + personString).equals(person.getUrl())){
+                if (personString != null &&!(geneanetSearchURL + personString).equals(person.getUrl())){
                     GeneanetPerson halfSibling = new GeneanetPerson(geneanetSearchURL + personString);
                     person.addHalfSibling(halfSibling);
                 } else if (siblingNumber == 1) {
@@ -444,15 +447,15 @@ public class GeneanetConverter {
         }
     }
 
-    public void parseDocument(Document document, String url, GeneanetPerson person){
+    public void parseDocument(Document document, GeneanetPerson person){
         doc = document;
         String firstName = getFirstName(doc);
         String name = getName(doc);
         person.setFirstName(firstName);
         person.setFamilyName(name);
         setGender(person);
-        person.setUrl(url);
-       //setUrl();
+        person.setUrl(person.getUrl());
+        setGeneanetUrl(person);
         setBirth(person);
         setDeath(person);
         int offset = setParents(person);
@@ -471,10 +474,12 @@ public class GeneanetConverter {
         }
     }
 
-    /*private void setUrl() {
+    private void setGeneanetUrl(GeneanetPerson person) {
         String url = Xsoup.compile(XpathUrl).evaluate(doc).get();
-        person.setUrl(geneanetSearchURL + url);
-    }*/
+        if (url != null){
+            person.setGeneanetUrl(geneanetSearchURL + url);
+        }
+    }
 
     private void setGender(GeneanetPerson person) {
         String gender = Xsoup.compile(XpathGender).evaluate(doc).get();

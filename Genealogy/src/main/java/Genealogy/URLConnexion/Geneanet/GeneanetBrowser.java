@@ -251,7 +251,27 @@ public class GeneanetBrowser {
         //Call others
         searchFather(person);
         searchMother(person);
-        //searchPartner(person);
+        searchSiblings(person);
+        searchHalfSiblings(person);
+        searchPartner(person);
+    }
+
+    private void searchSiblings(GeneanetPerson person) {
+        ArrayList<GeneanetPerson> newSiblings = new ArrayList<GeneanetPerson>();
+        for (GeneanetPerson sibling : person.getSiblings()){
+            searchPerson(sibling);
+            newSiblings.add(sibling);
+        }
+        person.setSiblings(newSiblings);
+    }
+
+    private void searchHalfSiblings(GeneanetPerson person) {
+        ArrayList<GeneanetPerson> newHalfSiblings = new ArrayList<GeneanetPerson>();
+        for (GeneanetPerson halfSibling : person.getHalfSiblings()){
+            searchPerson(halfSibling);
+            newHalfSiblings.add(halfSibling);
+        }
+        person.setSiblings(newHalfSiblings);
     }
 
     public void searchRoot(){
@@ -259,12 +279,14 @@ public class GeneanetBrowser {
         searchPerson(rootPerson);
         searchFather(rootPerson);
         searchMother(rootPerson);
+        searchSiblings(rootPerson);
+        searchHalfSiblings(rootPerson);
+        searchPartner(rootPerson);
     }
 
     public void searchFather(GeneanetPerson person){
         GeneanetPerson father = person.getFather();
         if (father != null && !father.getUrl().equals("") && !father.isSearched()){
-            String fatherUrl = father.getUrl();
             searchTree(father);
             rootPerson.setFather(father);
         }
@@ -273,28 +295,53 @@ public class GeneanetBrowser {
     public void searchMother(GeneanetPerson person){
         GeneanetPerson mother = person.getMother();
         if (mother != null && !mother.getUrl().equals("") && !mother.isSearched()) {
-            String motherUrl = mother.getUrl();
             searchTree( mother);
             rootPerson.setFather(mother);
         }
     }
 
-    public void searchPartner(GeneanetPerson person){
+    public void researchPartner(GeneanetPerson person){
+        logger.info("Double research for " + person.getFirstName() + " " + person.getFamilyName());
         HashMap<GeneanetPerson, HashMap<MyDate, String>> marriage = person.getMarriage();
-        for (GeneanetPerson partner : marriage.keySet()){
+        HashMap<GeneanetPerson, HashMap<MyDate, String>> newMarriage = new HashMap<GeneanetPerson, HashMap<MyDate, String>>();
+        for (Map.Entry<GeneanetPerson, HashMap<MyDate, String>> entry :  marriage.entrySet()){
+            GeneanetPerson partner = entry.getKey();
             if (!partner.getUrl().equals("") && !partner.isSearched()) {
-                String partnerUrl = partner.getUrl();
-                //rootPerson.setMarriage(searchTree(partnerUrl, partner));
+                searchPerson(partner);
+                researchPartnerNoRecursive(partner);
+                newMarriage.put(partner,entry.getValue());
             }
         }
+        person.setMarriage(newMarriage);
+    }
 
+    public void researchPartnerNoRecursive(GeneanetPerson person){
+        logger.info("Double research partner for " + person.getFirstName() + " " + person.getFamilyName());
+        HashMap<GeneanetPerson, HashMap<MyDate, String>> marriage = person.getMarriage();
+        HashMap<GeneanetPerson, HashMap<MyDate, String>> newMarriage = new HashMap<GeneanetPerson, HashMap<MyDate, String>>();
+        for (Map.Entry<GeneanetPerson, HashMap<MyDate, String>> entry :  marriage.entrySet()){
+            GeneanetPerson partner = entry.getKey();
+            if (!partner.getUrl().equals("") && !partner.isSearched()) {
+                searchPerson(partner);
+                newMarriage.put(partner,entry.getValue());
+            }
+        }
+        person.setMarriage(newMarriage);
+    }
+
+    public void searchPartner(GeneanetPerson person){
+        if (person != null){
+            if (person.getMarriage() != null && person.getMarriage().size() > 1){
+                researchPartner(person);
+            }
+        }
     }
 
     private void searchPerson(GeneanetPerson person) {
         try {
             String url = person.getUrl();
             Document inputDocument = connect(url);
-            geneanetConverter.parseDocument(inputDocument, url, person);
+            geneanetConverter.parseDocument(inputDocument, person);
             logger.info("Searched " + person.getFirstName() + " " + person.getFamilyName() + " : " + person);
         } catch (Exception e) {
             e.printStackTrace();
@@ -303,7 +350,7 @@ public class GeneanetBrowser {
     }
 
 
-    public static void main44(String[] args) {
+    public static void main(String[] args) {
         BasicConfigurator.configure();
         try {
             //String url = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louis+claude&n=vincent";
@@ -320,7 +367,7 @@ public class GeneanetBrowser {
     }
 
 
-    public static void main(String[] args) {
+    public static void main44(String[] args) {
         BasicConfigurator.configure();
         try {
             //String url = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louis+claude&n=vincent";
@@ -328,8 +375,9 @@ public class GeneanetBrowser {
             GeneanetBrowser browser = new GeneanetBrowser(url);
             browser.init();
             //Document doc = browser.connect(url);
-            browser.searchPerson(new GeneanetPerson(url));
-            System.out.println(browser.rootPerson);
+            GeneanetPerson person = new GeneanetPerson(url);
+            browser.searchPerson(person);
+            System.out.println(person);
         } catch (Exception e) {
             e.printStackTrace();
         }

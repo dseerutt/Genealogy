@@ -26,6 +26,8 @@ public class GeneanetPerson {
     private ArrayList<GeneanetPerson> children;
     private HashMap<GeneanetPerson,HashMap<MyDate,String>> marriage;
     private boolean searched = false;
+    private boolean directAncestor = false;
+    private String geneanetUrl;
 
     public GeneanetPerson(String url, String firstName, String familyName) {
         this.url = url;
@@ -165,26 +167,44 @@ public class GeneanetPerson {
         this.gender = gender;
     }
 
+    public String getGeneanetUrl() {
+        return geneanetUrl;
+    }
+
+    public void setGeneanetUrl(String geneanetUrl) {
+        this.geneanetUrl = geneanetUrl;
+    }
+
+    public boolean isDirectAncestor() {
+        return directAncestor;
+    }
+
+    public void setDirectAncestor(boolean directAncestor) {
+        this.directAncestor = directAncestor;
+    }
+
     @Override
     public String toString() {
         if (firstName != null ) {
-            return "GeneanetPerson{" +
-                    "url='" + url + '\'' +
-                    ", firstName='" + firstName + '\'' +
-                    ", familyName='" + familyName + '\'' +
-                    ", gender='" + gender + '\'' +
-                    ", birthDate=" + birthDate +
-                    ", placeOfBirth=" + placeOfBirth +
-                    ", deathDate=" + deathDate +
-                    ", placeOfDeath=" + placeOfDeath +
-                    ", father='" + father + '\'' +
-                    ", mother='" + mother + '\'' +
-                    ", siblings=" + siblings +
-                    ", halfSiblings=" + halfSiblings +
-                    ", children=" + children +
-                    ", marriage=" + marriage +
-                    ", searched=" + searched +
-                    '}';
+            String result =  "GeneanetPerson{";
+            result += (url != null) ? "url='" + url + '\'' : "";
+            result += (geneanetUrl != null) ? ", geneanetURL='" + geneanetUrl + '\'' : "";
+            result += (firstName != null) ? ", firstName='" + firstName + '\'' : "";
+            result += (familyName != null) ? ", familyName='" + familyName + '\'' : "";
+            result += (gender != null) ? ", gender='" + gender + '\'' : "";
+            result += (birthDate != null) ? ", birthDate='" + birthDate + '\'' : "";
+            result += (placeOfBirth != null) ? ", placeOfBirth='" + placeOfBirth + '\'' : "";
+            result += (deathDate != null) ? ", deathDate='" + deathDate + '\'' : "";
+            result += (placeOfDeath != null) ? ", placeOfDeath='" + placeOfDeath + '\'' : "";
+            result += (father != null) ? ", father='" + father + '\'' : "";
+            result += (mother != null) ? ", mother='" + mother + '\'' : "";
+            result += (siblings != null && !siblings.isEmpty()) ? ", siblings='" + siblings + '\'' : "";
+            result += (halfSiblings != null && !halfSiblings.isEmpty()) ? ", halfSiblings='" + halfSiblings + '\'' : "";
+            result += (children != null && !children.isEmpty()) ? ", children='" + children + '\'' : "";
+            result += (marriage != null && !marriage.isEmpty()) ? ", marriage='" + marriage + '\'' : "";
+            result += ", searched='" + searched + '\'';
+            result += ", directAncestor='" + directAncestor + '\'';
+            return result;
         } else {
             return  "url='" + url;
         }
