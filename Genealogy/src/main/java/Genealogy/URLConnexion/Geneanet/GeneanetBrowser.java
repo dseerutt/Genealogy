@@ -86,8 +86,7 @@ public class GeneanetBrowser {
             geneanetConverter.setXpathGender(prop.getProperty("XpathGender"));
             geneanetConverter.setXpathFirstName(prop.getProperty("XpathFirstName"));
             geneanetConverter.setXpathFamilyName(prop.getProperty("XpathFamilyName"));
-            geneanetConverter.setXpathBirth(prop.getProperty("XpathBirth"));
-            geneanetConverter.setXpathDeath(prop.getProperty("XpathDeath"));
+            geneanetConverter.setXpathBirthAndDeath(prop.getProperty("XpathBirthAndDeath"));
             geneanetConverter.setXpathFather(prop.getProperty("XpathFather"));
             geneanetConverter.setXpathMother(prop.getProperty("XpathMother"));
             geneanetConverter.setXpathFamily(prop.getProperty("XpathFamily"));
@@ -152,6 +151,7 @@ public class GeneanetBrowser {
                         .execute();
             } catch (Exception exception) {
                 logger.info("Failed to connect " + exception.getMessage());
+                Thread.sleep(1000);
                 cptConnexion++;
             }
         }
@@ -296,6 +296,7 @@ public class GeneanetBrowser {
 
     public void searchRoot(){
         rootPerson =  new GeneanetPerson(url);
+        rootPerson.setRootperson(true);
         searchPerson(rootPerson);
         searchFather(rootPerson);
         searchMother(rootPerson);
@@ -351,7 +352,7 @@ public class GeneanetBrowser {
 
     public void searchPartner(GeneanetPerson person){
         if (person != null){
-            if (person.getMarriage() != null && person.getMarriage().size() > 1){
+            if (person.getMarriage() != null && (person.getMarriage().size() > 1 || person.isRootperson())){
                 researchPartner(person);
             }
         }
@@ -370,6 +371,7 @@ public class GeneanetBrowser {
     }
 
     private static void testSearch(String url){
+        BasicConfigurator.configure();
         try {
             GeneanetBrowser browser = new GeneanetBrowser(url);
             GeneanetPerson person = new GeneanetPerson(url);
@@ -378,19 +380,6 @@ public class GeneanetBrowser {
             e.printStackTrace();
         }
     }
-
-    public static void main(String[] args) {
-        String testUrl = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louis+claude&n=vincent";
-        String testUrl2 = "https://gw.geneanet.org/roalda?lang=fr&n=bardin&nz=arnaux&ocz=0&p=marie+anne&pz=ronald+guy";
-        String xpathPattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/ul/li/text()";
-        String xpathText = "Jacques BARDIN";
-
-        //mainSearchFullTree(testUrl);
-        //mainTestSearchTree();
-        //mainTestXpath(testUrl2,xpathPattern);
-        mainFindXpath(testUrl2, xpathText);
-    }
-
 
     public static void mainSearchFullTree(String url) {
         BasicConfigurator.configure();
@@ -437,5 +426,19 @@ public class GeneanetBrowser {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) {
+        String testUrl = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louis+claude&n=vincent";
+        String testUrl2 = "http://gw.geneanet.org/familysoyer?lang=fr&iz=0&p=louis+leonore&n=badin";
+        String testUrl3 = "https://gw.geneanet.org/familysoyer?lang=fr&p=marie+genevieve&n=badin";
+        String xpathPattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/ul/li/text()";
+        String xpathText = "Jean Jacques BOYAU";
+
+        //mainSearchFullTree(testUrl2);
+        testSearch(testUrl3);
+        //mainTestSearchTree();
+        //mainTestXpath(testUrl2,xpathPattern);
+        //mainFindXpath(testUrl2, xpathText);
     }
 }

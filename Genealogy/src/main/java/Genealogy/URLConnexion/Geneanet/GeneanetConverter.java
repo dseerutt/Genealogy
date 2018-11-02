@@ -13,7 +13,6 @@ import us.codecraft.xsoup.Xsoup;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -27,8 +26,7 @@ public class GeneanetConverter {
     private static String XpathGender;
     private static String XpathFirstName;
     private static String XpathFamilyName;
-    private static String XpathBirth;
-    private static String XpathDeath;
+    private static String XpathBirthAndDeath;
     private static String XpathFather;
     private static String XpathMother;
     private static String XpathFamily;
@@ -72,20 +70,12 @@ public class GeneanetConverter {
         XpathFamilyName = xpathFamilyName;
     }
 
-    public static String getXpathBirth() {
-        return XpathBirth;
+    public static String getXpathBirthAndDeath() {
+        return XpathBirthAndDeath;
     }
 
-    public static void setXpathBirth(String xpathBirth) {
-        XpathBirth = xpathBirth;
-    }
-
-    public static String getXpathDeath() {
-        return XpathDeath;
-    }
-
-    public static void setXpathDeath(String xpathDeath) {
-        XpathDeath = xpathDeath;
+    public static void setXpathBirthAndDeath(String xpathBirthAndDeath) {
+        XpathBirthAndDeath = xpathBirthAndDeath;
     }
 
     public static String getXpathFather() {
@@ -219,7 +209,7 @@ public class GeneanetConverter {
 
     public void setBirth(GeneanetPerson person){
         String regex = "(.*?)$|,.*";
-        String birth = Xsoup.compile(XpathBirth).evaluate(doc).get();
+        String birth = Xsoup.compile(XpathBirthAndDeath.replace("XXX","1")).evaluate(doc).get();
         if (birth == null){
             return ;
         }
@@ -231,7 +221,10 @@ public class GeneanetConverter {
             if (tab != null && tab.length > 1){
                 String date = tab[0];
                 String city = tab[1];
-                person.setPlaceOfBirth(city);
+                String[] cityTab = city.split(",");
+                if (cityTab != null && cityTab.length > 0){
+                    person.setPlaceOfBirth(cityTab[0]);
+                }
                 person.setBirthDate(parseBirthDate(date,person.getGender()));
             } else if (tab != null && tab.length == 1){
                 String date = tab[0];
@@ -242,7 +235,7 @@ public class GeneanetConverter {
 
     public void setDeath(GeneanetPerson person){
         String regex = "(.*?),.*";
-        String death = Xsoup.compile(XpathDeath).evaluate(doc).get();
+        String death = Xsoup.compile(XpathBirthAndDeath.replace("XXX","2")).evaluate(doc).get();
         if (death == null){
             return ;
         }
@@ -322,9 +315,7 @@ public class GeneanetConverter {
     private MyDate parseDate(String inputDate) {
         SimpleDateFormat dateFormatFullMonth = new SimpleDateFormat("dd MMMM yyyy", Locale.FRANCE);
         SimpleDateFormat dateFormatFullMonthOnly = new SimpleDateFormat("MMMM yyyy", Locale.FRANCE);
-        SimpleDateFormat dateFormatYear = new SimpleDateFormat("yyyy", Locale.FRANCE);
         dateFormatFullMonthOnly.setTimeZone(TimeZone.getTimeZone("UTC"));
-        dateFormatYear.setTimeZone(TimeZone.getTimeZone("UTC"));
         try {
             Date date0 = dateFormatFullMonth.parse(inputDate);
             return new FullDate(date0);
@@ -339,13 +330,10 @@ public class GeneanetConverter {
         } catch (ParseException e) {
         }
 
-        try {
-            Date date0 = dateFormatYear.parse(inputDate);
-            LocalDate localDate = date0.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            int year  = localDate.getYear();
+        if (inputDate.length() == 4){
+            int year  = Integer.parseInt(inputDate);
             return new YearDate(year);
-        } catch (ParseException e) {
-            //GeneanetBrowser.logger.debug("Could not convert with Gregorian calendar " + inputDate);
+        } else {
             return parseRepublicanDate(inputDate);
         }
 
@@ -359,21 +347,12 @@ public class GeneanetConverter {
 
     public void setFamily(int index, GeneanetPerson person){
         String category = Xsoup.compile(XpathSection.replace("XXX","" + index)).evaluate(doc).get();
-        if (category != null && category.equals("Union(s) et enfant(s)")){
+        if (category != null && category.contains("Union(s)")){
             setMarriageAndChildren(index+1, person);
             index++;
         }
         category = Xsoup.compile(XpathSection.replace("XXX","" + index)).evaluate(doc).get();
-        if (category != null && category.equals("Fratrie")){
-            setBrotherhood(index+1, person);
-            index++;
-        } else if (category != null && category.equals("Demi-frères et demi-sœurs")) {
-            setHalfBrotherhood(person);
-            index++;
-        }
-
-        category = Xsoup.compile(XpathSection.replace("XXX","" + index)).evaluate(doc).get();
-        if (category != null && category.equals("Fratrie")){
+        if (category != null && (category.equals("Fratrie")||category.equals("Frères et sœurs"))){
             setBrotherhood(index+1, person);
             index++;
         } else if (category != null && category.equals("Demi-frères et demi-sœurs")) {
@@ -503,10 +482,10 @@ public class GeneanetConverter {
     }
 
     private boolean setMother(GeneanetPerson person) {
-        int nbmother = 1;
+        int nbmother = 2;
         String xpath =(XpathFamily.replace("XXX","2") + XpathMother.replace("XXX",nbmother + ""));
-        if (!xpath.contains("&p=")){
-            nbmother++;
+        if (person.getGeneanetUrl() == null){
+            nbmother--;
             xpath =(XpathFamily.replace("XXX","2") + XpathMother.replace("XXX",nbmother + ""));
         }
         String motherURL = Xsoup.compile(xpath).evaluate(doc).get();
@@ -518,10 +497,10 @@ public class GeneanetConverter {
     }
 
     private boolean setFather(GeneanetPerson person) {
-        int nbfather = 1;
+        int nbfather = 2;
         String xpath =(XpathFamily.replace("XXX","2") + XpathFather.replace("XXX",nbfather + ""));
-        if (!xpath.contains("&p=")){
-            nbfather++;
+        if (person.getGeneanetUrl() == null){
+            nbfather--;
             xpath =(XpathFamily.replace("XXX","2") + XpathFather.replace("XXX",nbfather + ""));
         }
         String fatherURL = Xsoup.compile(xpath).evaluate(doc).get();

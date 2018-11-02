@@ -28,6 +28,7 @@ public class GeneanetPerson {
     private boolean searched = false;
     private boolean directAncestor = false;
     private String geneanetUrl;
+    private boolean rootperson = false;
 
     public GeneanetPerson(String url, String firstName, String familyName) {
         this.url = url;
@@ -45,6 +46,14 @@ public class GeneanetPerson {
         halfSiblings = new ArrayList<>();
         marriage = new HashMap<>();
         children = new ArrayList<>();
+    }
+
+    public boolean isRootperson() {
+        return rootperson;
+    }
+
+    public void setRootperson(boolean rootperson) {
+        this.rootperson = rootperson;
     }
 
     public void setSearched(boolean searched) {
@@ -204,6 +213,7 @@ public class GeneanetPerson {
             result += (marriage != null && !marriage.isEmpty()) ? ", marriage='" + marriage + '\'' : "";
             result += ", searched='" + searched + '\'';
             result += ", directAncestor='" + directAncestor + '\'';
+            result += (rootperson) ? ", rootperson='" + rootperson + '\'' : "";
             return result;
         } else {
             return  "url='" + url;
