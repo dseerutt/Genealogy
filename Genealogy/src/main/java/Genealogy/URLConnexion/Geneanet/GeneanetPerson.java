@@ -1,10 +1,8 @@
 package Genealogy.URLConnexion.Geneanet;
 
 import Genealogy.Model.Date.MyDate;
-import Genealogy.Model.Town;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -17,8 +15,12 @@ public class GeneanetPerson {
     private String familyName;
     private MyDate birthDate;
     private String placeOfBirth;
+    private MyDate christeningDate;
+    private String placeOfChristening;
     private MyDate deathDate;
     private String placeOfDeath;
+    private MyDate burialDate;
+    private String placeOfBurial;
     private GeneanetPerson father;
     private GeneanetPerson mother;
     private ArrayList<GeneanetPerson> siblings;
@@ -74,6 +76,38 @@ public class GeneanetPerson {
 
     public String getFamilyName() {
         return familyName;
+    }
+
+    public MyDate getChristeningDate() {
+        return christeningDate;
+    }
+
+    public void setChristeningDate(MyDate christeningDate) {
+        this.christeningDate = christeningDate;
+    }
+
+    public String getPlaceOfChristening() {
+        return placeOfChristening;
+    }
+
+    public void setPlaceOfChristening(String placeOfChristening) {
+        this.placeOfChristening = placeOfChristening;
+    }
+
+    public MyDate getBurialDate() {
+        return burialDate;
+    }
+
+    public void setBurialDate(MyDate burialDate) {
+        this.burialDate = burialDate;
+    }
+
+    public String getPlaceOfBurial() {
+        return placeOfBurial;
+    }
+
+    public void setPlaceOfBurial(String placeOfBurial) {
+        this.placeOfBurial = placeOfBurial;
     }
 
     public void setFamilyName(String familyName) {
@@ -203,8 +237,12 @@ public class GeneanetPerson {
             result += (gender != null) ? ", gender='" + gender + '\'' : "";
             result += (birthDate != null) ? ", birthDate='" + birthDate + '\'' : "";
             result += (placeOfBirth != null) ? ", placeOfBirth='" + placeOfBirth + '\'' : "";
+            result += (christeningDate != null) ? ", christeningDate='" + christeningDate + '\'' : "";
+            result += (placeOfChristening != null) ? ", placeOfChristening='" + placeOfChristening + '\'' : "";
             result += (deathDate != null) ? ", deathDate='" + deathDate + '\'' : "";
             result += (placeOfDeath != null) ? ", placeOfDeath='" + placeOfDeath + '\'' : "";
+            result += (burialDate != null) ? ", burialDate='" + burialDate + '\'' : "";
+            result += (placeOfBurial != null) ? ", placeOfBurial='" + placeOfBurial + '\'' : "";
             result += (father != null) ? ", father='" + father + '\'' : "";
             result += (mother != null) ? ", mother='" + mother + '\'' : "";
             result += (siblings != null && !siblings.isEmpty()) ? ", siblings='" + siblings + '\'' : "";

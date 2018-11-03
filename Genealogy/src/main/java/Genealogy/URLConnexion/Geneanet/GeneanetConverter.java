@@ -18,6 +18,9 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static Genealogy.URLConnexion.Geneanet.GeneanetBrowser.logger;
+import static Genealogy.URLConnexion.Geneanet.GeneanetConverter.ActType.*;
+
 /**
  * Created by Dan on 07/11/2017.
  */
@@ -207,69 +210,90 @@ public class GeneanetConverter {
         return null;
     }
 
-    public void setBirth(GeneanetPerson person){
+    public int setChristening(GeneanetPerson person, int index){
+        return index;
+    }
+
+    public int setBurial(GeneanetPerson person, int index){
+        return index;
+    }
+
+    public enum ActType {
+        BIRTH,
+        CHRISTENING,
+        DEATH,
+        BURIAL;
+    }
+
+    public int setPersonDates(GeneanetPerson person, int index, ActType act){
         String regex = "(.*?)$|,.*";
-        String birth = Xsoup.compile(XpathBirthAndDeath.replace("XXX","1")).evaluate(doc).get();
+        String birth = Xsoup.compile(XpathBirthAndDeath.replace("XXX","" + index)).evaluate(doc).get();
         if (birth == null){
-            return ;
+            return index;
         }
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(birth);
         if (matcher != null && matcher.find()){
             String dateAndCity = matcher.group(1);
-            String[] tab = dateAndCity.split(" - ");
-            if (tab != null && tab.length > 1){
-                String date = tab[0];
-                String city = tab[1];
-                String[] cityTab = city.split(",");
-                if (cityTab != null && cityTab.length > 0){
-                    person.setPlaceOfBirth(cityTab[0]);
+            if (dateAndCity.contains("Né")||dateAndCity.contains("Baptisé")||dateAndCity.contains("Décédé")||dateAndCity.contains("Inhumé")) {
+                String[] tab = dateAndCity.split(" - ");
+                String date = null;
+                String city = null;
+                if (tab != null && tab.length > 1){
+                    date = tab[0];
+                    String cityTmp = tab[1];
+                    String[] cityTab = cityTmp.split(",");
+                    if (cityTab != null && cityTab.length > 0){
+                        city = cityTab[0];
+                    }
+                } else if (tab != null && tab.length == 1){
+                    date = tab[0];
                 }
-                person.setBirthDate(parseBirthDate(date,person.getGender()));
-            } else if (tab != null && tab.length == 1){
-                String date = tab[0];
-                person.setBirthDate(parseBirthDate(date,person.getGender()));
+                if (date != null || city != null){
+                    switch (act) {
+                        case BIRTH:
+                            if (date.contains("Né")){
+                                person.setBirthDate(parseDateWithSex(date,person.getGender(),"Né le "));
+                                person.setPlaceOfBirth(city);
+                                index++;
+                            }
+                            break;
+                        case CHRISTENING:
+                            if (date.contains("Baptisé")) {
+                                person.setChristeningDate(parseDateWithSex(date, person.getGender(), "Baptisé le "));
+                                person.setPlaceOfChristening(city);
+                                index++;
+                            }
+                            break;
+                        case DEATH:
+                            if (date.contains("Décédé")) {
+                                person.setDeathDate(parseDateWithSex(date,person.getGender(),"Décédé le "));
+                                person.setPlaceOfDeath(city);
+                                index++;
+                            }
+                            break;
+                        case BURIAL:
+                            if (date.contains("Inhumé")) {
+                                person.setBurialDate(parseDateWithSex(date,person.getGender(),"Inhumé le "));
+                                person.setPlaceOfBurial(city);
+                                index++;
+                            }
+                            break;
+                        default:
+                            logger.error("Type acte Geneanet non trouvé");
+                            break;
+                    }
+                }
             }
         }
+        return index;
     }
 
-    public void setDeath(GeneanetPerson person){
-        String regex = "(.*?),.*";
-        String death = Xsoup.compile(XpathBirthAndDeath.replace("XXX","2")).evaluate(doc).get();
-        if (death == null){
-            return ;
-        }
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(death);
-        if (matcher != null && matcher.find()){
-            String dateAndCity = matcher.group(1);
-            String[] tab = dateAndCity.split(" - ");
-            if (tab != null && tab.length > 1){
-                int cityNumber = 1;
-                String date = tab[0];
-                String city = tab[cityNumber];
-                if (wrongCities.contains(city)){
-                    cityNumber++;
-                    city = tab[cityNumber];
-                }
-                person.setPlaceOfDeath(city);
-                person.setDeathDate(parseDeathDate(date,person.getGender()));
-            }
-        }
-    }
-
-    public MyDate parseBirthDate(String input, Gender gender){
+    public MyDate parseDateWithSex(String input, Gender gender, String text){
         if (gender == Gender.Female){
-            return parseDate(input,"Née le ");
+            return parseDate(input,text.replace("é ","ée "));
         }
-        return parseDate(input,"Né le ");
-    }
-
-    public MyDate parseDeathDate(String input, Gender gender){
-        if (gender == Gender.Female){
-            return parseDate(input,"Décédée le ");
-        }
-        return parseDate(input,"Décédé le ");
+        return parseDate(input,text);
     }
 
     public MyDate parseMarriageDate(String input, Gender gender){
@@ -336,7 +360,6 @@ public class GeneanetConverter {
         } else {
             return parseRepublicanDate(inputDate);
         }
-
     }
 
     private MyDate parseRepublicanDate(String inputDate){
@@ -446,8 +469,10 @@ public class GeneanetConverter {
         person.setFamilyName(name);
         setGender(person);
         setGeneanetUrl(person);
-        setBirth(person);
-        setDeath(person);
+        int index = setPersonDates(person,1,BIRTH);
+        index = setPersonDates(person,index,CHRISTENING);
+        index = setPersonDates(person,index,DEATH);
+        setPersonDates(person,index,BURIAL);
         int offset = setParents(person);
         setFamily(2 + offset,person);
         person.setSearched(true);

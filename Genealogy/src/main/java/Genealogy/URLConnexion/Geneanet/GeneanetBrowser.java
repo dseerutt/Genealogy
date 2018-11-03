@@ -435,8 +435,8 @@ public class GeneanetBrowser {
         String xpathPattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/ul/li/text()";
         String xpathText = "Jean Jacques BOYAU";
 
-        //mainSearchFullTree(testUrl2);
-        testSearch(testUrl3);
+        mainSearchFullTree(testUrl2);
+        //testSearch(testUrl3);
         //mainTestSearchTree();
         //mainTestXpath(testUrl2,xpathPattern);
         //mainFindXpath(testUrl2, xpathText);
