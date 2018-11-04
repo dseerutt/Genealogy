@@ -332,12 +332,16 @@ public class GeneanetBrowser {
     }
 
     public void researchPartner(GeneanetPerson person){
-        logger.info("Double research for " + person.getFirstName() + " " + person.getFamilyName());
+        boolean found = false;
         HashMap<GeneanetPerson, HashMap<MyDate, String>> marriage = person.getMarriage();
         HashMap<GeneanetPerson, HashMap<MyDate, String>> newMarriage = new HashMap<GeneanetPerson, HashMap<MyDate, String>>();
         for (Map.Entry<GeneanetPerson, HashMap<MyDate, String>> entry :  marriage.entrySet()){
             GeneanetPerson partner = entry.getKey();
             if (!partner.getUrl().equals("") && !partner.isSearched()) {
+                if (!found){
+                    logger.info("Double research for " + person.getFirstName() + " " + person.getFamilyName());
+                    found = true;
+                }
                 searchPerson(partner);
                 researchPartnerNoRecursive(partner);
                 newMarriage.put(partner,entry.getValue());
@@ -440,10 +444,10 @@ public class GeneanetBrowser {
 
     public static void main(String[] args) {
         String testUrl = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louis+claude&n=vincent";
-        String testUrl2 = "http://gw.geneanet.org/gluc?lang=fr&pz=iris+brigitte+dominique&nz=pignaud&ocz=0&p=louis+eleonore&n=badin";
-        String testUrl3 = "https://gw.geneanet.org/familysoyer?lang=fr&p=pelagie+marie+amable&n=troisoeufs";
+        String testUrl2 = "http://gw.geneanet.org/sylvieb4?lang=fr&pz=sylvie+jacqueline+marie+bernadette&nz=bergereau&ocz=0&p=jean+jacques&n=boileau";
+        String testUrl3 = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louise&n=vincent";
         String xpathPattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/ul/li/text()";
-        String xpathText = "Jean Jacques BOYAU";
+        String xpathText = "Edmé Etienne BOILEAU";
 
         mainSearchFullTree(testUrl2);
         //testSearch(testUrl3);
