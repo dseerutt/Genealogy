@@ -430,8 +430,8 @@ public class GeneanetBrowser {
 
     public static void main(String[] args) {
         String testUrl = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louis+claude&n=vincent";
-        String testUrl2 = "http://gw.geneanet.org/familysoyer?lang=fr&iz=0&p=louis+leonore&n=badin";
-        String testUrl3 = "https://gw.geneanet.org/familysoyer?lang=fr&p=marie+genevieve&n=badin";
+        String testUrl2 = "http://gw.geneanet.org/gluc?lang=fr&pz=iris+brigitte+dominique&nz=pignaud&ocz=0&p=louis+eleonore&n=badin";
+        String testUrl3 = "https://gw.geneanet.org/familysoyer?lang=fr&p=pelagie+marie+amable&n=troisoeufs";
         String xpathPattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/ul/li/text()";
         String xpathText = "Jean Jacques BOYAU";
 
