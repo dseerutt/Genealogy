@@ -303,6 +303,16 @@ public class GeneanetBrowser {
         searchSiblings(rootPerson);
         searchHalfSiblings(rootPerson);
         searchPartner(rootPerson);
+        searchChildren(rootPerson);
+    }
+
+    private void searchChildren(GeneanetPerson rootPerson) {
+        ArrayList<GeneanetPerson> newChildren = new ArrayList<GeneanetPerson>();
+        for (GeneanetPerson child : rootPerson.getChildren()){
+            searchPerson(child);
+            newChildren.add(child);
+        }
+        rootPerson.setChildren(newChildren);
     }
 
     public void searchFather(GeneanetPerson person){
