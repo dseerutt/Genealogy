@@ -28,7 +28,6 @@ public class GeneanetPerson {
     private ArrayList<GeneanetPerson> children;
     private HashMap<GeneanetPerson,HashMap<MyDate,String>> marriage;
     private boolean searched = false;
-    private boolean directAncestor = false;
     private String geneanetUrl;
     private boolean rootperson = false;
 
@@ -218,14 +217,6 @@ public class GeneanetPerson {
         this.geneanetUrl = geneanetUrl;
     }
 
-    public boolean isDirectAncestor() {
-        return directAncestor;
-    }
-
-    public void setDirectAncestor(boolean directAncestor) {
-        this.directAncestor = directAncestor;
-    }
-
     @Override
     public String toString() {
         if (firstName != null ) {
@@ -250,7 +241,6 @@ public class GeneanetPerson {
             result += (children != null && !children.isEmpty()) ? ", children='" + children + '\'' : "";
             result += (marriage != null && !marriage.isEmpty()) ? ", marriage='" + marriage + '\'' : "";
             result += ", searched='" + searched + '\'';
-            result += ", directAncestor='" + directAncestor + '\'';
             result += (rootperson) ? ", rootperson='" + rootperson + '\'' : "";
             return result;
         } else {

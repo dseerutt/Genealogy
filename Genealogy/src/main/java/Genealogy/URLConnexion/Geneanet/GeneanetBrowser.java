@@ -444,12 +444,12 @@ public class GeneanetBrowser {
 
     public static void main(String[] args) {
         String testUrl = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louis+claude&n=vincent";
-        String testUrl2 = "http://gw.geneanet.org/sylvieb4?lang=fr&pz=sylvie+jacqueline+marie+bernadette&nz=bergereau&ocz=0&p=jean+jacques&n=boileau";
-        String testUrl3 = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louise&n=vincent";
+        String testUrl2 = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=laurence&n=croize";
+        String testUrl3 = "http://gw.geneanet.org/michelnormand?lang=fr&p=catherine&n=collet";
         String xpathPattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/ul/li/text()";
-        String xpathText = "Edmé Etienne BOILEAU";
+        String xpathText = "Denis, François VINCENT";
 
-        mainSearchFullTree(testUrl2);
+        mainSearchFullTree(testUrl3);
         //testSearch(testUrl3);
         //mainTestSearchTree();
         //mainTestXpath(testUrl2,xpathPattern);
