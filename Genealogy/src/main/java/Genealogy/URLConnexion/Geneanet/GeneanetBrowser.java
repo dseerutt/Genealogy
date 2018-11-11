@@ -273,7 +273,7 @@ public class GeneanetBrowser {
         searchMother(person);
         searchSiblings(person);
         searchHalfSiblings(person);
-        searchPartner(person);
+        searchPartner(person, false);
     }
 
     private void searchSiblings(GeneanetPerson person) {
@@ -302,7 +302,7 @@ public class GeneanetBrowser {
         searchMother(rootPerson);
         searchSiblings(rootPerson);
         searchHalfSiblings(rootPerson);
-        searchPartner(rootPerson);
+        searchPartner(rootPerson, true);
         searchChildren(rootPerson);
     }
 
@@ -331,7 +331,7 @@ public class GeneanetBrowser {
         }
     }
 
-    public void researchPartner(GeneanetPerson person){
+    public void researchPartner(GeneanetPerson person, boolean root){
         boolean found = false;
         HashMap<GeneanetPerson, HashMap<MyDate, String>> marriage = person.getMarriage();
         HashMap<GeneanetPerson, HashMap<MyDate, String>> newMarriage = new HashMap<GeneanetPerson, HashMap<MyDate, String>>();
@@ -342,32 +342,38 @@ public class GeneanetBrowser {
                     logger.info("Double research for " + person.getFirstName() + " " + person.getFamilyName());
                     found = true;
                 }
-                searchPerson(partner);
-                researchPartnerNoRecursive(partner);
-                newMarriage.put(partner,entry.getValue());
+                if (root){
+                    searchTree(partner);
+                } else {
+                    searchPerson(partner);
+                    researchPartnerNoRecursive(partner);
+                    newMarriage.put(partner,entry.getValue());
+                }
             }
         }
         person.setMarriage(newMarriage);
     }
 
     public void researchPartnerNoRecursive(GeneanetPerson person){
-        logger.info("Double research partner for " + person.getFirstName() + " " + person.getFamilyName());
-        HashMap<GeneanetPerson, HashMap<MyDate, String>> marriage = person.getMarriage();
-        HashMap<GeneanetPerson, HashMap<MyDate, String>> newMarriage = new HashMap<GeneanetPerson, HashMap<MyDate, String>>();
-        for (Map.Entry<GeneanetPerson, HashMap<MyDate, String>> entry :  marriage.entrySet()){
-            GeneanetPerson partner = entry.getKey();
-            if (!partner.getUrl().equals("") && !partner.isSearched()) {
-                searchPerson(partner);
-                newMarriage.put(partner,entry.getValue());
+        if (person != null && person.getMarriage().size() > 1){
+            logger.info("Double research partner for " + person.getFirstName() + " " + person.getFamilyName());
+            HashMap<GeneanetPerson, HashMap<MyDate, String>> marriage = person.getMarriage();
+            HashMap<GeneanetPerson, HashMap<MyDate, String>> newMarriage = new HashMap<GeneanetPerson, HashMap<MyDate, String>>();
+            for (Map.Entry<GeneanetPerson, HashMap<MyDate, String>> entry :  marriage.entrySet()){
+                GeneanetPerson partner = entry.getKey();
+                if (!partner.getUrl().equals("") && !partner.isSearched()) {
+                    searchPerson(partner);
+                    newMarriage.put(partner,entry.getValue());
+                }
             }
+            person.setMarriage(newMarriage);
         }
-        person.setMarriage(newMarriage);
     }
 
-    public void searchPartner(GeneanetPerson person){
+    public void searchPartner(GeneanetPerson person, boolean root){
         if (person != null){
             if (person.getMarriage() != null && (person.getMarriage().size() > 1 || person.isRootperson())){
-                researchPartner(person);
+                researchPartner(person, root);
             }
         }
     }
@@ -443,16 +449,16 @@ public class GeneanetBrowser {
     }
 
     public static void main(String[] args) {
-        String testUrl = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=louis+claude&n=vincent";
-        String testUrl2 = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=laurence&n=croize";
-        String testUrl3 = "http://gw.geneanet.org/michelnormand?lang=fr&p=catherine&n=collet";
-        String xpathPattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/ul/li/text()";
-        String xpathText = "Denis, François VINCENT";
+        String testUrl = "https://gw.geneanet.org/genea50com?lang=fr&p=cecile&n=lefoulon";
+        String testUrl2 = "https://gw.geneanet.org/genea50com?lang=fr&p=jean&n=lepontois&oc=4";
+        String testUrl3 = "http://gw.geneanet.org/genea50com?lang=fr&p=marie+madeleine&n=douville&oc=5";
+        String xpathPattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/h2[1]/span[2]/text()";
+        String xpathText = "Hector LEPONTOIS";
 
-        mainSearchFullTree(testUrl3);
-        //testSearch(testUrl3);
+        //mainSearchFullTree(testUrl3);
+        testSearch(testUrl);
         //mainTestSearchTree();
-        //mainTestXpath(testUrl2,xpathPattern);
-        //mainFindXpath(testUrl2, xpathText);
+        //mainTestXpath(testUrl3,xpathPattern);
+        //mainFindXpath(testUrl3, xpathText);
     }
 }
