@@ -41,6 +41,16 @@ public class GeneanetConverter {
     private static String XpathHalfBrother;
     private static String XpathChildren;
     private static String XpathUrl;
+
+    public static HashMap<String, Integer> getSearchedTrees() {
+        return searchedTrees;
+    }
+
+    public static void setSearchedTrees(HashMap<String, Integer> searchedTrees) {
+        GeneanetConverter.searchedTrees = searchedTrees;
+    }
+
+    private static HashMap<String,Integer> searchedTrees;
     private static ArrayList<String> geneanetTrees;
     private Document doc;
     private final static Character space = (char) 160;
@@ -49,6 +59,53 @@ public class GeneanetConverter {
     public GeneanetConverter(Document document){
         doc = document;
         initWrongCities();
+        initSearchedTrees();
+    }
+
+    private void initSearchedTrees(){
+        searchedTrees = new HashMap<String,Integer>();
+        searchedTrees.put("roalda",7);
+        searchedTrees.put("familysoyer",46);
+        searchedTrees.put("dil",-1);
+        searchedTrees.put("gluc",-1);
+        searchedTrees.put("sylvieb4",-1);
+        searchedTrees.put("jeannineleger1",-1);
+        searchedTrees.put("jlrenaud",-1);
+        searchedTrees.put("michelnormand",-1);
+        searchedTrees.put("hamon22",-1);
+        searchedTrees.put("duvachat",-1);
+        searchedTrees.put("phil68",-1);
+        searchedTrees.put("jvillette",-1);
+        searchedTrees.put("mangeret",-1);
+        searchedTrees.put("pierref",-1);
+        searchedTrees.put("gaudillatp",-1);
+        searchedTrees.put("genea50com",-1);
+        searchedTrees.put("mganier",-1);
+        searchedTrees.put("jeanhinard",-1);
+        searchedTrees.put("murphyauzerais",-1);
+        searchedTrees.put("cralu",-1);
+        searchedTrees.put("sobou",-1);
+        searchedTrees.put("oliviercailleau",-1);
+        searchedTrees.put("pierrepetrequi",-1);
+        searchedTrees.put("francoist",-1);
+        searchedTrees.put("hubertp83",-1);
+        searchedTrees.put("beta1",-1);
+        searchedTrees.put("rogo1",-1);
+        searchedTrees.put("barthricher",-1);
+        searchedTrees.put("denischuquet",-1);
+        searchedTrees.put("slebruman",-1);
+        searchedTrees.put("mjdesoeuvre",-1);
+        searchedTrees.put("mamynanne",-1);
+        searchedTrees.put("trucy",-1);
+        searchedTrees.put("geruwene1",-1);
+        searchedTrees.put("fufu",-1);
+        searchedTrees.put("jacqbri",-1);
+        searchedTrees.put("amc50",-1);
+        searchedTrees.put("micha12",-1);
+        searchedTrees.put("fabricelenoble",-1);
+        searchedTrees.put("msebastien1",-1);
+        searchedTrees.put("lisetoxe",-1);
+        searchedTrees.put("mdonville1",-1);
     }
 
     private void initWrongCities() {

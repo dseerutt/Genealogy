@@ -47,6 +47,7 @@ public class GeneanetBrowser {
     public Map<String, String> cookie;
     private GeneanetConverter geneanetConverter;
     public GeneanetPerson rootPerson;
+    public int nbPeople = 0;
     final static Logger logger = Logger.getLogger(GeneanetBrowser.class);
 
     public GeneanetBrowser(String url0) throws Exception {
@@ -60,6 +61,14 @@ public class GeneanetBrowser {
             Document doc = initConnexion();
             geneanetConverter = new GeneanetConverter(doc);
         }
+    }
+
+    public int getNbPeople() {
+        return nbPeople;
+    }
+
+    public void setNbPeople(int nbPeople) {
+        this.nbPeople = nbPeople;
     }
 
     /**
@@ -121,7 +130,7 @@ public class GeneanetBrowser {
     }
 
     private void initGeneanetTrees(Properties prop) {
-        String tmpGeneanetTrees = prop.getProperty("GeneanetTrees");
+        String tmpGeneanetTrees = prop.getProperty("geneanetTrees");
         ArrayList<String> geneanetTreesList = new ArrayList<String>();
         if (tmpGeneanetTrees != null )
         {
@@ -383,6 +392,7 @@ public class GeneanetBrowser {
             String url = person.getUrl();
             Document inputDocument = connect(url);
             geneanetConverter.parseDocument(inputDocument, person);
+            nbPeople++;
             logger.info("Searched " + person.getFirstName() + " " + person.getFamilyName() + " : " + person);
         } catch (Exception e) {
             e.printStackTrace();
@@ -401,23 +411,45 @@ public class GeneanetBrowser {
         }
     }
 
-    public static void mainSearchFullTree(String url) {
-        BasicConfigurator.configure();
+    public static int mainSearchFullTree(String url) {
         try {
             GeneanetBrowser browser = new GeneanetBrowser(url);
             browser.searchRoot();
+            System.out.println("People searched : " + browser.getNbPeople());
+            return browser.getNbPeople();
         } catch (Exception e) {
             e.printStackTrace();
+            return 0;
         }
     }
 
+    public static String findTreeName(String tree){
+        String regex = ".*\\.org/(.*)\\?.*";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(tree);
+        if (matcher != null && matcher.find()) {
+            String name = matcher.group(1);
+            return name;
+        }
+        return null;
+    }
 
-    public static void mainTestSearchTree() {
+
+    public static void treeTest() {
         try {
-            BasicConfigurator.configure();
-            GeneanetBrowser browser = new GeneanetBrowser(null);
+            GeneanetBrowser browser = new GeneanetBrowser("");
+            HashMap<String, Integer> searchedTrees = browser.getGeneanetConverter().getSearchedTrees();
             for (String url : browser.getGeneanetConverter().getGeneanetTrees()){
-                testSearch(url);
+                logger.info("Searching " + url);
+                int people = mainSearchFullTree(url);
+                String treeName = findTreeName(url);
+                Integer value = searchedTrees.get(treeName);
+                if (searchedTrees != null && value != null && (value != people)){
+                    logger.error("Test KO for URL " + url + " : expected " + value + " but got " + people);
+                    return;
+                } else if (searchedTrees != null){
+                    logger.info("Test OK for URL " + treeName);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -425,7 +457,6 @@ public class GeneanetBrowser {
     }
 
     public static void mainTestXpath(String url, String pattern) {
-        BasicConfigurator.configure();
         try {
             GeneanetBrowser browser = new GeneanetBrowser("");
             Document doc = browser.connect(url);
@@ -437,7 +468,6 @@ public class GeneanetBrowser {
     }
 
     public static void mainFindXpath(String url, String text) {
-        BasicConfigurator.configure();
         try {
             GeneanetBrowser browser = new GeneanetBrowser(url);
             Document doc = browser.connect(url);
@@ -449,14 +479,16 @@ public class GeneanetBrowser {
     }
 
     public static void main(String[] args) {
+        BasicConfigurator.configure();
         String testUrl = "https://gw.geneanet.org/genea50com?lang=fr&p=cecile&n=lefoulon";
         String testUrl2 = "https://gw.geneanet.org/genea50com?lang=fr&p=jean&n=lepontois&oc=4";
-        String testUrl3 = "http://gw.geneanet.org/genea50com?lang=fr&p=marie+madeleine&n=douville&oc=5";
+        String testUrl3 = "http://gw.geneanet.org/roalda?lang=fr&pz=ronald+guy&nz=arnaux&ocz=0&p=marie+anne&n=bardin";
         String xpathPattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/h2[1]/span[2]/text()";
         String xpathText = "Hector LEPONTOIS";
 
+        treeTest();
         //mainSearchFullTree(testUrl3);
-        testSearch(testUrl);
+        //testSearch(testUrl);
         //mainTestSearchTree();
         //mainTestXpath(testUrl3,xpathPattern);
         //mainFindXpath(testUrl3, xpathText);
