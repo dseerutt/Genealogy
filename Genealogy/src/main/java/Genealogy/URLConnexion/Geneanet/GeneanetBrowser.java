@@ -438,18 +438,22 @@ public class GeneanetBrowser {
     public static void treeTest() {
         try {
             GeneanetBrowser browser = new GeneanetBrowser("");
+            int cpt = 0;
             HashMap<String, Integer> searchedTrees = browser.getGeneanetConverter().getSearchedTrees();
             for (String url : browser.getGeneanetConverter().getGeneanetTrees()){
-                logger.info("Searching " + url);
-                int people = mainSearchFullTree(url);
-                String treeName = findTreeName(url);
-                Integer value = searchedTrees.get(treeName);
-                if (searchedTrees != null && value != null && (value != people)){
-                    logger.error("Test KO for URL " + url + " : expected " + value + " but got " + people);
-                    return;
-                } else if (searchedTrees != null){
-                    logger.info("Test OK for URL " + treeName);
+                if (cpt <= 31){
+                    logger.info("Searching " + url);
+                    int people = mainSearchFullTree(url);
+                    String treeName = findTreeName(url);
+                    Integer value = searchedTrees.get(treeName);
+                    if (searchedTrees != null && value != null && (value != people)){
+                        logger.error("Test KO for URL " + url + " : expected " + value + " but got " + people);
+                        return;
+                    } else if (searchedTrees != null){
+                        logger.info("Test OK for URL " + treeName);
+                    }
                 }
+                cpt++;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -481,7 +485,7 @@ public class GeneanetBrowser {
     public static void main(String[] args) {
         BasicConfigurator.configure();
         String testUrl = "https://gw.geneanet.org/dil?lang=fr&iz=0&i=17109";
-        String testUrl2 = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=ernest+leon&n=berton";
+        String testUrl2 = "https://gw.geneanet.org/sylvieb4?lang=fr&pz=sylvie+jacqueline+marie+bernadette&nz=bergereau&ocz=0&p=jeanne&n=naudin";
         String testUrl3 = "http://gw.geneanet.org/roalda?lang=fr&pz=ronald+guy&nz=arnaux&ocz=0&p=marie+anne&n=bardin";
         String xpathPattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/h2[1]/span[2]/text()";
         String xpathText = "Eugène, Jules BERTON";
