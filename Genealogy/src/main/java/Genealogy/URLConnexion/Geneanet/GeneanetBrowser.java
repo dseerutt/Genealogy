@@ -93,8 +93,8 @@ public class GeneanetBrowser {
             password = prop.getProperty("p2");
             formRegex = prop.getProperty("formRegex");
             geneanetConverter.setXpathGender(prop.getProperty("XpathGender"));
-            geneanetConverter.setXpathFirstName(prop.getProperty("XpathFirstName"));
-            geneanetConverter.setXpathFamilyName(prop.getProperty("XpathFamilyName"));
+            geneanetConverter.setXpathNames(prop.getProperty("XpathNames"));
+            geneanetConverter.setXpathNames2(prop.getProperty("XpathNames2"));
             geneanetConverter.setXpathBirthAndDeath(prop.getProperty("XpathBirthAndDeath"));
             geneanetConverter.setXpathFather(prop.getProperty("XpathFather"));
             geneanetConverter.setXpathMother(prop.getProperty("XpathMother"));
@@ -104,6 +104,7 @@ public class GeneanetBrowser {
             geneanetConverter.setXpathMarriageDate(prop.getProperty("XpathMarriageDate"));
             geneanetConverter.setXpathMarriagePartner(prop.getProperty("XpathMarriagePartner"));
             geneanetConverter.setXpathBrother(prop.getProperty("XpathBrother"));
+            geneanetConverter.setXpathBrother2(prop.getProperty("XpathBrother2"));
             geneanetConverter.setXpathHalfBrother(prop.getProperty("XpathHalfBrother"));
             geneanetConverter.setXpathChildren(prop.getProperty("XpathChildren"));
             geneanetConverter.setXpathUrl(prop.getProperty("XpathUrl"));
@@ -401,7 +402,6 @@ public class GeneanetBrowser {
     }
 
     private static void testSearch(String url){
-        BasicConfigurator.configure();
         try {
             GeneanetBrowser browser = new GeneanetBrowser(url);
             GeneanetPerson person = new GeneanetPerson(url);
@@ -480,15 +480,15 @@ public class GeneanetBrowser {
 
     public static void main(String[] args) {
         BasicConfigurator.configure();
-        String testUrl = "https://gw.geneanet.org/genea50com?lang=fr&p=cecile&n=lefoulon";
-        String testUrl2 = "https://gw.geneanet.org/genea50com?lang=fr&p=jean&n=lepontois&oc=4";
+        String testUrl = "https://gw.geneanet.org/dil?lang=fr&iz=0&i=17109";
+        String testUrl2 = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=ernest+leon&n=berton";
         String testUrl3 = "http://gw.geneanet.org/roalda?lang=fr&pz=ronald+guy&nz=arnaux&ocz=0&p=marie+anne&n=bardin";
         String xpathPattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/h2[1]/span[2]/text()";
-        String xpathText = "Hector LEPONTOIS";
+        String xpathText = "Eugène, Jules BERTON";
 
         treeTest();
         //mainSearchFullTree(testUrl3);
-        //testSearch(testUrl);
+        //testSearch(testUrl2);
         //mainTestSearchTree();
         //mainTestXpath(testUrl3,xpathPattern);
         //mainFindXpath(testUrl3, xpathText);
