@@ -268,4 +268,8 @@ public class GeneanetPerson {
         GeneanetPerson person = new GeneanetPerson(personString);
         marriage.put(person, partnerMap);
     }
+
+    public String getFullName() {
+        return firstName + " " + familyName;
+    }
 }

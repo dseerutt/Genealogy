@@ -29,9 +29,11 @@ public class GeneanetConverter {
     private static String XpathGender;
     private static String XpathNames;
     private static String XpathNames2;
+    private static String XpathNames3;
     private static String XpathBirthAndDeath;
     private static String XpathFather;
     private static String XpathMother;
+    private static String XpathParents2;
     private static String XpathFamily;
     private static String XpathSection;
     private static String geneanetSearchURL;
@@ -81,7 +83,7 @@ public class GeneanetConverter {
         searchedTrees.put("gaudillatp",46);
         searchedTrees.put("mganier",3);
         searchedTrees.put("jeanhinard",3);
-        searchedTrees.put("murphyauzerais",13);
+        searchedTrees.put("murphyauzerais",12);
         searchedTrees.put("cralu",15);
         searchedTrees.put("sobou",4);
         searchedTrees.put("oliviercailleau",14);
@@ -97,16 +99,16 @@ public class GeneanetConverter {
         searchedTrees.put("jacqbri",47);
         searchedTrees.put("amc50",89);
         searchedTrees.put("micha12",33);
+        searchedTrees.put("fabricelenoble",5);
+        searchedTrees.put("fufu",22);
+        searchedTrees.put("mamynanne",7);
+        searchedTrees.put("mdonville1",8);
+        searchedTrees.put("hubertp83",74);
+        searchedTrees.put("slebruman",22);
         //KO
-        searchedTrees.put("dil",682);
         searchedTrees.put("msebastien1",-1);
         searchedTrees.put("lisetoxe",-1);
-        searchedTrees.put("fabricelenoble",-1);
-        searchedTrees.put("fufu",-1);
-        searchedTrees.put("mamynanne",-1);
-        searchedTrees.put("mdonville1",-1);
-        searchedTrees.put("hubertp83",-1);
-        searchedTrees.put("slebruman",-1);
+        searchedTrees.put("dil",682);
         //King
         searchedTrees.put("genea50com",-1);
     }
@@ -153,6 +155,14 @@ public class GeneanetConverter {
         return XpathMother;
     }
 
+    public static String getXpathParents2() {
+        return XpathParents2;
+    }
+
+    public static void setXpathParents2(String xpathParents2) {
+        XpathParents2 = xpathParents2;
+    }
+
     public static void setXpathMother(String xpathMother) {
         XpathMother = xpathMother;
     }
@@ -195,6 +205,14 @@ public class GeneanetConverter {
 
     public static void setGeneanetTrees(ArrayList<String> geneanetTrees) {
         GeneanetConverter.geneanetTrees = geneanetTrees;
+    }
+
+    public static String getXpathNames3() {
+        return XpathNames3;
+    }
+
+    public static void setXpathNames3(String xpathNames3) {
+        XpathNames3 = xpathNames3;
     }
 
     public Document getDoc() {
@@ -266,6 +284,9 @@ public class GeneanetConverter {
         if (StringUtil.isBlank(firstName)){
             firstName = Xsoup.compile(XpathNames2.replace("XXX","" + 1)).evaluate(doc).get();
         }
+        if (StringUtil.isBlank(firstName)){
+            firstName = Xsoup.compile(XpathNames3.replace("XXX","" + 1)).evaluate(doc).get();
+        }
         if (!StringUtil.isBlank(firstName)){
             return firstName;
         }
@@ -276,6 +297,9 @@ public class GeneanetConverter {
         String name = Xsoup.compile(XpathNames.replace("XXX","" + 2)).evaluate(doc).get();
         if (StringUtil.isBlank(name)){
             name = Xsoup.compile(XpathNames2.replace("XXX","" + 2)).evaluate(doc).get();
+        }
+        if (StringUtil.isBlank(name)){
+            name = Xsoup.compile(XpathNames3.replace("XXX","" + 2)).evaluate(doc).get();
         }
         if (!StringUtil.isBlank(name)){
             return name;
@@ -481,9 +505,10 @@ public class GeneanetConverter {
             if (personString != null && !(geneanetSearchURL + personString).equals(person.getGeneanetUrl()) && personString.contains("i1=")){
                 personString = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathBrother.replace("XXX","" + siblingNumber).replace("YYY","" + 2)).evaluate(doc).get();
             }
+            String isThisMe = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathBrother2.replace("XXX","" + siblingNumber)).evaluate(doc).get();
             if (personString == null){
-                personString = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathBrother2.replace("XXX","" + siblingNumber)).evaluate(doc).get();
-            } else if (personString != null && !(geneanetSearchURL + personString).equals(person.getGeneanetUrl()) && !personString.contains("i1=")) {
+                personString = isThisMe;
+            } else if (personString != null && !(geneanetSearchURL + personString).equals(person.getGeneanetUrl()) && !personString.contains("i1=") && !(person.getFullName()).equals(isThisMe)) {
                     GeneanetPerson sibling = new GeneanetPerson(geneanetSearchURL + personString);
                     person.addSibling(sibling);
             }
@@ -597,9 +622,13 @@ public class GeneanetConverter {
         String category = Xsoup.compile(XpathSection.replace("XXX","" + 1)).evaluate(doc).get();
 
         if (category != null && category.equals("Parents")){
-            setFather(person, index);
-            setMother(person, index);
-            return index + 1;
+            int fatherId = setFather(person, index);
+            int motherId = setMother(person, index);
+            if (fatherId == 1 || motherId == 1){
+                return index + 1 ;
+            } else {
+                return index;
+            }
         } else {
             return index;
         }
@@ -622,68 +651,84 @@ public class GeneanetConverter {
         person.setGender(Gender.getGender(gender));
     }
 
-    private boolean setMother(GeneanetPerson person, int index) {
-        int nbmother = 2;
-        String xpath =(XpathFamily.replace("XXX","" + index) + XpathMother.replace("XXX",nbmother + ""));
-        String motherURL = Xsoup.compile(xpath).evaluate(doc).get();
-        if (person.getGeneanetUrl() == null || (motherURL != null && motherURL.contains("&t="))){
-            nbmother--;
-            xpath =(XpathFamily.replace("XXX","" + index) + XpathMother.replace("XXX",nbmother + ""));
-            motherURL = Xsoup.compile(xpath).evaluate(doc).get();
-        }
-        if (motherURL != null && motherURL.contains("i1=")){
-            nbmother++;
-            xpath =(XpathFamily.replace("XXX","" + index) + XpathMother.replace("XXX",nbmother + ""));
-            motherURL = Xsoup.compile(xpath).evaluate(doc).get();
-        }
-        if (motherURL == null ){
-            index++;
-            xpath =(XpathFamily.replace("XXX","" + index) + XpathMother.replace("XXX",nbmother + ""));
-            motherURL = Xsoup.compile(xpath).evaluate(doc).get();
-        }
-        if (motherURL == null ){
-            index--;
-            nbmother--;
-            xpath =(XpathFamily.replace("XXX","" + index) + XpathMother.replace("XXX",nbmother + ""));
-            motherURL = Xsoup.compile(xpath).evaluate(doc).get();
-        }
-        if (motherURL != null){
+    private int setMother(GeneanetPerson person, int index) {
+        if (doc.toString().contains("<!-- Parents photo -->")){
+            String xpath =(XpathParents2.replace("XXX","" + 2));
+            String motherURL = Xsoup.compile(xpath).evaluate(doc).get();
             GeneanetPerson mother = new GeneanetPerson(geneanetSearchURL + motherURL);
             person.setMother(mother);
+            return 0;
+        } else {
+            int nbmother = 2;
+            String xpath =(XpathFamily.replace("XXX","" + index) + XpathMother.replace("XXX",nbmother + ""));
+            String motherURL = Xsoup.compile(xpath).evaluate(doc).get();
+            if (person.getGeneanetUrl() == null || (motherURL != null && motherURL.contains("&t="))){
+                nbmother--;
+                xpath =(XpathFamily.replace("XXX","" + index) + XpathMother.replace("XXX",nbmother + ""));
+                motherURL = Xsoup.compile(xpath).evaluate(doc).get();
+            }
+            if (motherURL != null && motherURL.contains("i1=")){
+                nbmother++;
+                xpath =(XpathFamily.replace("XXX","" + index) + XpathMother.replace("XXX",nbmother + ""));
+                motherURL = Xsoup.compile(xpath).evaluate(doc).get();
+            }
+            if (motherURL == null ){
+                index++;
+                xpath =(XpathFamily.replace("XXX","" + index) + XpathMother.replace("XXX",nbmother + ""));
+                motherURL = Xsoup.compile(xpath).evaluate(doc).get();
+            }
+            if (motherURL == null  || motherURL.contains("#note-wed-1")){
+                index--;
+                nbmother--;
+                xpath =(XpathFamily.replace("XXX","" + index) + XpathMother.replace("XXX",nbmother + ""));
+                motherURL = Xsoup.compile(xpath).evaluate(doc).get();
+            }
+            if (motherURL != null){
+                GeneanetPerson mother = new GeneanetPerson(geneanetSearchURL + motherURL);
+                person.setMother(mother);
+            }
+            return 1;
         }
-        return person.getMother() != null;
     }
 
-    private boolean setFather(GeneanetPerson person, int index) {
-        int nbfather = 2;
-        String xpath =(XpathFamily.replace("XXX","" + index) + XpathFather.replace("XXX",nbfather + ""));
-        String fatherURL = Xsoup.compile(xpath).evaluate(doc).get();
-        if (person.getGeneanetUrl() == null || (fatherURL != null && fatherURL.contains("&t="))){
-            nbfather--;
-            xpath =(XpathFamily.replace("XXX","" + index) + XpathFather.replace("XXX",nbfather + ""));
-            fatherURL = Xsoup.compile(xpath).evaluate(doc).get();
-        }
-        if (fatherURL != null && fatherURL.contains("i1=")){
-            nbfather++;
-            xpath =(XpathFamily.replace("XXX","" + index) + XpathFather.replace("XXX",nbfather + ""));
-            fatherURL = Xsoup.compile(xpath).evaluate(doc).get();
-        }
-        if (fatherURL == null ){
-            index++;
-            xpath =(XpathFamily.replace("XXX","" + index) + XpathFather.replace("XXX",nbfather + ""));
-            fatherURL = Xsoup.compile(xpath).evaluate(doc).get();
-        }
-        if (fatherURL == null ){
-            index--;
-            nbfather--;
-            xpath =(XpathFamily.replace("XXX","" + index) + XpathFather.replace("XXX",nbfather + ""));
-            fatherURL = Xsoup.compile(xpath).evaluate(doc).get();
-        }
-        if (fatherURL != null){
+    private int setFather(GeneanetPerson person, int index) {
+        if (doc.toString().contains("<!-- Parents photo -->")){
+            String xpath =(XpathParents2.replace("XXX","" + 1));
+            String fatherURL = Xsoup.compile(xpath).evaluate(doc).get();
             GeneanetPerson father = new GeneanetPerson(geneanetSearchURL + fatherURL);
             person.setFather(father);
+            return 0;
+        } else {
+            int nbfather = 2;
+            String xpath =(XpathFamily.replace("XXX","" + index) + XpathFather.replace("XXX",nbfather + ""));
+            String fatherURL = Xsoup.compile(xpath).evaluate(doc).get();
+            if (person.getGeneanetUrl() == null || (fatherURL != null && fatherURL.contains("&t="))){
+                nbfather--;
+                xpath =(XpathFamily.replace("XXX","" + index) + XpathFather.replace("XXX",nbfather + ""));
+                fatherURL = Xsoup.compile(xpath).evaluate(doc).get();
+            }
+            if (fatherURL != null && fatherURL.contains("i1=")){
+                nbfather++;
+                xpath =(XpathFamily.replace("XXX","" + index) + XpathFather.replace("XXX",nbfather + ""));
+                fatherURL = Xsoup.compile(xpath).evaluate(doc).get();
+            }
+            if (fatherURL == null ){
+                index++;
+                xpath =(XpathFamily.replace("XXX","" + index) + XpathFather.replace("XXX",nbfather + ""));
+                fatherURL = Xsoup.compile(xpath).evaluate(doc).get();
+            }
+            if (fatherURL == null || fatherURL.contains("#note-wed-1")){
+                index--;
+                nbfather--;
+                xpath =(XpathFamily.replace("XXX","" + index) + XpathFather.replace("XXX",nbfather + ""));
+                fatherURL = Xsoup.compile(xpath).evaluate(doc).get();
+            }
+            if (fatherURL != null){
+                GeneanetPerson father = new GeneanetPerson(geneanetSearchURL + fatherURL);
+                person.setFather(father);
+            }
+            return 1;
         }
-        return person.getFather() != null;
     }
 
 }

@@ -95,10 +95,12 @@ public class GeneanetBrowser {
             geneanetConverter.setXpathGender(prop.getProperty("XpathGender"));
             geneanetConverter.setXpathNames(prop.getProperty("XpathNames"));
             geneanetConverter.setXpathNames2(prop.getProperty("XpathNames2"));
+            geneanetConverter.setXpathNames3(prop.getProperty("XpathNames3"));
             geneanetConverter.setXpathBirthAndDeath(prop.getProperty("XpathBirthAndDeath"));
             geneanetConverter.setXpathFather(prop.getProperty("XpathFather"));
             geneanetConverter.setXpathMother(prop.getProperty("XpathMother"));
             geneanetConverter.setXpathFamily(prop.getProperty("XpathFamily"));
+            geneanetConverter.setXpathParents2(prop.getProperty("XpathParents2"));
             geneanetConverter.setGeneanetSearchURL(prop.getProperty("geneanetSearchURL"));
             geneanetConverter.setXpathSection(prop.getProperty("XpathSection"));
             geneanetConverter.setXpathMarriageDate(prop.getProperty("XpathMarriageDate"));
@@ -153,19 +155,25 @@ public class GeneanetBrowser {
         String csrfValue = "";
         Connection.Response loginForm = null;
         int cptConnexion = 1;
+        boolean exit = false;
         do {
             logger.info("Connexion " + cptConnexion + " to " + geneanetURL);
             try {
                 loginForm = Jsoup.connect(geneanetURL)
                         .method(Connection.Method.GET)
                         .execute();
+                exit = true;
             } catch (Exception exception) {
                 logger.info("Failed to connect " + exception.getMessage());
                 Thread.sleep(1000);
+                if (cptConnexion >= 3){
+                    logger.error("Exiting, failed to connect " + exception.getMessage());
+                    throw new Exception("Cannot connect to url " + geneanetURL);
+                }
                 cptConnexion++;
             }
         }
-        while (loginForm == null || cptConnexion == 5);
+        while (!exit);
         Document doc = loginForm.parse();
 
         Pattern pattern = Pattern.compile(formRegex);
@@ -389,16 +397,21 @@ public class GeneanetBrowser {
     }
 
     private void searchPerson(GeneanetPerson person) {
-        try {
-            String url = person.getUrl();
-            Document inputDocument = connect(url);
-            geneanetConverter.parseDocument(inputDocument, person);
-            nbPeople++;
-            logger.info("Searched " + person.getFirstName() + " " + person.getFamilyName() + " : " + person);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Erreur lors de la recherche de l'url " + url);
-        }
+        int tries = 1;
+        do {
+            try {
+                String url = person.getUrl();
+                Document inputDocument = connect(url);
+                geneanetConverter.parseDocument(inputDocument, person);
+                nbPeople++;
+                logger.info("Searched " + person.getFirstName() + " " + person.getFamilyName() + " : " + person);
+                return;
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Connexion " + tries + ":  erreur lors de la recherche de l'url " + url);
+                tries++;
+            }
+        } while (tries <= 3);
     }
 
     private static void testSearch(String url){
@@ -441,7 +454,7 @@ public class GeneanetBrowser {
             int cpt = 0;
             HashMap<String, Integer> searchedTrees = browser.getGeneanetConverter().getSearchedTrees();
             for (String url : browser.getGeneanetConverter().getGeneanetTrees()){
-                if (cpt <= 31){
+                if (cpt <= 37){
                     logger.info("Searching " + url);
                     int people = mainSearchFullTree(url);
                     String treeName = findTreeName(url);
@@ -484,17 +497,17 @@ public class GeneanetBrowser {
 
     public static void main(String[] args) {
         BasicConfigurator.configure();
-        String testUrl = "https://gw.geneanet.org/dil?lang=fr&iz=0&i=17109";
+        String testUrl = "https://gw.geneanet.org/msebastien1?lang=fr&pz=sebastien+david&nz=mercier&ocz=0&p=estienne&n=porcher";
         String testUrl2 = "https://gw.geneanet.org/sylvieb4?lang=fr&pz=sylvie+jacqueline+marie+bernadette&nz=bergereau&ocz=0&p=jeanne&n=naudin";
-        String testUrl3 = "http://gw.geneanet.org/roalda?lang=fr&pz=ronald+guy&nz=arnaux&ocz=0&p=marie+anne&n=bardin";
+        String testUrl3 = "http://gw.geneanet.org/genea50com?lang=fr&p=marie+madeleine&n=douville&oc=5";
         String xpathPattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/h2[1]/span[2]/text()";
-        String xpathText = "Eugène, Jules BERTON";
+        String xpathText = "Pierre MARIE";
 
         treeTest();
-        //mainSearchFullTree(testUrl3);
-        //testSearch(testUrl2);
+        //mainSearchFullTree(testUrl);
+        //testSearch(testUrl);
         //mainTestSearchTree();
         //mainTestXpath(testUrl3,xpathPattern);
-        //mainFindXpath(testUrl3, xpathText);
+        //mainFindXpath(testUrl, xpathText);
     }
 }
