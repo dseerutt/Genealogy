@@ -30,6 +30,7 @@ public class GeneanetPerson {
     private boolean searched = false;
     private String geneanetUrl;
     private boolean rootperson = false;
+    private boolean isUsingDateTable = false;
 
     public GeneanetPerson(String url, String firstName, String familyName) {
         this.url = url;
@@ -47,6 +48,14 @@ public class GeneanetPerson {
         halfSiblings = new ArrayList<>();
         marriage = new HashMap<>();
         children = new ArrayList<>();
+    }
+
+    public boolean isUsingDateTable() {
+        return isUsingDateTable;
+    }
+
+    public void setUsingDateTable(boolean table) {
+        isUsingDateTable = table;
     }
 
     public boolean isRootperson() {

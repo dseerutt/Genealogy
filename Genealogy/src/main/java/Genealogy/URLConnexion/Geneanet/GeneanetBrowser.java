@@ -21,10 +21,7 @@ import javax.security.auth.login.LoginException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.UnknownHostException;
 import java.security.spec.ECField;
 import java.text.DateFormat;
@@ -100,6 +97,7 @@ public class GeneanetBrowser {
             geneanetConverter.setXpathFather(prop.getProperty("XpathFather"));
             geneanetConverter.setXpathMother(prop.getProperty("XpathMother"));
             geneanetConverter.setXpathFamily(prop.getProperty("XpathFamily"));
+            geneanetConverter.setXpathFamily2(prop.getProperty("XpathFamily2"));
             geneanetConverter.setXpathParents2(prop.getProperty("XpathParents2"));
             geneanetConverter.setGeneanetSearchURL(prop.getProperty("geneanetSearchURL"));
             geneanetConverter.setXpathSection(prop.getProperty("XpathSection"));
@@ -449,12 +447,14 @@ public class GeneanetBrowser {
 
 
     public static void treeTest() {
+        hidePrintOut();
         try {
             GeneanetBrowser browser = new GeneanetBrowser("");
             int cpt = 0;
             HashMap<String, Integer> searchedTrees = browser.getGeneanetConverter().getSearchedTrees();
             for (String url : browser.getGeneanetConverter().getGeneanetTrees()){
-                if (cpt <= 37){
+                if (cpt < 41){
+                    //41 = KINGS
                     logger.info("Searching " + url);
                     int people = mainSearchFullTree(url);
                     String treeName = findTreeName(url);
@@ -495,13 +495,21 @@ public class GeneanetBrowser {
         }
     }
 
+    private static void hidePrintOut(){
+        System.setOut(new PrintStream(new OutputStream() {
+            public void write(int b) {
+                // Do nothing
+            }
+        }));
+    }
+
     public static void main(String[] args) {
         BasicConfigurator.configure();
-        String testUrl = "https://gw.geneanet.org/msebastien1?lang=fr&pz=sebastien+david&nz=mercier&ocz=0&p=estienne&n=porcher";
+        String testUrl = "https://gw.geneanet.org/genea50com?lang=fr&p=thomas&n=de+rouvencestre";
         String testUrl2 = "https://gw.geneanet.org/sylvieb4?lang=fr&pz=sylvie+jacqueline+marie+bernadette&nz=bergereau&ocz=0&p=jeanne&n=naudin";
         String testUrl3 = "http://gw.geneanet.org/genea50com?lang=fr&p=marie+madeleine&n=douville&oc=5";
         String xpathPattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/h2[1]/span[2]/text()";
-        String xpathText = "Pierre MARIE";
+        String xpathText = "Pierre DAVY";
 
         treeTest();
         //mainSearchFullTree(testUrl);
