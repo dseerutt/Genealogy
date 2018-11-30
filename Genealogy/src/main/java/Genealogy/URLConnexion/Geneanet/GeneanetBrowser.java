@@ -393,7 +393,7 @@ public class GeneanetBrowser {
             Serializer serializer = new Serializer();
             path = Serializer.getPath();
         }
-        File file = new File(path + File.separator + "out" + File.separator + findTreeName(url) + ".bak");
+        File file = new File(path + File.separator + "trees" + File.separator + findTreeName(url) + ".bak");
         FileWriter fr = null;
         try {
             fr = new FileWriter(file);
