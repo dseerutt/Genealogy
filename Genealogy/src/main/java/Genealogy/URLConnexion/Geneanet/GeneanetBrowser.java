@@ -1,10 +1,7 @@
 package Genealogy.URLConnexion.Geneanet;
 
-import Genealogy.AuxMethods;
 import Genealogy.Model.Date.MyDate;
-import Genealogy.URLConnexion.MyHttpURLConnexion;
 import Genealogy.URLConnexion.Serializer;
-import org.apache.commons.codec.binary.StringUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.jsoup.Connection;
@@ -13,19 +10,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
-import org.jsoup.select.Elements;
-import org.xml.sax.SAXException;
 import us.codecraft.xsoup.Xsoup;
 
-import javax.security.auth.login.LoginException;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
-import java.net.UnknownHostException;
-import java.security.spec.ECField;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,10 +28,12 @@ public class GeneanetBrowser {
     public static String password;
     public static String formRegex;
     public String url;
+    public String searchOutput = "";
     public Map<String, String> cookie;
     private GeneanetConverter geneanetConverter;
     public GeneanetPerson rootPerson;
     public int nbPeople = 0;
+    public int expectedNbPeople = 0;
     final static Logger logger = Logger.getLogger(GeneanetBrowser.class);
 
     public GeneanetBrowser(String url0) throws Exception {
@@ -69,7 +58,7 @@ public class GeneanetBrowser {
     }
 
     /**
-     * Fonction initGovernors
+     * Fonction initProperties
      * initialise les propriétés de la classe GeneanetBrowser
      */
     public void initProperties() throws Exception {
@@ -394,15 +383,45 @@ public class GeneanetBrowser {
         }
     }
 
+    public void addPersonToSearchedPersons(String input, GeneanetPerson person){
+        searchOutput += input + person.toString() + System.getProperty("line.separator");
+    }
+
+    public void saveSearchOutput(){
+        String path = Serializer.getPath();
+        if (path == null){
+            Serializer serializer = new Serializer();
+            path = Serializer.getPath();
+        }
+        File file = new File(path + File.separator + "out" + File.separator + findTreeName(url) + ".bak");
+        FileWriter fr = null;
+        try {
+            fr = new FileWriter(file);
+            fr.write(searchOutput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally{
+            //close resources
+            try {
+                fr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private void searchPerson(GeneanetPerson person) {
         int tries = 1;
+        String inputTxt = "";
         do {
             try {
                 String url = person.getUrl();
                 Document inputDocument = connect(url);
                 geneanetConverter.parseDocument(inputDocument, person);
                 nbPeople++;
-                logger.info("Searched " + person.getFirstName() + " " + person.getFamilyName() + " : " + person);
+                inputTxt = nbPeople + "/" + expectedNbPeople + " ";
+                logger.info(inputTxt + "Search " + person.getFirstName() + " " + person.getFamilyName() + " : " + person);
+                addPersonToSearchedPersons(inputTxt, person);
                 return;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -422,16 +441,21 @@ public class GeneanetBrowser {
         }
     }
 
-    public static int mainSearchFullTree(String url) {
+    public static GeneanetBrowser mainSearchFullTree(String url, boolean save, int expectedNbPeople0) {
         try {
             GeneanetBrowser browser = new GeneanetBrowser(url);
+            browser.expectedNbPeople = expectedNbPeople0;
             browser.searchRoot();
             System.out.println("People searched : " + browser.getNbPeople());
-            return browser.getNbPeople();
+            return browser;
         } catch (Exception e) {
             e.printStackTrace();
-            return 0;
+            return null;
         }
+    }
+
+    public static GeneanetBrowser mainSearchFullTree(String url, boolean save) {
+        return mainSearchFullTree(url, save, 0);
     }
 
     public static String findTreeName(String tree){
@@ -446,24 +470,28 @@ public class GeneanetBrowser {
     }
 
 
-    public static void treeTest() {
+    public static void searchAllTrees(boolean save) {
         hidePrintOut();
         try {
             GeneanetBrowser browser = new GeneanetBrowser("");
             int cpt = 0;
             HashMap<String, Integer> searchedTrees = browser.getGeneanetConverter().getSearchedTrees();
             for (String url : browser.getGeneanetConverter().getGeneanetTrees()){
-                if (cpt < 41){
+                if (cpt < 400){
                     //41 = KINGS
                     logger.info("Searching " + url);
-                    int people = mainSearchFullTree(url);
                     String treeName = findTreeName(url);
                     Integer value = searchedTrees.get(treeName);
+                    GeneanetBrowser newBrowser = mainSearchFullTree(url, save, value);
+                    int people = newBrowser.getNbPeople();
                     if (searchedTrees != null && value != null && (value != people)){
                         logger.error("Test KO for URL " + url + " : expected " + value + " but got " + people);
                         return;
                     } else if (searchedTrees != null){
                         logger.info("Test OK for URL " + treeName);
+                        if (save){
+                            newBrowser.saveSearchOutput();
+                        }
                     }
                 }
                 cpt++;
@@ -505,13 +533,13 @@ public class GeneanetBrowser {
 
     public static void main(String[] args) {
         BasicConfigurator.configure();
-        String testUrl = "https://gw.geneanet.org/genea50com?lang=fr&p=thomas&n=de+rouvencestre";
+        String testUrl = "https://gw.geneanet.org/dil?iz=0&lang=fr&n=berton&p=ernest+leon";
         String testUrl2 = "https://gw.geneanet.org/sylvieb4?lang=fr&pz=sylvie+jacqueline+marie+bernadette&nz=bergereau&ocz=0&p=jeanne&n=naudin";
         String testUrl3 = "http://gw.geneanet.org/genea50com?lang=fr&p=marie+madeleine&n=douville&oc=5";
         String xpathPattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/h2[1]/span[2]/text()";
         String xpathText = "Pierre DAVY";
 
-        treeTest();
+        searchAllTrees(true);
         //mainSearchFullTree(testUrl);
         //testSearch(testUrl);
         //mainTestSearchTree();

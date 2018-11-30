@@ -684,8 +684,12 @@ public class GeneanetConverter {
 
     private int setMother(GeneanetPerson person, int index) {
         if (doc.toString().contains("<!-- Parents photo -->")){
-            String xpath =(XpathParents2.replace("XXX","" + 2));
+            String xpath =(XpathParents2.replace("XXX","" + 2).replace("YYY","" + 1));
             String motherURL = Xsoup.compile(xpath).evaluate(doc).get();
+            if (motherURL != null && motherURL.contains("i1=")) {
+                xpath =(XpathParents2.replace("XXX","" + 2).replace("YYY","" + 2));
+                motherURL = Xsoup.compile(xpath).evaluate(doc).get();
+            }
             GeneanetPerson mother = new GeneanetPerson(geneanetSearchURL + motherURL);
             person.setMother(mother);
             return 0;
@@ -724,8 +728,12 @@ public class GeneanetConverter {
 
     private int setFather(GeneanetPerson person, int index) {
         if (doc.toString().contains("<!-- Parents photo -->")){
-            String xpath =(XpathParents2.replace("XXX","" + 1));
+            String xpath =(XpathParents2.replace("XXX","" + 1).replace("YYY","" + 1));
             String fatherURL = Xsoup.compile(xpath).evaluate(doc).get();
+            if (fatherURL != null && fatherURL.contains("i1=")) {
+                xpath =(XpathParents2.replace("XXX","" + 1).replace("YYY","" + 2));
+                fatherURL = Xsoup.compile(xpath).evaluate(doc).get();
+            }
             GeneanetPerson father = new GeneanetPerson(geneanetSearchURL + fatherURL);
             person.setFather(father);
             return 0;
