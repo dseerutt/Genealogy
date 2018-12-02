@@ -4,12 +4,16 @@ import Genealogy.Model.Date.FullDate;
 import Genealogy.Model.Date.MonthDate;
 import Genealogy.Model.Date.MyDate;
 import Genealogy.Model.Date.YearDate;
+import Genealogy.URLConnexion.Serializer;
 import fr.followthecode.republican.date.utils.RepublicanCalendarDateConverter;
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import us.codecraft.xsoup.Xsoup;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -45,72 +49,13 @@ public class GeneanetConverter {
     private static String XpathHalfBrother;
     private static String XpathChildren;
     private static String XpathUrl;
-
-    public static HashMap<String, Integer> getSearchedTrees() {
-        return searchedTrees;
-    }
-
-    public static void setSearchedTrees(HashMap<String, Integer> searchedTrees) {
-        GeneanetConverter.searchedTrees = searchedTrees;
-    }
-
-    private static HashMap<String,Integer> searchedTrees;
-    private static ArrayList<String> geneanetTrees;
     private Document doc;
     private final static Character space = (char) 160;
     private static ArrayList<String> wrongCities;
 
-    public GeneanetConverter(Document document){
+    public GeneanetConverter(Document document) throws Exception{
         doc = document;
         initWrongCities();
-        initSearchedTrees();
-    }
-
-    private void initSearchedTrees(){
-        searchedTrees = new HashMap<String,Integer>();
-        searchedTrees.put("roalda",7);
-        searchedTrees.put("familysoyer",46);
-        searchedTrees.put("gluc",55);
-        searchedTrees.put("sylvieb4",70);
-        searchedTrees.put("jeannineleger1",11);
-        searchedTrees.put("jlrenaud",3);
-        searchedTrees.put("michelnormand",10);
-        searchedTrees.put("hamon22",6);
-        searchedTrees.put("duvachat",4);
-        searchedTrees.put("phil68",5);
-        searchedTrees.put("jvillette",109);
-        searchedTrees.put("mangeret",29);
-        searchedTrees.put("pierref",30);
-        searchedTrees.put("gaudillatp",45);
-        searchedTrees.put("mganier",3);
-        searchedTrees.put("jeanhinard",3);
-        searchedTrees.put("murphyauzerais",12);
-        searchedTrees.put("cralu",15);
-        searchedTrees.put("sobou",4);
-        searchedTrees.put("oliviercailleau",14);
-        searchedTrees.put("pierrepetrequi",3);
-        searchedTrees.put("francoist",7);
-        searchedTrees.put("beta1",9);
-        searchedTrees.put("rogo1",75);
-        searchedTrees.put("barthricher",15);
-        searchedTrees.put("denischuquet",70);
-        searchedTrees.put("mjdesoeuvre",72);
-        searchedTrees.put("trucy",29);
-        searchedTrees.put("geruwene1",37);
-        searchedTrees.put("jacqbri",46);
-        searchedTrees.put("amc50",89);
-        searchedTrees.put("micha12",33);
-        searchedTrees.put("fabricelenoble",5);
-        searchedTrees.put("fufu",22);
-        searchedTrees.put("mamynanne",7);
-        searchedTrees.put("mdonville1",8);
-        searchedTrees.put("hubertp83",74);
-        searchedTrees.put("slebruman",22);
-        searchedTrees.put("msebastien1",579);
-        searchedTrees.put("lisetoxe",555);
-        searchedTrees.put("dil",695);
-        //King
-        searchedTrees.put("genea50com",1095);
     }
 
     private void initWrongCities() {
@@ -205,14 +150,6 @@ public class GeneanetConverter {
 
     public static void setGeneanetSearchURL(String GeneanetSearchURL) {
         geneanetSearchURL = GeneanetSearchURL;
-    }
-
-    public static ArrayList<String> getGeneanetTrees() {
-        return geneanetTrees;
-    }
-
-    public static void setGeneanetTrees(ArrayList<String> geneanetTrees) {
-        GeneanetConverter.geneanetTrees = geneanetTrees;
     }
 
     public static String getXpathNames3() {
