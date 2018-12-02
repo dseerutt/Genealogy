@@ -34,6 +34,7 @@ public class GeneanetBrowser {
     public GeneanetPerson rootPerson;
     public int nbPeople = 0;
     public int expectedNbPeople = 0;
+    public HashSet<String> peopleUrl = new HashSet<String>();
     final static Logger logger = Logger.getLogger(GeneanetBrowser.class);
 
     public GeneanetBrowser(String url0) throws Exception {
@@ -273,6 +274,7 @@ public class GeneanetBrowser {
 
     public void searchTree(GeneanetPerson person){
         searchPerson(person);
+
         //Call others
         searchFather(person);
         searchMother(person);
@@ -284,7 +286,7 @@ public class GeneanetBrowser {
     private void searchSiblings(GeneanetPerson person) {
         ArrayList<GeneanetPerson> newSiblings = new ArrayList<GeneanetPerson>();
         for (GeneanetPerson sibling : person.getSiblings()){
-            searchPerson(sibling);
+            searchPerson(sibling, true);
             newSiblings.add(sibling);
         }
         person.setSiblings(newSiblings);
@@ -293,7 +295,7 @@ public class GeneanetBrowser {
     private void searchHalfSiblings(GeneanetPerson person) {
         ArrayList<GeneanetPerson> newHalfSiblings = new ArrayList<GeneanetPerson>();
         for (GeneanetPerson halfSibling : person.getHalfSiblings()){
-            searchPerson(halfSibling);
+            searchPerson(halfSibling, true);
             newHalfSiblings.add(halfSibling);
         }
         person.setSiblings(newHalfSiblings);
@@ -302,6 +304,7 @@ public class GeneanetBrowser {
     public void searchRoot(){
         rootPerson =  new GeneanetPerson(url);
         rootPerson.setRootperson(true);
+
         searchPerson(rootPerson);
         searchFather(rootPerson);
         searchMother(rootPerson);
@@ -350,7 +353,7 @@ public class GeneanetBrowser {
                 if (root){
                     searchTree(partner);
                 } else {
-                    searchPerson(partner);
+                    searchPerson(partner, true);
                     researchPartnerNoRecursive(partner);
                     newMarriage.put(partner,entry.getValue());
                 }
@@ -367,7 +370,7 @@ public class GeneanetBrowser {
             for (Map.Entry<GeneanetPerson, HashMap<MyDate, String>> entry :  marriage.entrySet()){
                 GeneanetPerson partner = entry.getKey();
                 if (!partner.getUrl().equals("") && !partner.isSearched()) {
-                    searchPerson(partner);
+                    searchPerson(partner, true);
                     newMarriage.put(partner,entry.getValue());
                 }
             }
@@ -383,7 +386,7 @@ public class GeneanetBrowser {
         }
     }
 
-    public void addPersonToSearchedPersons(String input, GeneanetPerson person){
+    public void addPersonToSearchedOutputPersons(String input, GeneanetPerson person){
         searchOutput += input + person.toString() + System.getProperty("line.separator");
     }
 
@@ -411,24 +414,39 @@ public class GeneanetBrowser {
     }
 
     private void searchPerson(GeneanetPerson person) {
-        int tries = 1;
-        String inputTxt = "";
-        do {
-            try {
-                String url = person.getUrl();
-                Document inputDocument = connect(url);
-                geneanetConverter.parseDocument(inputDocument, person);
-                nbPeople++;
-                inputTxt = nbPeople + "/" + expectedNbPeople + " ";
-                logger.info(inputTxt + "Search " + person.getFirstName() + " " + person.getFamilyName() + " : " + person);
-                addPersonToSearchedPersons(inputTxt, person);
-                return;
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("Connexion " + tries + ":  erreur lors de la recherche de l'url " + url);
-                tries++;
-            }
-        } while (tries <= 3);
+        searchPerson(person,false);
+    }
+
+    private void searchPerson(GeneanetPerson person, boolean partialSearch) {
+        if (!peopleUrl.contains(person.getUrl())){
+            int tries = 1;
+            String inputTxt = "";
+            do {
+                try {
+                    String url = person.getUrl();
+                    Document inputDocument = connect(url);
+                    geneanetConverter.parseDocument(inputDocument, person);
+                    nbPeople++;
+                    //Double search for partners/siblings : don't add if partner
+                    if (!partialSearch){
+                        peopleUrl.add(url);
+                    }
+                    if (expectedNbPeople != 0){
+                        inputTxt = nbPeople + "/" + expectedNbPeople + " ";
+                    }
+                    logger.info(inputTxt + "Search " + person.getFirstName() + " " + person.getFamilyName() + " : " + person);
+                    addPersonToSearchedOutputPersons(inputTxt, person);
+                    return;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("Connexion " + tries + ":  erreur lors de la recherche de l'url " + url);
+                    tries++;
+                }
+            } while (tries <= 3);
+        } else {
+            logger.info("Stopped search for " + person.getUrl());
+        }
+
     }
 
     private static void testSearch(String url){
@@ -477,7 +495,7 @@ public class GeneanetBrowser {
             int cpt = 0;
             HashMap<String, Integer> searchedTrees = browser.getGeneanetConverter().getSearchedTrees();
             for (String url : browser.getGeneanetConverter().getGeneanetTrees()){
-                if (cpt < 400){
+                if (cpt < 390){
                     //41 = KINGS
                     logger.info("Searching " + url);
                     String treeName = findTreeName(url);
@@ -486,6 +504,7 @@ public class GeneanetBrowser {
                     int people = newBrowser.getNbPeople();
                     if (searchedTrees != null && value != null && (value != people)){
                         logger.error("Test KO for URL " + url + " : expected " + value + " but got " + people);
+                        newBrowser.saveSearchOutput();
                         return;
                     } else if (searchedTrees != null){
                         logger.info("Test OK for URL " + treeName);
@@ -533,14 +552,14 @@ public class GeneanetBrowser {
 
     public static void main(String[] args) {
         BasicConfigurator.configure();
-        String testUrl = "https://gw.geneanet.org/dil?iz=0&lang=fr&n=berton&p=ernest+leon";
+        String testUrl = "https://gw.geneanet.org/sylvieb4?lang=fr&n=boileau&nz=bergereau&ocz=0&p=jean+jacques&pz=sylvie+jacqueline+marie+bernadette";
         String testUrl2 = "https://gw.geneanet.org/sylvieb4?lang=fr&pz=sylvie+jacqueline+marie+bernadette&nz=bergereau&ocz=0&p=jeanne&n=naudin";
         String testUrl3 = "http://gw.geneanet.org/genea50com?lang=fr&p=marie+madeleine&n=douville&oc=5";
         String xpathPattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/h2[1]/span[2]/text()";
         String xpathText = "Pierre DAVY";
 
         searchAllTrees(true);
-        //mainSearchFullTree(testUrl);
+        //mainSearchFullTree(testUrl, true);
         //testSearch(testUrl);
         //mainTestSearchTree();
         //mainTestXpath(testUrl3,xpathPattern);

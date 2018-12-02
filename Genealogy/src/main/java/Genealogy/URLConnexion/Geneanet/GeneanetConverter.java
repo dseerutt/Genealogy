@@ -71,17 +71,17 @@ public class GeneanetConverter {
         searchedTrees.put("roalda",7);
         searchedTrees.put("familysoyer",46);
         searchedTrees.put("gluc",55);
-        searchedTrees.put("sylvieb4",76);
-        searchedTrees.put("jeannineleger1",13);
+        searchedTrees.put("sylvieb4",70);
+        searchedTrees.put("jeannineleger1",11);
         searchedTrees.put("jlrenaud",3);
         searchedTrees.put("michelnormand",10);
         searchedTrees.put("hamon22",6);
         searchedTrees.put("duvachat",4);
         searchedTrees.put("phil68",5);
-        searchedTrees.put("jvillette",110);
-        searchedTrees.put("mangeret",30);
-        searchedTrees.put("pierref",31);
-        searchedTrees.put("gaudillatp",46);
+        searchedTrees.put("jvillette",109);
+        searchedTrees.put("mangeret",29);
+        searchedTrees.put("pierref",30);
+        searchedTrees.put("gaudillatp",45);
         searchedTrees.put("mganier",3);
         searchedTrees.put("jeanhinard",3);
         searchedTrees.put("murphyauzerais",12);
@@ -94,10 +94,10 @@ public class GeneanetConverter {
         searchedTrees.put("rogo1",75);
         searchedTrees.put("barthricher",15);
         searchedTrees.put("denischuquet",70);
-        searchedTrees.put("mjdesoeuvre",75);
+        searchedTrees.put("mjdesoeuvre",72);
         searchedTrees.put("trucy",29);
         searchedTrees.put("geruwene1",37);
-        searchedTrees.put("jacqbri",47);
+        searchedTrees.put("jacqbri",46);
         searchedTrees.put("amc50",89);
         searchedTrees.put("micha12",33);
         searchedTrees.put("fabricelenoble",5);
@@ -106,11 +106,11 @@ public class GeneanetConverter {
         searchedTrees.put("mdonville1",8);
         searchedTrees.put("hubertp83",74);
         searchedTrees.put("slebruman",22);
-        searchedTrees.put("msebastien1",832);
-        searchedTrees.put("lisetoxe",645);
-        searchedTrees.put("dil",744);
+        searchedTrees.put("msebastien1",579);
+        searchedTrees.put("lisetoxe",555);
+        searchedTrees.put("dil",695);
         //King
-        searchedTrees.put("genea50com",3571);
+        searchedTrees.put("genea50com",1095);
     }
 
     private void initWrongCities() {
