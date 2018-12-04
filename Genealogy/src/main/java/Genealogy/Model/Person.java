@@ -738,4 +738,40 @@ public class Person {
         }
         return txt.replace("\n",".\n");
     }
+
+
+
+    public ArrayList<Person> getHalfSiblings() {
+        ArrayList<Person> result = new ArrayList<Person>();
+        if (father != null){
+            ArrayList<Person> children = father.getChildren();
+            for (Person person : children){
+                if (!person.getMother().equals(mother) && !person.equals(this)){
+                    result.add(person);
+                }
+            }
+        }
+        if (mother != null){
+            ArrayList<Person> children = mother.getChildren();
+            for (Person person : children){
+                if (!person.getMother().equals(father) && !person.equals(this)){
+                    result.add(person);
+                }
+            }
+        }
+        return result;
+    }
+
+    public ArrayList<Person> getSiblings() {
+        ArrayList<Person> result = new ArrayList<Person>();
+        if (father != null){
+            ArrayList<Person> children = father.getChildren();
+            for (Person person : children){
+                if (person.getMother().equals(mother) && !person.equals(this)){
+                    result.add(person);
+                }
+            }
+        }
+        return result;
+    }
 }

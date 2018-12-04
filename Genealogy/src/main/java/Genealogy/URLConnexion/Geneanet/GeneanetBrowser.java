@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 /**
  * Created by Dan on 01/11/2017.
  */
-public class GeneanetBrowser {
+public class GeneanetBrowser implements Serializable {
 
     public static String geneanetURL;
     public static String geneanetURLpart2;
@@ -30,7 +30,7 @@ public class GeneanetBrowser {
     public String url;
     public String searchOutput = "";
     public Map<String, String> cookie;
-    private GeneanetConverter geneanetConverter;
+    private transient GeneanetConverter geneanetConverter;
     public GeneanetPerson rootPerson;
     public int nbPeople = 0;
     public int expectedNbPeople = 0;
@@ -531,7 +531,6 @@ public class GeneanetBrowser {
             ArrayList<GeneanetTree> localGeneanetTrees = browser.geneanetTrees;
             for (GeneanetTree tree : localGeneanetTrees){
                 if (cpt < 390){
-                    //41 = KINGS
                     logger.info("Searching " + tree.getUrl());
                     String treeName = tree.getName();
                     Integer value = tree.getPeopleNumber();
@@ -586,15 +585,15 @@ public class GeneanetBrowser {
 
     public static void main(String[] args) {
         BasicConfigurator.configure();
-        String testUrl = "https://gw.geneanet.org/sylvieb4?lang=fr&n=boileau&nz=bergereau&ocz=0&p=jean+jacques&pz=sylvie+jacqueline+marie+bernadette";
+        String testUrl = "https://gw.geneanet.org/roalda?lang=fr&n=bardin&nz=arnaux&ocz=0&p=marie+anne&pz=ronald+guy";
         String testUrl2 = "https://gw.geneanet.org/sylvieb4?lang=fr&pz=sylvie+jacqueline+marie+bernadette&nz=bergereau&ocz=0&p=jeanne&n=naudin";
         String testUrl3 = "http://gw.geneanet.org/genea50com?lang=fr&p=marie+madeleine&n=douville&oc=5";
         String xpathPattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/h2[1]/span[2]/text()";
         String xpathText = "Pierre DAVY";
 
-        searchAllTrees(false);
+        //searchAllTrees(false);
         //mainSearchFullTree(testUrl, true);
-        //testSearch(testUrl);
+        testSearch(testUrl);
         //mainTestSearchTree();
         //mainTestXpath(testUrl3,xpathPattern);
         //mainFindXpath(testUrl, xpathText);

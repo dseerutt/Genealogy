@@ -34,6 +34,15 @@ public class Genealogy {
         }
     }
 
+    public Person findPersonById(String id){
+        for (Person person : persons){
+            if (id.equals(person.getId())){
+                return person;
+            }
+        }
+        return null;
+    }
+
     public ArrayList<ParsingStructure> getContents() {
         return contents;
     }

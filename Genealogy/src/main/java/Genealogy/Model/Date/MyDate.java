@@ -1,6 +1,7 @@
 package Genealogy.Model.Date;
 
 import javax.swing.plaf.FontUIResource;
+import java.io.Serializable;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.util.Date;
@@ -8,7 +9,7 @@ import java.util.Date;
 /**
  * Created by Dan on 07/04/2016.
  */
-public abstract class MyDate {
+public abstract class MyDate implements Serializable {
 
     public MyDate() {
     }

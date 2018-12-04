@@ -3,6 +3,7 @@ package Genealogy.Model.Date;
 import Genealogy.AuxMethods;
 import org.apache.log4j.Logger;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,7 +12,7 @@ import java.util.Locale;
 /**
  * Created by Dan on 07/04/2016.
  */
-public class MonthDate extends MyDate {
+public class MonthDate extends MyDate implements Serializable {
     private int month;
     private int year;
     final static Logger logger = Logger.getLogger(MonthDate.class);

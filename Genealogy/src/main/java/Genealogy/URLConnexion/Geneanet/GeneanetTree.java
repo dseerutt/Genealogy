@@ -1,9 +1,11 @@
 package Genealogy.URLConnexion.Geneanet;
 
+import java.io.Serializable;
+
 /**
  * Created by Dan on 02/12/2018.
  */
-public class GeneanetTree {
+public class GeneanetTree implements Serializable {
     private String name;
     private String url;
     private int peopleNumber;
