@@ -390,8 +390,8 @@ public class GeneanetBrowser implements Serializable {
                 } else {
                     searchPerson(partner, true);
                     researchPartnerNoRecursive(partner);
-                    newMarriage.put(partner,entry.getValue());
                 }
+                newMarriage.put(partner,entry.getValue());
             }
         }
         person.setMarriage(newMarriage);

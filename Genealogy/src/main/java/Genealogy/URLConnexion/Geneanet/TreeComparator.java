@@ -6,6 +6,7 @@ import Genealogy.Model.Date.MyDate;
 import Genealogy.Model.Person;
 import Genealogy.Model.Town;
 import Genealogy.Parsing.MyGedcomReader;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.BasicConfigurator;
 
 import java.io.*;
@@ -120,7 +121,7 @@ public class TreeComparator {
 
     private static boolean supercontains(ArrayList<Union> marriageGed, GeneanetPerson person, MyDate date, String town) {
         for (Union union : marriageGed){
-            Person partner = union.getPartner();
+            Person partner = union.getCitizen();
             MyDate date1 = union.getDate();
             Town town1 = union.getTown();
             if (superEquals(partner.getFullName(),person.getFullName())&&superEquals(date,date1)&&superEquals(town,town1.getName())){
@@ -189,7 +190,16 @@ public class TreeComparator {
         if (string1 == null && string2 == null){
             return true;
         } else if (string1 != null && string2 != null){
-            return string1.toLowerCase().equals(string2.toLowerCase());
+            String newString1 = StringUtils.stripAccents(string1).toLowerCase();
+            String newString2 = StringUtils.stripAccents(string2).toLowerCase();
+            if (!newString1.equals(newString2)){
+                //Synonyms
+                newString1 = newString1.replace("boiau","boyau").replaceAll("\\d","").replace(" ","");
+                newString2 = newString2.replace("boiau","boyau").replaceAll("\\d","").replace(" ","");
+                return newString1.equals(newString2);
+            } else {
+                return true;
+            }
         } else {
             return false;
         }

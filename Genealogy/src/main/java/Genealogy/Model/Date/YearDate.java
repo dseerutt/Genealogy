@@ -44,6 +44,17 @@ public class YearDate extends MyDate implements Serializable {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof YearDate)) return false;
+
+        YearDate yearDate = (YearDate) o;
+
+        return getYear() == yearDate.getYear();
+
+    }
+
     public String descriptionDate(){
         return "en " + year;
     }

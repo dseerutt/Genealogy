@@ -6,7 +6,7 @@ import Genealogy.Model.Date.MyDate;
 import Genealogy.Model.Date.YearDate;
 import Genealogy.URLConnexion.Serializer;
 import fr.followthecode.republican.date.utils.RepublicanCalendarDateConverter;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import us.codecraft.xsoup.Xsoup;

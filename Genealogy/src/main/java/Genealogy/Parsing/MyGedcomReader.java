@@ -5,6 +5,7 @@ import Genealogy.Model.Date.YearDate;
 import org.apache.log4j.Logger;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 /**
@@ -18,7 +19,7 @@ public class MyGedcomReader {
         ArrayList<ParsingStructure> parsingStructureList = new ArrayList<ParsingStructure>();
             BufferedReader br = null;
             String sCurrentLine;
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(path), "Cp1252"));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(path), "UTF-8"));
             while ((sCurrentLine = br.readLine()) != null) {
                 String[] temp = sCurrentLine.split(" ");
                 if (temp.length == 2){

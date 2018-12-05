@@ -30,6 +30,18 @@ public class MonthDate extends MyDate implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MonthDate)) return false;
+
+        MonthDate monthDate = (MonthDate) o;
+
+        if (month != monthDate.month) return false;
+        return getYear() == monthDate.getYear();
+
+    }
+
+    @Override
     public String toString() {
         return month + "/" + year;
     }

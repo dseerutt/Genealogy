@@ -50,6 +50,22 @@ public class FullDate extends MyDate implements Serializable {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FullDate)) return false;
+
+        FullDate fullDate = (FullDate) o;
+
+        return getDate() != null ? getDate().equals(fullDate.getDate()) : fullDate.getDate() == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return getDate() != null ? getDate().hashCode() : 0;
+    }
+
     public String descriptionDate(){
         int day = AuxMethods.getDay(date);
         int month = AuxMethods.getMonth(date);
