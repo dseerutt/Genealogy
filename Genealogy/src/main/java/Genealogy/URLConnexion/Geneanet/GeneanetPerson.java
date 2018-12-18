@@ -246,8 +246,8 @@ public class GeneanetPerson implements Serializable {
             result += (placeOfDeath != null) ? ", placeOfDeath='" + placeOfDeath + '\'' : "";
             result += (burialDate != null) ? ", burialDate='" + burialDate + '\'' : "";
             result += (placeOfBurial != null) ? ", placeOfBurial='" + placeOfBurial + '\'' : "";
-            result += (father != null) ? ", father='" + father.getFullName() + '\'' : "";
-            result += (mother != null) ? ", mother='" + mother.getFullName() + '\'' : "";
+            result += (father != null) ? ", father='" + father.getUrl() + '\'' : "";
+            result += (mother != null) ? ", mother='" + mother.getUrl() + '\'' : "";
             result += (siblings != null && !siblings.isEmpty()) ? ", siblings='" + printListofGeneanetPerson(siblings) + '\'' : "";
             result += (halfSiblings != null && !halfSiblings.isEmpty()) ? ", halfSiblings='" + printListofGeneanetPerson(halfSiblings) + '\'' : "";
             result += (children != null && !children.isEmpty()) ? ", children='" + printListofGeneanetPerson(children) + '\'' : "";
@@ -262,8 +262,14 @@ public class GeneanetPerson implements Serializable {
 
     public static String printListofGeneanetPerson(ArrayList<GeneanetPerson> list){
         String result = "";
+        Boolean first = true;
         for (GeneanetPerson person : list){
-            result += person.getFullName();
+            if (!first){
+                result += ";" + person.getUrl();
+            } else {
+                result += person.getUrl();
+                first = false;
+            }
         }
         return result;
     }
@@ -271,7 +277,7 @@ public class GeneanetPerson implements Serializable {
     public static String printHashMapofGeneanetPerson(HashMap<GeneanetPerson,HashMap<MyDate,String>> hashmap){
         String result = "";
         for(Map.Entry<GeneanetPerson, HashMap<MyDate,String>> entry : hashmap.entrySet()) {
-            result += entry.getKey().getFullName() + ";" + entry.getValue();
+            result += entry.getKey().getUrl() + ";" + entry.getValue();
 
         }
         return result;
@@ -299,5 +305,21 @@ public class GeneanetPerson implements Serializable {
 
     public String getFullName() {
         return firstName + " " + familyName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof GeneanetPerson)) return false;
+
+        GeneanetPerson that = (GeneanetPerson) o;
+
+        return getUrl() != null ? getUrl().equals(that.getUrl()) : that.getUrl() == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return getUrl() != null ? getUrl().hashCode() : 0;
     }
 }

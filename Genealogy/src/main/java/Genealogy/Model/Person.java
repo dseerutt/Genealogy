@@ -455,7 +455,7 @@ public class Person {
 
             Town deathTown = null;
             try {
-                deathTown = new Town(AuxMethods.findField(list,"PLAC",indexDeath,indexBirthday+2));
+                deathTown = new Town(AuxMethods.findField(list,"PLAC",indexDeath,indexDeath+2));
             } catch (Exception e) {
                 //System.out.println("Impossible de parser la ville de décès de " + id);
             }
