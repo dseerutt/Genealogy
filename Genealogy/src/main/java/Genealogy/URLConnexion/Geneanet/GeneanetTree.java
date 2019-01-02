@@ -9,7 +9,7 @@ public class GeneanetTree implements Serializable {
     private String name;
     private String url;
     private int peopleNumber;
-    private int gedcomId = -1;
+    private String gedcomId = "";
 
     public GeneanetTree(String name, String url, String peopleNumber) {
         this.name = name;
@@ -21,7 +21,7 @@ public class GeneanetTree implements Serializable {
         this.name = name;
         this.url = url;
         this.peopleNumber = Integer.parseInt(peopleNumber);
-        this.gedcomId = Integer.parseInt(gedcomId);
+        this.gedcomId = gedcomId;
     }
 
     public String getName() {
@@ -48,11 +48,11 @@ public class GeneanetTree implements Serializable {
         this.peopleNumber = peopleNumber;
     }
 
-    public int getGedcomId() {
+    public String getGedcomId() {
         return gedcomId;
     }
 
-    public void setGedcomId(int gedcomId) {
+    public void setGedcomId(String gedcomId) {
         this.gedcomId = gedcomId;
     }
 

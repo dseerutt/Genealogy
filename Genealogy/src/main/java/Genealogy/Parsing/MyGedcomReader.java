@@ -13,6 +13,15 @@ import java.util.ArrayList;
  */
 public class MyGedcomReader {
     final static Logger logger = Logger.getLogger(MyGedcomReader.class);
+    public static final String UTF8_BOM = "\uFEFF";
+
+    private static String removeUTF8BOM(String s) {
+        if (s.startsWith(UTF8_BOM)) {
+            s = s.substring(1);
+        }
+        return s;
+    }
+
     public Genealogy read(String path) throws IOException {
 
         Genealogy genealogy = new Genealogy();
@@ -22,8 +31,11 @@ public class MyGedcomReader {
             br = new BufferedReader(new InputStreamReader(new FileInputStream(path), "UTF-8"));
             while ((sCurrentLine = br.readLine()) != null) {
                 String[] temp = sCurrentLine.split(" ");
+                if (parsingStructureList.isEmpty()){
+                    temp = removeUTF8BOM(sCurrentLine).split(" ");
+                }
                 if (temp.length == 2){
-                    parsingStructureList.add(new ParsingStructure(Integer.parseInt(temp[0]),temp[1],""));
+                    parsingStructureList.add(new ParsingStructure(Integer.parseInt("" + temp[0]),temp[1],""));
                 } else if (temp.length > 2) {
                     String value = temp[0];
                     String id = temp[1];

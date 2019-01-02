@@ -44,6 +44,10 @@ public class GeneanetBrowser implements Serializable {
         init();
     }
 
+    public GeneanetBrowser() throws Exception {
+        init();
+    }
+
     public void init() throws Exception {
         initProperties();
         if (url != null) {
@@ -90,7 +94,7 @@ public class GeneanetBrowser implements Serializable {
                     String[] tmpTab = tmpProperty.split(";");
                     if (tmpTab.length == 4) {
                         geneanetTrees.add(new GeneanetTree(tmpTab[0], tmpTab[1], tmpTab[2], tmpTab[3]));
-                    } else if (tmpTab.length < 4) {
+                    } else if (tmpTab.length < 4 && tmpTab.length > 1) {
                         geneanetTrees.add(new GeneanetTree(tmpTab[0], tmpTab[1], tmpTab[2]));
                     }
                 }
@@ -162,6 +166,24 @@ public class GeneanetBrowser implements Serializable {
                 }
             }
         }
+    }
+
+    public ArrayList<GeneanetTree> getGeneanetTrees() {
+        return geneanetTrees;
+    }
+
+    public void setGeneanetTrees(ArrayList<GeneanetTree> geneanetTrees) {
+        this.geneanetTrees = geneanetTrees;
+    }
+
+    public String getGedcomIdFromGeneanetTrees(){
+        for (GeneanetTree geneanetTree : geneanetTrees)
+        {
+            if (geneanetTree.getUrl().replace("&ocz=0","").equals(url.replace("&ocz=0",""))){
+                return geneanetTree.getGedcomId();
+            }
+        }
+        return "";
     }
 
     public GeneanetConverter getGeneanetConverter() {
@@ -474,7 +496,7 @@ public class GeneanetBrowser implements Serializable {
                     nbPeople++;
                     //Double search for partners/siblings : don't add if partner
                     if (!partialSearch){
-                        peopleUrl.add(url);
+                        peopleUrl.add(url.replace("&ocz=0",""));
                     }
                     allPeopleUrl.put(url,person);
                     geneanetConverter.parseDocument(inputDocument, person);
@@ -510,7 +532,7 @@ public class GeneanetBrowser implements Serializable {
         }
     }
 
-    public static GeneanetBrowser mainSearchFullTree(String url, boolean save, int expectedNbPeople0) {
+    public static GeneanetBrowser mainSearchFullTree(String url, int expectedNbPeople0) {
         try {
             GeneanetBrowser browser = new GeneanetBrowser(url);
             browser.expectedNbPeople = expectedNbPeople0;
@@ -523,8 +545,8 @@ public class GeneanetBrowser implements Serializable {
         }
     }
 
-    public static GeneanetBrowser mainSearchFullTree(String url, boolean save) {
-        return mainSearchFullTree(url, save, 0);
+    public static GeneanetBrowser mainSearchFullTree(String url) {
+        return mainSearchFullTree(url, 0);
     }
 
     public static String findTreeName(String tree){
@@ -550,7 +572,7 @@ public class GeneanetBrowser implements Serializable {
                     logger.info("Searching " + tree.getUrl());
                     String treeName = tree.getName();
                     Integer value = tree.getPeopleNumber();
-                    GeneanetBrowser newBrowser = mainSearchFullTree(tree.getUrl(), save, tree.getPeopleNumber());
+                    GeneanetBrowser newBrowser = mainSearchFullTree(tree.getUrl(), tree.getPeopleNumber());
                     int people = newBrowser.getNbPeople();
                     if (value != null && (value != people)){
                         logger.error("Test KO for URL " + tree.getUrl() + " : expected " + value + " but got " + people);
