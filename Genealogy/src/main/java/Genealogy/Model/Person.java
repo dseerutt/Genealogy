@@ -746,7 +746,7 @@ public class Person {
         if (father != null){
             ArrayList<Person> children = father.getChildren();
             for (Person person : children){
-                if (!person.getMother().equals(mother) && !person.equals(this)){
+                if (person.getMother() != null && !person.getMother().equals(mother) && !person.equals(this)){
                     result.add(person);
                 }
             }
@@ -767,7 +767,7 @@ public class Person {
         if (father != null){
             ArrayList<Person> children = father.getChildren();
             for (Person person : children){
-                if (person.getMother().equals(mother) && !person.equals(this)){
+                if (person.getMother() != null && person.getMother().equals(mother) && !person.equals(this)){
                     result.add(person);
                 }
             }

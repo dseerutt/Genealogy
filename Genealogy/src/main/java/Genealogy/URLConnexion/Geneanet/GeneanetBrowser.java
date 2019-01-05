@@ -32,12 +32,11 @@ public class GeneanetBrowser implements Serializable {
     public Map<String, String> cookie;
     private transient GeneanetConverter geneanetConverter;
     public GeneanetPerson rootPerson;
-    public int nbPeople = 0;
     public int expectedNbPeople = 0;
-    public ArrayList<String> peopleUrl = new ArrayList<String>();
+    public HashSet<String> peopleUrl = new HashSet<String>();
     public HashMap<String, GeneanetPerson> allPeopleUrl = new HashMap<String, GeneanetPerson>();
     final static Logger logger = Logger.getLogger(GeneanetBrowser.class);
-    private ArrayList<GeneanetTree> geneanetTrees = new ArrayList<>();
+    private static transient ArrayList<GeneanetTree> geneanetTrees = new ArrayList<>();
 
     public GeneanetBrowser(String url0) throws Exception {
         url = url0;
@@ -56,14 +55,6 @@ public class GeneanetBrowser implements Serializable {
         }
     }
 
-    public int getNbPeople() {
-        return nbPeople;
-    }
-
-    public void setNbPeople(int nbPeople) {
-        this.nbPeople = nbPeople;
-    }
-
     /**
      * Fonction initProperties
      * initialise les propriétés de la classe GeneanetBrowser
@@ -74,6 +65,9 @@ public class GeneanetBrowser implements Serializable {
     }
 
     public void initGeneanetTrees() throws Exception {
+        if (!geneanetTrees.isEmpty()){
+            return;
+        }
         Properties prop = new Properties();
         InputStream input = null;
         try {
@@ -184,6 +178,15 @@ public class GeneanetBrowser implements Serializable {
             }
         }
         return "";
+    }
+    public int getPeopleNumberFromGeneanetTrees(){
+        for (GeneanetTree geneanetTree : geneanetTrees)
+        {
+            if (geneanetTree.getUrl().replace("&ocz=0","").equals(url.replace("&ocz=0",""))){
+                return geneanetTree.getPeopleNumber();
+            }
+        }
+        return -1;
     }
 
     public GeneanetConverter getGeneanetConverter() {
@@ -492,16 +495,16 @@ public class GeneanetBrowser implements Serializable {
             do {
                 try {
                     String url = person.getUrl();
+                    url = url.replace("&ocz=0","").replace("&iz=0","");
                     Document inputDocument = connect(url);
-                    nbPeople++;
                     //Double search for partners/siblings : don't add if partner
                     if (!partialSearch){
-                        peopleUrl.add(url.replace("&ocz=0",""));
+                        peopleUrl.add(url);
                     }
                     allPeopleUrl.put(url,person);
                     geneanetConverter.parseDocument(inputDocument, person);
                     if (expectedNbPeople != 0){
-                        inputTxt = nbPeople + "/" + expectedNbPeople + " ";
+                        inputTxt = getNbPeople() + "/" + expectedNbPeople + " ";
                     }
                     if (partialSearch){
                         logger.info(inputTxt + "Partial Search " + person.getFirstName() + " " + person.getFamilyName() + " : " + person);
@@ -565,7 +568,7 @@ public class GeneanetBrowser implements Serializable {
         hidePrintOut();
         try {
             GeneanetBrowser browser = new GeneanetBrowser("");
-            int cpt = 0;
+            int cpt = 1;
             ArrayList<GeneanetTree> localGeneanetTrees = browser.geneanetTrees;
             for (GeneanetTree tree : localGeneanetTrees){
                 if (cpt >= 0){
@@ -590,6 +593,10 @@ public class GeneanetBrowser implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public int getNbPeople() {
+        return allPeopleUrl.size();
     }
 
     public static void mainTestXpath(String url, String pattern) {
