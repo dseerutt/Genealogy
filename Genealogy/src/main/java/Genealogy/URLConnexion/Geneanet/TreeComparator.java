@@ -480,7 +480,7 @@ public class TreeComparator {
             Serializer serializer = new Serializer();
             path = Serializer.getPath();
         }
-        File file = new File(path + File.separator + "comparatorTrees" + File.separator + tree + ".bak");
+        File file = new File(path + File.separator + "comparatorTrees" + File.separator + tree + ".bak2");
         FileWriter fr = null;
         try {
             fr = new FileWriter(file);
