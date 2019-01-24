@@ -539,6 +539,8 @@ public class GeneanetConverter {
             //unknown date case
             if (dateAndCity != null && !dateAndCity.contains("avant")&&!dateAndCity.contains("après")){
                 date = parseMarriageDate(dateAndCity, person.getGender());
+            } else {
+                date = null;
             }
             city = parseMarriageCity(dateAndCity, person.getGender());
             person.addMarriage(geneanetSearchURL + personString,date,city);

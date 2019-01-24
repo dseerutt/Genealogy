@@ -38,6 +38,7 @@ public class TreeComparator {
     private String treeName;
 
     public TreeComparator(GeneanetPerson geneanetPerson, Person gedcomPerson, HashMap<String, GeneanetPerson> peopleUrl, String treeName) {
+        urlSearched = new ArrayList<String>();
         this.geneanetRoot = geneanetPerson;
         this.gedcomRoot = gedcomPerson;
         this.peopleUrl = peopleUrl;
@@ -423,8 +424,8 @@ public class TreeComparator {
             String newString2 = StringUtils.stripAccents(string2).toLowerCase();
             if (!newString1.equals(newString2)){
                 //Synonyms
-                newString1 = newString1.replace("boiau","boyau").replaceAll("\\d","").replace(" ","").replace("-","").replace("chatilloncoligny","chatillonsurloing").replace("loiret","");
-                newString2 = newString2.replace("boiau","boyau").replaceAll("\\d","").replace(" ","").replace("-","").replace("chatilloncoligny","chatillonsurloing").replace("loiret","");
+                newString1 = newString1.replace("boiau","boyau").replace("boyot","boyau").replace("boileau","boyau").replace("boilleau","boyau").replace("gionnet","guionnet").replace("clain","clin").replaceAll("\\d","").replace(" ","").replace("-","").replace("chatilloncoligny","chatillonsurloing").replace("loiret","").replace("...","?");
+                newString2 = newString2.replace("boiau","boyau").replace("boyot","boyau").replace("boileau","boyau").replace("boilleau","boyau").replace("gionnet","guionnet").replace("clain","clin").replaceAll("\\d","").replace(" ","").replace("-","").replace("chatilloncoligny","chatillonsurloing").replace("loiret","").replace("...","?");
                 return newString1.equals(newString2);
             } else {
                 return true;
@@ -700,7 +701,7 @@ public class TreeComparator {
         boolean saveGeneanetSearch = false;
         int index = 1;
         for (GeneanetTree geneanetTree : geneanetTrees){
-            if (index >= 1){
+            if (index == 5){
                 String url = geneanetTree.getUrl();
                 compareTree(url, searchOnGeneanet, genealogy, saveComparisonInFile, saveGeneanetSearch);
             }
