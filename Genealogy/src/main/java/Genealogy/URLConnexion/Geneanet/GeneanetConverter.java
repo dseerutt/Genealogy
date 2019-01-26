@@ -374,7 +374,7 @@ public class GeneanetConverter {
         if (input != null){
             String[] temptab = input.split(", ");
             if (temptab.length > 1){
-                return temptab[1];
+                return temptab[1].split(",")[0];
             }
         }
         return null;
