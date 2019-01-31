@@ -105,10 +105,11 @@ public class TreeComparator {
         compareMarriage(geneanetRoot, gedcomRoot);
         //compareSiblings(geneanetRoot, gedcomRoot);
         //compareHalfSiblings(geneanetRoot, gedcomRoot);
-        compareChildren(geneanetRoot, gedcomRoot);
+        //compareChildren(geneanetRoot, gedcomRoot);
 
         urlSearched.add(geneanetRoot.getUrl());
         searchFamily(geneanetRoot, gedcomRoot, true);
+        searchChildren(geneanetRoot, gedcomRoot);
     }
 
     private void comparePerson(GeneanetPerson geneanetPerson, Person gedcomPerson) throws Exception {
@@ -129,7 +130,7 @@ public class TreeComparator {
         searchFamily(geneanetPerson, gedcomPerson, false);
     }
 
-    private void compareSibling(GeneanetPerson geneanetPerson, Person gedcomPerson) throws Exception {
+    private void compareSibling(GeneanetPerson geneanetPerson, Person gedcomPerson, boolean children) throws Exception {
         if (urlSearched.contains(geneanetPerson.getUrl())){
             return;
         }
@@ -139,13 +140,15 @@ public class TreeComparator {
         compareNames(geneanetPerson, gedcomPerson);
         compareBirth(geneanetPerson, gedcomPerson);
         compareDeath(geneanetPerson, gedcomPerson);
-        compareMarriage(geneanetPerson, gedcomPerson);
+        if (!children){
+            compareMarriage(geneanetPerson, gedcomPerson);
+        }
         //compareSiblings(geneanetPerson, gedcomPerson);
         //compareHalfSiblings(geneanetPerson, gedcomPerson);
 
         urlSearched.add(geneanetPerson.getUrl());
         //Search partners
-        if (geneanetPerson != null || gedcomPerson != null){
+        if ((geneanetPerson != null || gedcomPerson != null)&&(!children)){
             searchPartners(geneanetPerson, gedcomPerson, false);
         }
     }
@@ -211,7 +214,7 @@ public class TreeComparator {
                 for (Person siblingGed : siblingsGed){
                     if (newSiblingGen != null && superEquals(newSiblingGen.getFullName(),siblingGed.getFullName()) && !gedcomPersonList.contains(siblingGed)
                             && !urlSearched.contains(newSiblingGen.getUrl())){
-                        compareSibling(newSiblingGen,siblingGed);
+                        compareSibling(newSiblingGen,siblingGed, txt.equals("Children"));
                         gedcomPersonList.add(siblingGed);
                     }
                 }
@@ -220,6 +223,12 @@ public class TreeComparator {
                 }
             }
         }
+    }
+
+    private void searchChildren(GeneanetPerson geneanetPerson, Person gedcomPerson) throws Exception {
+        ArrayList<GeneanetPerson> childrenGen = geneanetPerson.getChildren();
+        ArrayList<Person> childrenGed = gedcomPerson.getChildren();
+        searchRelatives(geneanetPerson, gedcomPerson, childrenGen, childrenGed, "Children");
     }
 
     private void searchSiblings(GeneanetPerson geneanetPerson, Person gedcomPerson) throws Exception {
@@ -424,8 +433,8 @@ public class TreeComparator {
             String newString2 = StringUtils.stripAccents(string2).toLowerCase() + " ";
             if (!newString1.equals(newString2)){
                 //Synonyms
-                newString1 = newString1.replace("boiau","boyau").replace("boyot","boyau").replace("boileau","boyau").replace("boilleau","boyau").replace("gionnet","guionnet").replace("clain","clin").replace("st ","saint ").replace("benoistville","benoitville").replace("guille ","guillet ").replace("issoudun-letrieix","issoudun").replace("issoudun letrieix","issoudun").replace("de la ville","delaville").replaceAll("\\d","").replace(" ","").replace("-","").replace("chatilloncoligny","chatillonsurloing").replace("loiret","").replace("...","?").trim();
-                newString2 = newString2.replace("boiau","boyau").replace("boyot","boyau").replace("boileau","boyau").replace("boilleau","boyau").replace("gionnet","guionnet").replace("clain","clin").replace("st ","saint ").replace("benoistville","benoitville").replace("guille ","guillet ").replace("issoudun-letrieix","issoudun").replace("issoudun letrieix","issoudun").replace("de la ville","delaville").replaceAll("\\d","").replace(" ","").replace("-","").replace("chatilloncoligny","chatillonsurloing").replace("loiret","").replace("...","?").trim();
+                newString1 = newString1.replace(","," ").replace("boiau","boyau").replace("boyot","boyau").replace("boileau","boyau").replace("boilleau","boyau").replace("gionnet","guionnet").replace("clain","clin").replace("st ","saint ").replace("benoistville","benoitville").replace("guille ","guillet ").replace("issoudun-letrieix","issoudun").replace("issoudun letrieix","issoudun").replace("de la ville","delaville").replaceAll("\\d","").replace(" ","").replace("-","").replace("chatilloncoligny","chatillonsurloing").replace("loiret","").replace("...","?").trim();
+                newString2 = newString2.replace(","," ").replace("boiau","boyau").replace("boyot","boyau").replace("boileau","boyau").replace("boilleau","boyau").replace("gionnet","guionnet").replace("clain","clin").replace("st ","saint ").replace("benoistville","benoitville").replace("guille ","guillet ").replace("issoudun-letrieix","issoudun").replace("issoudun letrieix","issoudun").replace("de la ville","delaville").replaceAll("\\d","").replace(" ","").replace("-","").replace("chatilloncoligny","chatillonsurloing").replace("loiret","").replace("...","?").trim();
                 return newString1.equals(newString2);
             } else {
                 return true;
@@ -701,7 +710,7 @@ public class TreeComparator {
         boolean saveGeneanetSearch = false;
         int index = 1;
         for (GeneanetTree geneanetTree : geneanetTrees){
-            if (index == 17){
+            if (index <= 20){
                 String url = geneanetTree.getUrl();
                 compareTree(url, searchOnGeneanet, genealogy, saveComparisonInFile, saveGeneanetSearch);
             }
