@@ -307,7 +307,14 @@ public class GeneanetConverter {
                     String cityTmp = tab[1];
                     String[] cityTab = cityTmp.split(",");
                     if (cityTab != null && cityTab.length > 0){
-                        city = cityTab[0];
+                        if (cityTab[0].contains("(")){
+                            String[] newcityTab = cityTab[0].split("\\(");
+                            if (newcityTab != null && newcityTab.length > 0){
+                                city = newcityTab[0];
+                            }
+                        } else {
+                            city = cityTab[0];
+                        }
                     }
                 } else if (tab != null && tab.length == 1){
                     date = tab[0];
@@ -374,7 +381,12 @@ public class GeneanetConverter {
         if (input != null){
             String[] temptab = input.split(", ");
             if (temptab.length > 1){
-                return temptab[1].split(",")[0];
+                String newTemptab =  temptab[1].split(",")[0];
+                if (newTemptab.contains("(")){
+                    return newTemptab.split("\\(")[0];
+                } else {
+                    return newTemptab;
+                }
             }
         }
         return null;
