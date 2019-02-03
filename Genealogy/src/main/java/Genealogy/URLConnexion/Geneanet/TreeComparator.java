@@ -710,7 +710,7 @@ public class TreeComparator {
         boolean saveGeneanetSearch = false;
         int index = 1;
         for (GeneanetTree geneanetTree : geneanetTrees){
-            if (index >= 24){
+            if (index >= 25){
                 String url = geneanetTree.getUrl();
                 compareTree(url, searchOnGeneanet, genealogy, saveComparisonInFile, saveGeneanetSearch);
             }
