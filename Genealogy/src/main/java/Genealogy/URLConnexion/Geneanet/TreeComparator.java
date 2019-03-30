@@ -26,6 +26,7 @@ import static Genealogy.URLConnexion.Geneanet.GeneanetPerson.printListofGeneanet
 
 /**
  * Created by Dan on 02/12/2018.
+ * Export en UTF8 à partir de ahnenblatt : export + encoder en utf8, encoder en ansi puis convertir en utf8
  */
 public class TreeComparator {
     private GeneanetPerson geneanetRoot;
@@ -710,7 +711,7 @@ public class TreeComparator {
         boolean saveGeneanetSearch = false;
         int index = 1;
         for (GeneanetTree geneanetTree : geneanetTrees){
-            if (index >= 27){
+            if (index >= 28){
                 String url = geneanetTree.getUrl();
                 compareTree(url, searchOnGeneanet, genealogy, saveComparisonInFile, saveGeneanetSearch);
             }
