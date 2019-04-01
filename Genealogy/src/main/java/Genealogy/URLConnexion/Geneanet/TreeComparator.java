@@ -706,7 +706,7 @@ public class TreeComparator {
 
         GeneanetBrowser urlBrowser = new GeneanetBrowser();
         ArrayList<GeneanetTree> geneanetTrees = urlBrowser.getGeneanetTrees();
-        boolean searchOnGeneanet = true;
+        boolean searchOnGeneanet = false;
         boolean saveComparisonInFile = false;
         boolean saveGeneanetSearch = false;
         int index = 1;

@@ -305,6 +305,9 @@ public class GeneanetConverter {
                 if (tab != null && tab.length > 1){
                     date = tab[0];
                     String cityTmp = tab[1];
+                    if (cityTmp.contains("Canton de") && tab.length > 2){
+                        cityTmp = tab[2];
+                    }
                     String[] cityTab = cityTmp.split(",");
                     if (cityTab != null && cityTab.length > 0){
                         if (cityTab[0].contains("(")){
