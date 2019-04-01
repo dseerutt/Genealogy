@@ -633,9 +633,9 @@ public class GeneanetBrowser implements Serializable {
         BasicConfigurator.configure();
         String testUrl = "https://gw.geneanet.org/roalda?lang=fr&pz=ronald+guy&nz=arnaux&ocz=0&p=marie+anne&n=bardin";
         String testUrl2 = "https://gw.geneanet.org/sylvieb4?lang=fr&pz=sylvie+jacqueline+marie+bernadette&nz=bergereau&ocz=0&p=jeanne&n=naudin";
-        String testUrl3 = "https://gw.geneanet.org/sylvieb4?lang=fr&pz=sylvie+jacqueline+marie+bernadette&nz=bergereau&p=jean&n=poirier";
+        String testUrl3 = "https://gw.geneanet.org/familysoyer?lang=fr&p=agnes&n=paris";
         String xpathPattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/h2[1]/span[2]/text()";
-        String xpathText = "Pierre DAVY";
+        String xpathText = "Félix DORLEZ";
 
         //searchAllTrees(true);
         //mainSearchFullTree(testUrl, false);
@@ -645,6 +645,6 @@ public class GeneanetBrowser implements Serializable {
         testSearch(testUrl3);
         //mainTestSearchTree();
         //mainTestXpath(testUrl3,xpathPattern);
-        //mainFindXpath(testUrl, xpathText);
+        //mainFindXpath(testUrl3, xpathText);
     }
 }

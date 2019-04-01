@@ -462,15 +462,18 @@ public class GeneanetConverter {
         do {
             sectionIndex++;
             category = Xsoup.compile(XpathSection.replace("XXX","" + sectionIndex )).evaluate(doc).get();
-            if (category != null && category.contains("Union(s)")){
-                setMarriageAndChildren(index, person);
-                index++;
-            } else if (category != null && (category.equals("Fratrie")||category.equals("Frères et sœurs"))){
-                setBrotherhood(index, person);
-                index++;
-            } else if (category != null && category.equals("Demi-frères et demi-sœurs")) {
-                setHalfBrotherhood(person);
-                index++;
+            if (category != null){
+                category = category.replaceAll(" ","");
+                if (category.contains("Union(s)")){
+                    setMarriageAndChildren(index, person);
+                    index++;
+                } else if ((category.equals("Fratrie")||category.equals("Frèresetsœurs"))){
+                    setBrotherhood(index, person);
+                    index++;
+                } else if (category.equals("Demi-frèresetdemi-sœurs")) {
+                    setHalfBrotherhood(person);
+                    index++;
+                }
             }
         } while (category != null);
     }
@@ -589,14 +592,7 @@ public class GeneanetConverter {
         index = setPersonDates(person,index,CHRISTENING);
         index = setPersonDates(person,index,DEATH);
         index = setPersonDates(person,index,BURIAL);
-        if (person.isUsingDateTable()){
-            index = 1;
-        }
-        if (index != 1){
-            //found date data
-            index = 2;
-        }
-        int offset = setParents(person, index);
+        int offset = setParents(person, 2);
         setFamily(offset,person);
         person.setSearched(true);
     }
