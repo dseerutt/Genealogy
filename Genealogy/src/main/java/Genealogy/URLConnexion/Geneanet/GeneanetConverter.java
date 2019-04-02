@@ -384,7 +384,12 @@ public class GeneanetConverter {
         if (input != null){
             String[] temptab = input.split(", ");
             if (temptab.length > 1){
-                String newTemptab =  temptab[1].split(",")[0];
+                String cityTmp = temptab[1];
+                String newTemptab =  cityTmp.split(",")[0];
+                String[] newTab = newTemptab.split(" - ");
+                if (cityTmp.contains("Canton de") && newTab.length > 1){
+                    newTemptab = newTab[1];
+                }
                 if (newTemptab.contains("(")){
                     return newTemptab.split("\\(")[0];
                 } else {
