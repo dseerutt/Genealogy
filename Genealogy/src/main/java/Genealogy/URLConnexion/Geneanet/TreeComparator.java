@@ -706,12 +706,12 @@ public class TreeComparator {
 
         GeneanetBrowser urlBrowser = new GeneanetBrowser();
         ArrayList<GeneanetTree> geneanetTrees = urlBrowser.getGeneanetTrees();
-        boolean searchOnGeneanet = true;
+        boolean searchOnGeneanet = false;
         boolean saveComparisonInFile = false;
         boolean saveGeneanetSearch = false;
         int index = 1;
         for (GeneanetTree geneanetTree : geneanetTrees){
-            if (index >= 31){
+            if (index >= 32){
                 String url = geneanetTree.getUrl();
                 compareTree(url, searchOnGeneanet, genealogy, saveComparisonInFile, saveGeneanetSearch);
             }
