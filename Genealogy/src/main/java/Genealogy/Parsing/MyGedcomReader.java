@@ -1,11 +1,9 @@
 package Genealogy.Parsing;
 
 import Genealogy.Genealogy;
-import Genealogy.Model.Date.YearDate;
 import org.apache.log4j.Logger;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 /**
@@ -23,12 +21,12 @@ public class MyGedcomReader {
     }
 
     public Genealogy read(String path) throws IOException {
-
+        //prepareFile(path);
         Genealogy genealogy = new Genealogy();
         ArrayList<ParsingStructure> parsingStructureList = new ArrayList<ParsingStructure>();
             BufferedReader br = null;
             String sCurrentLine;
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(path), "UTF-8"));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(path), "ISO8859_1"));
             while ((sCurrentLine = br.readLine()) != null) {
                 String[] temp = sCurrentLine.split(" ");
                 if (parsingStructureList.isEmpty()){

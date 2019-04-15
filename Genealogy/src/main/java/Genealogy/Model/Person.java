@@ -417,7 +417,7 @@ public class Person {
 
         if (indexBirthday != -1){
             indexBirthday++;
-            String input = AuxMethods.findField(list,"DATE",indexBirthday,indexBirthday+2);
+            String input = AuxMethods.findField(list,"DATE",indexBirthday,indexBirthday+3);
             MyDate birthDay = null;
             try{
                 birthDay = (MyDate) MyDate.Mydate(input);
@@ -428,7 +428,7 @@ public class Person {
 
             Town birthTown = null;
             try {
-                birthTown = new Town(AuxMethods.findField(list,"PLAC",indexBirthday,indexBirthday+2));
+                birthTown = new Town(AuxMethods.findField(list,"PLAC",indexBirthday,indexBirthday+3));
             } catch (Exception e) {
                 //System.out.println("Impossible de parser la ville de naissance de " + id);
             }
@@ -444,7 +444,7 @@ public class Person {
 
         if (indexDeath != -1){
             indexDeath++;
-            String input = AuxMethods.findField(list,"DATE",indexDeath,indexDeath+2);
+            String input = AuxMethods.findField(list,"DATE",indexDeath,indexDeath+3);
             MyDate deathDay = null;
             try{
                 deathDay = (MyDate) MyDate.Mydate(input);
@@ -455,7 +455,7 @@ public class Person {
 
             Town deathTown = null;
             try {
-                deathTown = new Town(AuxMethods.findField(list,"PLAC",indexDeath,indexDeath+2));
+                deathTown = new Town(AuxMethods.findField(list,"PLAC",indexDeath,indexDeath+3));
             } catch (Exception e) {
                 //System.out.println("Impossible de parser la ville de décès de " + id);
             }
