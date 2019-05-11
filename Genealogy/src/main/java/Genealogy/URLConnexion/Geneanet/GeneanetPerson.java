@@ -34,6 +34,7 @@ public class GeneanetPerson implements Serializable {
     private String geneanetUrl;
     private boolean rootperson = false;
     private boolean isUsingDateTable = false;
+    private String image;
 
     public GeneanetPerson(String url, String firstName, String familyName) {
         this.url = url;
@@ -99,6 +100,14 @@ public class GeneanetPerson implements Serializable {
 
     public String getPlaceOfChristening() {
         return placeOfChristening;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public void setPlaceOfChristening(String placeOfChristening) {
@@ -252,6 +261,7 @@ public class GeneanetPerson implements Serializable {
             result += (halfSiblings != null && !halfSiblings.isEmpty()) ? ", halfSiblings='" + printListofGeneanetPerson(halfSiblings) + '\'' : "";
             result += (children != null && !children.isEmpty()) ? ", children='" + printListofGeneanetPerson(children) + '\'' : "";
             result += (marriage != null && !marriage.isEmpty()) ? ", marriage='" + printHashMapofGeneanetPerson(marriage) + '\'' : "";
+            result += (image != null) ? ", image='" + image + '\'' : "";
             result += ", searched='" + searched + '\'';
             result += (rootperson) ? ", rootperson='" + rootperson + '\'' : "";
             return result;

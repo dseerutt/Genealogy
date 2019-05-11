@@ -13,10 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.BasicConfigurator;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static Genealogy.Genealogy.genealogy;
 import static Genealogy.URLConnexion.Geneanet.GeneanetBrowser.findTreeName;
@@ -31,12 +28,14 @@ import static Genealogy.URLConnexion.Geneanet.GeneanetPerson.printListofGeneanet
 public class TreeComparator {
     private GeneanetPerson geneanetRoot;
     private Person gedcomRoot;
-    private HashMap<GeneanetPerson,String> differences = new HashMap<>();
+    private LinkedHashMap<GeneanetPerson,String> differences = new LinkedHashMap<>();
+    private LinkedHashMap<GeneanetPerson,String> differencesForDisplay = new LinkedHashMap<>();
     public HashMap<String, GeneanetPerson> peopleUrl = new HashMap<String, GeneanetPerson>();
     public static ArrayList<String> urlSearched = new ArrayList<String>();
     public static ArrayList<String> urlPartnersSearched = new ArrayList<String>();
     private boolean log = true;
     private String treeName;
+    private String comparisonResultDisplay;
 
     public TreeComparator(GeneanetPerson geneanetPerson, Person gedcomPerson, HashMap<String, GeneanetPerson> peopleUrl, String treeName) {
         urlSearched = new ArrayList<String>();
@@ -70,12 +69,26 @@ public class TreeComparator {
         return log;
     }
 
+    public String getComparisonResultDisplay() {
+        return comparisonResultDisplay;
+    }
+
+    public void setComparisonResultDisplay(String comparisonResultDisplay) {
+        this.comparisonResultDisplay = comparisonResultDisplay;
+    }
+
     public void setLog(boolean log) {
         this.log = log;
     }
 
-    public void printDifferences(){
-        for(Map.Entry<GeneanetPerson, String> entry : differences.entrySet()) {
+    public void printDifferences(boolean displayModeFull){
+        HashMap<GeneanetPerson,String> tmpDifferences;
+        if (displayModeFull) {
+            tmpDifferences = differences;
+        } else {
+            tmpDifferences = differencesForDisplay;
+        }
+        for (Map.Entry<GeneanetPerson, String> entry : tmpDifferences.entrySet()) {
             logger.info("\"" + entry.getKey().getUrl() + "\";" + entry.getKey().getFullName() + ";" + entry.getValue());
         }
     }
@@ -430,12 +443,15 @@ public class TreeComparator {
         if (string1 == null && string2 == null){
             return true;
         } else if (string1 != null && string2 != null){
+            if (string1.equals("Bussière")){
+                String res = "";
+            }
             String newString1 = StringUtils.stripAccents(string1).toLowerCase() + " ";
             String newString2 = StringUtils.stripAccents(string2).toLowerCase() + " ";
             if (!newString1.equals(newString2)){
                 //Synonyms
-                newString1 = newString1.replace(","," ").replace("boiau","boyau").replace("boyot","boyau").replace("boileau","boyau").replace("boilleau","boyau").replace("gionnet","guionnet").replace("clain","clin").replace("st ","saint ").replace("st-","saint ").replace("benoistville","benoitville").replace("guille ","guillet ").replace("issoudun-letrieix","issoudun").replace("issoudun letrieix","issoudun").replace("de la ville","delaville").replaceAll("\\d","").replace(" ","").replace("-","").replace("chatilloncoligny","chatillonsurloing").replace("quiboumanche","quibou").replace("dangymanche","dangy").replace("loiret","").replace("-","").replace("...","?").trim();
-                newString2 = newString2.replace(","," ").replace("boiau","boyau").replace("boyot","boyau").replace("boileau","boyau").replace("boilleau","boyau").replace("gionnet","guionnet").replace("clain","clin").replace("st ","saint ").replace("st-","saint ").replace("benoistville","benoitville").replace("guille ","guillet ").replace("issoudun-letrieix","issoudun").replace("issoudun letrieix","issoudun").replace("de la ville","delaville").replaceAll("\\d","").replace(" ","").replace("-","").replace("chatilloncoligny","chatillonsurloing").replace("quiboumanche","quibou").replace("dangymanche","dangy").replace("loiret","").replace("-","").replace("...","?").trim();
+                newString1 = newString1.replace(","," ").replace("boiau","boyau").replace("boyot","boyau").replace("boileau","boyau").replace("boilleau","boyau").replace("gionnet","guionnet").replace("clain","clin").replace("st ","saint ").replace("st-","saint ").replace("benoistville","benoitville").replace("guille ","guillet ").replace("issoudun-letrieix","issoudun").replace("issoudun letrieix","issoudun").replace("de la ville","delaville").replaceAll("\\d","").replace(" ","").replace("-","").replace("chatilloncoligny","chatillonsurloing").replace("brienonl'archeveque","brienonsurarmancon").replace("quiboumanche","quibou").replace("dangymanche","dangy").replaceAll("^bussiere","labussiere").replace("loiret","").replace("-","").replace("...","?").trim();
+                newString2 = newString2.replace(","," ").replace("boiau","boyau").replace("boyot","boyau").replace("boileau","boyau").replace("boilleau","boyau").replace("gionnet","guionnet").replace("clain","clin").replace("st ","saint ").replace("st-","saint ").replace("benoistville","benoitville").replace("guille ","guillet ").replace("issoudun-letrieix","issoudun").replace("issoudun letrieix","issoudun").replace("de la ville","delaville").replaceAll("\\d","").replace(" ","").replace("-","").replace("chatilloncoligny","chatillonsurloing").replace("brienonl'archeveque","brienonsurarmancon").replace("quiboumanche","quibou").replace("dangymanche","dangy").replaceAll("^bussiere","labussiere").replace("loiret","").replace("-","").replace("...","?").trim();
                 return newString1.equals(newString2);
             } else {
                 return true;
@@ -445,7 +461,7 @@ public class TreeComparator {
         }
     }
 
-    private String compareDifferences(HashMap<GeneanetPerson,String> differences2) throws Exception {
+    private void compareDifferences(HashMap<GeneanetPerson,String> differences2, boolean displayModeFull) throws Exception {
         String result = "";
         for(Map.Entry<GeneanetPerson, String> entry : differences.entrySet()) {
             GeneanetPerson person = entry.getKey();
@@ -455,6 +471,11 @@ public class TreeComparator {
             String valueTxt = entry.getValue();
             if (!differences2.containsKey(person) || differences2.containsKey(person) && !valueTxt.equals(differences2.get(person))){
                 result += person.getFullName() + ";" + valueTxt + System.lineSeparator();
+                differencesForDisplay.put(person, entry.getValue());
+                if (!displayModeFull && differencesForDisplay.size() == 10){
+                    comparisonResultDisplay = result;
+                    return;
+                }
             }
         }
 
@@ -469,9 +490,14 @@ public class TreeComparator {
             String valueTxt = entry.getValue();
             if (!differences.containsKey(person) || differences.containsKey(person) && !valueTxt.equals(differences.get(person))){
                 result += person.getFullName() + ";" + valueTxt + System.lineSeparator();
+                if (!displayModeFull && differencesForDisplay.size() == 10){
+                    differencesForDisplay.put(person, differences2.get(person));
+                    comparisonResultDisplay = result;
+                    return;
+                }
             }
         }
-        return result;
+        comparisonResultDisplay = result;
     }
 
     private void addDifference(GeneanetPerson geneanetPerson, String txt){
@@ -631,10 +657,13 @@ public class TreeComparator {
         return geneanetBrowser;
     }
 
-    public static void compareTree(String testUrl, boolean search, Genealogy genealogy, boolean saveComparison, boolean saveGeneanet) throws Exception {
+    public static void compareTree(String testUrl, boolean search, Genealogy genealogy, boolean saveComparison, boolean saveGeneanet, boolean displayModeFull, boolean exceptionMode) throws Exception {
         //Geneanet Browser
         String tree = GeneanetBrowser.findTreeName(testUrl);
-        GeneanetBrowser geneanetBrowser = getGeneanetBrowserFromFile(tree);
+        GeneanetBrowser geneanetBrowser = null;
+        if (!search){
+            geneanetBrowser = getGeneanetBrowserFromFile(tree);
+        }
 
         if (search || geneanetBrowser == null){
             GeneanetBrowser geneanetBrowser0 = mainSearchFullTree(testUrl);
@@ -642,8 +671,10 @@ public class TreeComparator {
             int people = geneanetBrowser0.getNbPeople();
             int expectedPeople = geneanetBrowser0.getPeopleNumberFromGeneanetTrees();
             if (expectedPeople != people){
-                logger.error("Test KO for URL " + testUrl + " : expected " + expectedPeople + " but got " + people);
-                throw new Exception("Geneanet Search result unexpected for " + testUrl);
+                if (exceptionMode){
+                    logger.error("Test KO for URL " + testUrl + " : expected " + expectedPeople + " but got " + people);
+                    throw new Exception("Error : Found new number for search for tree " + tree);
+                }
             } else {
                 logger.info("Test OK for URL " + tree);
             }
@@ -671,7 +702,7 @@ public class TreeComparator {
         treeComparator.compareRoot();
         int nbPeopleComp = treeComparator.getPeopleSize();
         if (nbPeopleGen == nbPeopleComp){
-            //logger.info("Comparison OK for " + testUrl);
+            logger.info("Comparison OK for " + testUrl);
         } else {
             logger.info("Comparison KO for " + testUrl + " Expected " + nbPeopleGen + " but got " + nbPeopleComp);
         }
@@ -679,14 +710,17 @@ public class TreeComparator {
             treeComparator.saveDifference(tree);
         }
         HashMap<GeneanetPerson, String> geneanetPersonStringHashMap = treeComparator.readDifferences(tree);
-        String comparison = treeComparator.compareDifferences(geneanetPersonStringHashMap);
+        treeComparator.compareDifferences(geneanetPersonStringHashMap, displayModeFull);
+        String comparison = treeComparator.getComparisonResultDisplay();
         if (comparison != null && !comparison.equals("")){
-            treeComparator.printDifferences();
+            treeComparator.printDifferences(displayModeFull);
             logger.info("Root Geneanet person : " + geneanetBrowser.rootPerson);
             logger.info("Main Gedcom person : " + person);
             logger.info("Differences for " + tree + " :");
             logger.error(comparison);
-            throw new Exception("Error with comparison for tree " + tree);
+            if (exceptionMode) {
+                throw new Exception("Error with comparison for tree " + tree);
+            }
 
         } else {
             logger.info("Tree " + tree + " OK");
@@ -704,16 +738,18 @@ public class TreeComparator {
         genealogy.parseContents();
         genealogy.sortPersons();
 
+        boolean saveComparisonInFile = false;
         GeneanetBrowser urlBrowser = new GeneanetBrowser();
         ArrayList<GeneanetTree> geneanetTrees = urlBrowser.getGeneanetTrees();
         boolean searchOnGeneanet = false;
-        boolean saveComparisonInFile = false;
         boolean saveGeneanetSearch = false;
+        boolean displayModeFull = true;
+        boolean exceptionMode = true;
         int index = 1;
         for (GeneanetTree geneanetTree : geneanetTrees){
             if (index >= 37){
                 String url = geneanetTree.getUrl();
-                compareTree(url, searchOnGeneanet, genealogy, saveComparisonInFile, saveGeneanetSearch);
+                compareTree(url, searchOnGeneanet, genealogy, saveComparisonInFile, saveGeneanetSearch, displayModeFull, exceptionMode);
             }
             index++;
         }

@@ -145,6 +145,7 @@ public class GeneanetBrowser implements Serializable {
             geneanetConverter.setXpathHalfBrother(prop.getProperty("XpathHalfBrother"));
             geneanetConverter.setXpathChildren(prop.getProperty("XpathChildren"));
             geneanetConverter.setXpathUrl(prop.getProperty("XpathUrl"));
+            geneanetConverter.setXpathImage(prop.getProperty("XpathImage"));
             if (geneanetURL == null){
                 throw new Exception("Impossible de récupérer le fichier de propriétés");
             }
@@ -631,11 +632,11 @@ public class GeneanetBrowser implements Serializable {
 
     public static void main(String[] args) {
         BasicConfigurator.configure();
-        String testUrl = "https://gw.geneanet.org/roalda?lang=fr&pz=ronald+guy&nz=arnaux&ocz=0&p=marie+anne&n=bardin";
-        String testUrl2 = "https://gw.geneanet.org/sylvieb4?lang=fr&pz=sylvie+jacqueline+marie+bernadette&nz=bergereau&ocz=0&p=jeanne&n=naudin";
-        String testUrl3 = "https://gw.geneanet.org/familysoyer?lang=fr&p=agnes&n=paris";
-        String xpathPattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/h2[1]/span[2]/text()";
-        String xpathText = "Félix DORLEZ";
+        String testUrl = "https://gw.geneanet.org/msebastien1?lang=fr&pz=sebastien+david&nz=mercier&p=estienne&n=porcher";
+        String testUrl2 = "https://gw.geneanet.org/msebastien1?lang=fr&pz=sebastien+david&nz=mercier&p=louis+claude&n=vincent";
+        String testUrl3 = "https://gw.geneanet.org/msebastien1?lang=fr&pz=sebastien+david&nz=mercier&p=madeleine&n=jusseaume";
+        String xpathPattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/h2[2]/span[2]/text()";
+        String xpathText = "Agnès Des VOISINES";
 
         //searchAllTrees(true);
         //mainSearchFullTree(testUrl, false);

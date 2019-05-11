@@ -50,6 +50,7 @@ public class GeneanetConverter {
     private static String XpathHalfBrother;
     private static String XpathChildren;
     private static String XpathUrl;
+    private static String XpathImage;
     private Document doc;
     private final static Character space = (char) 160;
     private static ArrayList<String> wrongCities;
@@ -107,6 +108,14 @@ public class GeneanetConverter {
 
     public static void setXpathParents2(String xpathParents2) {
         XpathParents2 = xpathParents2;
+    }
+
+    public static String getXpathImage() {
+        return XpathImage;
+    }
+
+    public static void setXpathImage(String xpathImage) {
+        XpathImage = xpathImage;
     }
 
     public static void setXpathMother(String xpathMother) {
@@ -266,6 +275,11 @@ public class GeneanetConverter {
             return name;
         }
         return null;
+    }
+
+    public String getImage(Document doc){
+        String name = Xsoup.compile(XpathImage).evaluate(doc).get();
+        return name;
     }
 
     public int setChristening(GeneanetPerson person, int index){
@@ -594,6 +608,8 @@ public class GeneanetConverter {
         String name = getName(doc);
         person.setFirstName(firstName);
         person.setFamilyName(name);
+        String image = getImage(doc);
+        person.setImage(image);
         setGender(person);
         setGeneanetUrl(person);
         int index = setPersonDates(person,1,BIRTH);
@@ -607,17 +623,21 @@ public class GeneanetConverter {
 
     private int setParents(GeneanetPerson person, int index){
         String category = Xsoup.compile(XpathSection.replace("XXX","" + 1)).evaluate(doc).get();
-
+        String image = person.getImage();
+        int offset = 0;
+        if (image != null){
+            offset = -1;
+        }
         if (category != null && category.equals("Parents")){
-            int fatherId = setFather(person, index);
-            int motherId = setMother(person, index);
+            int fatherId = setFather(person, index + offset);
+            int motherId = setMother(person, index + offset);
             if (fatherId == 1 || motherId == 1){
-                return index + 1 ;
+                return index + 1 + offset ;
             } else {
-                return index;
+                return index + offset;
             }
         } else {
-            return index;
+            return index + offset;
         }
     }
 
@@ -638,7 +658,9 @@ public class GeneanetConverter {
         person.setGender(Gender.getGender(gender));
     }
 
-    private int setMother(GeneanetPerson person, int index) {
+    private int setMother(GeneanetPerson person, int index0) {
+        int index = index0;
+        int result = 1;
         if (doc.toString().contains("<!-- Parents photo -->")){
             String xpath =(XpathParents2.replace("XXX","" + 2).replace("YYY","" + 1));
             String motherURL = Xsoup.compile(xpath).evaluate(doc).get();
@@ -678,11 +700,13 @@ public class GeneanetConverter {
                 GeneanetPerson mother = new GeneanetPerson(geneanetSearchURL + motherURL);
                 person.setMother(mother);
             }
-            return 1;
+            return result;
         }
     }
 
-    private int setFather(GeneanetPerson person, int index) {
+    private int setFather(GeneanetPerson person, int index0) {
+        int index = index0;
+        int result = 1;
         if (doc.toString().contains("<!-- Parents photo -->")){
             String xpath =(XpathParents2.replace("XXX","" + 1).replace("YYY","" + 1));
             String fatherURL = Xsoup.compile(xpath).evaluate(doc).get();
@@ -722,7 +746,7 @@ public class GeneanetConverter {
                 GeneanetPerson father = new GeneanetPerson(geneanetSearchURL + fatherURL);
                 person.setFather(father);
             }
-            return 1;
+            return result;
         }
     }
 
