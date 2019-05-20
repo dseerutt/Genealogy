@@ -53,6 +53,14 @@ public class TreeComparator {
         return geneanetRoot;
     }
 
+    public LinkedHashMap<GeneanetPerson, String> getDifferences() {
+        return differences;
+    }
+
+    public void setDifferences(LinkedHashMap<GeneanetPerson, String> differences) {
+        this.differences = differences;
+    }
+
     public void setGeneanetRoot(GeneanetPerson geneanetRoot) {
         this.geneanetRoot = geneanetRoot;
     }
@@ -443,15 +451,15 @@ public class TreeComparator {
         if (string1 == null && string2 == null){
             return true;
         } else if (string1 != null && string2 != null){
-            if (string1.equals("Bussière")){
+            /*if (string1.contains("test")){
                 String res = "";
-            }
+            }*/
             String newString1 = StringUtils.stripAccents(string1).toLowerCase() + " ";
             String newString2 = StringUtils.stripAccents(string2).toLowerCase() + " ";
             if (!newString1.equals(newString2)){
                 //Synonyms
-                newString1 = newString1.replace(","," ").replace("boiau","boyau").replace("boyot","boyau").replace("boileau","boyau").replace("boilleau","boyau").replace("gionnet","guionnet").replace("clain","clin").replace("st ","saint ").replace("st-","saint ").replace("benoistville","benoitville").replace("guille ","guillet ").replace("issoudun-letrieix","issoudun").replace("issoudun letrieix","issoudun").replace("de la ville","delaville").replaceAll("\\d","").replace(" ","").replace("-","").replace("chatilloncoligny","chatillonsurloing").replace("brienonl'archeveque","brienonsurarmancon").replace("quiboumanche","quibou").replace("dangymanche","dangy").replaceAll("^bussiere","labussiere").replace("loiret","").replace("-","").replace("...","?").trim();
-                newString2 = newString2.replace(","," ").replace("boiau","boyau").replace("boyot","boyau").replace("boileau","boyau").replace("boilleau","boyau").replace("gionnet","guionnet").replace("clain","clin").replace("st ","saint ").replace("st-","saint ").replace("benoistville","benoitville").replace("guille ","guillet ").replace("issoudun-letrieix","issoudun").replace("issoudun letrieix","issoudun").replace("de la ville","delaville").replaceAll("\\d","").replace(" ","").replace("-","").replace("chatilloncoligny","chatillonsurloing").replace("brienonl'archeveque","brienonsurarmancon").replace("quiboumanche","quibou").replace("dangymanche","dangy").replaceAll("^bussiere","labussiere").replace("loiret","").replace("-","").replace("...","?").trim();
+                newString1 = newString1.replace(","," ").replace("boiau","boyau").replace("boyot","boyau").replace("boileau","boyau").replace("boilleau","boyau").replace("gionnet","guionnet").replace("clain","clin").replace("st ","saint ").replace("st-","saint ").replace("benoistville","benoitville").replace("guille ","guillet ").replace("issoudun-letrieix","issoudun").replace("issoudun letrieix","issoudun").replace("de la ville","delaville").replaceAll("\\d","").replace(" ","").replace("-","").replace("saintlouisgien","gien").replace("chatilloncoligny","chatillonsurloing").replace("brienonl'archeveque","brienonsurarmancon").replace("quiboumanche","quibou").replace("dangymanche","dangy").replaceAll("^bussiere","labussiere").replace("loiret","").replace("-","").replace("...","?").trim();
+                newString2 = newString2.replace(","," ").replace("boiau","boyau").replace("boyot","boyau").replace("boileau","boyau").replace("boilleau","boyau").replace("gionnet","guionnet").replace("clain","clin").replace("st ","saint ").replace("st-","saint ").replace("benoistville","benoitville").replace("guille ","guillet ").replace("issoudun-letrieix","issoudun").replace("issoudun letrieix","issoudun").replace("de la ville","delaville").replaceAll("\\d","").replace(" ","").replace("-","").replace("saintlouisgien","gien").replace("chatilloncoligny","chatillonsurloing").replace("brienonl'archeveque","brienonsurarmancon").replace("quiboumanche","quibou").replace("dangymanche","dangy").replaceAll("^bussiere","labussiere").replace("loiret","").replace("-","").replace("...","?").trim();
                 return newString1.equals(newString2);
             } else {
                 return true;
@@ -702,7 +710,7 @@ public class TreeComparator {
         treeComparator.compareRoot();
         int nbPeopleComp = treeComparator.getPeopleSize();
         if (nbPeopleGen == nbPeopleComp){
-            logger.info("Comparison OK for " + testUrl);
+            //logger.info("Comparison OK for " + testUrl);
         } else {
             logger.info("Comparison KO for " + testUrl + " Expected " + nbPeopleGen + " but got " + nbPeopleComp);
         }
@@ -716,7 +724,7 @@ public class TreeComparator {
             treeComparator.printDifferences(displayModeFull);
             logger.info("Root Geneanet person : " + geneanetBrowser.rootPerson);
             logger.info("Main Gedcom person : " + person);
-            logger.info("Differences for " + tree + " :");
+            logger.info(geneanetPersonStringHashMap.size() + "/" + treeComparator.getDifferences().size() + " differences of " + tree + " tree :");
             logger.error(comparison);
             if (exceptionMode) {
                 throw new Exception("Error with comparison for tree " + tree);
@@ -743,7 +751,7 @@ public class TreeComparator {
         ArrayList<GeneanetTree> geneanetTrees = urlBrowser.getGeneanetTrees();
         boolean searchOnGeneanet = false;
         boolean saveGeneanetSearch = false;
-        boolean displayModeFull = true;
+        boolean displayModeFull = false;
         boolean exceptionMode = true;
         int index = 1;
         for (GeneanetTree geneanetTree : geneanetTrees){
