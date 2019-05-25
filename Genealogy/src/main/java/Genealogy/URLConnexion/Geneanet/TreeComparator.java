@@ -141,6 +141,9 @@ public class TreeComparator {
         if (log){
             logger.info("Compared " + gedcomPerson.getFullName() + "(" + geneanetPerson.getUrl() + ")");
         }
+        /*if (geneanetPerson != null && geneanetPerson.getFullName().equals("Marie BIOT")){
+            String res = "";
+        }*/
         compareNames(geneanetPerson, gedcomPerson);
         compareBirth(geneanetPerson, gedcomPerson);
         compareDeath(geneanetPerson, gedcomPerson);
@@ -755,7 +758,7 @@ public class TreeComparator {
         boolean exceptionMode = true;
         int index = 1;
         for (GeneanetTree geneanetTree : geneanetTrees){
-            if (index >= 37){
+            if (index >= 38){
                 String url = geneanetTree.getUrl();
                 compareTree(url, searchOnGeneanet, genealogy, saveComparisonInFile, saveGeneanetSearch, displayModeFull, exceptionMode);
             }
