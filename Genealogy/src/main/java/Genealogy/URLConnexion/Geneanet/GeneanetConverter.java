@@ -327,10 +327,10 @@ public class GeneanetConverter {
                         if (cityTab[0].contains("(")){
                             String[] newcityTab = cityTab[0].split("\\(");
                             if (newcityTab != null && newcityTab.length > 0){
-                                city = newcityTab[0];
+                                city = removeTrailingNumbers(newcityTab[0]);
                             }
                         } else {
-                            city = cityTab[0];
+                            city = removeTrailingNumbers(cityTab[0]);
                         }
                     }
                 } else if (tab != null && tab.length == 1){
@@ -394,6 +394,21 @@ public class GeneanetConverter {
         return parseDate(input,"le ");
     }
 
+    /**
+     * Fonction removeTrailingNumbers
+     * Supprime les nombres à la fin d'un string
+     * @param inputString string en entree
+     * @return le string sans ces nombres
+     */
+    public String removeTrailingNumbers(String inputString){
+        Pattern pattern = Pattern.compile("(.*) [0-9]+");
+        Matcher matcher = pattern.matcher(inputString);
+        if (matcher.matches()){
+            return matcher.group(1);
+        }
+        return inputString;
+    }
+
     public String parseMarriageCity(String input, Gender gender){
         if (input != null){
             String[] temptab = input.split(", ");
@@ -405,9 +420,9 @@ public class GeneanetConverter {
                     newTemptab = newTab[1];
                 }
                 if (newTemptab.contains("(")){
-                    return newTemptab.split("\\(")[0];
+                    return removeTrailingNumbers(newTemptab.split("\\(")[0]);
                 } else {
-                    return newTemptab;
+                    return removeTrailingNumbers(newTemptab);
                 }
             }
         }
