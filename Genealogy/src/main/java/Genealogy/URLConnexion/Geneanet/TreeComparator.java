@@ -177,7 +177,7 @@ public class TreeComparator {
             logger.info("Compared " + gedcomPerson.getFullName() + "(" + geneanetPerson.getUrl() + ")");
         }
         /*if (geneanetPerson != null && geneanetPerson.getFullName().equals("Louis THIERRY") &&
-                geneanetPerson.getMarriage() != null && geneanetPerson.getMarriage().size()!= 1){
+                geneanetPerson.getMarriage() != null && geneanetPerson.getMarriage().size()!= 1){ 
             String res = "";
         }*/
         compareNames(geneanetPerson, gedcomPerson);
