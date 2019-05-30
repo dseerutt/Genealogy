@@ -634,7 +634,7 @@ public class GeneanetBrowser implements Serializable {
         BasicConfigurator.configure();
         String testUrl = "https://gw.geneanet.org/msebastien1?lang=fr&pz=sebastien+david&nz=mercier&p=estienne&n=porcher";
         String testUrl2 = "https://gw.geneanet.org/msebastien1?lang=fr&pz=sebastien+david&nz=mercier&p=louis+claude&n=vincent";
-        String testUrl3 = "https://gw.geneanet.org/lisetoxe?lang=fr&n=thierry&p=louise+josephine";
+        String testUrl3 = "https://gw.geneanet.org/lisetoxe?lang=fr&p=louise&n=olivier";
         String xpathPattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/h2[2]/span[2]/text()";
         String xpathText = "Agnès Des VOISINES";
 
