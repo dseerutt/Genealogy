@@ -176,10 +176,10 @@ public class TreeComparator {
         if (log){
             logger.info("Compared " + gedcomPerson.getFullName() + "(" + geneanetPerson.getUrl() + ")");
         }
-        /*if (geneanetPerson != null && geneanetPerson.getFullName().equals("Louis THIERRY") &&
-                geneanetPerson.getMarriage() != null && geneanetPerson.getMarriage().size()!= 1){ 
+        if (geneanetPerson != null && geneanetPerson.getFullName().equals("Claude VINCENT") &&
+                geneanetPerson.getMarriage() != null && geneanetPerson.getMarriage().size()== 1){
             String res = "";
-        }*/
+        }
         compareNames(geneanetPerson, gedcomPerson);
         compareBirth(geneanetPerson, gedcomPerson);
         compareDeath(geneanetPerson, gedcomPerson);
@@ -517,10 +517,10 @@ public class TreeComparator {
             }
             String valueTxt = entry.getValue();
             if (!differences2.containsKey(person) || differences2.containsKey(person) && !valueTxt.equals(differences2.get(person))){
-                result += person.getFullName() + ";" + valueTxt + System.lineSeparator();
+                result += person.getFullName() + ";" + valueTxt;
                 differencesForDisplay.put(person, entry.getValue());
                 if ((!displayModeFull && differencesForDisplay.size() == 10)||(hideComparisons)){
-                    comparisonResultDisplay = result;
+                    comparisonResultDisplay = result + System.lineSeparator() + person.getUrl();
                     return;
                 }
             }
@@ -536,10 +536,10 @@ public class TreeComparator {
             }
             String valueTxt = entry.getValue();
             if (!differences.containsKey(person) || differences.containsKey(person) && !valueTxt.equals(differences.get(person))){
-                result += person.getFullName() + ";" + valueTxt + System.lineSeparator();
+                result += person.getFullName() + ";" + valueTxt;
                 if (!displayModeFull && differencesForDisplay.size() == 10){
                     differencesForDisplay.put(person, differences2.get(person));
-                    comparisonResultDisplay = result;
+                    comparisonResultDisplay = result + System.lineSeparator() + person.getUrl();
                     return;
                 }
             }

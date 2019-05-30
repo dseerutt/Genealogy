@@ -32,6 +32,7 @@ import static Genealogy.URLConnexion.Geneanet.GeneanetConverter.ActType.*;
 public class GeneanetConverter {
 
     private static String XpathGender;
+    private static String XpathGender2;
     private static String XpathNames;
     private static String XpathNames2;
     private static String XpathNames3;
@@ -80,6 +81,14 @@ public class GeneanetConverter {
 
     public static void setXpathNames2(String xpathNames2) {
         XpathNames2 = xpathNames2;
+    }
+
+    public static String getXpathGender2() {
+        return XpathGender2;
+    }
+
+    public static void setXpathGender2(String xpathGender2) {
+        XpathGender2 = xpathGender2;
     }
 
     public static String getXpathBirthAndDeath() {
@@ -670,6 +679,9 @@ public class GeneanetConverter {
 
     private void setGender(GeneanetPerson person) {
         String gender = Xsoup.compile(XpathGender).evaluate(doc).get();
+        if (StringUtil.isBlank(gender)){
+            gender = Xsoup.compile(XpathGender2).evaluate(doc).get();
+        }
         person.setGender(Gender.getGender(gender));
     }
 

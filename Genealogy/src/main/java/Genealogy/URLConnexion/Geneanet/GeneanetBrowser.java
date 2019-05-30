@@ -127,6 +127,7 @@ public class GeneanetBrowser implements Serializable {
             password = prop.getProperty("p2");
             formRegex = prop.getProperty("formRegex");
             geneanetConverter.setXpathGender(prop.getProperty("XpathGender"));
+            geneanetConverter.setXpathGender2(prop.getProperty("XpathGender2"));
             geneanetConverter.setXpathNames(prop.getProperty("XpathNames"));
             geneanetConverter.setXpathNames2(prop.getProperty("XpathNames2"));
             geneanetConverter.setXpathNames3(prop.getProperty("XpathNames3"));
@@ -634,9 +635,9 @@ public class GeneanetBrowser implements Serializable {
         BasicConfigurator.configure();
         String testUrl = "https://gw.geneanet.org/msebastien1?lang=fr&pz=sebastien+david&nz=mercier&p=estienne&n=porcher";
         String testUrl2 = "https://gw.geneanet.org/msebastien1?lang=fr&pz=sebastien+david&nz=mercier&p=louis+claude&n=vincent";
-        String testUrl3 = "https://gw.geneanet.org/lisetoxe?lang=fr&p=louise&n=olivier";
-        String xpathPattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/h2[2]/span[2]/text()";
-        String xpathText = "Agnès Des VOISINES";
+        String testUrl3 = "https://gw.geneanet.org/lisetoxe?lang=fr&p=claude&n=vincent";
+        String xpathPattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/table/tbody/tr/td[2]/div/div/h1/img";
+        String xpathText = "Claude";
 
         //searchAllTrees(true);
         //mainSearchFullTree(testUrl, false);
