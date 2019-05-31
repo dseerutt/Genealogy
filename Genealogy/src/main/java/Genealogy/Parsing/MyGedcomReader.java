@@ -43,8 +43,8 @@ public class MyGedcomReader {
                 } else {
                     logger.error("Erreur dans le parsing du fichier Gedcom");
                 }
-                genealogy.setContents(parsingStructureList);
             }
+        genealogy.setContents(parsingStructureList);
         return genealogy;
     }
 }

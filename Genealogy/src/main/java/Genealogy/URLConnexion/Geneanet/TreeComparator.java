@@ -34,6 +34,7 @@ public class TreeComparator {
     public HashMap<String, GeneanetPerson> peopleUrl = new HashMap<String, GeneanetPerson>();
     public static ArrayList<String> urlSearched = new ArrayList<String>();
     public static ArrayList<String> urlPartnersSearched = new ArrayList<String>();
+    public static String gedcomFile;
     private boolean log = true;
     private boolean errorComparison = false;
     private String treeName;
@@ -176,10 +177,10 @@ public class TreeComparator {
         if (log){
             logger.info("Compared " + gedcomPerson.getFullName() + "(" + geneanetPerson.getUrl() + ")");
         }
-        if (geneanetPerson != null && geneanetPerson.getFullName().equals("Claude VINCENT") &&
+        /*if (geneanetPerson != null && geneanetPerson.getFullName().equals("Claude VINCENT") &&
                 geneanetPerson.getMarriage() != null && geneanetPerson.getMarriage().size()== 1){
             String res = "";
-        }
+        }*/
         compareNames(geneanetPerson, gedcomPerson);
         compareBirth(geneanetPerson, gedcomPerson);
         compareDeath(geneanetPerson, gedcomPerson);
@@ -724,8 +725,9 @@ public class TreeComparator {
         return geneanetBrowser;
     }
 
-    public static void loopCompareTree(String testUrl, boolean search, Genealogy genealogy, boolean saveComparison, boolean saveGeneanet, boolean displayModeFull, boolean exceptionMode, boolean hideComparisons) throws Exception {
-        TreeComparator treeComparator = compareTree(testUrl, search, genealogy, saveComparison, saveGeneanet, displayModeFull, exceptionMode, hideComparisons);
+    public static void loopCompareTree(String testUrl, boolean search, Genealogy genealogyInput, boolean saveComparison, boolean saveGeneanet, boolean displayModeFull, boolean exceptionMode, boolean hideComparisons) throws Exception {
+        Genealogy genealogyParameter = genealogyInput;
+        TreeComparator treeComparator = compareTree(testUrl, search, genealogyParameter, saveComparison, saveGeneanet, displayModeFull, exceptionMode, hideComparisons);
         boolean error = treeComparator.isErrorComparison();
         while (error){
             logger.info("Add line ? (Yes or any or exit)");
@@ -736,10 +738,12 @@ public class TreeComparator {
                 addDifferenceInFile(treeComparator.getTreeName(),treeComparator.printDifferences(false, false, false));
             } else if (!addModification.equals("exit")) {
                 logger.info("Rerun needed");
+                setGedcomData();
+                genealogyParameter = genealogy;
             } else {
                 throw new Exception("User exited the program");
             }
-            treeComparator = compareTree(testUrl, search, genealogy, saveComparison, saveGeneanet, displayModeFull, exceptionMode, hideComparisons);
+            treeComparator = compareTree(testUrl, search, genealogyParameter, saveComparison, saveGeneanet, displayModeFull, exceptionMode, hideComparisons);
             error = treeComparator.isErrorComparison();
         }
     }
@@ -817,16 +821,19 @@ public class TreeComparator {
         return treeComparator;
     }
 
-    public static void main(String[] args) throws Exception {
-        BasicConfigurator.configure();
-
-        //init gedcomfile
-        String gedcomFile = "C:\\Users\\Dan\\Desktop\\Programmation\\IntelliJ\\Genealogy\\Genealogy\\src\\main\\resources\\famille1.ged";
-        gedcomFile = "C:\\Users\\Dan\\Desktop\\famille1.ged";
+    public static void setGedcomData() throws IOException {
         MyGedcomReader myGedcomReader = new MyGedcomReader();
         genealogy = myGedcomReader.read(gedcomFile);
         genealogy.parseContents();
         genealogy.sortPersons();
+    }
+
+    public static void main(String[] args) throws Exception {
+        BasicConfigurator.configure();
+
+        //init gedcomfile
+        gedcomFile = "C:\\Users\\Dan\\Desktop\\famille1.ged";
+        setGedcomData();
 
         boolean saveComparisonInFile = false;
         GeneanetBrowser urlBrowser = new GeneanetBrowser();
