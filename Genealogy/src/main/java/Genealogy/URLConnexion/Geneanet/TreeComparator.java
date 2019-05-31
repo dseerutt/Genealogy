@@ -838,15 +838,15 @@ public class TreeComparator {
         boolean saveComparisonInFile = false;
         GeneanetBrowser urlBrowser = new GeneanetBrowser();
         ArrayList<GeneanetTree> geneanetTrees = urlBrowser.getGeneanetTrees();
-        boolean searchOnGeneanet = false;
-        boolean saveGeneanetSearch = false;
+        boolean searchOnGeneanet = true;
+        boolean saveGeneanetSearch = true;
         boolean displayModeFull = false;
         boolean exceptionMode = true;
         boolean hideComparisons = true;
         int index = 1;
         boolean errorCompareTree = false;
         for (GeneanetTree geneanetTree : geneanetTrees){
-            if (index >= 38){
+            if (index >= 40){
                 String url = geneanetTree.getUrl();
                 loopCompareTree(url, searchOnGeneanet, genealogy, saveComparisonInFile, saveGeneanetSearch, displayModeFull, exceptionMode, hideComparisons);
             }

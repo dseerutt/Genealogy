@@ -480,7 +480,7 @@ public class GeneanetConverter {
             LocalDate localDate = date0.toInstant().atZone(ZoneOffset.UTC).toLocalDate();
             int year  = localDate.getYear();
             int month = localDate.getMonthValue();
-            return new MonthDate(year,month);
+            return new MonthDate(month,year);
         } catch (ParseException e) {
         }
 
