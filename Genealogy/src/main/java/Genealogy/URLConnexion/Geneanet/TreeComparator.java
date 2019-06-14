@@ -491,15 +491,15 @@ public class TreeComparator {
         if (string1 == null && string2 == null){
             return true;
         } else if (string1 != null && string2 != null){
-            /*if (string1.contains("test")){
+            /*if (string1.contains("FEINS en GATINAIS 45 les FOUCHES")){
                 String res = "";
             }*/
             String newString1 = StringUtils.stripAccents(string1).toLowerCase() + " ";
             String newString2 = StringUtils.stripAccents(string2).toLowerCase() + " ";
             if (!newString1.equals(newString2)){
                 //Synonyms
-                newString1 = newString1.replace(","," ").replace("boiau","boyau").replace("boyot","boyau").replace("boileau","boyau").replace("boilleau","boyau").replace("gionnet","guionnet").replace("clain","clin").replace("st ","saint ").replace("st-","saint ").replace("benoistville","benoitville").replace("guille ","guillet ").replace("issoudun-letrieix","issoudun").replace("issoudun letrieix","issoudun").replace("de la ville","delaville").replaceAll("\\d","").replace(" ","").replace("-","").replace("saintlouisgien","gien").replace("chatilloncoligny","chatillonsurloing").replace("brienonl'archeveque","brienonsurarmancon").replace("quiboumanche","quibou").replace("dangymanche","dangy").replaceAll("^bussiere","labussiere").replace("loiret","").replace("-","").replace("...","?").trim();
-                newString2 = newString2.replace(","," ").replace("boiau","boyau").replace("boyot","boyau").replace("boileau","boyau").replace("boilleau","boyau").replace("gionnet","guionnet").replace("clain","clin").replace("st ","saint ").replace("st-","saint ").replace("benoistville","benoitville").replace("guille ","guillet ").replace("issoudun-letrieix","issoudun").replace("issoudun letrieix","issoudun").replace("de la ville","delaville").replaceAll("\\d","").replace(" ","").replace("-","").replace("saintlouisgien","gien").replace("chatilloncoligny","chatillonsurloing").replace("brienonl'archeveque","brienonsurarmancon").replace("quiboumanche","quibou").replace("dangymanche","dangy").replaceAll("^bussiere","labussiere").replace("loiret","").replace("-","").replace("...","?").trim();
+                newString1 = newString1.replace(","," ").replace("boiau","boyau").replace("boyot","boyau").replace("boileau","boyau").replace("boilleau","boyau").replace("gionnet","guionnet").replace("clain","clin").replace("gien 45 st laurent","Gien").replace("feins en gatinais 45 les fouches","feins en gatinais").replace("rogny-les-sept-ecluses st eusoge","rogny-les-sept-ecluses").replace("st ","saint ").replace("st-","saint ").replace("benoistville","benoitville").replace("guille ","guillet ").replace("issoudun-letrieix","issoudun").replace("issoudun letrieix","issoudun").replace("de la ville","delaville").replaceAll("\\d","").replace(" ","").replace("-","").replace("saintlouisgien","gien").replace("chatilloncoligny","chatillonsurloing").replace("brienonl'archeveque","brienonsurarmancon").replace("quiboumanche","quibou").replace("dangymanche","dangy").replaceAll("^bussiere","labussiere").replace("loiret","").replace("-","").replace("...","?").trim();
+                newString2 = newString2.replace(","," ").replace("boiau","boyau").replace("boyot","boyau").replace("boileau","boyau").replace("boilleau","boyau").replace("gionnet","guionnet").replace("clain","clin").replace("gien 45 st laurent","Gien").replace("feins en gatinais 45 les fouches","feins en gatinais").replace("rogny-les-sept-ecluses st eusoge","rogny-les-sept-ecluses").replace("st ","saint ").replace("st-","saint ").replace("benoistville","benoitville").replace("guille ","guillet ").replace("issoudun-letrieix","issoudun").replace("issoudun letrieix","issoudun").replace("de la ville","delaville").replaceAll("\\d","").replace(" ","").replace("-","").replace("saintlouisgien","gien").replace("chatilloncoligny","chatillonsurloing").replace("brienonl'archeveque","brienonsurarmancon").replace("quiboumanche","quibou").replace("dangymanche","dangy").replaceAll("^bussiere","labussiere").replace("loiret","").replace("-","").replace("...","?").trim();
                 return newString1.equals(newString2);
             } else {
                 return true;
@@ -846,7 +846,7 @@ public class TreeComparator {
         int index = 1;
         boolean errorCompareTree = false;
         for (GeneanetTree geneanetTree : geneanetTrees){
-            if (index >= 38){
+            if (index >= 39){
                 String url = geneanetTree.getUrl();
                 loopCompareTree(url, searchOnGeneanet, genealogy, saveComparisonInFile, saveGeneanetSearch, displayModeFull, exceptionMode, hideComparisons);
             }
