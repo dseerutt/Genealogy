@@ -158,6 +158,7 @@ public class TreeComparator {
             logger.info("Compared " + gedcomRoot.getFullName() + " (" + geneanetRoot.getUrl() + ")");
         }
         compareNames(geneanetRoot, gedcomRoot);
+        compareSex(geneanetRoot, gedcomRoot);
         compareBirth(geneanetRoot, gedcomRoot);
         compareDeath(geneanetRoot, gedcomRoot);
         compareMarriage(geneanetRoot, gedcomRoot);
@@ -182,6 +183,7 @@ public class TreeComparator {
             String res = "";
         }*/
         compareNames(geneanetPerson, gedcomPerson);
+        compareSex(geneanetPerson, gedcomPerson);
         compareBirth(geneanetPerson, gedcomPerson);
         compareDeath(geneanetPerson, gedcomPerson);
         compareMarriage(geneanetPerson, gedcomPerson);
@@ -200,6 +202,7 @@ public class TreeComparator {
             logger.info("Compared " + gedcomPerson.getFullName() + "(" + geneanetPerson.getUrl() + ")");
         }
         compareNames(geneanetPerson, gedcomPerson);
+        compareSex(geneanetPerson, gedcomPerson);
         compareBirth(geneanetPerson, gedcomPerson);
         compareDeath(geneanetPerson, gedcomPerson);
         if (!children){
@@ -221,6 +224,7 @@ public class TreeComparator {
         }
         urlPartnersSearched.add(geneanetPerson.getUrl());
         compareNames(geneanetPerson, gedcomPerson);
+        compareSex(geneanetPerson, gedcomPerson);
         compareBirth(geneanetPerson, gedcomPerson);
         compareDeath(geneanetPerson, gedcomPerson);
         compareMarriage(geneanetPerson, gedcomPerson);
@@ -491,9 +495,9 @@ public class TreeComparator {
         if (string1 == null && string2 == null){
             return true;
         } else if (string1 != null && string2 != null){
-            /*if (string1.contains("FEINS en GATINAIS 45 les FOUCHES")){
+            if (string1.contains("Laurent PIAT")){
                 String res = "";
-            }*/
+            }
             String newString1 = StringUtils.stripAccents(string1).toLowerCase() + " ";
             String newString2 = StringUtils.stripAccents(string2).toLowerCase() + " ";
             if (!newString1.equals(newString2)){
@@ -649,6 +653,14 @@ public class TreeComparator {
         String familyNameGed = gedcomPerson.getName();
         if (!superEquals(familyNameGenea, familyNameGed)){
             addDifference(geneanetPerson,"familyName=" + familyNameGenea );
+        }
+    }
+
+    private void compareSex(GeneanetPerson geneanetPerson, Person gedcomPerson) {
+        String sexGenea = geneanetPerson.getGender().toString();
+        String sexGed = gedcomPerson.getSex().toString();
+        if (!superEquals(sexGenea, sexGed)){
+            addDifference(geneanetPerson,"sex=" + sexGenea );
         }
     }
 
@@ -846,7 +858,7 @@ public class TreeComparator {
         int index = 1;
         boolean errorCompareTree = false;
         for (GeneanetTree geneanetTree : geneanetTrees){
-            if (index >= 39){
+            if (index <= 39){
                 String url = geneanetTree.getUrl();
                 loopCompareTree(url, searchOnGeneanet, genealogy, saveComparisonInFile, saveGeneanetSearch, displayModeFull, exceptionMode, hideComparisons);
             }

@@ -23,4 +23,20 @@ public enum Gender {
         }
         return null;
     }
+
+    public String toString(){
+        if (this != null){
+            switch(this){
+                case Male:
+                    return "M";
+                case Female:
+                    return "F";
+                case Unknown:
+                    return "U";
+                default:
+                    break;
+            }
+        }
+        return null;
+    }
 }

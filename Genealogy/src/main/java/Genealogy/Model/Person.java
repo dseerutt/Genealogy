@@ -32,6 +32,22 @@ public class Person {
         HOMME,
         FEMME,
         INCONNU;
+
+        public String toString(){
+            if (this != null){
+                switch(this){
+                    case HOMME:
+                        return "M";
+                    case FEMME:
+                        return "F";
+                    case INCONNU:
+                        return "U";
+                    default:
+                        break;
+                }
+            }
+            return null;
+        }
     }
     private Sex sex;
     private String name;
