@@ -1,3 +1,3 @@
-# Genealogy
-## Application that shows in a map your ancestors
-## Data about each and every ancestors
+# Genealogy application
+## Application to fetch data from websites
+## Application that shows where your ancestors were living
