@@ -208,4 +208,20 @@ public class AuxMethods {
         int B = new Double(firstCol.getBlue() * p + secondCol.getBlue() * (1 - p)).intValue();
         return new Color(R,G,B);
     }
+
+    public static String removeDoubleGeneanetSuffix(String input){
+        if (input != null) {
+            return input.replace("&ocz=0","").replace("&iz=0","");
+        } else {
+            return null;
+        }
+    }
+
+    public static String removeGeneanetSuffix(String input){
+        if (input != null) {
+            return input.replace("&ocz=0","");
+        } else {
+            return null;
+        }
+    }
 }

@@ -11,13 +11,12 @@ import Genealogy.Parsing.MyGedcomReader;
 import Genealogy.URLConnexion.Serializer;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.BasicConfigurator;
-import sun.reflect.generics.tree.Tree;
 
 import java.io.*;
 import java.util.*;
 
+import static Genealogy.AuxMethods.removeDoubleGeneanetSuffix;
 import static Genealogy.Genealogy.genealogy;
-import static Genealogy.URLConnexion.Geneanet.GeneanetBrowser.findTreeName;
 import static Genealogy.URLConnexion.Geneanet.GeneanetBrowser.logger;
 import static Genealogy.URLConnexion.Geneanet.GeneanetBrowser.mainSearchFullTree;
 import static Genealogy.URLConnexion.Geneanet.GeneanetPerson.printListofGeneanetPerson;
@@ -39,6 +38,9 @@ public class TreeComparator {
     private boolean errorComparison = false;
     private String treeName;
     private String comparisonResultDisplay;
+    private static LinkedHashMap<String,String> aliasCities;
+    private static LinkedHashMap<String,String> aliasRegexCities;
+    private static LinkedHashMap<String,String> aliasNames;
 
     public TreeComparator(GeneanetPerson geneanetPerson, Person gedcomPerson, HashMap<String, GeneanetPerson> peopleUrl, String treeName) {
         urlSearched = new ArrayList<String>();
@@ -47,6 +49,7 @@ public class TreeComparator {
         this.gedcomRoot = gedcomPerson;
         this.peopleUrl = peopleUrl;
         this.treeName = treeName;
+        initAlias();
     }
 
     public int getPeopleSize(){
@@ -252,7 +255,7 @@ public class TreeComparator {
     private void searchPartners(GeneanetPerson geneanetPerson, Person gedcomPerson, boolean root) throws Exception {
         for(Map.Entry<GeneanetPerson, HashMap<MyDate, String>> entry : geneanetPerson.getMarriage().entrySet()) {
             GeneanetPerson genPersonToSearch = entry.getKey();
-            genPersonToSearch = peopleUrl.get((genPersonToSearch.getUrl().replace("&ocz=0","").replace("&iz=0","")));
+            genPersonToSearch = peopleUrl.get((removeDoubleGeneanetSuffix(genPersonToSearch.getUrl())));
             if (genPersonToSearch == null){
                 throw new Exception("Could not find person " + entry.getKey().getUrl());
             }
@@ -273,7 +276,7 @@ public class TreeComparator {
         ArrayList<Person> gedcomPersonList = new ArrayList<>();
         if (geneanetPerson != null){
             for (GeneanetPerson siblingGen : siblingsGen){
-                GeneanetPerson newSiblingGen = peopleUrl.get(siblingGen.getUrl().replace("&ocz=0","").replace("&iz=0",""));
+                GeneanetPerson newSiblingGen = peopleUrl.get(removeDoubleGeneanetSuffix(siblingGen.getUrl()));
                 if (newSiblingGen == null){
                     throw new Exception("Could not find person " + siblingGen.getUrl());
                 }
@@ -387,7 +390,7 @@ public class TreeComparator {
 
         for(Map.Entry<GeneanetPerson, HashMap<MyDate, String>> entry : marriageGen.entrySet()) {
             GeneanetPerson person = entry.getKey();
-            GeneanetPerson fullGeneanetPerson = peopleUrl.get(person.getUrl().replace("&ocz=0","").replace("&iz=0",""));
+            GeneanetPerson fullGeneanetPerson = peopleUrl.get(removeDoubleGeneanetSuffix(person.getUrl()));
             if (fullGeneanetPerson == null){
                 throw new Exception("Person " + person.getUrl() + " not found");
             }
@@ -495,21 +498,82 @@ public class TreeComparator {
         if (string1 == null && string2 == null){
             return true;
         } else if (string1 != null && string2 != null){
-            if (string1.contains("Laurent PIAT")){
+            /*if (string1.contains("Laurent PIAT")){
                 String res = "";
-            }
+            }*/
             String newString1 = StringUtils.stripAccents(string1).toLowerCase() + " ";
             String newString2 = StringUtils.stripAccents(string2).toLowerCase() + " ";
             if (!newString1.equals(newString2)){
-                //Synonyms
-                newString1 = newString1.replace(","," ").replace("boiau","boyau").replace("boyot","boyau").replace("boileau","boyau").replace("boilleau","boyau").replace("gionnet","guionnet").replace("clain","clin").replace("gien 45 st laurent","Gien").replace("feins en gatinais 45 les fouches","feins en gatinais").replace("rogny-les-sept-ecluses st eusoge","rogny-les-sept-ecluses").replace("st ","saint ").replace("st-","saint ").replace("benoistville","benoitville").replace("guille ","guillet ").replace("issoudun-letrieix","issoudun").replace("issoudun letrieix","issoudun").replace("de la ville","delaville").replaceAll("\\d","").replace(" ","").replace("-","").replace("saintlouisgien","gien").replace("chatilloncoligny","chatillonsurloing").replace("brienonl'archeveque","brienonsurarmancon").replace("quiboumanche","quibou").replace("dangymanche","dangy").replaceAll("^bussiere","labussiere").replace("loiret","").replace("-","").replace("...","?").trim();
-                newString2 = newString2.replace(","," ").replace("boiau","boyau").replace("boyot","boyau").replace("boileau","boyau").replace("boilleau","boyau").replace("gionnet","guionnet").replace("clain","clin").replace("gien 45 st laurent","Gien").replace("feins en gatinais 45 les fouches","feins en gatinais").replace("rogny-les-sept-ecluses st eusoge","rogny-les-sept-ecluses").replace("st ","saint ").replace("st-","saint ").replace("benoistville","benoitville").replace("guille ","guillet ").replace("issoudun-letrieix","issoudun").replace("issoudun letrieix","issoudun").replace("de la ville","delaville").replaceAll("\\d","").replace(" ","").replace("-","").replace("saintlouisgien","gien").replace("chatilloncoligny","chatillonsurloing").replace("brienonl'archeveque","brienonsurarmancon").replace("quiboumanche","quibou").replace("dangymanche","dangy").replaceAll("^bussiere","labussiere").replace("loiret","").replace("-","").replace("...","?").trim();
-                return newString1.equals(newString2);
+                //NameAlias
+                for (Map.Entry<String, String> entry : aliasNames.entrySet()) {
+                    String key = entry.getKey();
+                    String value = entry.getValue();
+                    newString1 = newString1.replace(key,value);
+                    newString2 = newString2.replace(key,value);
+                }
+
+                //CityAlias
+                for (Map.Entry<String, String> entry : aliasCities.entrySet()) {
+                    String key = entry.getKey();
+                    String value = entry.getValue();
+                    newString1 = newString1.replace(key,value);
+                    newString2 = newString2.replace(key,value);
+                }
+
+                //RegexCityAlias
+                for (Map.Entry<String, String> entry : aliasRegexCities.entrySet()) {
+                    String key = entry.getKey();
+                    String value = entry.getValue();
+                    newString1 = newString1.replaceAll(key,value);
+                    newString2 = newString2.replaceAll(key,value);
+                }
+                return newString1.trim().equals(newString2.trim());
             } else {
                 return true;
             }
         } else {
             return false;
+        }
+    }
+
+    private void initAlias(){
+        if (aliasCities == null && aliasNames == null && aliasRegexCities == null){
+            try {
+                String path = Serializer.getPath();
+                if (path == null){
+                    Serializer serializer = new Serializer();
+                    path = serializer.getPath();
+                }
+                aliasCities = new LinkedHashMap<>();
+                aliasNames = new LinkedHashMap<>();
+                aliasRegexCities = new LinkedHashMap<>();
+                File f = new File(path + "ComparatorAlias.txt");
+
+                BufferedReader b = new BufferedReader(new FileReader(f));
+                String readLine = "";
+
+                while ((readLine = b.readLine()) != null) {
+                    String[] inputTab = readLine.split(";");
+                    if (inputTab.length > 2 && inputTab[2] != null){
+                        switch (inputTab[2]){
+                            case "city":
+                                aliasCities.put(inputTab[0], inputTab[1]);
+                                break;
+                            case "name":
+                                aliasNames.put(inputTab[0], inputTab[1]);
+                                break;
+                            case "cityRegex":
+                                aliasRegexCities.put(inputTab[0], inputTab[1]);
+                                break;
+                            default:
+                                throw new Exception("Unknown alias type " + inputTab[2]);
+                        }
+                    }
+                }
+            }
+            catch (Exception e){
+                logger.error("Could not initialize cityAlias file : " + e);
+            }
         }
     }
 

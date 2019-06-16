@@ -1,0 +1,28 @@
+boiau;boyau;name
+boyot;boyau;name
+boileau;boyau;name
+boilleau;boyau;name
+gionnet;guionnet;name
+clain;clin;name
+de la ville;delaville;name
+guille ;guillet ;name
+^bussiere;labussiere;cityRegex
+\d;;cityRegex
+,; ;city
+gien 45 st laurent;Gien;city
+feins en gatinais 45 les fouches;feins en gatinais;city
+rogny-les-sept-ecluses st eusoge;rogny-les-sept-ecluses;city
+benoistville;benoitville;city
+issoudun letrieix;issoudun;city
+issoudun-letrieix;issoudun;city
+loiret;;city
+dangy manche;dangy;city
+quibou manche;quibou;city
+brienon l'archeveque;brienonsurarmancon;city
+st ;saint ;city
+st-;saint ;city
+-;;city
+ ;;city
+saintlouisgien;gien;city
+chatilloncoligny;chatillonsurloing;city
+...;?;city

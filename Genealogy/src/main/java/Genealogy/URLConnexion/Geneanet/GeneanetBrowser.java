@@ -17,6 +17,9 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static Genealogy.AuxMethods.removeDoubleGeneanetSuffix;
+import static Genealogy.AuxMethods.removeGeneanetSuffix;
+
 /**
  * Created by Dan on 01/11/2017.
  */
@@ -74,10 +77,10 @@ public class GeneanetBrowser implements Serializable {
             String path = Serializer.getPath();
             if (path == null){
                 Serializer serializer = new Serializer();
-                path = Serializer.getPath()
+                path = serializer.getPath()
                 ;
             }
-            input = new FileInputStream(Serializer.getPath() + "geneanetTrees.properties");
+            input = new FileInputStream(path + "geneanetTrees.properties");
             prop.load(input);
             String property = "tree";
             String tmpProperty = "";
@@ -175,7 +178,7 @@ public class GeneanetBrowser implements Serializable {
     public String getGedcomIdFromGeneanetTrees(){
         for (GeneanetTree geneanetTree : geneanetTrees)
         {
-            if (geneanetTree.getUrl().replace("&ocz=0","").equals(url.replace("&ocz=0",""))){
+            if (removeGeneanetSuffix(geneanetTree.getUrl()).equals(removeGeneanetSuffix(url))){
                 return geneanetTree.getGedcomId();
             }
         }
@@ -184,7 +187,7 @@ public class GeneanetBrowser implements Serializable {
     public int getPeopleNumberFromGeneanetTrees(){
         for (GeneanetTree geneanetTree : geneanetTrees)
         {
-            if (geneanetTree.getUrl().replace("&ocz=0","").equals(url.replace("&ocz=0",""))){
+            if (removeGeneanetSuffix(geneanetTree.getUrl()).equals(removeGeneanetSuffix(url))){
                 return geneanetTree.getPeopleNumber();
             }
         }
@@ -497,7 +500,7 @@ public class GeneanetBrowser implements Serializable {
             do {
                 try {
                     String url = person.getUrl();
-                    url = url.replace("&ocz=0","").replace("&iz=0","");
+                    url = removeDoubleGeneanetSuffix(url);
                     Document inputDocument = connect(url);
                     //Double search for partners/siblings : don't add if partner
                     if (!partialSearch){
