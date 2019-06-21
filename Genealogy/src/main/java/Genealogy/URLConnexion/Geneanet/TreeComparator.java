@@ -261,11 +261,11 @@ public class TreeComparator {
             }
             for (Union union : gedcomPerson.getUnions()){
                 Person partner = union.getPartner();
-                if (superEquals(genPersonToSearch.getFullName(),partner.getFullName())){
+                if (superEqualsAlias(genPersonToSearch.getFullName(),partner.getFullName())){
                     superComparePartner(genPersonToSearch,partner,"partner", root);
                 }
                 Person citizen = union.getCitizen();
-                if (superEquals(genPersonToSearch.getFullName(),citizen.getFullName())){
+                if (superEqualsAlias(genPersonToSearch.getFullName(),citizen.getFullName())){
                     superComparePartner(genPersonToSearch,citizen,"partner", root);
                 }
             }
@@ -281,7 +281,7 @@ public class TreeComparator {
                     throw new Exception("Could not find person " + siblingGen.getUrl());
                 }
                 for (Person siblingGed : siblingsGed){
-                    if (newSiblingGen != null && superEquals(newSiblingGen.getFullName(),siblingGed.getFullName()) && !gedcomPersonList.contains(siblingGed)
+                    if (newSiblingGen != null && superEqualsAlias(newSiblingGen.getFullName(),siblingGed.getFullName()) && !gedcomPersonList.contains(siblingGed)
                             && !urlSearched.contains(newSiblingGen.getUrl())){
                         compareSibling(newSiblingGen,siblingGed, txt.equals("Children"));
                         gedcomPersonList.add(siblingGed);
@@ -415,7 +415,7 @@ public class TreeComparator {
             }
             MyDate date1 = union.getDate();
             Town town1 = union.getTown();
-            if (superEquals(partner.getFullName(),person.getFullName())&&superEquals(date,date1)&&superEquals(town,town1.getName())){
+            if (superEqualsAlias(partner.getFullName(),person.getFullName())&&superEquals(date,date1)&&superEquals(town,town1.getName())){
                 return true;
             }
         }
@@ -495,6 +495,40 @@ public class TreeComparator {
     }
 
     private static boolean superEquals(String string1, String string2){
+        if (string1 == null && string2 == null){
+            return true;
+        } else if (string1 != null && string2 != null){
+            /*if (string1.contains("Laurent PIAT")){
+                String res = "";
+            }*/
+            String newString1 = StringUtils.stripAccents(string1).toLowerCase() + " ";
+            String newString2 = StringUtils.stripAccents(string2).toLowerCase() + " ";
+            if (!newString1.equals(newString2)){
+                //CityAlias
+                for (Map.Entry<String, String> entry : aliasCities.entrySet()) {
+                    String key = entry.getKey();
+                    String value = entry.getValue();
+                    newString1 = newString1.replace(key,value);
+                    newString2 = newString2.replace(key,value);
+                }
+
+                //RegexCityAlias
+                for (Map.Entry<String, String> entry : aliasRegexCities.entrySet()) {
+                    String key = entry.getKey();
+                    String value = entry.getValue();
+                    newString1 = newString1.replaceAll(key,value);
+                    newString2 = newString2.replaceAll(key,value);
+                }
+                return newString1.trim().equals(newString2.trim());
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    private static boolean superEqualsAlias(String string1, String string2){
         if (string1 == null && string2 == null){
             return true;
         } else if (string1 != null && string2 != null){

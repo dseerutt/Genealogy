@@ -6,6 +6,7 @@ gionnet;guionnet;name
 clain;clin;name
 de la ville;delaville;name
 guille ;guillet ;name
+guillier;guillet ;name
 ^bussiere;labussiere;cityRegex
 \d;;cityRegex
 ,; ;city
