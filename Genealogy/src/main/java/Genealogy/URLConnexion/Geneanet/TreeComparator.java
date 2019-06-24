@@ -38,6 +38,8 @@ public class TreeComparator {
     private boolean errorComparison = false;
     private String treeName;
     private String comparisonResultDisplay;
+    private String comparisonResultToReplace;
+    private String comparisonResultReplacement;
     private static LinkedHashMap<String,String> aliasCities;
     private static LinkedHashMap<String,String> aliasRegexCities;
     private static LinkedHashMap<String,String> aliasNames;
@@ -49,7 +51,7 @@ public class TreeComparator {
         this.gedcomRoot = gedcomPerson;
         this.peopleUrl = peopleUrl;
         this.treeName = treeName;
-        initAlias();
+        initAlias(false);
     }
 
     public int getPeopleSize(){
@@ -110,6 +112,22 @@ public class TreeComparator {
 
     public String getComparisonResultDisplay() {
         return comparisonResultDisplay;
+    }
+
+    public String getComparisonResultToReplace() {
+        return comparisonResultToReplace;
+    }
+
+    public void setComparisonResultToReplace(String comparisonResultToReplace) {
+        this.comparisonResultToReplace = comparisonResultToReplace;
+    }
+
+    public String getComparisonResultReplacement() {
+        return comparisonResultReplacement;
+    }
+
+    public void setComparisonResultReplacement(String comparisonResultReplacement) {
+        this.comparisonResultReplacement = comparisonResultReplacement;
     }
 
     public void setComparisonResultDisplay(String comparisonResultDisplay) {
@@ -181,10 +199,9 @@ public class TreeComparator {
         if (log){
             logger.info("Compared " + gedcomPerson.getFullName() + "(" + geneanetPerson.getUrl() + ")");
         }
-        /*if (geneanetPerson != null && geneanetPerson.getFullName().equals("Claude VINCENT") &&
-                geneanetPerson.getMarriage() != null && geneanetPerson.getMarriage().size()== 1){
+        if (geneanetPerson != null && geneanetPerson.getFullName().equals("Savinienne de RODOUAN")){
             String res = "";
-        }*/
+        }
         compareNames(geneanetPerson, gedcomPerson);
         compareSex(geneanetPerson, gedcomPerson);
         compareBirth(geneanetPerson, gedcomPerson);
@@ -570,8 +587,8 @@ public class TreeComparator {
         }
     }
 
-    private void initAlias(){
-        if (aliasCities == null && aliasNames == null && aliasRegexCities == null){
+    private void initAlias(boolean reset){
+        if ((aliasCities == null && aliasNames == null && aliasRegexCities == null) || reset){
             try {
                 String path = Serializer.getPath();
                 if (path == null){
@@ -613,6 +630,7 @@ public class TreeComparator {
 
     private void compareDifferences(HashMap<GeneanetPerson,String> differences2, boolean displayModeFull, boolean hideComparisons) throws Exception {
         String result = "";
+        //Differences missing in file
         for(Map.Entry<GeneanetPerson, String> entry : differences.entrySet()) {
             GeneanetPerson person = entry.getKey();
             if (!person.isSearched()){
@@ -624,11 +642,14 @@ public class TreeComparator {
                 differencesForDisplay.put(person, entry.getValue());
                 if ((!displayModeFull && differencesForDisplay.size() == 10)||(hideComparisons)){
                     comparisonResultDisplay = result + System.lineSeparator() + person.getUrl();
+                    comparisonResultToReplace = person.getUrl() + ";" + person.getFullName() + ";" + differences2.get(person);
+                    comparisonResultReplacement = person.getUrl() + ";" + person.getFullName() + ";" + valueTxt;
                     return;
                 }
             }
         }
 
+        //Differences added in file
         for(Map.Entry<GeneanetPerson, String> entry : differences2.entrySet()) {
             GeneanetPerson person = entry.getKey();
             if (!person.isSearched()){
@@ -640,14 +661,21 @@ public class TreeComparator {
             String valueTxt = entry.getValue();
             if (!differences.containsKey(person) || differences.containsKey(person) && !valueTxt.equals(differences.get(person))){
                 result += person.getFullName() + ";" + valueTxt;
-                if (!displayModeFull && differencesForDisplay.size() == 10){
-                    differencesForDisplay.put(person, differences2.get(person));
+                differencesForDisplay.put(person, differences2.get(person));
+                if (!displayModeFull){
                     comparisonResultDisplay = result + System.lineSeparator() + person.getUrl();
+                    if (differences.get(person) == null){
+                        comparisonResultReplacement = "";
+                    } else {
+                        comparisonResultReplacement = person.getUrl() + ";" + person.getFullName() + ";" + differences.get(person);
+                    }
+                    comparisonResultToReplace = person.getUrl() + ";" + person.getFullName() + ";" + valueTxt;
                     return;
                 }
             }
         }
         comparisonResultDisplay = result;
+        comparisonResultToReplace = result;
     }
 
     private void addDifference(GeneanetPerson geneanetPerson, String txt){
@@ -697,6 +725,70 @@ public class TreeComparator {
         try {
             fr = new FileWriter(file, true);
             fr.write(difference);
+            fr.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            logger.error("Could not write into " + fileName);
+        }
+    }
+
+    public static void replaceDifferenceInFile(TreeComparator treeComparator, boolean delete){
+        String treeName = treeComparator.getTreeName();
+        String find = treeComparator.getComparisonResultToReplace();
+        String difference = treeComparator.getComparisonResultReplacement();
+        if (difference == null){
+            difference = "";
+        }
+        if (!delete && difference.equals("")){
+            logger.error("Can only remove field");
+            return;
+        }
+        if (difference.equals("")){
+            find += System.lineSeparator();
+        }
+        String resultToPrint = "";
+        int lineNumber = 1;
+
+        //read data
+        String path = Serializer.getPath();
+        if (path == null){
+            Serializer serializer = new Serializer();
+            path = Serializer.getPath();
+        }
+        String fileName = path + File.separator + "comparatorTrees" + File.separator + treeName + ".bak";
+
+        try (FileReader reader = new FileReader(fileName);
+             BufferedReader br = new BufferedReader(reader)) {
+
+            // read line by line
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (lineNumber > 1){
+                    resultToPrint += System.lineSeparator() + line;
+                } else {
+                    resultToPrint += line;
+                }
+                lineNumber++;
+            }
+
+        } catch (IOException e) {
+            System.err.format("IOException: %s%n", e);
+        }
+
+        //replace data
+        resultToPrint += System.lineSeparator();
+        resultToPrint = resultToPrint.replace(find, difference);
+        if (resultToPrint != null && resultToPrint.length() > 0){
+            resultToPrint = resultToPrint.substring(0, resultToPrint.length()-2);
+        }
+
+
+        //Printing data into file
+        File file = new File(fileName);
+        FileWriter fr = null;
+        try {
+            fr = new FileWriter(file, false);
+            fr.write(resultToPrint);
             fr.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -840,18 +932,34 @@ public class TreeComparator {
         TreeComparator treeComparator = compareTree(testUrl, search, genealogyParameter, saveComparison, saveGeneanet, displayModeFull, exceptionMode, hideComparisons);
         boolean error = treeComparator.isErrorComparison();
         while (error){
-            logger.info("Add line ? (Yes or any or exit)");
+            logger.info("Add line ? (Y to add, R to replace, D to delete, exit to exit, any other to refresh data)");
             Scanner in = new Scanner(System.in);
             String addModification = in.nextLine();
-            if (addModification != null && addModification.equals("Y") || addModification.equals("YES")){
-                logger.info("Modification added");
-                addDifferenceInFile(treeComparator.getTreeName(),treeComparator.printDifferences(false, false, false));
-            } else if (!addModification.equals("exit")) {
-                logger.info("Rerun needed");
-                setGedcomData();
-                genealogyParameter = genealogy;
-            } else {
-                throw new Exception("User exited the program");
+            if (addModification != null){
+                switch ( addModification){
+                    case "Y":
+                    case "YES":
+                        logger.info("Modification added");
+                        addDifferenceInFile(treeComparator.getTreeName(),treeComparator.printDifferences(false, false, false));
+                        break;
+                    case "exit":
+                        throw new Exception("User exited the program");
+                    case "R":
+                    case "REPLACE":
+                        logger.info("Modification carried out");
+                        replaceDifferenceInFile(treeComparator, false);
+                        break;
+                    case "D":
+                    case "DELETE":
+                        logger.info("Deletion carried out");
+                        replaceDifferenceInFile(treeComparator, true);
+                        break;
+                        default:
+                        logger.info("Rerun needed");
+                        setGedcomData();
+                        treeComparator.initAlias(true);
+                        genealogyParameter = genealogy;
+                }
             }
             treeComparator = compareTree(testUrl, search, genealogyParameter, saveComparison, saveGeneanet, displayModeFull, exceptionMode, hideComparisons);
             error = treeComparator.isErrorComparison();

@@ -3,6 +3,42 @@ boyot;boyau;name
 boileau;boyau;name
 boilleau;boyau;name
 gionnet;guionnet;name
+michele;michelle;name
+anthoine;antoine;name
+adiren;adrien;name
+margueritte;marguerite;name
+magdelaine;madeleine;name
+magdelenne;madeleine;name
+caesar;cesar;name
+dit le jeune;;name
+bergeon;bergeron;name
+1;;name
+2;;name
+le jeune;;name
+magdeleine;madeleine;name
+madelaine;madeleine;name
+gabrielle;gabriel;name
+l'aine;;name
+l'aisne;;name
+margueritte;marguerite;name
+estiennette;etiennette;name
+georges;george;name
+adrian;adrien;name
+henri;henry;name
+esmee;edmee;name
+jehan;jean;name
+jehanne;jeanne;name
+ayme;aime;name
+aymee;aimee;name
+sieur;;name
+eleonore;leonore;name
+inconnu;...;name
+elizabeth;elisabeth;name
+suzanne;susanne;name
+maitre;;name
+maritt maritte ou marie;maritte;name
+germine;germaine;name
+(Hurissé);;name
 clain;clin;name
 de la ville;delaville;name
 guille ;guillet ;name
