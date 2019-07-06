@@ -932,13 +932,13 @@ public class TreeComparator {
         TreeComparator treeComparator = compareTree(testUrl, search, genealogyParameter, saveComparison, saveGeneanet, displayModeFull, exceptionMode, hideComparisons);
         boolean error = treeComparator.isErrorComparison();
         while (error){
-            logger.info("Add line ? (Y to add, R to replace, D to delete, exit to exit, any other to refresh data)");
+            logger.info("Add line ? (A to add, R to replace, D to delete, exit to exit, any other to refresh data)");
             Scanner in = new Scanner(System.in);
             String addModification = in.nextLine();
             if (addModification != null){
                 switch ( addModification){
-                    case "Y":
-                    case "YES":
+                    case "A":
+                    case "ADD":
                         logger.info("Modification added");
                         addDifferenceInFile(treeComparator.getTreeName(),treeComparator.printDifferences(false, false, false));
                         break;

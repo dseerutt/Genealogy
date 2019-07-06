@@ -38,11 +38,72 @@ suzanne;susanne;name
 maitre;;name
 maritt maritte ou marie;maritte;name
 germine;germaine;name
-(Hurissé);;name
+(Hurisse);;name
 clain;clin;name
 de la ville;delaville;name
 guille ;guillet ;name
+guillé ;guillet ;name
 guillier;guillet ;name
+paslot;paslat;name
+paslas;paslat;name
+palla;paslat;name
+pallat;paslat;name
+des fontaines;desfontaines;name
+de fontaines;desfontaines;name
+defontaine;desfontaines;name
+lescluse;lecluse;name
+rihouey;rihoy;name
+lepeigny;le pegny;name
+le peigny;le pegny;name
+perrotte;perotte;name
+troiseuf;trois oeufs;name
+foiubert,foubert;name
+leroi;leroy;name
+thomelin;thommelin;name
+thebault ou thiebot;thiebot;name
+thiebault;thiebot;name
+bareau ou baveille;barreau;name
+lecocq;le coque;name
+gencon;janson;name
+thierri;thierry;name
+...;?;name
+derouet ou deroy;drouet;name
+derouet;drouet;name
+deroy;drouet;name
+meusnier;meunier;name
+chavalier;chevallier;name
+cufaut;cufaud;name
+noury;nourry;name
+croze;croise;name
+croisere;croise;name
+moniault;mommault;name
+de pollangis;de polangis;name
+demoiselle;;name
+bergera;bergerat;name
+mocquo;mocquot;name
+breton;berton;name
+depont;depond;name
+despons;depond;name
+durocher;rocher;name
+larcanche;archanche;name
+guerin ou guini?;guerin;name
+ouvre;ouvret;name
+collas;colas;name
+baulget;baulger;name
+fraineau;freneau;name
+dupin;le pin;name
+filley;filet;name
+lerouille;le rouillet;name
+galmelle;galmel;name
+delarue;larue;name
+barreau;bareau;name
+villaine;vilaine;name
+desnoues;desnoux;name
+herue;herve;name
+galochet;galocher;name
+beugnon;bugnon;name
+le suin;le suain;name
+
 ^bussiere;labussiere;cityRegex
 \d;;cityRegex
 ,; ;city
@@ -63,3 +124,4 @@ st-;saint ;city
 saintlouisgien;gien;city
 chatilloncoligny;chatillonsurloing;city
 ...;?;city
+.;?;name
