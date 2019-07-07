@@ -66,6 +66,7 @@ bareau ou baveille;barreau;name
 lecocq;le coque;name
 gencon;janson;name
 thierri;thierry;name
+les boisseaux;saint maurice sur aveyron;city
 ...;?;name
 derouet ou deroy;drouet;name
 derouet;drouet;name
@@ -87,35 +88,55 @@ despons;depond;name
 durocher;rocher;name
 larcanche;archanche;name
 guerin ou guini?;guerin;name
-ouvre;ouvret;name
+ouvre ;ouvret ;name
 collas;colas;name
 baulget;baulger;name
 fraineau;freneau;name
 dupin;le pin;name
 filley;filet;name
+gallet;galais;name
 lerouille;le rouillet;name
 galmelle;galmel;name
 delarue;larue;name
 barreau;bareau;name
 villaine;vilaine;name
 desnoues;desnoux;name
+gennevieve;genevieve;name
 herue;herve;name
 galochet;galocher;name
 beugnon;bugnon;name
 le suin;le suain;name
-
+kaizant;quaizant;name
+quezant;quaizant;name
+qaisant;quaizant;name
+nian;nyon;name
 ^bussiere;labussiere;cityRegex
 \d;;cityRegex
 ,; ;city
+,; ;name
+"; ;name
 gien 45 st laurent;Gien;city
 feins en gatinais 45 les fouches;feins en gatinais;city
 rogny-les-sept-ecluses st eusoge;rogny-les-sept-ecluses;city
+saint-eusoge - rogny-les-sept-ecluses;rogny-les-sept-ecluses;city
+saint-eusoge;rogny-les-sept-ecluses;city
+mairie;;city
 benoistville;benoitville;city
+crouzat;issoudun;city
 issoudun letrieix;issoudun;city
 issoudun-letrieix;issoudun;city
 loiret;;city
 dangy manche;dangy;city
+la gastiere;aillant sur milleron;city
 quibou manche;quibou;city
+saint-pierre. saint-louis;gien;city
+saint-louis - gien;gien;city
+saint-laurent - gien;gien;city
+saint-louis ;gien;city
+gien-le-vieil;gien;city
+les fouches;feins-en-gatinais;city
+la petite pogne;champcevrais;city
+les morins;malicorne;city
 brienon l'archeveque;brienonsurarmancon;city
 st ;saint ;city
 st-;saint ;city

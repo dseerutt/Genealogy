@@ -199,7 +199,7 @@ public class TreeComparator {
         if (log){
             logger.info("Compared " + gedcomPerson.getFullName() + "(" + geneanetPerson.getUrl() + ")");
         }
-        if (geneanetPerson != null && geneanetPerson.getFullName().equals("Savinienne de RODOUAN")){
+        if (geneanetPerson != null && geneanetPerson.getFullName().equals("Claude FREMY")){
             String res = "";
         }
         compareNames(geneanetPerson, gedcomPerson);
@@ -1064,7 +1064,7 @@ public class TreeComparator {
         int index = 1;
         boolean errorCompareTree = false;
         for (GeneanetTree geneanetTree : geneanetTrees){
-            if (index <= 39){
+            if (index >= 39){
                 String url = geneanetTree.getUrl();
                 loopCompareTree(url, searchOnGeneanet, genealogy, saveComparisonInFile, saveGeneanetSearch, displayModeFull, exceptionMode, hideComparisons);
             }
