@@ -199,7 +199,7 @@ public class TreeComparator {
         if (log){
             logger.info("Compared " + gedcomPerson.getFullName() + "(" + geneanetPerson.getUrl() + ")");
         }
-        if (geneanetPerson != null && geneanetPerson.getFullName().equals("Claude FREMY")){
+        if (geneanetPerson != null && geneanetPerson.getFullName().equals("Marie-Louise DUPIN (LEPIN)")){
             String res = "";
         }
         compareNames(geneanetPerson, gedcomPerson);

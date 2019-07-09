@@ -92,14 +92,27 @@ ouvre ;ouvret ;name
 collas;colas;name
 baulget;baulger;name
 fraineau;freneau;name
+fresneau;freneau;name
+gagnon;gagnont;name
+(le) gue;gue;name
+verain;vrain;name
+dupin (lepin);le pin;name
 dupin;le pin;name
+dupin;le pin;name
+lepin;le pin;name
 filley;filet;name
 gallet;galais;name
 lerouille;le rouillet;name
 galmelle;galmel;name
+ducharme;dufarme;name
 delarue;larue;name
 barreau;bareau;name
 villaine;vilaine;name
+pignault;peignault;name
+deroy;drouet;name
+jusseaumme;jusseaume;name
+jousseaume;jusseaume;name
+lajoye;laiye;name
 desnoues;desnoux;name
 gennevieve;genevieve;name
 herue;herve;name
@@ -110,6 +123,7 @@ kaizant;quaizant;name
 quezant;quaizant;name
 qaisant;quaizant;name
 nian;nyon;name
+pertuisot;perthuiseau;name
 ^bussiere;labussiere;cityRegex
 \d;;cityRegex
 ,; ;city
@@ -123,6 +137,7 @@ saint-eusoge;rogny-les-sept-ecluses;city
 mairie;;city
 benoistville;benoitville;city
 crouzat;issoudun;city
+la grande metairie;adon;city
 issoudun letrieix;issoudun;city
 issoudun-letrieix;issoudun;city
 loiret;;city
@@ -134,6 +149,12 @@ saint-louis - gien;gien;city
 saint-laurent - gien;gien;city
 saint-louis ;gien;city
 gien-le-vieil;gien;city
+briere;montbouy;city
+les etisseaux;saint maurice sur aveyron;city
+la croix-lambert;saint maurice sur aveyron;city
+les plots;saint maurice sur aveyron;city
+les guidus;saint maurice sur aveyron;city
+le bourg;la chapelle sur aveyron;city
 les fouches;feins-en-gatinais;city
 la petite pogne;champcevrais;city
 les morins;malicorne;city
