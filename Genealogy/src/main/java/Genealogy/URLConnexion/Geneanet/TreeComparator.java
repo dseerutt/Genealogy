@@ -14,6 +14,8 @@ import org.apache.log4j.BasicConfigurator;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static Genealogy.AuxMethods.removeDoubleGeneanetSuffix;
 import static Genealogy.Genealogy.genealogy;
@@ -43,6 +45,7 @@ public class TreeComparator {
     private static LinkedHashMap<String,String> aliasCities;
     private static LinkedHashMap<String,String> aliasRegexCities;
     private static LinkedHashMap<String,String> aliasNames;
+    public static final Pattern SPECIAL_REGEX_CHARS = Pattern.compile("[{}()\\[\\].+*?^$\\\\|]");
 
     public TreeComparator(GeneanetPerson geneanetPerson, Person gedcomPerson, HashMap<String, GeneanetPerson> peopleUrl, String treeName) {
         urlSearched = new ArrayList<String>();
@@ -199,7 +202,7 @@ public class TreeComparator {
         if (log){
             logger.info("Compared " + gedcomPerson.getFullName() + "(" + geneanetPerson.getUrl() + ")");
         }
-        if (geneanetPerson != null && geneanetPerson.getFullName().equals("Marie-Louise DUPIN (LEPIN)")){
+        if (geneanetPerson != null && geneanetPerson.getFullName().equals("Marguerite GEOFFROY")){
             String res = "";
         }
         compareNames(geneanetPerson, gedcomPerson);
@@ -549,9 +552,9 @@ public class TreeComparator {
         if (string1 == null && string2 == null){
             return true;
         } else if (string1 != null && string2 != null){
-            /*if (string1.contains("Laurent PIAT")){
+            if (string1.contains("Angélique, \"Virginie\" MARTIGNON")){
                 String res = "";
-            }*/
+            }
             String newString1 = StringUtils.stripAccents(string1).toLowerCase() + " ";
             String newString2 = StringUtils.stripAccents(string2).toLowerCase() + " ";
             if (!newString1.equals(newString2)){
@@ -927,6 +930,22 @@ public class TreeComparator {
         return geneanetBrowser;
     }
 
+    public static String findTinyUrl(String inputUrl){
+        String result = "";
+        if (inputUrl != null){
+            String[] urlTab = inputUrl.split("&p=");
+            if (urlTab != null && urlTab.length > 0){
+                result = urlTab[0];
+            }
+        }
+        return result;
+    }
+
+    public static String escapeSpecialRegexChars(String str) {
+        return SPECIAL_REGEX_CHARS.matcher(str).replaceAll("\\\\$0");
+    }
+
+
     public static void loopCompareTree(String testUrl, boolean search, Genealogy genealogyInput, boolean saveComparison, boolean saveGeneanet, boolean displayModeFull, boolean exceptionMode, boolean hideComparisons) throws Exception {
         Genealogy genealogyParameter = genealogyInput;
         TreeComparator treeComparator = compareTree(testUrl, search, genealogyParameter, saveComparison, saveGeneanet, displayModeFull, exceptionMode, hideComparisons);
@@ -1064,7 +1083,7 @@ public class TreeComparator {
         int index = 1;
         boolean errorCompareTree = false;
         for (GeneanetTree geneanetTree : geneanetTrees){
-            if (index >= 39){
+            if (index >= 24){
                 String url = geneanetTree.getUrl();
                 loopCompareTree(url, searchOnGeneanet, genealogy, saveComparisonInFile, saveGeneanetSearch, displayModeFull, exceptionMode, hideComparisons);
             }

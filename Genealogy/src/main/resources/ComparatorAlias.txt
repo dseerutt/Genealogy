@@ -19,6 +19,7 @@ magdeleine;madeleine;name
 madelaine;madeleine;name
 gabrielle;gabriel;name
 l'aine;;name
+l aine;;name
 l'aisne;;name
 margueritte;marguerite;name
 estiennette;etiennette;name
@@ -27,6 +28,7 @@ adrian;adrien;name
 henri;henry;name
 esmee;edmee;name
 jehan;jean;name
+chauvin;chanvin;name
 jehanne;jeanne;name
 ayme;aime;name
 aymee;aimee;name
@@ -44,10 +46,12 @@ de la ville;delaville;name
 guille ;guillet ;name
 guillé ;guillet ;name
 guillier;guillet ;name
+de chicault;chicaut;name
 paslot;paslat;name
 paslas;paslat;name
 palla;paslat;name
 pallat;paslat;name
+pasquelin;paquelin;name
 des fontaines;desfontaines;name
 de fontaines;desfontaines;name
 defontaine;desfontaines;name
@@ -58,8 +62,10 @@ le peigny;le pegny;name
 perrotte;perotte;name
 troiseuf;trois oeufs;name
 foiubert,foubert;name
-leroi;leroy;name
+leroi;roy;name
+leroy;roy;name
 thomelin;thommelin;name
+hippolyte;hippolite;name
 thebault ou thiebot;thiebot;name
 thiebault;thiebot;name
 bareau ou baveille;barreau;name
@@ -67,6 +73,7 @@ lecocq;le coque;name
 gencon;janson;name
 thierri;thierry;name
 les boisseaux;saint maurice sur aveyron;city
+la foret;saint maurice sur aveyron;city
 ...;?;name
 derouet ou deroy;drouet;name
 derouet;drouet;name
@@ -77,20 +84,32 @@ cufaut;cufaud;name
 noury;nourry;name
 croze;croise;name
 croisere;croise;name
+blampin;blompin;name
 moniault;mommault;name
+felicitee;felicite;name
 de pollangis;de polangis;name
 demoiselle;;name
 bergera;bergerat;name
-mocquo;mocquot;name
+bergere;bergerat;name
+lebourgeois;le bourgeois;name
+mocquo ;mocquot ;name
+bauge;bouge;name
+arsenne;arsene;name
+estienne;etienne;name
 breton;berton;name
 depont;depond;name
 despons;depond;name
+maritte;mary;name
 durocher;rocher;name
 larcanche;archanche;name
 guerin ou guini?;guerin;name
 ouvre ;ouvret ;name
 collas;colas;name
+bauge;bouge;name
+larrivee;la rive;name
+remy;remi;name
 baulget;baulger;name
+aymee;edmee;name
 fraineau;freneau;name
 fresneau;freneau;name
 gagnon;gagnont;name
@@ -115,6 +134,7 @@ jousseaume;jusseaume;name
 lajoye;laiye;name
 desnoues;desnoux;name
 gennevieve;genevieve;name
+angelie;angelique;name
 herue;herve;name
 galochet;galocher;name
 beugnon;bugnon;name
@@ -129,7 +149,7 @@ pertuisot;perthuiseau;name
 ,; ;city
 ,; ;name
 "; ;name
-gien 45 st laurent;Gien;city
+gien 45 st laurent;gien;city
 feins en gatinais 45 les fouches;feins en gatinais;city
 rogny-les-sept-ecluses st eusoge;rogny-les-sept-ecluses;city
 saint-eusoge - rogny-les-sept-ecluses;rogny-les-sept-ecluses;city
@@ -137,27 +157,50 @@ saint-eusoge;rogny-les-sept-ecluses;city
 mairie;;city
 benoistville;benoitville;city
 crouzat;issoudun;city
+saint-cydroine - laroche-saint-cydroine;laroche saint cydroine;city
+laroche-saint-cydroine;laroche saint cydroine;city
+saint-cydroine;laroche saint cydroine;city
+notre-dame-de-cenilly;notre dame de cenilly;city
+notre-dame;villeneuve-le-roi;city
 la grande metairie;adon;city
 issoudun letrieix;issoudun;city
 issoudun-letrieix;issoudun;city
 loiret;;city
 dangy manche;dangy;city
+le champs du charme;les sieges;city
 la gastiere;aillant sur milleron;city
 quibou manche;quibou;city
+gien 45 paroisse st louis;gien;city
 saint-pierre. saint-louis;gien;city
 saint-louis - gien;gien;city
 saint-laurent - gien;gien;city
 saint-louis ;gien;city
+saint-didier;sens;city
 gien-le-vieil;gien;city
+la charmault;montcresson;city
 briere;montbouy;city
+la prevote;bussy-en-othe;city
+a la ferme de la bruyere.;montbouy;city
 les etisseaux;saint maurice sur aveyron;city
 la croix-lambert;saint maurice sur aveyron;city
 les plots;saint maurice sur aveyron;city
 les guidus;saint maurice sur aveyron;city
+la tuillerie;saint maurice sur aveyron;city
+la chabassolerie;saint maurice sur aveyron;city
+chabassollerie;saint maurice sur aveyron;city
+saint-pierre-le-rond - sens;sens;city
+saint-pierre-le-rond;sens;city
+ferme de berthonval;mont-saint-eloi;city
 le bourg;la chapelle sur aveyron;city
 les fouches;feins-en-gatinais;city
+mortumier;les choux;city
+arrabloy;gien;city
 la petite pogne;champcevrais;city
 les morins;malicorne;city
+ferme de crecy;avrolles;city
+saint-hilaire-sur-puiseaux;saint hilaire sur puiseaux;city
+saint-hilaire - sens;sens;city
+saint-hilaire;sens;city
 brienon l'archeveque;brienonsurarmancon;city
 st ;saint ;city
 st-;saint ;city
