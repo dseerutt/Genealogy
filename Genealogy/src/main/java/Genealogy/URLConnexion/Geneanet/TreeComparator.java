@@ -46,6 +46,7 @@ public class TreeComparator {
     private static LinkedHashMap<String,String> aliasRegexCities;
     private static LinkedHashMap<String,String> aliasNames;
     public static final Pattern SPECIAL_REGEX_CHARS = Pattern.compile("[{}()\\[\\].+*?^$\\\\|]");
+    private static int cptPersonWithoutName = 1;
 
     public TreeComparator(GeneanetPerson geneanetPerson, Person gedcomPerson, HashMap<String, GeneanetPerson> peopleUrl, String treeName) {
         urlSearched = new ArrayList<String>();
@@ -639,6 +640,12 @@ public class TreeComparator {
             if (!person.isSearched()){
                 person = peopleUrl.get(person.getUrl());
             }
+            if (person != null && person.getUrl().contains("&i=")){
+                String newURL = person.getUrl().replaceAll(escapeSpecialRegexChars("&i=") + "......","&i=" + cptPersonWithoutName);
+                person.setUrl(newURL);
+                cptPersonWithoutName++;
+                peopleUrl.put(removeDoubleGeneanetSuffix(newURL),person);
+            }
             String valueTxt = entry.getValue();
             if (!differences2.containsKey(person) || differences2.containsKey(person) && !valueTxt.equals(differences2.get(person))){
                 result += person.getFullName() + ";" + valueTxt;
@@ -655,13 +662,20 @@ public class TreeComparator {
         //Differences added in file
         for(Map.Entry<GeneanetPerson, String> entry : differences2.entrySet()) {
             GeneanetPerson person = entry.getKey();
+            String valueTxt = entry.getValue();
             if (!person.isSearched()){
                 person = peopleUrl.get(person.getUrl());
                 if (person == null){
                     throw new Exception("Could not find person " + entry.getKey().getUrl());
                 }
             }
-            String valueTxt = entry.getValue();
+            if (person != null && person.getUrl().contains("&i=")){
+                String newURL = person.getUrl().replaceAll(escapeSpecialRegexChars("&i=") + "......","&i=" + cptPersonWithoutName);
+                person.setUrl(newURL);
+                cptPersonWithoutName++;
+                peopleUrl.put(removeDoubleGeneanetSuffix(newURL),person);
+                differences.put(person,valueTxt);
+            }
             if (!differences.containsKey(person) || differences.containsKey(person) && !valueTxt.equals(differences.get(person))){
                 result += person.getFullName() + ";" + valueTxt;
                 differencesForDisplay.put(person, differences2.get(person));
@@ -681,7 +695,15 @@ public class TreeComparator {
         comparisonResultToReplace = result;
     }
 
-    private void addDifference(GeneanetPerson geneanetPerson, String txt){
+    private void addDifference(GeneanetPerson geneanetPerson, String inputTxt){
+        String txt = inputTxt;
+        //Replace random id by .....
+        if (inputTxt.contains("&i=")){
+            String regex = escapeSpecialRegexChars("&i=") + "......";
+            txt = inputTxt.replaceAll(regex,"&i=" + cptPersonWithoutName);
+            cptPersonWithoutName++;
+        }
+
         if (differences.containsKey(geneanetPerson)){
             String oldTxt = differences.get(geneanetPerson);
             if (!oldTxt.contains(txt)){
@@ -812,7 +834,7 @@ public class TreeComparator {
                 while ((line = br.readLine()) != null) {
                     String[] tmpLine = line.split(";");
                     if (tmpLine != null && tmpLine.length > 1){
-                        GeneanetPerson person = new GeneanetPerson(tmpLine[0]);
+                        GeneanetPerson person = new GeneanetPerson(removeDoubleGeneanetSuffix(tmpLine[0]));
                         String txt = "";
                         for (int i = 2 ; i < tmpLine.length ; i++){
                             if (i != 2){
@@ -1025,6 +1047,7 @@ public class TreeComparator {
         Person person = genealogy.findPersonById(personId);
 
         //Comparing
+        cptPersonWithoutName = 1;
         TreeComparator treeComparator = new TreeComparator(rootPerson,person, geneanetBrowser.allPeopleUrl, tree);
         treeComparator.setLog(false);
         treeComparator.compareRoot();

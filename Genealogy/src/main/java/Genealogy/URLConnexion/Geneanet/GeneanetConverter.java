@@ -639,7 +639,7 @@ public class GeneanetConverter {
         int index = setPersonDates(person,1,BIRTH);
         index = setPersonDates(person,index,CHRISTENING);
         index = setPersonDates(person,index,DEATH);
-        index = setPersonDates(person,index,BURIAL);
+        setPersonDates(person,index,BURIAL);
         int offset = setParents(person, 2);
         setFamily(offset,person);
         person.setSearched(true);

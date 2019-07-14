@@ -137,11 +137,17 @@ gennevieve;genevieve;name
 angelie;angelique;name
 herue;herve;name
 galochet;galocher;name
+jacquelin;paquelin;name
+tetrel;tetturel;name
 beugnon;bugnon;name
 le suin;le suain;name
+lerouilley;le rouillet;name
 kaizant;quaizant;name
 quezant;quaizant;name
 qaisant;quaizant;name
+soimier;soymier;name
+le bargi;le bargy;name
+lebargy;le bargy;name
 nian;nyon;name
 pertuisot;perthuiseau;name
 ^bussiere;labussiere;cityRegex

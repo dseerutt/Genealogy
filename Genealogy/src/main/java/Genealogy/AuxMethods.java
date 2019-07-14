@@ -211,7 +211,7 @@ public class AuxMethods {
 
     public static String removeDoubleGeneanetSuffix(String input){
         if (input != null) {
-            return input.replace("&ocz=0","").replace("&iz=0","");
+            return input.replace("&ocz=0","").replaceAll("&iz=.*?&","&").replaceAll("&pz=.*?&","&").replaceAll("&nz=.*?&","&");
         } else {
             return null;
         }
@@ -219,7 +219,7 @@ public class AuxMethods {
 
     public static String removeGeneanetSuffix(String input){
         if (input != null) {
-            return input.replace("&ocz=0","");
+            return input.replace("&ocz=0","").replaceAll("&pz=.*?&","&").replaceAll("&nz=.*?&","&");
         } else {
             return null;
         }

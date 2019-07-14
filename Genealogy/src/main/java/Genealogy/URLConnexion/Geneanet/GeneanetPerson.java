@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static Genealogy.AuxMethods.removeDoubleGeneanetSuffix;
+
 /**
  * Created by Dan on 07/11/2017.
  */
@@ -37,7 +39,7 @@ public class GeneanetPerson implements Serializable {
     private String image;
 
     public GeneanetPerson(String url, String firstName, String familyName) {
-        this.url = url;
+        this.url = removeDoubleGeneanetSuffix(url);
         this.firstName = firstName;
         this.familyName = familyName;
         siblings = new ArrayList<>();
@@ -47,7 +49,7 @@ public class GeneanetPerson implements Serializable {
     }
 
     public GeneanetPerson(String url) {
-        this.url = url;
+        this.url = removeDoubleGeneanetSuffix(url);
         siblings = new ArrayList<>();
         halfSiblings = new ArrayList<>();
         marriage = new HashMap<>();
@@ -219,7 +221,7 @@ public class GeneanetPerson implements Serializable {
     }
 
     public void setUrl(String url) {
-        this.url = url;
+        this.url = removeDoubleGeneanetSuffix(url);
     }
 
     public Gender getGender() {
