@@ -143,7 +143,9 @@ public class GeneanetBrowser implements Serializable {
             geneanetConverter.setGeneanetSearchURL(prop.getProperty("geneanetSearchURL"));
             geneanetConverter.setXpathSection(prop.getProperty("XpathSection"));
             geneanetConverter.setXpathMarriageDate(prop.getProperty("XpathMarriageDate"));
+            geneanetConverter.setXpathMarriageDate2(prop.getProperty("XpathMarriageDate2"));
             geneanetConverter.setXpathMarriagePartner(prop.getProperty("XpathMarriagePartner"));
+            geneanetConverter.setXpathMarriagePartner2(prop.getProperty("XpathMarriagePartner2"));
             geneanetConverter.setXpathBrother(prop.getProperty("XpathBrother"));
             geneanetConverter.setXpathBrother2(prop.getProperty("XpathBrother2"));
             geneanetConverter.setXpathHalfBrother(prop.getProperty("XpathHalfBrother"));
@@ -489,11 +491,11 @@ public class GeneanetBrowser implements Serializable {
         }
     }
 
-    private void searchPerson(GeneanetPerson person) {
-        searchPerson(person,false);
+    private GeneanetPerson searchPerson(GeneanetPerson person) {
+        return searchPerson(person,false);
     }
 
-    private void searchPerson(GeneanetPerson person, boolean partialSearch) {
+    private GeneanetPerson searchPerson(GeneanetPerson person, boolean partialSearch) {
         if (!peopleUrl.contains(person.getUrl()) && (!partialSearch ||  !allPeopleUrl.containsKey(person.getUrl()))){
             int tries = 1;
             String inputTxt = "";
@@ -510,6 +512,8 @@ public class GeneanetBrowser implements Serializable {
                     geneanetConverter.parseDocument(inputDocument, person);
                     if (expectedNbPeople != 0){
                         inputTxt = getNbPeople() + "/" + expectedNbPeople + " ";
+                    } else {
+                        inputTxt = getNbPeople() + ") ";
                     }
                     if (partialSearch){
                         logger.info(inputTxt + "Partial Search " + person.getFirstName() + " " + person.getFamilyName() + " : " + person);
@@ -517,7 +521,7 @@ public class GeneanetBrowser implements Serializable {
                         logger.info(inputTxt + "Search " + person.getFirstName() + " " + person.getFamilyName() + " : " + person);
                     }
                     addPersonToSearchedOutputPersons(inputTxt, person);
-                    return;
+                    return person;
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.out.println("Connexion " + tries + ":  erreur lors de la recherche de l'url " + url);
@@ -527,14 +531,15 @@ public class GeneanetBrowser implements Serializable {
         } else {
             logger.info("Stopped search for " + person.getUrl());
         }
-
+        return null;
     }
 
     private static void testSearch(String url){
         try {
             GeneanetBrowser browser = new GeneanetBrowser(url);
             GeneanetPerson person = new GeneanetPerson(url);
-            browser.searchPerson(person);
+            GeneanetPerson resultPerson = browser.searchPerson(person);
+            System.out.println("HashCode de " + resultPerson.getFullName() + " : " + resultPerson.customHashCode());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -636,10 +641,10 @@ public class GeneanetBrowser implements Serializable {
 
     public static void main(String[] args) {
         BasicConfigurator.configure();
-        String testUrl = "https://gw.geneanet.org/msebastien1?lang=fr&pz=sebastien+david&nz=mercier&p=estienne&n=porcher";
-        String testUrl2 = "https://gw.geneanet.org/msebastien1?lang=fr&pz=sebastien+david&nz=mercier&p=louis+claude&n=vincent";
-        String testUrl3 = "https://gw.geneanet.org/dil?lang=fr&iz=0&p=marie&n=mace";
-        String xpathPattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/table/tbody/tr/td[2]/div/div/h1/img";
+        String testUrl = "https://gw.geneanet.org/dil?lang=fr&i=19978";
+        String testUrl2 = "https://gw.geneanet.org/dil?lang=fr&i=19906";
+        String testUrl3 = "https://gw.geneanet.org/slebruman?lang=fr&i=523";
+        String xpathPattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/ul[2]/li[1]/table/tbody/tr/td[2]/em/text()";
         String xpathText = "Claude";
 
         //searchAllTrees(true);
@@ -649,7 +654,7 @@ public class GeneanetBrowser implements Serializable {
         //System.out.println(person.getMother());
         testSearch(testUrl3);
         //mainTestSearchTree();
-        //mainTestXpath(testUrl3,xpathPattern);
+        //mainTestXpath(testUrl,xpathPattern);
         //mainFindXpath(testUrl3, xpathText);
     }
 }

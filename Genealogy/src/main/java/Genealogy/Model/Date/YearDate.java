@@ -58,4 +58,9 @@ public class YearDate extends MyDate implements Serializable {
     public String descriptionDate(){
         return "en " + year;
     }
+
+    @Override
+    public int hashCode() {
+        return Long.hashCode(getYear());
+    }
 }

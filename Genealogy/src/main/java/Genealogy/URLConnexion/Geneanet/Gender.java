@@ -39,4 +39,20 @@ public enum Gender {
         }
         return null;
     }
+
+    public int customHashCode(){
+        if (this != null){
+            switch(this){
+                case Male:
+                    return 100;
+                case Female:
+                    return 200;
+                case Unknown:
+                    return -1;
+                default:
+                    break;
+            }
+        }
+        return -1;
+    }
 }

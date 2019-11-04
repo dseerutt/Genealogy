@@ -3,9 +3,9 @@ package Genealogy.URLConnexion.Geneanet;
 import Genealogy.Model.Date.FullDate;
 import Genealogy.Model.Date.MonthDate;
 import Genealogy.Model.Date.MyDate;
+import Genealogy.Model.Date.RepublicanDate.RepublicanCalendarDateConverter;
 import Genealogy.Model.Date.YearDate;
 import Genealogy.URLConnexion.Serializer;
-import fr.followthecode.republican.date.utils.RepublicanCalendarDateConverter;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
@@ -45,7 +45,9 @@ public class GeneanetConverter {
     private static String XpathSection;
     private static String geneanetSearchURL;
     private static String XpathMarriageDate;
+    private static String XpathMarriageDate2;
     private static String XpathMarriagePartner;
+    private static String XpathMarriagePartner2;
     private static String XpathBrother;
     private static String XpathBrother2;
     private static String XpathHalfBrother;
@@ -203,6 +205,22 @@ public class GeneanetConverter {
         XpathMarriagePartner = xpathMarriagePartner;
     }
 
+    public static String getXpathMarriageDate2() {
+        return XpathMarriageDate2;
+    }
+
+    public static void setXpathMarriageDate2(String xpathMarriageDate2) {
+        XpathMarriageDate2 = xpathMarriageDate2;
+    }
+
+    public static String getXpathMarriagePartner2() {
+        return XpathMarriagePartner2;
+    }
+
+    public static void setXpathMarriagePartner2(String xpathMarriagePartner2) {
+        XpathMarriagePartner2 = xpathMarriagePartner2;
+    }
+
     public static String getXpathBrother() {
         return XpathBrother;
     }
@@ -309,7 +327,7 @@ public class GeneanetConverter {
     public int setPersonDates(GeneanetPerson person, int index, ActType act){
         String regex = "(.*?)$|,.*";
         String birth = Xsoup.compile(XpathFamily.replace("XXX","" + 1) +  XpathBirthAndDeath.replace("XXX","" + index)).evaluate(doc).get();
-        if (birth == null || birth.replace(" ","").equals("")){
+        if (birth == null || birth.replace(" ","").equals("") || (birth.contains("Marié") && birth.contains("avec"))){
             birth = Xsoup.compile(XpathFamily2 +  XpathBirthAndDeath.replace("XXX","" + index)).evaluate(doc).get();
             if (birth == null || birth.replace(" ","").equals("")){
                 return index;
@@ -590,11 +608,20 @@ public class GeneanetConverter {
         String city = null;
         String dateAndCity = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathMarriageDate.replace("XXX","" + partnerNumber)).evaluate(doc).get();
         String personString = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathMarriagePartner.replace("XXX","" + partnerNumber).replace("YYY","" + aNumber)).evaluate(doc).get();
+        String tmpXpathMarriagePartner = XpathMarriagePartner;
+        String tmpXpathMarriageDate = XpathMarriageDate;
+
+        if (dateAndCity == null && personString == null){
+            dateAndCity = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathMarriageDate2.replace("XXX","" + partnerNumber)).evaluate(doc).get();
+            personString = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathMarriagePartner2.replace("XXX","" + partnerNumber).replace("YYY","" + aNumber)).evaluate(doc).get();
+            tmpXpathMarriagePartner = XpathMarriagePartner2;
+            tmpXpathMarriageDate = XpathMarriageDate2;
+        }
 
         while (dateAndCity != null || personString != null) {
             if (personString != null && !personString.contains("&p=")&&!personString.contains("&i=")){
                 aNumber++;
-                personString = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathMarriagePartner.replace("XXX","" + partnerNumber).replace("YYY","" + aNumber)).evaluate(doc).get();
+                personString = Xsoup.compile(XpathFamily.replace("XXX","" + index) + tmpXpathMarriagePartner.replace("XXX","" + partnerNumber).replace("YYY","" + aNumber)).evaluate(doc).get();
                 aNumber = 1;
             }
             //unknown date case
@@ -621,8 +648,14 @@ public class GeneanetConverter {
                 child = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathChildren.replace("XXX","" + partnerNumber).replace("YYY","" + aNumber).replace("ZZZ","" + children)).evaluate(doc).get();
             }
             partnerNumber++;
-            dateAndCity = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathMarriageDate.replace("XXX","" + partnerNumber)).evaluate(doc).get();
-            personString = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathMarriagePartner.replace("XXX","" + partnerNumber).replace("YYY","" + aNumber)).evaluate(doc).get();
+            dateAndCity = Xsoup.compile(XpathFamily.replace("XXX","" + index) + tmpXpathMarriageDate.replace("XXX","" + partnerNumber)).evaluate(doc).get();
+            personString = Xsoup.compile(XpathFamily.replace("XXX","" + index) + tmpXpathMarriagePartner.replace("XXX","" + partnerNumber).replace("YYY","" + aNumber)).evaluate(doc).get();
+            if (dateAndCity == null && personString == null){
+                dateAndCity = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathMarriageDate2.replace("XXX","" + partnerNumber)).evaluate(doc).get();
+                personString = Xsoup.compile(XpathFamily.replace("XXX","" + index) + XpathMarriagePartner2.replace("XXX","" + partnerNumber).replace("YYY","" + aNumber)).evaluate(doc).get();
+                tmpXpathMarriagePartner = XpathMarriagePartner2;
+                tmpXpathMarriageDate = XpathMarriageDate2;
+            }
         }
     }
 

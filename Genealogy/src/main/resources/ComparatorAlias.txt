@@ -41,7 +41,9 @@ maitre;;name
 maritt maritte ou marie;maritte;name
 germine;germaine;name
 (Hurisse);;name
+benard (guenard);guenard;name
 clain;clin;name
+sequin;seguin;name
 de la ville;delaville;name
 guille ;guillet ;name
 guillé ;guillet ;name
@@ -61,7 +63,7 @@ lepeigny;le pegny;name
 le peigny;le pegny;name
 perrotte;perotte;name
 troiseuf;trois oeufs;name
-foiubert,foubert;name
+foiubert;foubert;name
 leroi;roy;name
 leroy;roy;name
 thomelin;thommelin;name
@@ -74,6 +76,7 @@ gencon;janson;name
 thierri;thierry;name
 les boisseaux;saint maurice sur aveyron;city
 la foret;saint maurice sur aveyron;city
+la metairie des rosses;chatillon sur loire;city
 ...;?;name
 derouet ou deroy;drouet;name
 derouet;drouet;name
@@ -97,8 +100,12 @@ bauge;bouge;name
 arsenne;arsene;name
 estienne;etienne;name
 breton;berton;name
+marie-jeanne;marie jeanne;name
+anastasie;anastazie;name
 depont;depond;name
+desponds;depond;name
 despons;depond;name
+despond;depond;name
 maritte;mary;name
 durocher;rocher;name
 larcanche;archanche;name
@@ -106,12 +113,19 @@ guerin ou guini?;guerin;name
 ouvre ;ouvret ;name
 collas;colas;name
 bauge;bouge;name
+bergere;berger;name
+roze;rose;name
+chenau;chenot;name
+louisse;louise;name
 larrivee;la rive;name
 remy;remi;name
+gilles;gille;name
+haton;hatton;name
 baulget;baulger;name
 aymee;edmee;name
 fraineau;freneau;name
 fresneau;freneau;name
+tainnegui;tanneguy;name
 gagnon;gagnont;name
 (le) gue;gue;name
 verain;vrain;name
@@ -129,6 +143,8 @@ barreau;bareau;name
 villaine;vilaine;name
 pignault;peignault;name
 deroy;drouet;name
+germine;germaine;name
+laurence;laurent;name
 jusseaumme;jusseaume;name
 jousseaume;jusseaume;name
 lajoye;laiye;name
@@ -148,8 +164,10 @@ qaisant;quaizant;name
 soimier;soymier;name
 le bargi;le bargy;name
 lebargy;le bargy;name
+brusle;brule;name
 nian;nyon;name
 pertuisot;perthuiseau;name
+gaufilier;gaufillier;name
 ^bussiere;labussiere;cityRegex
 \d;;cityRegex
 ,; ;city
@@ -163,6 +181,7 @@ saint-eusoge;rogny-les-sept-ecluses;city
 mairie;;city
 benoistville;benoitville;city
 crouzat;issoudun;city
+crot aux moines;chemilly sur yonne;city
 saint-cydroine - laroche-saint-cydroine;laroche saint cydroine;city
 laroche-saint-cydroine;laroche saint cydroine;city
 saint-cydroine;laroche saint cydroine;city
@@ -171,18 +190,28 @@ notre-dame;villeneuve-le-roi;city
 la grande metairie;adon;city
 issoudun letrieix;issoudun;city
 issoudun-letrieix;issoudun;city
+briquemault;sainte genevieve des bois;city
 loiret;;city
 dangy manche;dangy;city
 le champs du charme;les sieges;city
 la gastiere;aillant sur milleron;city
 quibou manche;quibou;city
+saint-pierre-et-saint-louis / les bois;gien;city
+saint-pierre-et-saint-louis / la grosse pierre;gien;city
+saint-laurent - orleans;orleans;city
+saint-pierre-et-saint-louis / les rois;gien;city
+saint-pierre-et-saint-louis - gien;gien;city
 gien 45 paroisse st louis;gien;city
 saint-pierre. saint-louis;gien;city
+saint-pierre-et-saint-louis;gien;city
 saint-louis - gien;gien;city
 saint-laurent - gien;gien;city
+saint-laurent;gien;city
 saint-louis ;gien;city
 saint-didier;sens;city
 gien-le-vieil;gien;city
+les benoits;malicorne;city
+la boulasse;chatillon sur loire;city
 la charmault;montcresson;city
 briere;montbouy;city
 la prevote;bussy-en-othe;city
@@ -194,6 +223,9 @@ les guidus;saint maurice sur aveyron;city
 la tuillerie;saint maurice sur aveyron;city
 la chabassolerie;saint maurice sur aveyron;city
 chabassollerie;saint maurice sur aveyron;city
+la herbonniere;saint maurice sur aveyron;city
+la taupinniere;briare;city
+maison commune - saint-maurice-sur-aveyron;saint maurice sur aveyron;city
 saint-pierre-le-rond - sens;sens;city
 saint-pierre-le-rond;sens;city
 ferme de berthonval;mont-saint-eloi;city
@@ -201,9 +233,11 @@ le bourg;la chapelle sur aveyron;city
 les fouches;feins-en-gatinais;city
 mortumier;les choux;city
 arrabloy;gien;city
+les perichoirs;chateau renard;city
 la petite pogne;champcevrais;city
 les morins;malicorne;city
 ferme de crecy;avrolles;city
+avrolles - saint-florentin;avrolles;city
 saint-hilaire-sur-puiseaux;saint hilaire sur puiseaux;city
 saint-hilaire - sens;sens;city
 saint-hilaire;sens;city

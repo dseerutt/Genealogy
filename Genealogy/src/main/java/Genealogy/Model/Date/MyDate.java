@@ -37,4 +37,9 @@ public abstract class MyDate implements Serializable {
         }
         return month;
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

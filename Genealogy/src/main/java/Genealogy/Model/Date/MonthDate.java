@@ -65,4 +65,9 @@ public class MonthDate extends MyDate implements Serializable {
     public String descriptionDate(){
         return "en " + getMonthForInt(month-1) + " " + year;
     }
+
+    @Override
+    public int hashCode() {
+        return (new Integer(year)).hashCode() + (new Integer(month)).hashCode();
+    }
 }

@@ -330,6 +330,28 @@ public class GeneanetPerson implements Serializable {
 
     }
 
+    public int customHashCode() {
+        int resultInt = 0;
+        if (gender != null) {resultInt += gender.customHashCode();}
+        if (firstName != null) {resultInt += firstName.hashCode();}
+        if (familyName != null) {resultInt += familyName.hashCode();}
+        if (birthDate != null) {resultInt += birthDate.hashCode();}
+        if (placeOfBirth != null) {resultInt += placeOfBirth.hashCode();}
+        if (deathDate != null) {resultInt += deathDate.hashCode();}
+        if (placeOfDeath != null) {resultInt += placeOfDeath.hashCode();}
+
+        //Recursive calls
+        if (father != null && father.getGeneanetUrl() != null && !father.getGeneanetUrl().contains("&i=")) {resultInt += father.getGeneanetUrl().hashCode();}
+        if (mother != null && mother.getGeneanetUrl() != null && !mother.getGeneanetUrl().contains("&i=")) {resultInt += mother.getGeneanetUrl().hashCode();}
+        for (GeneanetPerson person : siblings ) { if (person.getUrl() != null && !person.getUrl().contains("&i=")) {resultInt += person.getUrl().hashCode();}}
+        for (GeneanetPerson person : halfSiblings ) { if (person.getUrl() != null && !person.getUrl().contains("&i=")) {resultInt += person.getUrl().hashCode();}}
+        for (GeneanetPerson person : children ) {
+            if (person.getUrl() != null && !person.getUrl().contains("&i=")) {
+                resultInt += person.getUrl().hashCode();}}
+        //No Hashmap because no order
+        return resultInt;
+    }
+
     @Override
     public int hashCode() {
         return getUrl() != null ? getUrl().hashCode() : 0;
