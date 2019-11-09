@@ -46,6 +46,7 @@ public class TreeComparator {
     private static LinkedHashMap<String,String> aliasRegexCities;
     private static LinkedHashMap<String,String> aliasNames;
     public static final Pattern SPECIAL_REGEX_CHARS = Pattern.compile("[{}()\\[\\].+*?^$\\\\|]");
+    private static HashMap<String,String> urlAlias = new HashMap<String,String>();
 
     public TreeComparator(GeneanetPerson geneanetPerson, Person gedcomPerson, HashMap<String, GeneanetPerson> peopleUrl, String treeName) {
         urlSearched = new ArrayList<String>();
@@ -157,6 +158,11 @@ public class TreeComparator {
                     result += System.lineSeparator() + entry.getKey().getUrl() + ";" + entry.getKey().getFullName() + ";" + entry.getValue();
                 }
             }
+        }
+        //print alias
+        if (comparisonResultToReplace != null && comparisonResultToReplace.contains("&z=")){
+            String[] splitUrl = comparisonResultToReplace.split(";");
+            logger.info("Alias url : " + urlAlias.get(splitUrl[0]));
         }
         return result;
     }
@@ -643,9 +649,11 @@ public class TreeComparator {
                 Pattern pattern = Pattern.compile(".*&i=([0-9]*).*");
                 Matcher matcher = pattern.matcher(person.getUrl());
                 if (matcher.matches() && matcher.groupCount() == 1){
+                    String oldUrl = person.getUrl();
                     String newURL = person.getUrl().replaceAll(escapeSpecialRegexChars("&i=") + matcher.group(1),"&z=" + person.customHashCode());
                     person.setUrl(newURL);
                     peopleUrl.put(removeDoubleGeneanetSuffix(newURL),person);
+                    urlAlias.put(newURL,oldUrl);
                 }
             }
             String valueTxt = entry.getValue();
@@ -653,7 +661,9 @@ public class TreeComparator {
                 Pattern pattern = Pattern.compile(".*&i=([0-9]*).*");
                 Matcher matcher = pattern.matcher(valueTxt);
                 if (matcher.matches() && matcher.groupCount() == 1){
+                    String oldValueTxt = valueTxt;
                     valueTxt = valueTxt.replaceAll(escapeSpecialRegexChars("&i=") + matcher.group(1),"&z=" + person.customHashCode());
+                    urlAlias.put(oldValueTxt,valueTxt);
                 }
             }
             if (!differences2.containsKey(person) || differences2.containsKey(person) && !valueTxt.equals(differences2.get(person))){
@@ -683,7 +693,9 @@ public class TreeComparator {
                 Pattern pattern = Pattern.compile(".*&i=([0-9]*).*");
                 Matcher matcher = pattern.matcher(newValue);
                 if (matcher.matches() && matcher.groupCount() == 1){
+                    String oldValue = newValue;
                     newValue = newValue.replaceAll(escapeSpecialRegexChars("&i=") + matcher.group(1),"&z=" + person.customHashCode());
+                    urlAlias.put(oldValue,newValue);
                 }
             }
 
@@ -713,9 +725,11 @@ public class TreeComparator {
             Pattern pattern = Pattern.compile(".*&i=([0-9]*).*");
             Matcher matcher = pattern.matcher(geneanetPerson.getUrl());
             if (matcher.matches() && matcher.groupCount() == 1){
+                String oldUrl = geneanetPerson.getUrl();
                 String newURL = geneanetPerson.getUrl().replaceAll(escapeSpecialRegexChars("&i=") + matcher.group(1),"&z=" + geneanetPerson.customHashCode());
                 geneanetPerson.setUrl(newURL);
                 peopleUrl.put(removeDoubleGeneanetSuffix(newURL),geneanetPerson);
+                urlAlias.put(newURL,oldUrl);
             }
         }
 
@@ -758,7 +772,7 @@ public class TreeComparator {
             Serializer serializer = new Serializer();
             path = Serializer.getPath();
         }
-        logger.info("For tree " + treeName + " , add line : " + difference);
+        //logger.debug("For tree " + treeName + " , add line : " + difference);
         String fileName = path + File.separator + "comparatorTrees" + File.separator + treeName + ".bak";
         File file = new File(fileName);
         FileWriter fr = null;
@@ -1080,15 +1094,14 @@ public class TreeComparator {
         boolean logDifferences = true;
         if (comparison != null && !comparison.equals("")){
             treeComparator.printDifferences(displayModeFull, hideComparisons, logDifferences);
-            logger.info("Root Geneanet person : " + geneanetBrowser.rootPerson);
-            logger.info("Main Gedcom person : " + person);
+            //logger.info("Root Geneanet person : " + geneanetBrowser.rootPerson);
+            //logger.info("Main Gedcom person : " + person);
             logger.info(geneanetPersonStringHashMap.size() + "/" + treeComparator.getDifferences().size() + " differences of " + tree + " tree :");
             logger.error(comparison);
             treeComparator.setErrorComparison(true);
             if (exceptionMode && !hideComparisons) {
                 throw new Exception("Error with comparison for tree " + tree);
             }
-
         } else {
             logger.info("Tree " + tree + " OK");
         }
@@ -1112,14 +1125,14 @@ public class TreeComparator {
         boolean saveComparisonInFile = false;
         GeneanetBrowser urlBrowser = new GeneanetBrowser();
         ArrayList<GeneanetTree> geneanetTrees = urlBrowser.getGeneanetTrees();
-        boolean searchOnGeneanet = true;
-        boolean saveGeneanetSearch = true;
+        boolean searchOnGeneanet = false;
+        boolean saveGeneanetSearch = false;
         boolean displayModeFull = false;
         boolean exceptionMode = true;
         boolean hideComparisons = true;
         int index = 1;
         for (GeneanetTree geneanetTree : geneanetTrees){
-            if (index <= 40){
+            if (index >= 1){
                 String url = geneanetTree.getUrl();
                 loopCompareTree(url, searchOnGeneanet, genealogy, saveComparisonInFile, saveGeneanetSearch, displayModeFull, exceptionMode, hideComparisons);
             }

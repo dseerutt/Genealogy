@@ -21,6 +21,7 @@ gabrielle;gabriel;name
 l'aine;;name
 l aine;;name
 l'aisne;;name
+claudine;claude;name
 margueritte;marguerite;name
 estiennette;etiennette;name
 georges;george;name
@@ -43,6 +44,7 @@ germine;germaine;name
 (Hurisse);;name
 benard (guenard);guenard;name
 clain;clin;name
+dauphin;daufin;name
 sequin;seguin;name
 de la ville;delaville;name
 guille ;guillet ;name
