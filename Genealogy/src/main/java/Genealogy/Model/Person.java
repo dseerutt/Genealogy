@@ -17,6 +17,7 @@ import Genealogy.Model.Date.MyDate;
 import Genealogy.Parsing.PDFStructure;
 import Genealogy.Parsing.ParsingStructure;
 import javafx.util.Pair;
+import org.apache.commons.codec.binary.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
@@ -258,7 +259,6 @@ public class Person {
         }
         return tempPeriods;
     }
-
 
     public int getProofUnionSize(){
         int nbUnions = 0;
@@ -789,5 +789,51 @@ public class Person {
             }
         }
         return result;
+    }
+
+    public void printNecessaryResearch(){
+        if (!StringUtils.equals(getSurname(),"...")){
+            boolean found = false;
+            String result = "";
+            if (birth != null){
+                String birthTxt = birth.getNecessaryResearch();
+                if (birthTxt != null){
+                    found = true;
+                    result += ", Birth=[" + birthTxt + "]";
+                }
+            } else {
+                result += ", Birth=[Date Town]";
+            }
+
+            ArrayList<Union> unions = getUnions();
+            if (unions != null ){
+                String unionTxt = "";
+                for (Union union : unions){
+                    String inputUnion = union.getNecessaryResearch();
+                    if (inputUnion != null){
+                        unionTxt += inputUnion;
+                    }
+                }
+                if (!unionTxt.equals("")){
+                    found = true;
+                    result += ", Union=[" + unionTxt + "]";
+                }
+            } else {
+                result += ", Union=[Date Town]";
+            }
+
+            if (death != null) {
+                String deathTxt = death.getNecessaryResearch();
+                if (deathTxt != null) {
+                    found = true;
+                    result += ", Death=[" + deathTxt + "]";
+                }
+            } else {
+                result += ", Death=[Date Town]";
+            }
+            if (found){
+                logger.info(getFullName() + " : " + result.substring(2));
+            }
+        }
     }
 }

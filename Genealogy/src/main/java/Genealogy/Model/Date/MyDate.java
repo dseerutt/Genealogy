@@ -28,6 +28,10 @@ public abstract class MyDate implements Serializable {
     public abstract Date getDate();
     public abstract String descriptionDate();
 
+    public boolean isFullDate(){
+        return this instanceof FullDate;
+    }
+
     public static String getMonthForInt(int num) {
         String month = "wrong";
         DateFormatSymbols dfs = new DateFormatSymbols();

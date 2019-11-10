@@ -32,6 +32,21 @@ public abstract class Act {
         }
     }
 
+    public String getNecessaryResearch(){
+        String result = "";
+        if (date == null || !date.isFullDate()){
+            result += " Date";
+        }
+        if (town.isEmpty()){
+            result += " Town";
+        }
+        if (!result.equals("")){
+            return result.substring(1);
+        } else {
+            return null;
+        }
+    }
+
     public Person getCitizen() {
         return citizen;
     }

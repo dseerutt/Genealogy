@@ -70,4 +70,23 @@ public class Union extends Act {
             return null;
         }
     }
+
+    @Override
+    public String getNecessaryResearch(){
+        String result = "";
+        if (date == null || !date.isFullDate()){
+            result += " Date";
+        }
+        if (town.isEmpty()){
+            result += " Town";
+        }
+        if (citizen == null){
+            result += " Partner";
+        }
+        if (!result.equals("")){
+            return result.substring(1);
+        } else {
+            return null;
+        }
+    }
 }

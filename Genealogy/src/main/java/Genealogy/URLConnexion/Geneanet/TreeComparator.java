@@ -1115,12 +1115,21 @@ public class TreeComparator {
         genealogy.sortPersons();
     }
 
+    private static void printDirectAncestorsToInvestigate() {
+        for (Person person : genealogy.getPersons()){
+            if (person.isDirectAncestor() ){
+                person.printNecessaryResearch();
+            }
+        }
+    }
+
     public static void main(String[] args) throws Exception {
         BasicConfigurator.configure();
 
         //init gedcomfile
         gedcomFile = "C:\\Users\\Dan\\Desktop\\famille1.ged";
         setGedcomData();
+        //printDirectAncestorsToInvestigate();
 
         boolean saveComparisonInFile = false;
         GeneanetBrowser urlBrowser = new GeneanetBrowser();

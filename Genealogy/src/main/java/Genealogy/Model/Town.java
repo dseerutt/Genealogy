@@ -262,6 +262,10 @@ public class Town implements Serializable{
 
     }
 
+    public boolean isEmpty(){
+        return name == null && detail == null;
+    }
+
     @Override
     public String toString() {
         String print = "Town{" +
