@@ -90,7 +90,7 @@ public class Serializer<T> {
                 logger.info("Serializer file well read");
                 }
             catch(InvalidClassException ex){
-                logger.error("Serializer Class not OK");
+                logger.warn("Serializer Class not OK");
                 ex.printStackTrace();
             }
             catch(Exception ex){

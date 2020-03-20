@@ -26,7 +26,7 @@ public class MyGedcomReader {
         ArrayList<ParsingStructure> parsingStructureList = new ArrayList<ParsingStructure>();
             BufferedReader br = null;
             String sCurrentLine;
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(path), "ISO8859_1"));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(path), "UTF-8"));
             while ((sCurrentLine = br.readLine()) != null) {
                 String[] temp = sCurrentLine.split(" ");
                 if (parsingStructureList.isEmpty()){

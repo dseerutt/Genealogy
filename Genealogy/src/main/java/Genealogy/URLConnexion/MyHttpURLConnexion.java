@@ -7,11 +7,13 @@ package Genealogy.URLConnexion;
 import Genealogy.AuxMethods;
 import Genealogy.Model.Town;
 import Genealogy.MapViewer.Structures.MyCoordinate;
+import org.apache.commons.codec.binary.StringUtils;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -21,6 +23,8 @@ public class MyHttpURLConnexion {
     private final String USER_AGENT = "Mozilla/5.0";
     private static final String testingInternetConnexion = "http://whatthecommit.com/";
     final static Logger logger = Logger.getLogger(MyHttpURLConnexion.class);
+    private static int cpt = 0;
+
     // HTTP GET request
     public String sendGet(String url) throws Exception {
         URL obj = new URL(url);
@@ -49,14 +53,53 @@ public class MyHttpURLConnexion {
         return response.toString();
     }
 
-    public String sendAddressRequest(String city) throws Exception {
+    public String sendAddressRequest(String city, String county) throws Exception {
+        Thread.sleep(1000);
+        String googleApi = "https://maps.googleapis.com/maps/api/geocode/json?address=";
+        String openstreetmapApiDefault = "https://nominatim.openstreetmap.org/search?city=Tataouine&format=json";
+        try {
+            String newCity = URLEncoder.encode(city, "UTF-8");
+            String newCounty = URLEncoder.encode(county, "UTF-8");
+            String openstreetmapApi = "https://nominatim.openstreetmap.org/search?city=" + newCity
+                    + "&county=" + newCounty + "&format=json";
+            String res = sendGet(openstreetmapApi);
+            logger.info("Result of request to Nominatim API :\n" + res);
+            if (res.contains("ERROR")){
+                Thread.sleep(1000);
+                return sendAddressRequest(city, county);
+            } else if (StringUtils.equals(res,"[]")) {
+                //Pas de réponse : mettre Tataouine comme ville par défaut
+                logger.warn("No result found for " + city);
+                Town.addLostTowns(city);
+                return sendGet(openstreetmapApiDefault);
+            }
+            else  {
+                return res;
+            }
+        }
+        catch (ConnectException e) {
+            logger.error("Timeout",e);
+            cpt++;
+            if (cpt >= 5){
+                throw new URLException("Impossible de se connecter à l'API");
+            } else {
+                Thread.sleep(5000);
+                return sendAddressRequest(city, county);
+            }
+        }catch (Exception e) {
+            logger.error("Impossible de se connecter à l'API",e);
+           throw new URLException("Impossible de se connecter à l'API");
+        }
+    }
+
+    public String sendGoogleAddressRequest(String city) throws Exception {
         try {
             String newCity = URLEncoder.encode(city, "UTF-8");
             String res = sendGet("https://maps.googleapis.com/maps/api/geocode/json?address=" + newCity);
             logger.info("Result of request to Google Map API :\n" + res);
             if (res.contains("OVER_QUERY_LIMIT")){
                 Thread.sleep(1000);
-                return sendAddressRequest(city);
+                return sendGoogleAddressRequest(city);
             } else if (res.contains("ZERO_RESULTS")) {
                 //Pas de réponse : mettre Tataouine comme ville par défaut
                 logger.warn("No result found for " + city);
@@ -68,13 +111,12 @@ public class MyHttpURLConnexion {
             }
         } catch (Exception e) {
             e.printStackTrace();
-           throw new URLException("Impossible de se connecter à l'API de Google Map");
+            throw new URLException("Impossible de se connecter à l'API de Google Map");
         }
     }
 
 
     public static boolean testInternetConnexion(){
-        //TODO
         MyHttpURLConnexion connexion = new MyHttpURLConnexion();
         try {
             connexion.sendGet(testingInternetConnexion);
@@ -83,6 +125,11 @@ public class MyHttpURLConnexion {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public static void main(String[] args) throws Exception {
+        MyHttpURLConnexion connexion = new MyHttpURLConnexion();
+        System.out.println(connexion.sendAddressRequest("Rennes","Ille et Vilaine"));
     }
 
 }

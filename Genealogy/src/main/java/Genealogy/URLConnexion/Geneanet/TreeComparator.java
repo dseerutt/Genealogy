@@ -1146,6 +1146,6 @@ public class TreeComparator {
                 loopCompareTree(url, searchOnGeneanet, genealogy, saveComparisonInFile, saveGeneanetSearch, displayModeFull, exceptionMode, hideComparisons);
             }
             index++;
-        }
+        }//https://www.geneanet.org/fonds/individus/
     }
 }

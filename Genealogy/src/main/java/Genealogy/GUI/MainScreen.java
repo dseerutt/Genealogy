@@ -14,11 +14,14 @@ import Genealogy.Model.Town;
 import Genealogy.URLConnexion.MyHttpURLConnexion;
 import Genealogy.URLConnexion.Serializer;
 import Genealogy.URLConnexion.URLException;
+import com.sun.org.slf4j.internal.LoggerFactory;
 import edu.emory.mathcs.backport.java.util.Collections;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.jdesktop.swingx.JXMapKit;
 import org.jdesktop.swingx.JXMapViewer;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
+import org.jdesktop.swingx.mapviewer.TileCache;
 import org.jdesktop.swingx.mapviewer.WaypointPainter;
 
 import javax.swing.*;
@@ -29,6 +32,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+
+import static com.sun.org.slf4j.internal.LoggerFactory.*;
 
 /**
  * Created by Dan on 10/04/2016.
@@ -454,7 +459,8 @@ public class MainScreen extends JFrame {
                 try {
                     String key = (String) NotFoundPlaces.getSelectedItem();
                     String value = searchField.getText();
-                    MyCoordinate result = Town.parseJsonArray(HTTPConnexion.sendAddressRequest(value),value);
+                    //MyCoordinate result = Town.parseJsonArray(HTTPConnexion.sendAddressRequest(value),value);
+                    MyCoordinate result = null;//TODO
                     Town.setCoordinates(result,key);
                     HashMap<String, String> townAssociation = Town.getTownAssociation();
                     townAssociation.remove(key);
@@ -481,7 +487,8 @@ public class MainScreen extends JFrame {
                 String search = searchField.getText();
                 if (search != null && !search.equals("")){
                     try {
-                        MyCoordinate result = Town.parseJsonArray(HTTPConnexion.sendAddressRequest(search),search);
+                        //MyCoordinate result = Town.parseJsonArray(HTTPConnexion.sendAddressRequest(search),search);
+                        MyCoordinate result = null; //TODO
                         logger.info("Coordonnées de la ville " + search + " : " + result);
                         if (result != null){
                             String city = search;

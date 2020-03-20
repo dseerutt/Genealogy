@@ -3,6 +3,7 @@ package Genealogy.Model;
 import Genealogy.URLConnexion.MyHttpURLConnexion;
 import Genealogy.Model.Act.Act;
 import Genealogy.URLConnexion.Serializer;
+import org.apache.commons.codec.binary.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -57,7 +58,30 @@ public class Town implements Serializable{
         return name + " " + detail;
     }
 
-    public static MyCoordinate parseJsonArray(String jsonObject, String city){
+    public static MyCoordinate parseJsonArray(String jsonObject){
+        if (StringUtils.equals(jsonObject,"[]")){
+            return null;
+        }
+        JSONObject jsonObj = new JSONObject(jsonObject.substring(1,jsonObject.length()-1));
+        MyCoordinate point2D = new MyCoordinate(Double.valueOf((String) jsonObj.get("lat")), Double.valueOf((String) jsonObj.get("lon")));
+        return point2D;
+    }
+
+    public static MyCoordinate parseGoogleJsonArray(String jsonObject){
+        JSONObject jsonObj = new JSONObject(jsonObject);
+        if (jsonObj.get("status").equals("OK")){
+            JSONArray results = (JSONArray) jsonObj.get("results");
+            JSONObject resultsIndex = (JSONObject) results.get(0);
+            JSONObject geometry = (JSONObject) resultsIndex.get("geometry");
+            JSONObject location = (JSONObject) geometry.get("location");
+            MyCoordinate point2D = new MyCoordinate((double) location.get("lat"),(double) location.get("lng"));
+            return point2D;
+        } else {
+            return null;
+        }
+    }
+
+    public static MyCoordinate parseGoogleJsonArray(String jsonObject, String city){
         if (Serializer.getSerializer().isJar()){
             String[] tab = city.toLowerCase().split(" ");
             String input = jsonObject.toLowerCase();
@@ -161,10 +185,12 @@ public class Town implements Serializable{
             for (Town thisTown : towns) {
                 MyCoordinate coo = null;
                 String newName = thisTown.getFullName();
+                String city = thisTown.getName();
+                String county = thisTown.getDetail();
                 if (alias.containsKey(thisTown.getFullName())) {
                     newName = alias.get(thisTown.getFullName());
                 }
-                    coo = Town.parseJsonArray((new MyHttpURLConnexion()).sendAddressRequest(newName),newName);
+                    coo = Town.parseJsonArray((new MyHttpURLConnexion()).sendAddressRequest(city, county));
                 if (!lostTowns.contains(newName)){
                     townsToSave.add(thisTown);
                 }
@@ -177,6 +203,8 @@ public class Town implements Serializable{
             for (Town thisTown : towns){
                 Town town = findTown(townsInFile, thisTown);
                 String aliasName = thisTown.getFullName();
+                String city = thisTown.getName();
+                String county = thisTown.getDetail();
                 if (alias.containsKey(aliasName)){
                     aliasName = alias.get(thisTown.getFullName());
                 }
@@ -187,7 +215,7 @@ public class Town implements Serializable{
                     }
                 } else {
                     //Ajouter la ville
-                    MyCoordinate coo = Town.parseJsonArray((new MyHttpURLConnexion()).sendAddressRequest(aliasName),aliasName);
+                    MyCoordinate coo = Town.parseJsonArray((new MyHttpURLConnexion()).sendAddressRequest(city, county));
                     if (coo != null) {
                         thisTown.setCoordinates(coo);
                     }
