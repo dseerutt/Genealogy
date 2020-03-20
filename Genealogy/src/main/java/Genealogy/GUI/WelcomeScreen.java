@@ -2,15 +2,11 @@ package Genealogy.GUI;
 
 import Genealogy.Genealogy;
 import Genealogy.Main;
-import Genealogy.MapViewer.MapFrame;
-import Genealogy.MapViewer.Structures.MapPoint;
 import Genealogy.Model.Town;
 import Genealogy.Parsing.MyGedcomReader;
-import Genealogy.URLConnexion.MyHttpURLConnexion;
 import Genealogy.URLConnexion.Serializer;
-import org.apache.log4j.Logger;
-import org.jdesktop.swingx.JXMapKit;
-import org.jdesktop.swingx.mapviewer.GeoPosition;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,8 +14,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Dan on 10/04/2016.
@@ -31,7 +25,7 @@ public class WelcomeScreen extends JFrame{
     private JButton chargerFichierButton;
     private JPanel loadingPanel;
     private JProgressBar progressBar1;
-    final static Logger logger = Logger.getLogger(WelcomeScreen.class);
+    final static Logger logger = LogManager.getLogger(WelcomeScreen.class);
 
     public WelcomeScreen(String title) {
         super(title);

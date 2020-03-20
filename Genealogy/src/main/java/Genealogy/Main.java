@@ -1,10 +1,8 @@
 package Genealogy;
 
 import Genealogy.GUI.WelcomeScreen;
-import Genealogy.Parsing.MyGedcomReader;
-import Genealogy.URLConnexion.MyHttpURLConnexion;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,11 +15,16 @@ public class Main {
     public static final String myFile = "famille1.ged";
     public static final String myFolder = "C:\\Users\\Dan\\Desktop\\Programmation\\IntelliJ\\Genealogy\\Genealogy\\src\\main\\resources\\";
     public static final String myJarFolfer = System.getProperty("user.dir") + File.separator + "Properties" + File.separator;
-    final static Logger logger = Logger.getLogger(Main.class);
+    final static Logger logger = LogManager.getLogger(Main.class);
 
     public static void main(String[] args) throws ParseException, IOException {
-        BasicConfigurator.configure();
-        logger.info("Init app");
-        WelcomeScreen welcomeScreen = new WelcomeScreen("Ma généalogie");
+        try {
+            logger.info("Init app");
+            WelcomeScreen welcomeScreen = new WelcomeScreen("Ma généalogie");
+        }
+        catch (Exception e){
+            logger.error("Erreur inattendue",e);
+            throw e;
+        }
     }
 }

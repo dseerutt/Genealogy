@@ -3,10 +3,11 @@ package Genealogy;
 import Genealogy.Model.Act.Union;
 import Genealogy.Model.Date.MyDate;
 import Genealogy.Model.Header;
-import Genealogy.Parsing.ParsingStructure;
 import Genealogy.Model.Person;
 import Genealogy.Model.Town;
-import org.apache.log4j.Logger;
+import Genealogy.Parsing.ParsingStructure;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,7 +24,7 @@ public class Genealogy {
     private String author;
     private ArrayList<Person> persons = new ArrayList<Person>();
     public static Genealogy genealogy;
-    final static Logger logger = Logger.getLogger(Genealogy.class);
+    final static Logger logger = LogManager.getLogger(Genealogy.class);
 
     public Genealogy() {
     }

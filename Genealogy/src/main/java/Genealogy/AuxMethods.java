@@ -1,13 +1,17 @@
 package Genealogy;
 
-import Genealogy.Parsing.ParsingStructure;
 import Genealogy.Model.Person;
-import org.apache.log4j.Logger;
+import Genealogy.Parsing.ParsingStructure;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Dan on 05/04/2016.
@@ -23,7 +27,7 @@ public class AuxMethods {
     public static SimpleDateFormat SDF3 = new SimpleDateFormat(DATE_FORMAT3, Locale.ENGLISH);
     public static SimpleDateFormat SDF4 = new SimpleDateFormat(DATE_FORMAT3, Locale.ENGLISH);
     public static Color slowRed = new Color(244,89,81);
-    final static Logger logger = Logger.getLogger(AuxMethods.class);
+    final static Logger logger = LogManager.getLogger(AuxMethods.class);
 
     public static String findField(ArrayList<ParsingStructure> list, String field){
         return findField(list,field,0,list.size());

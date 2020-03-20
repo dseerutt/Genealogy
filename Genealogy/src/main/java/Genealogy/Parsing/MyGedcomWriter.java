@@ -1,12 +1,9 @@
 package Genealogy.Parsing;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,7 +11,7 @@ import java.util.regex.Pattern;
  * Created by Dan on 04/03/2018.
  */
 public class MyGedcomWriter {
-    final static Logger logger = Logger.getLogger(MyGedcomWriter.class);
+    final static Logger logger = LogManager.getLogger(MyGedcomWriter.class);
     private String fileName;
     private String contents;
     private static final String commentSection = "1 NOTE ";

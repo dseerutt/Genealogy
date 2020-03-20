@@ -1,11 +1,5 @@
 package Genealogy.Model;
 
-import java.lang.reflect.Type;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import Genealogy.AuxMethods;
 import Genealogy.MapViewer.Structures.MapStructure;
 import Genealogy.Model.Act.Act;
@@ -18,9 +12,15 @@ import Genealogy.Parsing.PDFStructure;
 import Genealogy.Parsing.ParsingStructure;
 import javafx.util.Pair;
 import org.apache.commons.codec.binary.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
+
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Dan on 05/04/2016.
@@ -68,7 +68,7 @@ public class Person {
     private static HashMap<Integer,ArrayList<MapStructure>> periodsDirectAncestors = new HashMap<>();
     private static int minimumPeriod = 10000;
     private boolean stillAlive = false;
-    final static Logger logger = Logger.getLogger(Person.class);
+    final static Logger logger = LogManager.getLogger(Person.class);
 
     public static HashMap<Integer,ArrayList<MapStructure>> getPeriods() {
         return periods;

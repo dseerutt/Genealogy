@@ -1,12 +1,10 @@
 package Genealogy.URLConnexion;
 
-import Genealogy.AuxMethods;
 import Genealogy.Model.Town;
-import Genealogy.Parsing.MyGedcomReader;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -14,7 +12,7 @@ import java.util.*;
  */
 public class Serializer<T> {
 
-    final static Logger logger = Logger.getLogger(Serializer.class);
+    final static Logger logger = LogManager.getLogger(Serializer.class);
     private static Serializer serializer;
     private ArrayList<T> serializedData;
     private static String path;

@@ -1,6 +1,7 @@
 package Genealogy.Model.Date;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.Serializable;
 import java.text.ParseException;
@@ -13,7 +14,7 @@ import java.util.Locale;
  */
 public class YearDate extends MyDate implements Serializable {
     public int year;
-    final static Logger logger = Logger.getLogger(YearDate.class);
+    final static Logger logger = LogManager.getLogger(YearDate.class);
 
     public YearDate(String year0) {
         year = Integer.parseInt(year0);

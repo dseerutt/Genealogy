@@ -2,8 +2,8 @@ package Genealogy.URLConnexion.Geneanet;
 
 import Genealogy.Model.Date.MyDate;
 import Genealogy.URLConnexion.Serializer;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -38,7 +38,7 @@ public class GeneanetBrowser implements Serializable {
     public int expectedNbPeople = 0;
     public HashSet<String> peopleUrl = new HashSet<String>();
     public HashMap<String, GeneanetPerson> allPeopleUrl = new HashMap<String, GeneanetPerson>();
-    final static Logger logger = Logger.getLogger(GeneanetBrowser.class);
+    final static Logger logger = LogManager.getLogger(GeneanetBrowser.class);
     private static transient ArrayList<GeneanetTree> geneanetTrees = new ArrayList<>();
 
     public GeneanetBrowser(String url0) throws Exception {
@@ -640,7 +640,6 @@ public class GeneanetBrowser implements Serializable {
     }
 
     public static void main(String[] args) {
-        BasicConfigurator.configure();
         String testUrl = "https://gw.geneanet.org/il?lang=fr&i=19978";
         String testUrl2 = "https://gw.geneanet.org/dil?lang=fr&i=19906";
         String testUrl3 = "https://gw.geneanet.org/slebruman?lang=fr&i=523";

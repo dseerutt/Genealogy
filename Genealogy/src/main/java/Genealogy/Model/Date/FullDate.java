@@ -1,7 +1,8 @@
 package Genealogy.Model.Date;
 
 import Genealogy.AuxMethods;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.Serializable;
 import java.text.ParseException;
@@ -14,7 +15,7 @@ import java.util.Locale;
  */
 public class FullDate extends MyDate implements Serializable {
     private Date date;
-    final static Logger logger = Logger.getLogger(FullDate.class);
+    final static Logger logger = LogManager.getLogger(FullDate.class);
 
     public FullDate(String input) throws ParseException {
             SimpleDateFormat format = new SimpleDateFormat(AuxMethods.DATE_FORMAT2, Locale.ENGLISH);

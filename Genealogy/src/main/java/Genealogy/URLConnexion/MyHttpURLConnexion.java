@@ -4,14 +4,12 @@ package Genealogy.URLConnexion;
  * Created by Dan on 15/04/2016.
  */
 
-import Genealogy.AuxMethods;
 import Genealogy.Model.Town;
-import Genealogy.MapViewer.Structures.MyCoordinate;
 import org.apache.commons.codec.binary.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
@@ -22,7 +20,7 @@ public class MyHttpURLConnexion {
 
     private final String USER_AGENT = "Mozilla/5.0";
     private static final String testingInternetConnexion = "http://whatthecommit.com/";
-    final static Logger logger = Logger.getLogger(MyHttpURLConnexion.class);
+    final static Logger logger = LogManager.getLogger(MyHttpURLConnexion.class);
     private static int cpt = 0;
 
     // HTTP GET request

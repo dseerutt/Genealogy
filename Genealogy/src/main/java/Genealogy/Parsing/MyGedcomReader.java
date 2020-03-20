@@ -1,16 +1,20 @@
 package Genealogy.Parsing;
 
 import Genealogy.Genealogy;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 /**
  * Created by Dan on 04/04/2016.
  */
 public class MyGedcomReader {
-    final static Logger logger = Logger.getLogger(MyGedcomReader.class);
+    final static Logger logger = LogManager.getLogger(MyGedcomReader.class);
     public static final String UTF8_BOM = "\uFEFF";
 
     private static String removeUTF8BOM(String s) {

@@ -10,7 +10,6 @@ import Genealogy.Model.Town;
 import Genealogy.Parsing.MyGedcomReader;
 import Genealogy.URLConnexion.Serializer;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.BasicConfigurator;
 
 import java.io.*;
 import java.util.*;
@@ -1124,7 +1123,6 @@ public class TreeComparator {
     }
 
     public static void main(String[] args) throws Exception {
-        BasicConfigurator.configure();
 
         //init gedcomfile
         gedcomFile = "C:\\Users\\Dan\\Desktop\\famille1.ged";

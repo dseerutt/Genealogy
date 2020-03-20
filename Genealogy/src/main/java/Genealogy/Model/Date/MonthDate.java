@@ -1,7 +1,8 @@
 package Genealogy.Model.Date;
 
 import Genealogy.AuxMethods;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.Serializable;
 import java.text.ParseException;
@@ -15,7 +16,7 @@ import java.util.Locale;
 public class MonthDate extends MyDate implements Serializable {
     private int month;
     private int year;
-    final static Logger logger = Logger.getLogger(MonthDate.class);
+    final static Logger logger = LogManager.getLogger(MonthDate.class);
 
     public MonthDate(String input) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat(AuxMethods.DATE_FORMAT4, Locale.ENGLISH);

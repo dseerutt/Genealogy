@@ -14,14 +14,12 @@ import Genealogy.Model.Town;
 import Genealogy.URLConnexion.MyHttpURLConnexion;
 import Genealogy.URLConnexion.Serializer;
 import Genealogy.URLConnexion.URLException;
-import com.sun.org.slf4j.internal.LoggerFactory;
 import edu.emory.mathcs.backport.java.util.Collections;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdesktop.swingx.JXMapKit;
 import org.jdesktop.swingx.JXMapViewer;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
-import org.jdesktop.swingx.mapviewer.TileCache;
 import org.jdesktop.swingx.mapviewer.WaypointPainter;
 
 import javax.swing.*;
@@ -32,8 +30,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-
-import static com.sun.org.slf4j.internal.LoggerFactory.*;
 
 /**
  * Created by Dan on 10/04/2016.
@@ -72,7 +68,7 @@ public class MainScreen extends JFrame {
     private ArrayList<MapPoint> mapPoints;
     private MapFrame mapFrame;
     private static MainScreen INSTANCE;
-    final static Logger logger = Logger.getLogger(MainScreen.class);
+    final static Logger logger = LogManager.getLogger(MainScreen.class);
     private MyHttpURLConnexion HTTPConnexion;
 
     public static MainScreen getINSTANCE() {
