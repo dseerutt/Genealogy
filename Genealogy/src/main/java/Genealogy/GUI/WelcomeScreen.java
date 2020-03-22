@@ -29,6 +29,7 @@ public class WelcomeScreen extends JFrame{
 
     public WelcomeScreen(String title) {
         super(title);
+        //initForm();
         initText();
         initButtons();
 
@@ -40,6 +41,15 @@ public class WelcomeScreen extends JFrame{
         setContentPane(welcomePanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+    }
+
+    private void initForm(){
+        selFichierButton = new JButton();
+        welcomePanel = new JPanel();
+        filePath = new JTextArea();
+        chargerFichierButton = new JButton();
+        loadingPanel = new JPanel();
+        progressBar1 = new JProgressBar();
     }
 
     private void initTownAssociation(Serializer serializer){

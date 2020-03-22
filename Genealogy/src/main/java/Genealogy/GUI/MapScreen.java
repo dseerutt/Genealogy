@@ -39,9 +39,7 @@ public class MapScreen extends JFrame{
     private JComboBox comboDate;
     private JComboBox comboDate1;
     private JComboBox comboDate2;
-    private JPanel mapPanel;
     private JButton retourButton;
-    private JPanel panelForMap;
     private JRadioButton actesDeDecesRadioButton;
     private JRadioButton actesDeMariageRadioButton;
     private JRadioButton actesDeNaissanceRadioButton;
@@ -50,9 +48,13 @@ public class MapScreen extends JFrame{
     private JRadioButton toutesLesPersonnesRadioButton;
     private JButton stopButton;
     private JButton effacerMarqueursButton;
-    private JPanel captionPanel;
     private JTextField FrenchHistoryText;
     private JTextField MauritianHistoryText;
+    private ImageIcon frenchGovernorPicture;
+    private ImageIcon mauritianGovernorPicture;
+    private JPanel mapPanel;
+    private JPanel captionPanel;
+    private JPanel panelForMap;
     private JPanel FrenchHistoryPanel;
     private JPanel MauritianHistoryPanel;
     private JXMapKit jXMapKit;
@@ -65,8 +67,6 @@ public class MapScreen extends JFrame{
     private static Worker currentWorker = null;
     private ImageIcon image1;
     private ImageIcon image2;
-    private ImageIcon frenchGovernorPicture;
-    private ImageIcon mauritianGovernorPicture;
     private JLabel labelImage;
     private Governors frenchGovernors;
     private Governors mauritianGovernors;
@@ -76,6 +76,7 @@ public class MapScreen extends JFrame{
     public MapScreen() throws Exception{
         super("Répartition territoriale dans le temps");
 
+        //initForm();
         initRadioButtons();
         initComboBox();
         initButtons();
@@ -93,6 +94,29 @@ public class MapScreen extends JFrame{
         panelForMap.setPreferredSize(new Dimension(5000,5000));
         //throw new Exception();
         setVisible(true);
+    }
+
+    private void initForm(){
+        lancerButton = new JButton();
+        generationAutomatiqueRadioButton = new JRadioButton();
+        generationALaDateRadioButton = new JRadioButton();
+        generationEntreLaDateRadioButton = new JRadioButton();
+        comboDate = new JComboBox();
+        comboDate1 = new JComboBox();
+        comboDate2 = new JComboBox();
+        retourButton = new JButton();
+        actesDeDecesRadioButton = new JRadioButton();
+        actesDeMariageRadioButton = new JRadioButton();
+        actesDeNaissanceRadioButton = new JRadioButton();
+        tousLesActesRadioButton = new JRadioButton();
+        tousLesAncetresRadioButton = new JRadioButton();
+        toutesLesPersonnesRadioButton = new JRadioButton();
+        stopButton = new JButton();
+        effacerMarqueursButton = new JButton();
+        FrenchHistoryText = new JTextField();
+        MauritianHistoryText = new JTextField();
+        frenchGovernorPicture = new ImageIcon();
+        mauritianGovernorPicture = new ImageIcon();
     }
 
     private void initGovernorsPanel() {
