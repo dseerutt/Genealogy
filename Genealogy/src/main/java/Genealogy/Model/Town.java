@@ -1,13 +1,13 @@
 package Genealogy.Model;
 
-import Genealogy.URLConnexion.MyHttpURLConnexion;
+import Genealogy.MapViewer.Structures.MyCoordinate;
 import Genealogy.Model.Act.Act;
+import Genealogy.URLConnexion.MyHttpURLConnexion;
 import Genealogy.URLConnexion.Serializer;
 import org.apache.commons.codec.binary.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import Genealogy.MapViewer.Structures.MyCoordinate;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -28,6 +28,7 @@ public class Town implements Serializable{
     private static ArrayList<String> lostTowns = new ArrayList<String>();
     private static HashMap<String,String> townAssociation;
     private ArrayList<Town> serializerTowns;
+    private static boolean useFileSave = true;
 
     public Town(String name, String detail) {
         this.name = name;
@@ -38,8 +39,9 @@ public class Town implements Serializable{
         return townsToSave;
     }
 
-    public static void addLostTowns(String town){
+    public static void addLostTowns(String town, String county){
         lostTowns.add(town);
+        townAssociation.put(town, county);
     }
 
     public static ArrayList<String> getLostTowns(){
@@ -56,6 +58,10 @@ public class Town implements Serializable{
 
     public String getFullName(){
         return name + " " + detail;
+    }
+
+    public String getFullNameWithParenthesis(){
+        return name + " (" + detail + ")";
     }
 
     public static MyCoordinate parseJsonArray(String jsonObject){
@@ -158,7 +164,7 @@ public class Town implements Serializable{
 
     public MyCoordinate findCoordinate(){
         for (int i = 0 ; i < Town.getTowns().size() ; i++){
-            if (towns.get(i).getFullName().equals(this.getFullName())){
+            if (towns.get(i).getFullNameWithParenthesis().equals(this.getFullName())){
                 return towns.get(i).getCoordinates();
             }
         }
@@ -167,7 +173,7 @@ public class Town implements Serializable{
 
     public static MyCoordinate findCoordinate(String city){
         for (int i = 0 ; i < Town.getTowns().size() ; i++){
-            if (towns.get(i).getFullName().equals(city)){
+            if (towns.get(i).getFullNameWithParenthesis().equals(city)){
                 return towns.get(i).getCoordinates();
             }
         }
@@ -178,6 +184,8 @@ public class Town implements Serializable{
         lostTowns = new ArrayList<String>();
         //Alias villes qui ont changé de nom
         HashMap<String,String> alias = Town.getTownAssociation();
+        Serializer serializer = Serializer.getSerializer();
+        String separator = "|";
 
         ArrayList<Town> townsInFile = Serializer.getSerializer().getTowns();
         if ((townsInFile == null)||(townsInFile.isEmpty())){
@@ -187,16 +195,26 @@ public class Town implements Serializable{
                 String newName = thisTown.getFullName();
                 String city = thisTown.getName();
                 String county = thisTown.getDetail();
-                if (alias.containsKey(thisTown.getFullName())) {
+
+                String coordinatesFromFile = serializer.getCoordinatesFromFile(city + separator + county);
+                if (coordinatesFromFile != null){
+                    coo = new MyCoordinate(coordinatesFromFile);
+                    thisTown.setCoordinates(coo);
+                } else {
+                    if (alias.containsKey(thisTown.getFullName())) {
                     newName = alias.get(thisTown.getFullName());
                 }
                     coo = Town.parseJsonArray((new MyHttpURLConnexion()).sendAddressRequest(city, county));
-                if (!lostTowns.contains(newName)){
-                    townsToSave.add(thisTown);
-                }
+                    if (!lostTowns.contains(newName)){
+                        townsToSave.add(thisTown);
+                    }
 
-                if (coo != null) {
-                    thisTown.setCoordinates(coo);
+                    if (coo != null) {
+                        thisTown.setCoordinates(coo);
+                        if (useFileSave){
+                            saveCoordinateIntoFile(city, county, coo.getLattitude(), coo.getLongitude());
+                        }
+                    }
                 }
             }
         } else {
@@ -214,10 +232,20 @@ public class Town implements Serializable{
                         townsToSave.add(thisTown);
                     }
                 } else {
+                    MyCoordinate coo;
+                    String coordinatesFromFile = serializer.getCoordinatesFromFile(city + separator + county);
+                    if (coordinatesFromFile != null){
+                        coo = new MyCoordinate(coordinatesFromFile);
+                        thisTown.setCoordinates(coo);
+                        break;
+                    }
                     //Ajouter la ville
-                    MyCoordinate coo = Town.parseJsonArray((new MyHttpURLConnexion()).sendAddressRequest(city, county));
+                    coo = Town.parseJsonArray((new MyHttpURLConnexion()).sendAddressRequest(city, county));
                     if (coo != null) {
                         thisTown.setCoordinates(coo);
+                        if (useFileSave){
+                            saveCoordinateIntoFile(city, county, coo.getLattitude(), coo.getLongitude());
+                        }
                     }
                     if (!lostTowns.contains(aliasName)){
                         townsToSave.add(thisTown);
@@ -225,6 +253,10 @@ public class Town implements Serializable{
                 }
             }
         }
+    }
+
+    private static void saveCoordinateIntoFile(String city, String county, double lattitude, double longitude) {
+        Serializer.getSerializer().saveCity(city + "|" + county, "" + lattitude, "" + longitude);
     }
 
     public ArrayList<Town> getSerializerTowns() {

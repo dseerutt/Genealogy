@@ -8,10 +8,21 @@ import java.io.Serializable;
 public class MyCoordinate implements Serializable{
     private double lattitude;
     private double longitude;
+    private final String coordinateSeparator = ":";
 
     public MyCoordinate(double lattitude, double longitude) {
         this.lattitude = lattitude;
         this.longitude = longitude;
+    }
+
+    public MyCoordinate(String input) throws Exception {
+        String[] tmpTab = input.split(coordinateSeparator);
+        if (tmpTab != null && tmpTab.length == 2){
+            lattitude = Double.parseDouble(tmpTab[0]);
+            longitude = Double.parseDouble(tmpTab[1]);
+        } else {
+            throw new Exception("Could not parse MyCoordinate : " + input);
+        }
     }
 
     @Override

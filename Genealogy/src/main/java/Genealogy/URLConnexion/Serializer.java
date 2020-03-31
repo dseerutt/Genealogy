@@ -19,6 +19,8 @@ public class Serializer<T> {
     private static boolean jar = false;
     private static String serializerType;
     private static String townAssociationFile;
+    private static String cityFile;
+    private static HashMap<String,String> cityFileMap;
 
     public static Serializer getSerializer() {
         return serializer;
@@ -52,6 +54,7 @@ public class Serializer<T> {
             prop.load(input);
             serializerType = prop.getProperty("serializerType");
             townAssociationFile = prop.getProperty("townAssociationFile");
+            cityFile = prop.getProperty("cityFile");
         } catch (IOException ex) {
             ex.printStackTrace();
         } finally {
@@ -129,7 +132,7 @@ public class Serializer<T> {
             String sCurrentLine;
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path + townAssociationFile), "UTF-8"));
             while ((sCurrentLine = br.readLine()) != null) {
-                String[] temp = sCurrentLine.split("----");
+                String[] temp = sCurrentLine.split("->");
                 association.put(temp[0],temp[1]);
             }
         } else {
@@ -154,9 +157,93 @@ public class Serializer<T> {
             bw.write(content);
             logger.info("Town Association file updated");
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e);
             logger.info("Town Association file update failed");
         }
+    }
+
+    /**
+     * Fonction saveTownAssociation
+     * Met à jour le fichier des associations d'alias de villes
+     */
+    public void saveCity(String city, String lattitude, String longitude){
+        String citySeparator = "->";
+        String coordinateSeparator = ":";
+        HashMap<String,String> cities = new HashMap<String,String>();
+        String contents = "";
+        //Read file
+        try {
+            File f = new File(path + cityFile);
+            if(f.exists()) {
+                logger.info("City file found");
+                String sCurrentLine;
+                BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path + cityFile), "UTF-8"));
+                while ((sCurrentLine = br.readLine()) != null) {
+                    String[] temp = sCurrentLine.split(citySeparator);
+                    cities.put(temp[0],temp[1]);
+                    contents += sCurrentLine + System.lineSeparator();
+                }
+            } else {
+                logger.warn("city file not found");
+            }
+        }
+        catch (IOException exception){
+            logger.error(exception);
+            logger.info("Reading City file update failed");
+            return;
+        }
+
+        //Write file
+        String newkey = city;
+        String newValue = lattitude + coordinateSeparator + longitude;
+        String newline = newkey + citySeparator + newValue + System.lineSeparator();
+        if (!contents.contains(city)){
+            contents += newline;
+        } else {
+            cities.replace(city, newValue);
+            cityFileMap = cities;
+            contents = "";
+            for(Map.Entry<String, String> entry : cities.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                contents += key + citySeparator + value + System.lineSeparator();
+            }
+        }
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(path + cityFile))) {
+            bw.write(contents);
+            logger.info("City file updated");
+        } catch (IOException e) {
+            logger.error(e);
+            logger.info("Writing City file update failed");
+        }
+    }
+
+    public String getCoordinatesFromFile(String city){
+        String citySeparator = "->";
+        if (cityFileMap == null){
+            cityFileMap = new HashMap<>();
+            try {
+                File f = new File(path + cityFile);
+                if(f.exists()) {
+                    logger.info("City file found");
+                    String sCurrentLine;
+                    BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path + cityFile), "UTF-8"));
+                    while ((sCurrentLine = br.readLine()) != null) {
+                        String[] temp = sCurrentLine.split(citySeparator);
+                        cityFileMap.put(temp[0],temp[1]);
+                    }
+                } else {
+                    logger.warn("city file not found");
+                }
+            }
+            catch (IOException exception){
+                logger.error(exception);
+                logger.info("Reading City file update failed");
+                return null;
+            }
+        }
+        return cityFileMap.get(city);
     }
 
     public void saveTown(List<Town> town){

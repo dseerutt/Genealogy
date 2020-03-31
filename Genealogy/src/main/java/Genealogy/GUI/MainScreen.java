@@ -411,8 +411,9 @@ public class MainScreen extends JFrame {
 
     private void updateMissingCityTab(HashMap<String, String> townAssociation, String city){
         if (!townAssociation.isEmpty()){
-            TownQuery.setText(townAssociation.get(city));
-            MyCoordinate coordinate = Town.findCoordinate(city);
+            String newCity = townAssociation.get(city);
+            TownQuery.setText(newCity);
+            MyCoordinate coordinate = Town.findCoordinate(newCity);
             if (coordinate != null){
                 GeoPosition geoPosition = new GeoPosition(coordinate.getLattitude(),coordinate.getLongitude());
                 jXMapKit.setCenterPosition(geoPosition);
@@ -425,6 +426,7 @@ public class MainScreen extends JFrame {
                         "Impossible de trouver la coordonnée dans le fichier",
                         "Information",
                         JOptionPane.INFORMATION_MESSAGE);
+                TownQuery.setBackground(Color.ORANGE);
             }
         }
     }
@@ -455,7 +457,9 @@ public class MainScreen extends JFrame {
                     updateMissingCityTab(townAssociation,town);
                 }
             });
-            updateMissingCityTab(townAssociation,NotFoundPlaces.getSelectedItem().toString());
+            if (NotFoundPlaces.getSelectedItem() != null){
+                updateMissingCityTab(townAssociation,NotFoundPlaces.getSelectedItem().toString());
+            }
         }
         TownQuery.setEditable(false);
         rechercherVilleNonTrouvee();

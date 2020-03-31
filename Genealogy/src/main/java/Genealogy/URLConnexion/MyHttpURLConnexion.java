@@ -22,6 +22,7 @@ public class MyHttpURLConnexion {
     private static final String testingInternetConnexion = "http://whatthecommit.com/";
     final static Logger logger = LogManager.getLogger(MyHttpURLConnexion.class);
     private static int cpt = 0;
+    private String defaultLocation;
 
     // HTTP GET request
     public String sendGet(String url) throws Exception {
@@ -66,19 +67,23 @@ public class MyHttpURLConnexion {
                 Thread.sleep(1000);
                 return sendAddressRequest(city, county);
             } else if (StringUtils.equals(res,"[]")) {
-                //Pas de réponse : mettre Tataouine comme ville par défaut
-                logger.warn("No result found for " + city);
-                Town.addLostTowns(city);
-                return sendGet(openstreetmapApiDefault);
+                if (defaultLocation == null){
+                    //Pas de réponse : mettre Tataouine comme ville par défaut
+                    logger.warn("No result found for " + city);
+                    Town.addLostTowns(city, county);
+                    defaultLocation = sendGet(openstreetmapApiDefault);
+                }
+                return defaultLocation;
             }
             else  {
+                cpt = 0;
                 return res;
             }
         }
         catch (ConnectException e) {
             logger.error("Timeout",e);
             cpt++;
-            if (cpt >= 5){
+            if (cpt >= 500){
                 throw new URLException("Impossible de se connecter à l'API");
             } else {
                 Thread.sleep(5000);
@@ -90,18 +95,18 @@ public class MyHttpURLConnexion {
         }
     }
 
-    public String sendGoogleAddressRequest(String city) throws Exception {
+    public String sendGoogleAddressRequest(String city, String county) throws Exception {
         try {
             String newCity = URLEncoder.encode(city, "UTF-8");
             String res = sendGet("https://maps.googleapis.com/maps/api/geocode/json?address=" + newCity);
             logger.info("Result of request to Google Map API :\n" + res);
             if (res.contains("OVER_QUERY_LIMIT")){
                 Thread.sleep(1000);
-                return sendGoogleAddressRequest(city);
+                return sendGoogleAddressRequest(city, county);
             } else if (res.contains("ZERO_RESULTS")) {
                 //Pas de réponse : mettre Tataouine comme ville par défaut
                 logger.warn("No result found for " + city);
-                Town.addLostTowns(city);
+                Town.addLostTowns(city,county);
                 return sendGet("https://maps.googleapis.com/maps/api/geocode/json?address=" + "Tataouine");
             }
             else  {
