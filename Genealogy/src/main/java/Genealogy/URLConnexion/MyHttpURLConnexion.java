@@ -53,8 +53,13 @@ public class MyHttpURLConnexion {
     }
 
     public String sendAddressRequest(String city, String county) throws Exception {
-        Thread.sleep(1000);
-        String googleApi = "https://maps.googleapis.com/maps/api/geocode/json?address=";
+        return sendAddressRequest(city, county, true);
+    }
+
+    public String sendAddressRequest(String city, String county, boolean defaultSearch) throws Exception {
+        if (defaultSearch){
+            Thread.sleep(1000);
+        }
         String openstreetmapApiDefault = "https://nominatim.openstreetmap.org/search?city=Tataouine&format=json";
         try {
             String newCity = URLEncoder.encode(city, "UTF-8");
@@ -63,10 +68,10 @@ public class MyHttpURLConnexion {
                     + "&county=" + newCounty + "&format=json";
             String res = sendGet(openstreetmapApi);
             logger.info("Result of request to Nominatim API :\n" + res);
-            if (res.contains("ERROR")){
-                Thread.sleep(1000);
-                return sendAddressRequest(city, county);
-            } else if (StringUtils.equals(res,"[]")) {
+            if (StringUtils.equals(res,"[]")) {
+                if (!defaultSearch){
+                    throw new URLException("Lieu non trouvé " + city + " " + county);
+                }
                 if (defaultLocation == null){
                     //Pas de réponse : mettre Tataouine comme ville par défaut
                     logger.warn("No result found for " + city);
@@ -74,8 +79,7 @@ public class MyHttpURLConnexion {
                     defaultLocation = sendGet(openstreetmapApiDefault);
                 }
                 return defaultLocation;
-            }
-            else  {
+            } else {
                 cpt = 0;
                 return res;
             }
