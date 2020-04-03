@@ -15,6 +15,7 @@ import Genealogy.URLConnexion.MyHttpURLConnexion;
 import Genealogy.URLConnexion.Serializer;
 import Genealogy.URLConnexion.URLException;
 import edu.emory.mathcs.backport.java.util.Collections;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdesktop.swingx.JXMapKit;
@@ -35,8 +36,10 @@ import java.util.*;
  * Created by Dan on 10/04/2016.
  */
 public class MainScreen extends JFrame {
+    public static final String myFolder = "C:\\Users\\Dan\\Desktop\\Programmation\\IntelliJ\\Genealogy\\Genealogy\\src\\main\\resources\\";
+    public static final String myJarFolder = System.getProperty("user.dir") + File.separator + "Properties" + File.separator;
     private JTabbedPane tabbedPane1;
-    private JButton retourButton;
+    private JButton retourButton = new JButton();
     private JPanel mainPanel;
     private JComboBox directAncestors;
     private JComboBox ancestors;
@@ -85,7 +88,7 @@ public class MainScreen extends JFrame {
         initMissingCitiesTab();
         HTTPConnexion = new MyHttpURLConnexion();
 
-        setPreferredSize(new Dimension(700,500));
+        setPreferredSize(new Dimension(700, 500));
         pack();
         setLocationRelativeTo(null);
 
@@ -95,7 +98,7 @@ public class MainScreen extends JFrame {
         INSTANCE = this;
     }
 
-    private void initForm(){
+    private void initForm() {
         tabbedPane1 = new JTabbedPane();
         retourButton = new JButton();
         mainPanel = new JPanel();
@@ -128,13 +131,13 @@ public class MainScreen extends JFrame {
     }
 
     private void initMap() {
-        if (mapPoints == null){
+        if (mapPoints == null) {
             mapPoints = new ArrayList<>();
         }
-        GeoPosition initPosition = new GeoPosition(47.41022,2.925037);
+        GeoPosition initPosition = new GeoPosition(47.41022, 2.925037);
         int zoom = 13;
         ArrayList<MapPoint> mapPoints = new ArrayList<>();
-        mapFrame = new MapFrame(mapPoints,initPosition,zoom);
+        mapFrame = new MapFrame(mapPoints, initPosition, zoom);
         panelForMap = new JPanel();
         panelForMap.setLayout(new BorderLayout());
         panelForMap.add(mapFrame.getjXMapKit());
@@ -142,7 +145,7 @@ public class MainScreen extends JFrame {
         mapPanel.setLayout(new FlowLayout());
         mapPanel.add(panelForMap);
         jXMapKit = mapFrame.getjXMapKit();
-        GeoPosition initPosition2 = new GeoPosition(1,1);
+        GeoPosition initPosition2 = new GeoPosition(1, 1);
     }
 
     /**
@@ -156,11 +159,11 @@ public class MainScreen extends JFrame {
                 int index = 0;
                 int res = directAncestors.getSelectedIndex();
                 ArrayList<Person> persons = Genealogy.genealogy.getPersons();
-                if (persons != null){
-                    for (int i = 0; i < persons.size() ; i++){
-                        if (persons.get(i).isDirectAncestor()){
+                if (persons != null) {
+                    for (int i = 0; i < persons.size(); i++) {
+                        if (persons.get(i).isDirectAncestor()) {
                             Person p = persons.get(i);
-                            if ((p != null) && (index == res)){
+                            if ((p != null) && (index == res)) {
                                 textArea1.setText(p.printPerson());
                             }
                             index++;
@@ -169,19 +172,19 @@ public class MainScreen extends JFrame {
                 }
             }
         });
-            ArrayList<Person> persons = Genealogy.genealogy.getPersons();
-            if (persons != null && persons.size() > 0){
+        ArrayList<Person> persons = Genealogy.genealogy.getPersons();
+        if (persons != null && persons.size() > 0) {
             Person p = persons.get(0);
-            if (p != null){
+            if (p != null) {
                 textArea1.setText(p.printPerson());
             }
         }
 
-        for (int i = 0 ; i  < Genealogy.genealogy.getPersons().size() ; i++){
+        for (int i = 0; i < Genealogy.genealogy.getPersons().size(); i++) {
             Person person = Genealogy.genealogy.getPersons().get(i);
-            if ((person !=null)&&(person.isPrintable())){
+            if ((person != null) && (person.isPrintable())) {
                 ancestors.addItem(person.getFullNameInverted());
-                if (person.isDirectAncestor()){
+                if (person.isDirectAncestor()) {
                     textArea2.setText(Genealogy.genealogy.getPersons().get(ancestors.getSelectedIndex()).printPerson());
                     break;
                 }
@@ -202,7 +205,7 @@ public class MainScreen extends JFrame {
      * Fonction initPDFRadioButton
      * Initialise les radiobuttons de gestion de PDF
      */
-    private void initPDFRadioButton(){
+    private void initPDFRadioButton() {
         naissanceRadioButton.setSelected(true);
         naissanceRadioButton.addActionListener(new ActionListener() {
             @Override
@@ -227,12 +230,12 @@ public class MainScreen extends JFrame {
         });
     }
 
-    protected static JFileChooser initJFileChooser(){
+    protected static JFileChooser initJFileChooser() {
         Serializer<Town> serializer = new Serializer<Town>(Town.class);
         String myFolder = "D:\\Genealogie\\Preuves\\";
         String myJarFolder = System.getProperty("user.dir") + File.separator + "Preuves" + File.separator;
 
-        if (serializer.isJar()){
+        if (serializer.isJar()) {
 
             return new JFileChooser(myJarFolder);
         } else {
@@ -244,7 +247,7 @@ public class MainScreen extends JFrame {
      * Fonction initPDFButtons
      * Initialise les boutons de gestion de PDF
      */
-    private void initPDFButtons(){
+    private void initPDFButtons() {
         initPDFRadioButton();
         ajouterPDFButton.addActionListener(new ActionListener() {
             @Override
@@ -262,13 +265,13 @@ public class MainScreen extends JFrame {
                     }
                     //handle file
                     Person person = Genealogy.genealogy.getPersons().get(ancestors.getSelectedIndex());
-                    if (naissanceRadioButton.isSelected()){
-                        person.addProof(Act.TypeActe.Birth,file);
+                    if (naissanceRadioButton.isSelected()) {
+                        person.addProof(Act.TypeActe.Birth, file);
                     } else if (mariageRadioButton.isSelected()) {
-                        person.addProof(Act.TypeActe.Mariage,"",person.getProofUnionSize());
+                        person.addProof(Act.TypeActe.Mariage, "", person.getProofUnionSize());
                         //TODO
                     } else if (deathRadioButton.isSelected()) {
-                        person.addProof(Act.TypeActe.Death,file);
+                        person.addProof(Act.TypeActe.Death, file);
                     }
                 } catch (Exception e1) {
                     e1.printStackTrace();
@@ -286,10 +289,10 @@ public class MainScreen extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 try {
                     Person person = Genealogy.genealogy.getPersons().get(ancestors.getSelectedIndex());
-                    if (naissanceRadioButton.isSelected()){
+                    if (naissanceRadioButton.isSelected()) {
                         String file = person.getBirth().getProofs().get(0);
                     } else if (mariageRadioButton.isSelected()) {
-                        person.addProof(Act.TypeActe.Mariage,"",person.getProofUnionSize());
+                        person.addProof(Act.TypeActe.Mariage, "", person.getProofUnionSize());
                         //TODO
                     } else if (deathRadioButton.isSelected()) {
                         String file = person.getDeath().getProofs().get(0);
@@ -319,16 +322,16 @@ public class MainScreen extends JFrame {
      */
     private void initComboBox() {
         Town.sortTowns();
-        for (int i = 0 ; i  < Genealogy.genealogy.getPersons().size() ; i++){
+        for (int i = 0; i < Genealogy.genealogy.getPersons().size(); i++) {
             Person person = Genealogy.genealogy.getPersons().get(i);
-            if ((person !=null)&&(person.isPrintable())){
+            if ((person != null) && (person.isPrintable())) {
                 ancestors.addItem(person.getFullNameInverted());
-                if (person.isDirectAncestor()){
+                if (person.isDirectAncestor()) {
                     directAncestors.addItem(Genealogy.genealogy.getPersons().get(i).getFullNameInverted());
                 }
             }
         }
-        for (int i = 0 ; i < Town.getTowns().size() ; i++){
+        for (int i = 0; i < Town.getTowns().size(); i++) {
             towns.addItem(Town.getTowns().get(i).getName());
         }
     }
@@ -347,14 +350,14 @@ public class MainScreen extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 try {
                     //Test connexion internet
-                    if (!MyHttpURLConnexion.testInternetConnexion()){
+                    if (!MyHttpURLConnexion.testInternetConnexion()) {
                         throw new URLException("Impossible d'afficher la carte sans connexion internet");
                     }
                     MapScreen mapScreen = new MapScreen();
                     setVisible(false);
                 } catch (Exception e1) {
                     e1.printStackTrace();
-                    JOptionPane.showMessageDialog(mainPanel,e1.getMessage(),
+                    JOptionPane.showMessageDialog(mainPanel, e1.getMessage(),
                             "Erreur",
                             JOptionPane.ERROR_MESSAGE);
                 }
@@ -373,10 +376,10 @@ public class MainScreen extends JFrame {
                 ArrayList<String> birthList = new ArrayList<String>();
                 ArrayList<String> unionsList = new ArrayList<String>();
                 ArrayList<String> deathList = new ArrayList<String>();
-                for (int i = 0 ; i < list.size() ; i++){
-                    if (list.get(i) instanceof Birth){
+                for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i) instanceof Birth) {
                         birthList.add(naissances.getText() + list.get(i).getCitizen().getFullNameInverted() + "\n");
-                    } else if (list.get(i) instanceof Union){
+                    } else if (list.get(i) instanceof Union) {
                         unionsList.add(unions.getText() + list.get(i).getCitizen().getFullNameInverted() + " \navec " +
                                 ((Union) list.get(i)).getPartner().getFullNameInverted() + "\n");
                     } else {
@@ -386,13 +389,13 @@ public class MainScreen extends JFrame {
                 Collections.sort(birthList);
                 Collections.sort(unionsList);
                 Collections.sort(deathList);
-                for (String s : birthList){
+                for (String s : birthList) {
                     naissances.setText(naissances.getText() + s);
                 }
-                for (String s : unionsList){
+                for (String s : unionsList) {
                     unions.setText(unions.getText() + s);
                 }
-                for (String s : deathList){
+                for (String s : deathList) {
                     deces.setText(deces.getText() + s);
                 }
             }
@@ -409,16 +412,16 @@ public class MainScreen extends JFrame {
         return bi;
     }
 
-    private void updateMissingCityTab(HashMap<String, String> townAssociation, String city){
-        if (!townAssociation.isEmpty()){
+    private void updateMissingCityTab(HashMap<String, String> townAssociation, String city) {
+        if (!townAssociation.isEmpty()) {
             String newCity = townAssociation.get(city);
             TownQuery.setText(newCity);
             MyCoordinate coordinate = Town.findCoordinate(newCity);
-            if (coordinate != null){
-                GeoPosition geoPosition = new GeoPosition(coordinate.getLattitude(),coordinate.getLongitude());
+            if (coordinate != null) {
+                GeoPosition geoPosition = new GeoPosition(coordinate.getLattitude(), coordinate.getLongitude());
                 jXMapKit.setCenterPosition(geoPosition);
                 ArrayList<MapPoint> list = new ArrayList<>();
-                list.add(new MapPoint(coordinate,city));
+                list.add(new MapPoint(coordinate, city));
                 removeMarkers();
                 addMarkers(list);
             } else {
@@ -431,34 +434,62 @@ public class MainScreen extends JFrame {
         }
     }
 
-    private void updateMissingCityTab(HashMap<String, String> townAssociation, String city, MyCoordinate coordinate){
-        if (!townAssociation.isEmpty()){
+    private void updateMissingCityTab(HashMap<String, String> townAssociation, String city, MyCoordinate coordinates) {
+        if (!townAssociation.isEmpty()) {
+            //View
             TownQuery.setText(townAssociation.get(city));
-            GeoPosition geoPosition = new GeoPosition(coordinate.getLattitude(),coordinate.getLongitude());
+            GeoPosition geoPosition = new GeoPosition(coordinates.getLattitude(), coordinates.getLongitude());
             jXMapKit.setCenterPosition(geoPosition);
             ArrayList<MapPoint> list = new ArrayList<>();
-            list.add(new MapPoint(coordinate,city));
+            list.add(new MapPoint(coordinates, city));
             removeMarkers();
             addMarkers(list);
         }
     }
 
+    //TODO
+    private void updateMissingCitiesColor() {
+        NotFoundPlaces.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value,
+                                                          int index, boolean isSelected, boolean cellHasFocus) {
+                Component c = super.getListCellRendererComponent(
+                        list, value, index, isSelected, cellHasFocus);
+                if (c instanceof JLabel) {
+                    JLabel l = (JLabel) c;
+                    ArrayList<String> notFoundCitiesList = new ArrayList<>();
+                    notFoundCitiesList.add("Mestry (Calvados)");
+                    if (notFoundCitiesList.contains(value)) {
+                        l.setBackground(Color.YELLOW);
+                        if (isSelected) {
+                            list.setSelectionForeground(Color.RED);
+                            list.setSelectionBackground(Color.BLUE);
+                        }
+                    }
+                    return l;
+                }
+                return c;
+            }
+        });
+    }
+
     private void initMissingCitiesTab() {
         final HashMap<String, String> townAssociation = Town.getTownAssociation();
-        if (townAssociation != null){
-            for (Map.Entry<String, String> association : townAssociation.entrySet()){
+        if (townAssociation != null) {
+            for (Map.Entry<String, String> association : townAssociation.entrySet()) {
                 NotFoundPlaces.addItem(association.getKey());
             }
+            updateMissingCitiesColor();
             NotFoundPlaces.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     String town = NotFoundPlaces.getSelectedItem().toString();
                     TownQuery.setText(townAssociation.get(town));
-                    updateMissingCityTab(townAssociation,town);
+                    updateMissingCityTab(townAssociation, town);
                 }
             });
-            if (NotFoundPlaces.getSelectedItem() != null){
-                updateMissingCityTab(townAssociation,NotFoundPlaces.getSelectedItem().toString());
+            if (NotFoundPlaces.getSelectedItem() != null) {
+                updateMissingCityTab(townAssociation, NotFoundPlaces.getSelectedItem().toString());
             }
         }
         TownQuery.setEditable(false);
@@ -466,8 +497,8 @@ public class MainScreen extends JFrame {
         remplacerAction();
     }
 
-    public void addMarkers(ArrayList<MapPoint> mapPoints){
-        Set<MyWaypoint> waypoints =  mapFrame.addCities(mapPoints);
+    public void addMarkers(ArrayList<MapPoint> mapPoints) {
+        Set<MyWaypoint> waypoints = mapFrame.addCities(mapPoints);
         WaypointPainter<MyWaypoint> waypointPainter = new WaypointPainter<MyWaypoint>();
         waypointPainter.setWaypoints(waypoints);
         waypointPainter.setRenderer(new FancyWaypointRenderer());
@@ -475,8 +506,8 @@ public class MainScreen extends JFrame {
         map.setOverlayPainter(waypointPainter);
     }
 
-    public void removeMarkers(){
-        Set<MyWaypoint> waypoints =  new HashSet<>();
+    public void removeMarkers() {
+        Set<MyWaypoint> waypoints = new HashSet<>();
         WaypointPainter<MyWaypoint> waypointPainter = new WaypointPainter<MyWaypoint>();
         waypointPainter.setWaypoints(waypoints);
         waypointPainter.setRenderer(new FancyWaypointRenderer());
@@ -485,7 +516,7 @@ public class MainScreen extends JFrame {
         jXMapKit.getMainMap().removeAll();
     }
 
-    private void remplacerAction(){
+    private void remplacerAction() {
         remplacerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -494,18 +525,18 @@ public class MainScreen extends JFrame {
                     String value = searchField.getText();
                     //MyCoordinate result = Town.parseJsonArray(HTTPConnexion.sendAddressRequest(value),value);
                     MyCoordinate result = null;//TODO
-                    Town.setCoordinates(result,key);
+                    Town.setCoordinates(result, key);
                     HashMap<String, String> townAssociation = Town.getTownAssociation();
                     townAssociation.remove(key);
-                    townAssociation.put(key,value);
+                    townAssociation.put(key, value);
                     Serializer.getSerializer().saveTownAssociation(townAssociation);
                     Serializer.getSerializer().saveTown(Town.getTowns());
                     String city = NotFoundPlaces.getSelectedItem().toString();
-                    updateMissingCityTab(townAssociation,city);
+                    updateMissingCityTab(townAssociation, city);
                     JOptionPane.showMessageDialog(tabbedPane1,
-                        "Mise à jour d'alias de ville effectuée avec succès",
-                        "Information",
-                        JOptionPane.INFORMATION_MESSAGE);
+                            "Mise à jour d'alias de ville effectuée avec succès",
+                            "Information",
+                            JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -513,36 +544,49 @@ public class MainScreen extends JFrame {
         });
     }
 
-    private void rechercherVilleNonTrouvee(){
+    private void rechercheVille(boolean remplace) {
+        String search = searchField.getText();
+        if (search != null && (!search.equals("") && (search.contains(" ")))) {
+            try {
+                String[] tmpSplit = search.split(" ");
+                String concat = "";
+                for (int i = 0; i < tmpSplit.length - 1; i++) {
+                    concat += tmpSplit[i] + " ";
+                }
+                String city = StringUtils.strip(concat);
+                String county = tmpSplit[tmpSplit.length - 1];
+                String fullCity = city + " (" + county + ")";
+                MyCoordinate result = Town.parseJsonArray(HTTPConnexion.sendAddressRequest(city, county, false));
+                logger.info("Coordonnées de la ville " + fullCity + " : " + result);
+                if (result != null) {
+                    HashMap<String, String> townAssociation = Town.getTownAssociation();
+                    updateMissingCityTab(townAssociation, fullCity, result);
+                }
+            } catch (Exception e1) {
+                logger.error("Erreur lors de la recherche de ville", e1);
+                JOptionPane.showMessageDialog(tabbedPane1,
+                        "Erreur lors de la recherche de ville",
+                        "Erreur",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(tabbedPane1,
+                    "Impossible d'effectuer la recherche : le format de recherche est \"ville département\"",
+                    "Information",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    private void rechercherVilleNonTrouvee() {
         rechercherButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String search = searchField.getText();
-                if (search != null && !search.equals("")){
-                    try {
-                        //MyCoordinate result = Town.parseJsonArray(HTTPConnexion.sendAddressRequest(search),search);
-                        MyCoordinate result = null; //TODO
-                        logger.info("Coordonnées de la ville " + search + " : " + result);
-                        if (result != null){
-                            String city = search;
-                            HashMap<String, String> townAssociation = Town.getTownAssociation();
-                            updateMissingCityTab(townAssociation,city,result);
-                        }
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
-                        logger.error("Erreur lors de la recherche de ville");
-                        JOptionPane.showMessageDialog(tabbedPane1,
-                                "Erreur lors de la recherche de ville",
-                                "Erreur",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
-                }
+                rechercheVille(false);
             }
         });
     }
 
     private void createUIComponents() {
-        // TODO: place custom component creation code here
         initMap();
     }
 }

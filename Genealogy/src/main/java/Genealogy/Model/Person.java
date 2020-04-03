@@ -34,9 +34,9 @@ public class Person {
         FEMME,
         INCONNU;
 
-        public String toString(){
-            if (this != null){
-                switch(this){
+        public String toString() {
+            if (this != null) {
+                switch (this) {
                     case HOMME:
                         return "M";
                     case FEMME:
@@ -50,6 +50,7 @@ public class Person {
             return null;
         }
     }
+
     private Sex sex;
     private String name;
     private String surname;
@@ -64,13 +65,13 @@ public class Person {
     private ArrayList<Person> children = new ArrayList<Person>();
     private boolean directAncestor = false;
     private int age;
-    private static HashMap<Integer,ArrayList<MapStructure>> periods = new HashMap<>();
-    private static HashMap<Integer,ArrayList<MapStructure>> periodsDirectAncestors = new HashMap<>();
+    private static HashMap<Integer, ArrayList<MapStructure>> periods = new HashMap<>();
+    private static HashMap<Integer, ArrayList<MapStructure>> periodsDirectAncestors = new HashMap<>();
     private static int minimumPeriod = 10000;
     private boolean stillAlive = false;
     final static Logger logger = LogManager.getLogger(Person.class);
 
-    public static HashMap<Integer,ArrayList<MapStructure>> getPeriods() {
+    public static HashMap<Integer, ArrayList<MapStructure>> getPeriods() {
         return periods;
     }
 
@@ -82,8 +83,8 @@ public class Person {
         return stillAlive;
     }
 
-    public static Sex parseSex(String s){
-        switch (s){
+    public static Sex parseSex(String s) {
+        switch (s) {
             case "M":
                 return Sex.HOMME;
             case "F":
@@ -153,87 +154,88 @@ public class Person {
         this.directAncestor = directAncestor;
     }
 
-    public String getFullName(){
+    public String getFullName() {
         return surname + " " + name;
     }
 
     /**
      * Fonction getFullNameInverted
+     *
      * @return le nom puis le prénom
      */
-    public String getFullNameInverted(){
-        if ((name != null)&&(!name.equals(""))){
+    public String getFullNameInverted() {
+        if ((name != null) && (!name.equals(""))) {
             return name + " " + surname;
         }
         return surname;
     }
 
-    public String getName4Comparator(){
+    public String getComparatorName() {
         String txt = "";
-        if ((name.equals("..."))||(surname.equals("..."))){
+        if ((name.equals("...")) || (surname.equals("..."))) {
             txt = "z";
         }
         return txt + name + " " + surname;
     }
 
-    public void initPeriods2(ArrayList<Pair<MyDate,Town>> tempPeriods){
+    public void initPeriods2(ArrayList<Pair<MyDate, Town>> tempPeriods) {
         //System.out.println(tempPeriods);
-        if (tempPeriods.size() >= 1){
-            if (tempPeriods.size() == 1){
+        if (tempPeriods.size() >= 1) {
+            if (tempPeriods.size() == 1) {
                 Date date = new Date(tempPeriods.get(0).getKey().getDate().getTime());
                 MapStructure mapStructure =
-                        new MapStructure(tempPeriods.get(0).getValue(),getFullName(),getAge(date,0));
-                addPeriod((int) tempPeriods.get(0).getKey().getYear(),mapStructure);
+                        new MapStructure(tempPeriods.get(0).getValue(), getFullName(), getAge(date, 0));
+                addPeriod((int) tempPeriods.get(0).getKey().getYear(), mapStructure);
             } else {
-                for (int i = 0 ; i < tempPeriods.size()-1 ; i++){
+                for (int i = 0; i < tempPeriods.size() - 1; i++) {
                     int date1 = (int) tempPeriods.get(i).getKey().getYear();
-                    int date2 = (int) tempPeriods.get(i+1).getKey().getYear();
+                    int date2 = (int) tempPeriods.get(i + 1).getKey().getYear();
                     int index = 0;
-                    for (int k = date1 ; k < date2 ; k++){
+                    for (int k = date1; k < date2; k++) {
                         Date date = new Date(tempPeriods.get(i).getKey().getDate().getTime());
                         MapStructure mapStructure =
-                                new MapStructure(tempPeriods.get(i).getValue(),getFullName(),getAge(date,index));
-                        addPeriod(k,mapStructure);
+                                new MapStructure(tempPeriods.get(i).getValue(), getFullName(), getAge(date, index));
+                        addPeriod(k, mapStructure);
                         //System.out.println(periods);
                         index++;
                     }
                 }
-                Date date = new Date(tempPeriods.get(tempPeriods.size()-1).getKey().getDate().getTime());
+                Date date = new Date(tempPeriods.get(tempPeriods.size() - 1).getKey().getDate().getTime());
                 MapStructure mapStructure =
-                        new MapStructure(tempPeriods.get(tempPeriods.size()-1).getValue(),getFullName(),getAge(date,0));
-                addPeriod((int) tempPeriods.get(tempPeriods.size()-1).getKey().getYear(),mapStructure);
+                        new MapStructure(tempPeriods.get(tempPeriods.size() - 1).getValue(), getFullName(), getAge(date, 0));
+                addPeriod((int) tempPeriods.get(tempPeriods.size() - 1).getKey().getYear(), mapStructure);
             }
         }
     }
 
-    public ArrayList<Pair<MyDate,Town>> initPeriods1(){
-        ArrayList<Pair<MyDate,Town>> tempPeriods = new ArrayList<>();
+    public ArrayList<Pair<MyDate, Town>> initPeriods1() {
+        ArrayList<Pair<MyDate, Town>> tempPeriods = new ArrayList<>();
 
         //Naissance
-        if ((birth != null)&&(birth.getTown() != null)&&(birth.getTown().getName() != null)&&(birth.getDate() != null)){
-            tempPeriods.add(new Pair<MyDate, Town>(birth.getDate(),birth.getTown()));
+        if ((birth != null) && (birth.getTown() != null) && (birth.getTown().getName() != null) && (birth.getDate() != null)) {
+            tempPeriods.add(new Pair<MyDate, Town>(birth.getDate(), birth.getTown()));
         }
 
         //Unions
-        for (int i = 0 ; i < unions.size() ; i++){
-            if ((unions.get(i).getDate() != null)&&(unions.get(i).getTown()!=null)&&(unions.get(i).getTown().getName()!=null)){
-                tempPeriods.add(new Pair<MyDate, Town>(unions.get(i).getDate(),unions.get(i).getTown()));
+        for (int i = 0; i < unions.size(); i++) {
+            if ((unions.get(i).getDate() != null) && (unions.get(i).getTown() != null) && (unions.get(i).getTown().getName() != null)) {
+                tempPeriods.add(new Pair<MyDate, Town>(unions.get(i).getDate(), unions.get(i).getTown()));
             }
         }
 
         //Enfants
-        for (int i = 0 ; i < children.size() ; i++){
+        for (int i = 0; i < children.size(); i++) {
             if ((children.get(i).getBirth() != null) &&
-                    (children.get(i).getBirth().getDate() != null)&&
-                    (children.get(i).getBirth().getTown()!=null)&&
-                    (children.get(i).getBirth().getTown().getName()!=null)){
-                tempPeriods.add(new Pair<MyDate, Town>(children.get(i).getBirth().getDate(),children.get(i).getBirth().getTown()));
+                    (children.get(i).getBirth().getDate() != null) &&
+                    (children.get(i).getBirth().getTown() != null) &&
+                    (children.get(i).getBirth().getTown().getName() != null)) {
+                tempPeriods.add(new Pair<MyDate, Town>(children.get(i).getBirth().getDate(), children.get(i).getBirth().getTown()));
             }
         }
 
         //Décès
-        if ((death != null)&&(death.getTown() != null)&&(death.getTown().getName() != null)&&(death.getDate() != null)){
-            tempPeriods.add(new Pair<MyDate, Town>(death.getDate(),death.getTown()));
+        if ((death != null) && (death.getTown() != null) && (death.getTown().getName() != null) && (death.getDate() != null)) {
+            tempPeriods.add(new Pair<MyDate, Town>(death.getDate(), death.getTown()));
 
             Collections.sort(tempPeriods, new Comparator<Pair<MyDate, Town>>() {
                 @Override
@@ -243,8 +245,8 @@ public class Person {
             });
 
             //Cas des enfants nés après la mort
-            while (tempPeriods.get(tempPeriods.size()-1).getKey().getDate().getTime() > death.getDate().getDate().getTime()){
-                tempPeriods.remove(tempPeriods.size()-1);
+            while (tempPeriods.get(tempPeriods.size() - 1).getKey().getDate().getTime() > death.getDate().getDate().getTime()) {
+                tempPeriods.remove(tempPeriods.size() - 1);
             }
         } else {
             Collections.sort(tempPeriods, new Comparator<Pair<MyDate, Town>>() {
@@ -253,16 +255,16 @@ public class Person {
                     return o1.getKey().getDate().compareTo(o2.getKey().getDate());
                 }
             });
-            if ((stillAlive)&&(!tempPeriods.isEmpty())){
-                tempPeriods.add(new Pair<MyDate, Town>(new FullDate(),tempPeriods.get(tempPeriods.size()-1).getValue()));
+            if ((stillAlive) && (!tempPeriods.isEmpty())) {
+                tempPeriods.add(new Pair<MyDate, Town>(new FullDate(), tempPeriods.get(tempPeriods.size() - 1).getValue()));
             }
         }
         return tempPeriods;
     }
 
-    public int getProofUnionSize(){
+    public int getProofUnionSize() {
         int nbUnions = 0;
-        for (Union union : unions){
+        for (Union union : unions) {
             nbUnions += union.getProofs().size();
         }
         return nbUnions;
@@ -272,30 +274,31 @@ public class Person {
      * Fonction removePDFStructure
      * Remove PDFStructure in note
      */
-    public void removePDFStructure(){
+    public void removePDFStructure() {
         String PDFStructureRegex = "¤PDF" + id + "¤";
-        if (note.contains(PDFStructureRegex)){
+        if (note.contains(PDFStructureRegex)) {
             String PDFRegex = "(.*)" + PDFStructureRegex + "{.*}(.*)";
-            Pattern pattern = Pattern.compile(PDFRegex,Pattern.DOTALL);
+            Pattern pattern = Pattern.compile(PDFRegex, Pattern.DOTALL);
             Matcher matcher = pattern.matcher(note);
-            if (matcher.find() && matcher.groupCount() == 2){
+            if (matcher.find() && matcher.groupCount() == 2) {
                 note = matcher.group(1) + matcher.group(2);
             }
         }
     }
 
-    public void savePDFStructure(){
+    public void savePDFStructure() {
         note += pdfStructure;
     }
 
     /**
      * Fonction addProof
-     * @param typeActe Birth, Mariage, Death
-     * @param proof Nom du PDF String
+     *
+     * @param typeActe   Birth, Mariage, Death
+     * @param proof      Nom du PDF String
      * @param unionIndex numéro de l'union
      */
     public void addProof(Act.TypeActe typeActe, String proof, int unionIndex) throws Exception {
-        switch (typeActe){
+        switch (typeActe) {
             case Birth:
                 removePDFStructure();
                 birth.addProof(proof);
@@ -304,7 +307,7 @@ public class Person {
                 break;
             case Mariage:
                 removePDFStructure();
-                if (unionIndex < unions.size()){
+                if (unionIndex < unions.size()) {
                     unions.get(unionIndex).addProof(proof);
                     pdfStructure.addToPDFMarriageList(proof);
                     savePDFStructure();
@@ -325,57 +328,59 @@ public class Person {
 
     /**
      * Fonction addProof except marriage
+     *
      * @param typeActe Birth, Death
-     * @param proof Nom du PDF String
+     * @param proof    Nom du PDF String
      */
     public void addProof(Act.TypeActe typeActe, String proof) throws Exception {
-        addProof(typeActe,proof,0);
+        addProof(typeActe, proof, 0);
     }
 
     public static int getMinimumPeriod() {
         return minimumPeriod;
     }
 
-    public void initPeriods(){
+    public void initLifeSpans() {
         initPeriods2(initPeriods1());
     }
 
     /**
      * isPrintable retourne vrai si la personne a un prénom et un nom de famille différent de ...
+     *
      * @return
      */
-    public boolean isPrintable(){
-        return (name!=null) && (surname!=null) && (!name.equals("...")) && (!surname.equals("..."));
+    public boolean isPrintable() {
+        return (name != null) && (surname != null) && (!name.equals("...")) && (!surname.equals("..."));
     }
 
-    public void addPeriod(int year, MapStructure mapStructure){
-        if (year < minimumPeriod){
+    public void addPeriod(int year, MapStructure mapStructure) {
+        if (year < minimumPeriod) {
             minimumPeriod = year;
         }
-        if (periods.containsKey(year)){
+        if (periods.containsKey(year)) {
             periods.get(year).add(mapStructure);
         } else {
             ArrayList<MapStructure> structure = new ArrayList<>();
             structure.add(mapStructure);
-            periods.put(year,structure);
+            periods.put(year, structure);
         }
-        if (directAncestor){
-            if (periodsDirectAncestors.containsKey(year)){
+        if (directAncestor) {
+            if (periodsDirectAncestors.containsKey(year)) {
                 periodsDirectAncestors.get(year).add(mapStructure);
             } else {
                 ArrayList<MapStructure> structure = new ArrayList<>();
                 structure.add(mapStructure);
-                periodsDirectAncestors.put(year,structure);
+                periodsDirectAncestors.put(year, structure);
             }
         }
     }
 
-    public int getAge(Date date, int years){
-        if ((birth != null)&&(birth.getDate() != null)){
+    public int getAge(Date date, int years) {
+        if ((birth != null) && (birth.getDate() != null)) {
             Date d0 = birth.getDate().getDate();
             long diff = date.getTime() - birth.getDate().getDate().getTime();
             int days = (int) TimeUnit.DAYS.toDays(diff);
-            int a = days/365;
+            int a = days / 365;
             DateTime dateTime0 = new DateTime(birth.getDate().getDate().getTime());
             DateTime dateTime1 = new DateTime(date.getTime());
             Period period = new Period(dateTime0, dateTime1);
@@ -387,7 +392,7 @@ public class Person {
 
     @Override
     public String toString() {
-        String res =  "Person{" +
+        String res = "Person{" +
                 "id='" + id + '\'' +
                 ", sex=" + sex +
                 ", age=" + age +
@@ -398,10 +403,10 @@ public class Person {
                 ", profession='" + profession + '\'';
 
 
-        if (mother != null){
+        if (mother != null) {
             res += ", mother='" + mother.getFullName() + '\'';
         }
-        if (father != null){
+        if (father != null) {
             res += ", father='" + father.getFullName() + '\'';
         }
 
@@ -410,10 +415,10 @@ public class Person {
                 ", directAncestor=" + directAncestor + '\'' +
                 ", children={";
 
-        if (!children.isEmpty()){
+        if (!children.isEmpty()) {
             res += children.get(0).getFullName();
         }
-        for (int i = 1; i < children.size() ; i++){
+        for (int i = 1; i < children.size(); i++) {
             res += ", " + children.get(i).getFullName();
         }
 
@@ -426,85 +431,81 @@ public class Person {
             logger.error("Erreur dans le parsing de personne, offset >= indexMax");
             return;
         }
-            id = list.get(index++).getId();
-            name = AuxMethods.findField(list,"SURN",index++,indexMax);
-            surname = AuxMethods.findField(list,"GIVN",index++,indexMax);
-            int indexBirthday = AuxMethods.findIndexNumberString(list,"BIRT",index,indexMax);
+        id = list.get(index++).getId();
+        name = AuxMethods.findField(list, "SURN", index++, indexMax);
+        surname = AuxMethods.findField(list, "GIVN", index++, indexMax);
+        int indexBirthday = AuxMethods.findIndexNumberString(list, "BIRT", index, indexMax);
 
-        if (indexBirthday != -1){
+        if (indexBirthday != -1) {
             indexBirthday++;
-            String input = AuxMethods.findField(list,"DATE",indexBirthday,indexBirthday+3);
+            String input = AuxMethods.findField(list, "DATE", indexBirthday, indexBirthday + 3);
             MyDate birthDay = null;
-            try{
+            try {
                 birthDay = (MyDate) MyDate.Mydate(input);
-            }
-            catch (Exception e){
-                //System.out.println("Impossible de parser la date de naissance de " + id);
+            } catch (Exception e) {
+                logger.debug("Impossible de parser la date de naissance de " + id, e);
             }
 
             Town birthTown = null;
             try {
-                birthTown = new Town(AuxMethods.findField(list,"PLAC",indexBirthday,indexBirthday+3));
+                birthTown = new Town(AuxMethods.findField(list, "PLAC", indexBirthday, indexBirthday + 3));
             } catch (Exception e) {
-                //System.out.println("Impossible de parser la ville de naissance de " + id);
+                logger.debug("Impossible de parser la ville de naissance de " + id, e);
             }
-            birth = new Birth(this,birthDay,birthTown);
+            birth = new Birth(this, birthDay, birthTown);
         }
 
-        sex = parseSex(AuxMethods.findField(list,"SEX",offset,indexMax));
-        profession = AuxMethods.findField(list,"OCCU",offset,indexMax);
-        note = AuxMethods.findField(list,"NOTE",offset,indexMax);
-        pdfStructure = PDFStructure.parsePDFStucture(note,id);
+        sex = parseSex(AuxMethods.findField(list, "SEX", offset, indexMax));
+        profession = AuxMethods.findField(list, "OCCU", offset, indexMax);
+        note = AuxMethods.findField(list, "NOTE", offset, indexMax);
+        pdfStructure = PDFStructure.parsePDFStucture(note, id);
 
-        int indexDeath = AuxMethods.findIndexNumberString(list,"DEAT",index,indexMax);
+        int indexDeath = AuxMethods.findIndexNumberString(list, "DEAT", index, indexMax);
 
-        if (indexDeath != -1){
+        if (indexDeath != -1) {
             indexDeath++;
-            String input = AuxMethods.findField(list,"DATE",indexDeath,indexDeath+3);
+            String input = AuxMethods.findField(list, "DATE", indexDeath, indexDeath + 3);
             MyDate deathDay = null;
-            try{
+            try {
                 deathDay = (MyDate) MyDate.Mydate(input);
-            }
-            catch (Exception e){
-                //System.out.println("Impossible de parser la date de décès de " + id);
+            } catch (Exception e) {
+                logger.debug("Impossible de parser la date de décès de " + id, e);
             }
 
             Town deathTown = null;
             try {
-                deathTown = new Town(AuxMethods.findField(list,"PLAC",indexDeath,indexDeath+3));
+                deathTown = new Town(AuxMethods.findField(list, "PLAC", indexDeath, indexDeath + 3));
             } catch (Exception e) {
-                //System.out.println("Impossible de parser la ville de décès de " + id);
+                logger.debug("Impossible de parser la ville de décès de " + id, e);
             }
-            death = new Death(this,deathDay,deathTown);
+            death = new Death(this, deathDay, deathTown);
         }
 
         calculateAge();
     }
 
-    private Union findUnion(Person partner){
-        for (int i = 0 ; i < unions.size() ; i++){
-            if (unions.get(i).getPartner().getId().equals(partner.getId())){
+    private Union findUnion(Person partner) {
+        for (int i = 0; i < unions.size(); i++) {
+            if (unions.get(i).getPartner().getId().equals(partner.getId())) {
                 return unions.get(i);
             }
-            if (unions.get(i).getCitizen().getId().equals(partner.getId())){
+            if (unions.get(i).getCitizen().getId().equals(partner.getId())) {
                 return unions.get(i);
             }
         }
         return null;
     }
 
-    private ArrayList<Person> findChildren(Person partner){
+    private ArrayList<Person> findChildren(Person partner) {
         ArrayList<Person> list = new ArrayList<Person>();
-        for (int i = 0 ; i < children.size() ; i++){
+        for (int i = 0; i < children.size(); i++) {
             Person thisFather = children.get(i).getFather();
             Person thisMother = children.get(i).getMother();
-            if ((thisFather != null)&&(thisMother != null)){
-                if ((thisFather.getId().equals(partner.getId()))&&(thisMother.getId().equals(getId())))
-                {
+            if ((thisFather != null) && (thisMother != null)) {
+                if ((thisFather.getId().equals(partner.getId())) && (thisMother.getId().equals(getId()))) {
                     list.add(children.get(i));
                 }
-                if ((thisMother.getId().equals(partner.getId()))&&(thisFather.getId().equals(getId())))
-                {
+                if ((thisMother.getId().equals(partner.getId())) && (thisFather.getId().equals(getId()))) {
                     list.add(children.get(i));
                 }
             }
@@ -512,12 +513,12 @@ public class Person {
         return list;
     }
 
-    public ArrayList<Person> findNonDesire(){
+    public ArrayList<Person> findNonDesire() {
         ArrayList<Person> list = new ArrayList<Person>();
-        for (int i = 0 ; i < children.size() ; i++){
+        for (int i = 0; i < children.size(); i++) {
             Person thisFather = children.get(i).getFather();
             Person thisMother = children.get(i).getMother();
-            if ((thisFather == null)||(thisMother == null)){
+            if ((thisFather == null) || (thisMother == null)) {
                 list.add(children.get(i));
             }
         }
@@ -525,17 +526,17 @@ public class Person {
     }
 
     private void calculateAge() {
-        if ((birth == null)||(death == null)){
+        if ((birth == null) || (death == null)) {
             age = -1;
-            if ((death == null)&&(birth != null)&&(birth.getDate() != null)&&(AuxMethods.getYear(birth.getDate().getDate()) > 1916)){
+            if ((death == null) && (birth != null) && (birth.getDate() != null) && (AuxMethods.getYear(birth.getDate().getDate()) > 1916)) {
                 stillAlive = true;
             }
-        } else if ((birth.getDate() == null)||(death.getDate() == null)){
+        } else if ((birth.getDate() == null) || (death.getDate() == null)) {
             age = -1;
         } else {
             Date birthDate = birth.getDate().getDate();
             Date deathDate = death.getDate().getDate();
-            age = getDiffYears(birthDate,deathDate);
+            age = getDiffYears(birthDate, deathDate);
             String res = "";
         }
     }
@@ -557,11 +558,11 @@ public class Person {
         return cal;
     }
 
-    public void addUnion(Union union){
+    public void addUnion(Union union) {
         unions.add(union);
     }
 
-    public void addChildren(Person person){
+    public void addChildren(Person person) {
         children.add(person);
     }
 
@@ -573,9 +574,9 @@ public class Person {
         this.father = father;
     }
 
-    public String printPerson(){
+    public String printPerson() {
         String txt = "";
-        if (surname.equals("...")||name.equals("...")){
+        if (surname.equals("...") || name.equals("...")) {
             return "";
         }
         String pronoun = "Il";
@@ -583,46 +584,46 @@ public class Person {
         String fils = "le fils";
         String sfils = "fils";
         boolean foundText = false;
-        if (sex == Sex.FEMME){
+        if (sex == Sex.FEMME) {
             pronoun = "Elle";
             accord = "e";
             fils = "la fille";
             sfils = "fille";
         }
-        txt += surname + " " + name ;
-        if (birth != null){
-            if ((birth.getDate() != null)&&(birth.getTown() != null)&&(birth.getTown().getName() != null)){
+        txt += surname + " " + name;
+        if (birth != null) {
+            if ((birth.getDate() != null) && (birth.getTown() != null) && (birth.getTown().getName() != null)) {
                 foundText = true;
                 txt += " est né" + accord + " " + birth.getDate().descriptionDate() + " à "
-                + birth.getTown().getName() + " (" + birth.getTown().getDetail() + ")";
-            } else if (birth.getDate() != null){
+                        + birth.getTown().getName() + " (" + birth.getTown().getDetail() + ")";
+            } else if (birth.getDate() != null) {
                 foundText = true;
                 txt += " est né" + accord + " " + birth.getDate().descriptionDate() + "";
-            } else if ((birth.getTown() != null)&&(birth.getTown().getName() != null)){
+            } else if ((birth.getTown() != null) && (birth.getTown().getName() != null)) {
                 foundText = true;
-                txt+= " est né" + accord + " à " + birth.getTown().getName() + " (" + birth.getTown().getDetail() + ")";
+                txt += " est né" + accord + " à " + birth.getTown().getName() + " (" + birth.getTown().getDetail() + ")";
             }
         }
-        if (foundText){
-            if ((mother != null)&&(father != null)){
-                if (mother.findUnion(father).getState() == Union.State.MARIAGE_HETERO){
+        if (foundText) {
+            if ((mother != null) && (father != null)) {
+                if (mother.findUnion(father).getState() == Union.State.MARIAGE_HETERO) {
                     txt += " du mariage de " + father.getFullName() + " et de " + mother.getFullName();
                 } else {
                     txt += " de l'union de " + father.getFullName() + " et de " + mother.getFullName();
                 }
-            } else if (mother != null){
+            } else if (mother != null) {
                 txt += ", " + sfils + " de " + mother.getFullName();
-            } else if (father != null){
+            } else if (father != null) {
                 txt += ", " + sfils + " de " + father.getFullName();
             }
         } else {
-            if ((mother != null)&&(father != null)){
+            if ((mother != null) && (father != null)) {
                 txt += " est " + fils + " de ";
                 txt += father.getFullName() + " et de " + mother.getFullName();
-            } else if (mother != null){
+            } else if (mother != null) {
                 txt += " est " + fils + " de ";
                 txt += mother.getFullName();
-            } else if (father != null){
+            } else if (father != null) {
                 txt += " est " + fils + " de ";
                 txt += father.getFullName();
             }
@@ -631,23 +632,23 @@ public class Person {
         //Vivant ?
         String singularForm = "est";
         String pluralForm = "sont";
-        if (death != null){
+        if (death != null) {
             singularForm = "était";
             pluralForm = "étaient";
         }
         //Métier
-        if ((profession == null)||(!profession.equals(""))){
+        if ((profession == null) || (!profession.equals(""))) {
             foundText = true;
             String prof = getProfession();
-            if (prof.indexOf(',') == -1){
+            if (prof.indexOf(',') == -1) {
                 //Case where nothing was written before except names
-                if (txt.equals(surname + " " + name)){
+                if (txt.equals(surname + " " + name)) {
                     txt += " " + singularForm + " " + prof;
                 } else {
                     txt += "\nSon métier " + singularForm + " " + prof;
                 }
             } else {
-                if (txt.equals(surname + " " + name)){
+                if (txt.equals(surname + " " + name)) {
                     txt += " " + pluralForm + " " + prof;
                 } else {
                     txt += "\nSes métiers " + pluralForm + " " + prof;
@@ -655,15 +656,15 @@ public class Person {
             }
         }
 
-        for (int i = 0 ; i < unions.size() ; i++){
-                //Mariage
-                Union union = unions.get(i);
-                Person partner = union.getOtherPerson(this);
-                String marie = " s'est marié" + accord;
-                if (union.getState() != Union.State.MARIAGE_HETERO){
-                    marie = " a vécu";
-                }
-            if (foundText){
+        for (int i = 0; i < unions.size(); i++) {
+            //Mariage
+            Union union = unions.get(i);
+            Person partner = union.getOtherPerson(this);
+            String marie = " s'est marié" + accord;
+            if (union.getState() != Union.State.MARIAGE_HETERO) {
+                marie = " a vécu";
+            }
+            if (foundText) {
                 txt += "\n" + pronoun + marie + " avec " +
                         partner.getFullName();
             } else {
@@ -672,40 +673,40 @@ public class Person {
                         partner.getFullName();
             }
 
-                if ((partner.getProfession() != null)&&(!partner.getProfession().equals(""))){
-                    txt += ", " + partner.getProfession();
-                }
-                if (union.getDate() != null){
-                    txt += " " + union.getDate().descriptionDate() + " ";
-                }
-                if ((union.getTown() != null)&&(union.getTown().getName() != null)){
-                    txt += "à " + union.getTown().getName() + " (" + union.getTown().getDetail() + ")";
-                }
+            if ((partner.getProfession() != null) && (!partner.getProfession().equals(""))) {
+                txt += ", " + partner.getProfession();
+            }
+            if (union.getDate() != null) {
+                txt += " " + union.getDate().descriptionDate() + " ";
+            }
+            if ((union.getTown() != null) && (union.getTown().getName() != null)) {
+                txt += "à " + union.getTown().getName() + " (" + union.getTown().getDetail() + ")";
+            }
 
-                //Enfants
-                ArrayList<Person> myChildren = findChildren(partner);
-                if (!myChildren.isEmpty()){
-                    txt += " et a eu de cette union ";
-                    int nbChildren =  myChildren.size();
-                    if (nbChildren > 1){
-                        txt += nbChildren + " enfants nommés " + myChildren.get(0).getFullName();
-                        for (int j = 1 ; j < myChildren.size()-1 ; j++){
-                            txt += ", " + myChildren.get(j).getFullName();
-                        }
-                        txt += " et " + myChildren.get(myChildren.size()-1).getFullName();
-                    } else {
-                        txt += nbChildren + " enfant nommé " + myChildren.get(0).getFullName();
+            //Enfants
+            ArrayList<Person> myChildren = findChildren(partner);
+            if (!myChildren.isEmpty()) {
+                txt += " et a eu de cette union ";
+                int nbChildren = myChildren.size();
+                if (nbChildren > 1) {
+                    txt += nbChildren + " enfants nommés " + myChildren.get(0).getFullName();
+                    for (int j = 1; j < myChildren.size() - 1; j++) {
+                        txt += ", " + myChildren.get(j).getFullName();
                     }
+                    txt += " et " + myChildren.get(myChildren.size() - 1).getFullName();
+                } else {
+                    txt += nbChildren + " enfant nommé " + myChildren.get(0).getFullName();
                 }
+            }
         }
         ArrayList<Person> naturelChildren = findNonDesire();
-        if (!naturelChildren.isEmpty()){
-            if (naturelChildren.size() > 1){
+        if (!naturelChildren.isEmpty()) {
+            if (naturelChildren.size() > 1) {
                 txt += "\n" + pronoun + " a eu " + naturelChildren.size() + " enfants naturels nommés " + naturelChildren.get(0).getFullName();
-                for (int j = 1 ; j < naturelChildren.size()-1 ; j++){
+                for (int j = 1; j < naturelChildren.size() - 1; j++) {
                     txt += ", " + naturelChildren.get(j).getFullName();
                 }
-                txt += " et " + naturelChildren.get(naturelChildren.size()-1).getFullName();
+                txt += " et " + naturelChildren.get(naturelChildren.size() - 1).getFullName();
             } else {
                 txt += "\n" + pronoun + " a eu 1 enfant naturel nommé " + naturelChildren.get(0).getFullName();
             }
@@ -713,64 +714,63 @@ public class Person {
 
         boolean foundDeath = false;
 
-        if (death != null){
-            if ((death.getDate() != null)&&(death.getTown() != null)&&(death.getTown().getName() != null)){
-                if (foundText){
+        if (death != null) {
+            if ((death.getDate() != null) && (death.getTown() != null) && (death.getTown().getName() != null)) {
+                if (foundText) {
                     txt += "\n" + pronoun;
                 }
                 txt += " est décédé" + accord + " " + death.getDate().descriptionDate() + " à "
                         + death.getTown().getName() + " (" + death.getTown().getDetail() + ")";
                 foundText = true;
                 foundDeath = true;
-            } else if (death.getDate() != null){
-                if (foundText){
+            } else if (death.getDate() != null) {
+                if (foundText) {
                     txt += "\n" + pronoun;
                 }
                 foundText = true;
                 foundDeath = true;
                 txt += " est décédé" + accord + " " + death.getDate().descriptionDate();
-            } else if ((death.getTown() != null)&&(death.getTown().getName() != null)){
-                if (foundText){
+            } else if ((death.getTown() != null) && (death.getTown().getName() != null)) {
+                if (foundText) {
                     txt += "\n" + pronoun;
                 }
                 foundText = true;
                 foundDeath = true;
-                txt+= " est décédé" + accord + " à " + death.getTown().getName() + " (" + death.getTown().getDetail() + ")";
+                txt += " est décédé" + accord + " à " + death.getTown().getName() + " (" + death.getTown().getDetail() + ")";
             }
         }
 
-        if (age != -1){
-            if (age < 2){
+        if (age != -1) {
+            if (age < 2) {
                 txt += " à l'âge de " + age + " an";
             } else {
                 txt += " à l'âge de " + age + " ans";
             }
         }
 
-        if (txt.equals(surname + " " + name)){
+        if (txt.equals(surname + " " + name)) {
             txt = "";
         } else {
             txt += ".";
         }
-        return txt.replace("\n",".\n");
+        return txt.replace("\n", ".\n");
     }
-
 
 
     public ArrayList<Person> getHalfSiblings() {
         ArrayList<Person> result = new ArrayList<Person>();
-        if (father != null){
+        if (father != null) {
             ArrayList<Person> children = father.getChildren();
-            for (Person person : children){
-                if (person.getMother() != null && !person.getMother().equals(mother) && !person.equals(this)){
+            for (Person person : children) {
+                if (person.getMother() != null && !person.getMother().equals(mother) && !person.equals(this)) {
                     result.add(person);
                 }
             }
         }
-        if (mother != null){
+        if (mother != null) {
             ArrayList<Person> children = mother.getChildren();
-            for (Person person : children){
-                if (!person.getMother().equals(father) && !person.equals(this)){
+            for (Person person : children) {
+                if (!person.getMother().equals(father) && !person.equals(this)) {
                     result.add(person);
                 }
             }
@@ -780,10 +780,10 @@ public class Person {
 
     public ArrayList<Person> getSiblings() {
         ArrayList<Person> result = new ArrayList<Person>();
-        if (father != null){
+        if (father != null) {
             ArrayList<Person> children = father.getChildren();
-            for (Person person : children){
-                if (person.getMother() != null && person.getMother().equals(mother) && !person.equals(this)){
+            for (Person person : children) {
+                if (person.getMother() != null && person.getMother().equals(mother) && !person.equals(this)) {
                     result.add(person);
                 }
             }
@@ -791,13 +791,13 @@ public class Person {
         return result;
     }
 
-    public void printNecessaryResearch(){
-        if (!StringUtils.equals(getSurname(),"...")){
+    public void printNecessaryResearch() {
+        if (!StringUtils.equals(getSurname(), "...")) {
             boolean found = false;
             String result = "";
-            if (birth != null){
+            if (birth != null) {
                 String birthTxt = birth.getNecessaryResearch();
-                if (birthTxt != null){
+                if (birthTxt != null) {
                     found = true;
                     result += ", Birth=[" + birthTxt + "]";
                 }
@@ -806,15 +806,15 @@ public class Person {
             }
 
             ArrayList<Union> unions = getUnions();
-            if (unions != null ){
+            if (unions != null) {
                 String unionTxt = "";
-                for (Union union : unions){
+                for (Union union : unions) {
                     String inputUnion = union.getNecessaryResearch();
-                    if (inputUnion != null){
+                    if (inputUnion != null) {
                         unionTxt += inputUnion;
                     }
                 }
-                if (!unionTxt.equals("")){
+                if (!unionTxt.equals("")) {
                     found = true;
                     result += ", Union=[" + unionTxt + "]";
                 }
@@ -831,7 +831,7 @@ public class Person {
             } else {
                 result += ", Death=[Date Town]";
             }
-            if (found){
+            if (found) {
                 logger.info(getFullName() + " : " + result.substring(2));
             }
         }

@@ -2,8 +2,10 @@ package Genealogy;
 
 import Genealogy.Model.Act.Union;
 import Genealogy.Model.Date.MyDate;
+import Genealogy.Model.Exception.ParsingException;
 import Genealogy.Model.Header;
 import Genealogy.Model.Person;
+import Genealogy.Model.PersonNameComparator;
 import Genealogy.Model.Town;
 import Genealogy.Parsing.ParsingStructure;
 import org.apache.logging.log4j.LogManager;
@@ -11,63 +13,131 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * Created by Dan on 05/04/2016.
+ * Class Genealogy : class that hosts the elements of a genealogic tree
  */
 public class Genealogy {
 
+    /**
+     * List of ParsingStructures - core of the genealogy file
+     */
     private ArrayList<ParsingStructure> contents;
+    /**
+     * Root person of the tree
+     */
     private Person root;
+    /**
+     * Header of the genealogy file
+     */
     private Header header;
+    /**
+     * Author String of the genealogy file
+     */
     private String author;
+    /**
+     * List of Person in the tree
+     */
     private ArrayList<Person> persons = new ArrayList<Person>();
+    /**
+     * The Genealogy itself
+     */
     public static Genealogy genealogy;
+    /**
+     * Logger of the class
+     */
     final static Logger logger = LogManager.getLogger(Genealogy.class);
 
+    /**
+     * Genealogy : Default Constructor
+     */
     public Genealogy() {
     }
 
-    public void initPersonsPeriods() {
-        for (int i = 0 ; i < persons.size() ; i++){
-            persons.get(i).initPeriods();
+    /**
+     * Function initPersonsLifeSpans : initialize the lifespan of each Person in persons list
+     */
+    public void initPersonsLifeSpans() {
+        for (int i = 0; i < persons.size(); i++) {
+            persons.get(i).initLifeSpans();
         }
     }
 
-    public Person findPersonById(String id){
-        for (Person person : persons){
-            if (id.equals(person.getId())){
+    /**
+     * Function findPersonById : find a person by its String id
+     *
+     * @param id : the String to find
+     * @return : the Person
+     */
+    public Person findPersonById(String id) {
+        for (Person person : persons) {
+            if (id.equals(person.getId())) {
                 return person;
             }
         }
         return null;
     }
 
+    /**
+     * Contents getter
+     *
+     * @return
+     */
     public ArrayList<ParsingStructure> getContents() {
         return contents;
     }
 
+    /**
+     * Contents setter
+     *
+     * @param contents
+     */
     public void setContents(ArrayList<ParsingStructure> contents) {
         this.contents = contents;
     }
 
+    /**
+     * Root getter
+     *
+     * @return
+     */
     public Person getRoot() {
         return root;
     }
 
+    /**
+     * Author getter
+     *
+     * @return
+     */
     public String getAuthor() {
         return author;
     }
 
+    /**
+     * Header getter
+     *
+     * @return
+     */
     public Header getHeader() {
         return header;
     }
 
+    /**
+     * Persons getter
+     *
+     * @return
+     */
     public ArrayList<Person> getPersons() {
         return persons;
     }
 
+    /**
+     * Function toString : return contents only
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return "Genealogy.Genealogy{" +
@@ -75,133 +145,144 @@ public class Genealogy {
                 '}';
     }
 
-    public class NameComparator implements Comparator<Person> {
-        @Override
-        public int compare(Person o1, Person o2) {
-            return o1.getName4Comparator().compareTo(o2.getName4Comparator());
-        }
+    /**
+     * Function sortPersons : sort persons list with PersonNameComparator
+     */
+    public void sortPersons() {
+        Collections.sort(persons, new PersonNameComparator());
     }
 
-    public void sortPersons(){
-        Collections.sort(persons, new Genealogy.NameComparator());
-    }
-
-    public void parseContents(){
-        ArrayList<ParsingStructure> fileHeader = new ArrayList<ParsingStructure>();
+    /**
+     * Function parseContents : create the list of Persons from String contents
+     * set the direct ancestors recursively
+     *
+     * @throws ParsingException if the header is not handled
+     */
+    public void parseContents() throws ParsingException {
         int index = 0;
-        //Entête
-        for (int i = 0 ; i < contents.size() ; i++){
-            if (contents.get(i).getId().equals("@SUBM@")){
-                index = i+1;
+
+        //Header
+        ArrayList<ParsingStructure> fileHeader = new ArrayList<>();
+        for (int i = 0; i < contents.size(); i++) {
+            if ("@SUBM@".equals(contents.get(i).getId())) {
+                index = i + 1;
                 break;
             }
             fileHeader.add(contents.get(i));
         }
-        if (index == 0){
-            logger.error("Erreur dans le parsing");
-            return ;
+        if (index == 0) {
+            throw new ParsingException("Failed to parse header");
         }
         header = new Header(fileHeader);
         author = contents.get(index).getText();
         index++;
 
-        //Personnes
-        int newIndex = AuxMethods.findIndexNumberInteger(contents,0,index+1);
+        //Persons
+        int newIndex = AuxMethods.findIndexNumberInteger(contents, 0, index + 1);
 
-        while(contents.get(newIndex).getText().equals("INDI")){
-            Person person = new Person(contents,index,newIndex);
+        while (contents.get(newIndex).getText().equals("INDI")) {
+            Person person = new Person(contents, index, newIndex);
             index = newIndex;
-            newIndex = AuxMethods.findIndexNumberInteger(contents,0,index+1);
+            newIndex = AuxMethods.findIndexNumberInteger(contents, 0, index + 1);
             persons.add(person);
         }
-        Person person = new Person(contents,index,newIndex);
+        Person person = new Person(contents, index, newIndex);
         index = newIndex;
-        newIndex = AuxMethods.findIndexNumberInteger(contents,0,index+1);
+        newIndex = AuxMethods.findIndexNumberInteger(contents, 0, index + 1);
         persons.add(person);
 
-        //Famille
+        //Family
         int maxFamillyIndex = 0;
-        while (!contents.get(maxFamillyIndex).getText().equals("_LOC")){
-            maxFamillyIndex = AuxMethods.findIndexNumberInteger(contents,0,index+1);
-            handleWedding(persons,contents,index,maxFamillyIndex);
+        while (!contents.get(maxFamillyIndex).getText().equals("_LOC")) {
+            maxFamillyIndex = AuxMethods.findIndexNumberInteger(contents, 0, index + 1);
+            parseMarriageContents(persons, contents, index, maxFamillyIndex);
             index = maxFamillyIndex;
         }
         root = persons.get(0);
 
-        prepareDirectAncestors(root);
+        setDirectAncestors(root);
     }
 
-    private void prepareDirectAncestors(Person p) {
-        if (p == null){
-            return;
-        }
-        p.setDirectAncestor(true);
-        if (p.getFather() != null){
-            prepareDirectAncestors(p.getFather());
-        }
-        if (p.getMother() != null){
-            prepareDirectAncestors(p.getMother());
+    /**
+     * Function setDirectAncestors : spread directAncestor boolean recursively to all direct ancestors
+     *
+     * @param person
+     */
+    private void setDirectAncestors(Person person) {
+        if (person != null) {
+            person.setDirectAncestor(true);
+            if (person.getFather() != null) {
+                setDirectAncestors(person.getFather());
+            }
+            if (person.getMother() != null) {
+                setDirectAncestors(person.getMother());
+            }
         }
     }
 
-    private void handleWedding(ArrayList<Person> persons, ArrayList<ParsingStructure> contents, int index, int maxIndex) {
-        String husbId = AuxMethods.findField(contents,"HUSB",index,maxIndex);
-        int husbIndex = AuxMethods.findIDInStructure(persons,husbId);
-        String wifeId = AuxMethods.findField(contents,"WIFE",index,maxIndex);
-        int wifeIndex = AuxMethods.findIDInStructure(persons,wifeId);
+    /**
+     * Function parseMarriageContents : create Union structures from dates and places
+     *
+     * @param persons
+     * @param contents
+     * @param index
+     * @param maxIndex
+     */
+    private void parseMarriageContents(ArrayList<Person> persons, ArrayList<ParsingStructure> contents, int index, int maxIndex) {
+        String husbId = AuxMethods.findField(contents, "HUSB", index, maxIndex);
+        int husbIndex = AuxMethods.findIDInStructure(persons, husbId);
+        String wifeId = AuxMethods.findField(contents, "WIFE", index, maxIndex);
+        int wifeIndex = AuxMethods.findIDInStructure(persons, wifeId);
 
-        String statutString = AuxMethods.findField(contents,"_STAT",index,maxIndex);
+        String statutString = AuxMethods.findField(contents, "_STAT", index, maxIndex);
         Union.State state = Union.parseState(statutString);
 
-        //Date de mariage
-        String date = AuxMethods.findField(contents,"DATE",index,maxIndex);
+        //Marriage date
+        String date = AuxMethods.findField(contents, "DATE", index, maxIndex);
         MyDate marriageDay = null;
-        try{
+        try {
             marriageDay = (MyDate) MyDate.Mydate(date);
-        }
-        catch (Exception e){
-            //System.out.println("Impossible de parser la date de mariage de " + contents.get(index).getId());
+        } catch (Exception e) {
+            logger.debug("Impossible de parser la date de mariage de " + contents.get(index).getId(), e);
         }
 
-        //Ville de mariage
+        //Marriage city
         Town marriageTown = null;
         try {
-            marriageTown = new Town(AuxMethods.findField(contents,"PLAC",index,maxIndex));
+            marriageTown = new Town(AuxMethods.findField(contents, "PLAC", index, maxIndex));
         } catch (Exception e) {
-            //System.out.println("Impossible de parser la ville de mariage de " + contents.get(index).getId());
+            logger.debug("Impossible de parser la ville de mariage de " + contents.get(index).getId(), e);
         }
 
         Person father = null;
-        if (husbIndex != -1){
+        if (husbIndex != -1) {
             father = persons.get(husbIndex);
         }
         Person mother = null;
-        if (wifeIndex != -1){
+        if (wifeIndex != -1) {
             mother = persons.get(wifeIndex);
         }
 
-        if ((mother != null)&&(father != null)){
-            Union union = new Union(father,mother,marriageDay,marriageTown,state);
+        if ((mother != null) && (father != null)) {
+            Union union = new Union(father, mother, marriageDay, marriageTown, state);
             father.addUnion(union);
             mother.addUnion(union);
         }
 
-        for (int i = index ; i < maxIndex ; i++){
-            if (contents.get(i).getId().equals("CHIL")){
+        for (int i = index; i < maxIndex; i++) {
+            if (contents.get(i).getId().equals("CHIL")) {
                 String childId = contents.get(i).getText();
-                int childIndex = AuxMethods.findIDInStructure(persons,childId);
+                int childIndex = AuxMethods.findIDInStructure(persons, childId);
                 Person child = persons.get(childIndex);
-                if (father != null){
+                if (father != null) {
                     father.addChildren(child);
                     child.setFather(father);
                 }
-                if (mother != null){
+                if (mother != null) {
                     mother.addChildren(child);
                     child.setMother(mother);
                 }
             }
         }
     }
-
-
 }

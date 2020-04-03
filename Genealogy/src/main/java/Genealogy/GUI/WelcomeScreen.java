@@ -1,7 +1,6 @@
 package Genealogy.GUI;
 
 import Genealogy.Genealogy;
-import Genealogy.Main;
 import Genealogy.Model.Town;
 import Genealogy.Parsing.MyGedcomReader;
 import Genealogy.URLConnexion.Serializer;
@@ -15,13 +14,16 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 
+import static Genealogy.GUI.MainScreen.myFolder;
+import static Genealogy.GUI.MainScreen.myJarFolder;
+
 /**
  * Created by Dan on 10/04/2016.
  */
-public class WelcomeScreen extends JFrame{
+public class WelcomeScreen extends JFrame {
     private JButton selFichierButton;
     private JPanel welcomePanel;
-    private JTextArea filePath;
+    private JTextArea filePath = new JTextArea();
     private JButton chargerFichierButton;
     private JPanel loadingPanel;
     private JProgressBar progressBar1;
@@ -33,7 +35,7 @@ public class WelcomeScreen extends JFrame{
         initText();
         initButtons();
 
-        setPreferredSize(new Dimension(500,300));
+        setPreferredSize(new Dimension(500, 300));
         pack();
         setLocationRelativeTo(null);
         progressBar1.setVisible(false);
@@ -43,7 +45,7 @@ public class WelcomeScreen extends JFrame{
         setVisible(true);
     }
 
-    private void initForm(){
+    private void initForm() {
         selFichierButton = new JButton();
         welcomePanel = new JPanel();
         filePath = new JTextArea();
@@ -52,7 +54,7 @@ public class WelcomeScreen extends JFrame{
         progressBar1 = new JProgressBar();
     }
 
-    private void initTownAssociation(Serializer serializer){
+    private void initTownAssociation(Serializer serializer) {
         //Gestion des associations
         try {
             Town.setTownAssociation(serializer.initAssociation());
@@ -62,12 +64,12 @@ public class WelcomeScreen extends JFrame{
         }
     }
 
-    private JFileChooser initSerializer(){
+    private JFileChooser initSerializer() {
         Serializer<Town> serializer = new Serializer<Town>(Town.class);
-        if (serializer.isJar()){
-            return new JFileChooser(Main.myJarFolfer);
+        if (serializer.isJar()) {
+            return new JFileChooser(myJarFolder);
         } else {
-            return new JFileChooser(Main.myFolder);
+            return new JFileChooser(myFolder);
         }
     }
 
@@ -91,7 +93,7 @@ public class WelcomeScreen extends JFrame{
         chargerFichierButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (filePath.getText().equals("Fichier à charger")){
+                if (filePath.getText().equals("Fichier à charger")) {
 
                     JOptionPane.showMessageDialog(welcomePanel,
                             "Renseigner le fichier gedcom",
@@ -105,7 +107,7 @@ public class WelcomeScreen extends JFrame{
                         @Override
                         protected Void doInBackground() throws Exception {
                             // Worken hard or hardly worken...
-                            try{
+                            try {
                                 MyGedcomReader myGedcomReader = new MyGedcomReader();
                                 Genealogy.genealogy = myGedcomReader.read(filePath.getText());
                                 Genealogy.genealogy.parseContents();
@@ -113,24 +115,23 @@ public class WelcomeScreen extends JFrame{
                                 Town.setCoordinates();
                                 //Traitement de villes non trouvées
                                 ArrayList<String> lostTowns = Town.getLostTowns();
-                                if ((lostTowns != null)&&(!lostTowns.isEmpty())){
+                                if ((lostTowns != null) && (!lostTowns.isEmpty())) {
                                     String txt = lostTowns.toString();
                                     JOptionPane.showMessageDialog(welcomePanel,
                                             "Les villes suivantes n'ont pas été trouvées : \n" + txt,
                                             "Erreur",
                                             JOptionPane.ERROR_MESSAGE);
-                                    logger.error("Les villes suivantes n'ont pas été trouvées : "+ txt);
+                                    logger.error("Les villes suivantes n'ont pas été trouvées : " + txt);
                                 }
                                 Serializer.getSerializer().saveTown(Town.getTownsToSave());
                                 ArrayList<Town> myEmptyTowns = Serializer.getNullCoordinatesCities(Town.getTowns());
-                                if (!myEmptyTowns.isEmpty()){
+                                if (!myEmptyTowns.isEmpty()) {
                                     logger.warn("Villes avec Coordonnées nulles : " + myEmptyTowns);
                                 }
-                                Genealogy.genealogy.initPersonsPeriods();
+                                Genealogy.genealogy.initPersonsLifeSpans();
                                 setVisible(false);
                                 MainScreen mainScreen = new MainScreen("Ma Généalogie");
-                            }
-                            catch (Exception exception){
+                            } catch (Exception exception) {
                                 exception.printStackTrace();
                                 JOptionPane.showMessageDialog(welcomePanel,
                                         "Impossible d'importer le fichier",
