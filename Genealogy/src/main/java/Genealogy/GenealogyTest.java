@@ -113,7 +113,7 @@ public class GenealogyTest {
     @Test
     public void parseContents() throws IOException, ParsingException, URISyntaxException {
         //init
-        URL url = getClass().getResource("/test/testParseContents.ged");
+        URL url = getClass().getResource("/test/testParseContents.gedTest");
         File file = new File(url.toURI());
         MyGedcomReader myGedcomReader = new MyGedcomReader();
         Serializer serializer = new Serializer();
