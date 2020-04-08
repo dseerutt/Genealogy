@@ -4,7 +4,7 @@ import Genealogy.MapViewer.Structures.MyCoordinate;
 import Genealogy.Model.Act.Act;
 import Genealogy.URLConnexion.MyHttpURLConnexion;
 import Genealogy.URLConnexion.Serializer;
-import org.apache.commons.codec.binary.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -12,21 +12,22 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * Created by Dan on 06/04/2016.
  */
-public class Town implements Serializable{
+public class Town implements Serializable {
     private String name;
     private String detail;
     private MyCoordinate coordinates;
-    private static HashMap<Town,ArrayList<Act>> listOfTown = new HashMap<Town, ArrayList<Act>>();
+    private static HashMap<Town, ArrayList<Act>> listOfTown = new HashMap<Town, ArrayList<Act>>();
     private static ArrayList<Town> towns = new ArrayList<Town>();
     private static ArrayList<Town> townsToSave = new ArrayList<Town>();
     private static ArrayList<String> lostTowns = new ArrayList<String>();
-    private static HashMap<String,String> townAssociation;
+    private static HashMap<String, String> townAssociation;
     private ArrayList<Town> serializerTowns;
     private static boolean useFileSave = true;
 
@@ -39,12 +40,12 @@ public class Town implements Serializable{
         return townsToSave;
     }
 
-    public static void addLostTowns(String town, String county){
+    public static void addLostTowns(String town, String county) {
         lostTowns.add(town);
         townAssociation.put(town, county);
     }
 
-    public static ArrayList<String> getLostTowns(){
+    public static ArrayList<String> getLostTowns() {
         return lostTowns;
     }
 
@@ -56,54 +57,54 @@ public class Town implements Serializable{
         Town.townAssociation = townAssociation;
     }
 
-    public String getFullName(){
-        return name + " " + detail;
+    public String getFullName() {
+        return StringUtils.deleteWhitespace(Objects.toString(name, "") + " " + Objects.toString(detail, ""));
     }
 
-    public String getFullNameWithParenthesis(){
+    public String getFullNameWithParenthesis() {
         return name + " (" + detail + ")";
     }
 
-    public static MyCoordinate parseJsonArray(String jsonObject){
-        if (StringUtils.equals(jsonObject,"[]")){
+    public static MyCoordinate parseJsonArray(String jsonObject) {
+        if (StringUtils.equals(jsonObject, "[]")) {
             return null;
         }
-        JSONObject jsonObj = new JSONObject(jsonObject.substring(1,jsonObject.length()-1));
+        JSONObject jsonObj = new JSONObject(jsonObject.substring(1, jsonObject.length() - 1));
         MyCoordinate point2D = new MyCoordinate(Double.valueOf((String) jsonObj.get("lat")), Double.valueOf((String) jsonObj.get("lon")));
         return point2D;
     }
 
-    public static MyCoordinate parseGoogleJsonArray(String jsonObject){
+    public static MyCoordinate parseGoogleJsonArray(String jsonObject) {
         JSONObject jsonObj = new JSONObject(jsonObject);
-        if (jsonObj.get("status").equals("OK")){
+        if (jsonObj.get("status").equals("OK")) {
             JSONArray results = (JSONArray) jsonObj.get("results");
             JSONObject resultsIndex = (JSONObject) results.get(0);
             JSONObject geometry = (JSONObject) resultsIndex.get("geometry");
             JSONObject location = (JSONObject) geometry.get("location");
-            MyCoordinate point2D = new MyCoordinate((double) location.get("lat"),(double) location.get("lng"));
+            MyCoordinate point2D = new MyCoordinate((double) location.get("lat"), (double) location.get("lng"));
             return point2D;
         } else {
             return null;
         }
     }
 
-    public static MyCoordinate parseGoogleJsonArray(String jsonObject, String city){
-        if (Serializer.getSerializer().isJar()){
+    public static MyCoordinate parseGoogleJsonArray(String jsonObject, String city) {
+        if (Serializer.getSerializer().isJar()) {
             String[] tab = city.toLowerCase().split(" ");
             String input = jsonObject.toLowerCase();
-            for (int i = 0 ; i < tab.length ; i++){
-                if (!input.contains(tab[i])){
+            for (int i = 0; i < tab.length; i++) {
+                if (!input.contains(tab[i])) {
                     return null;
                 }
             }
         }
         JSONObject jsonObj = new JSONObject(jsonObject);
-        if (jsonObj.get("status").equals("OK")){
+        if (jsonObj.get("status").equals("OK")) {
             JSONArray results = (JSONArray) jsonObj.get("results");
             JSONObject resultsIndex = (JSONObject) results.get(0);
             JSONObject geometry = (JSONObject) resultsIndex.get("geometry");
             JSONObject location = (JSONObject) geometry.get("location");
-            MyCoordinate point2D = new MyCoordinate((double) location.get("lat"),(double) location.get("lng"));
+            MyCoordinate point2D = new MyCoordinate((double) location.get("lat"), (double) location.get("lng"));
             return point2D;
         } else {
             return null;
@@ -129,51 +130,58 @@ public class Town implements Serializable{
         return result;
     }
 
-    public Town(String fullname) throws Exception{
-            Pattern p = Pattern.compile("(.*) \\((.*)\\)");
+    public Town(String fullname) throws Exception {
+        for (String regex : Serializer.getTownRegex()) {
+            Pattern p = Pattern.compile(regex);
             Matcher m = p.matcher(fullname);
-            if (m.find()){
-                name = m.group(1);
-                detail = m.group(2);
+            if (m.find()) {
+                name = StringUtils.trim(m.group(1));
+                if (m.groupCount() > 1) {
+                    detail = StringUtils.trim(m.group(2));
+                } else {
+                    detail = "";
+                }
+                break;
             }
+        }
     }
 
-    public void addTown(Act act){
-        if (this != null){
-            if (this.getName() != null){
-                if (listOfTown.containsKey(this)){
+    public void addTown(Act act) {
+        if (this != null) {
+            if (this.getName() != null) {
+                if (listOfTown.containsKey(this)) {
                     listOfTown.get(this).add(act);
                 } else {
                     ArrayList<Act> actes = new ArrayList<Act>();
                     actes.add(act);
-                    listOfTown.put(this,actes);
+                    listOfTown.put(this, actes);
                     towns.add(this);
                 }
             }
         }
     }
 
-    public static Town findTown(ArrayList<Town> towns, Town thisTown){
-        for (Town town : towns){
-            if (town.getName().equals(thisTown.getName())){
+    public static Town findTown(ArrayList<Town> towns, Town thisTown) {
+        for (Town town : towns) {
+            if (town.getName().equals(thisTown.getName())) {
                 return town;
             }
         }
         return null;
     }
 
-    public MyCoordinate findCoordinate(){
-        for (int i = 0 ; i < Town.getTowns().size() ; i++){
-            if (towns.get(i).getFullNameWithParenthesis().equals(this.getFullName())){
+    public MyCoordinate findCoordinate() {
+        for (int i = 0; i < Town.getTowns().size(); i++) {
+            if (towns.get(i).getFullNameWithParenthesis().equals(this.getFullName())) {
                 return towns.get(i).getCoordinates();
             }
         }
         return null;
     }
 
-    public static MyCoordinate findCoordinate(String city){
-        for (int i = 0 ; i < Town.getTowns().size() ; i++){
-            if (towns.get(i).getFullNameWithParenthesis().equals(city)){
+    public static MyCoordinate findCoordinate(String city) {
+        for (int i = 0; i < Town.getTowns().size(); i++) {
+            if (towns.get(i).getFullNameWithParenthesis().equals(city)) {
                 return towns.get(i).getCoordinates();
             }
         }
@@ -183,12 +191,12 @@ public class Town implements Serializable{
     public static void setCoordinates() throws Exception {
         lostTowns = new ArrayList<String>();
         //Alias villes qui ont changé de nom
-        HashMap<String,String> alias = Town.getTownAssociation();
+        HashMap<String, String> alias = Town.getTownAssociation();
         Serializer serializer = Serializer.getSerializer();
         String separator = "|";
 
         ArrayList<Town> townsInFile = Serializer.getSerializer().getTowns();
-        if ((townsInFile == null)||(townsInFile.isEmpty())){
+        if ((townsInFile == null) || (townsInFile.isEmpty())) {
             //Si le fichier init est vide
             for (Town thisTown : towns) {
                 MyCoordinate coo = null;
@@ -197,44 +205,44 @@ public class Town implements Serializable{
                 String county = thisTown.getDetail();
 
                 String coordinatesFromFile = serializer.getCoordinatesFromFile(city + separator + county);
-                if (coordinatesFromFile != null){
+                if (coordinatesFromFile != null) {
                     coo = new MyCoordinate(coordinatesFromFile);
                     thisTown.setCoordinates(coo);
                 } else {
                     if (alias.containsKey(thisTown.getFullName())) {
-                    newName = alias.get(thisTown.getFullName());
-                }
+                        newName = alias.get(thisTown.getFullName());
+                    }
                     coo = Town.parseJsonArray((new MyHttpURLConnexion()).sendAddressRequest(city, county));
-                    if (!lostTowns.contains(newName)){
+                    if (!lostTowns.contains(newName)) {
                         townsToSave.add(thisTown);
                     }
 
                     if (coo != null) {
                         thisTown.setCoordinates(coo);
-                        if (useFileSave){
+                        if (useFileSave) {
                             saveCoordinateIntoFile(city, county, coo.getLattitude(), coo.getLongitude());
                         }
                     }
                 }
             }
         } else {
-            for (Town thisTown : towns){
+            for (Town thisTown : towns) {
                 Town town = findTown(townsInFile, thisTown);
                 String aliasName = thisTown.getFullName();
                 String city = thisTown.getName();
                 String county = thisTown.getDetail();
-                if (alias.containsKey(aliasName)){
+                if (alias.containsKey(aliasName)) {
                     aliasName = alias.get(thisTown.getFullName());
                 }
-                if ((town != null)&&(town.getCoordinates() != null)){
+                if ((town != null) && (town.getCoordinates() != null)) {
                     thisTown.setCoordinates(town.getCoordinates());
-                    if (!lostTowns.contains(aliasName)){
+                    if (!lostTowns.contains(aliasName)) {
                         townsToSave.add(thisTown);
                     }
                 } else {
                     MyCoordinate coo;
                     String coordinatesFromFile = serializer.getCoordinatesFromFile(city + separator + county);
-                    if (coordinatesFromFile != null){
+                    if (coordinatesFromFile != null) {
                         coo = new MyCoordinate(coordinatesFromFile);
                         thisTown.setCoordinates(coo);
                         break;
@@ -243,11 +251,11 @@ public class Town implements Serializable{
                     coo = Town.parseJsonArray((new MyHttpURLConnexion()).sendAddressRequest(city, county));
                     if (coo != null) {
                         thisTown.setCoordinates(coo);
-                        if (useFileSave){
+                        if (useFileSave) {
                             saveCoordinateIntoFile(city, county, coo.getLattitude(), coo.getLongitude());
                         }
                     }
-                    if (!lostTowns.contains(aliasName)){
+                    if (!lostTowns.contains(aliasName)) {
                         townsToSave.add(thisTown);
                     }
                 }
@@ -274,7 +282,7 @@ public class Town implements Serializable{
         }
     }
 
-    public static void sortTowns(){
+    public static void sortTowns() {
         java.util.Collections.sort(towns, new TownComparator());
     }
 
@@ -288,9 +296,9 @@ public class Town implements Serializable{
 
     public static void setCoordinates(MyCoordinate coordinates, String city) {
         Town thisTown;
-        for (Town town : towns){
-            if (town.getFullName().equals(city)){
-                thisTown =  town;
+        for (Town town : towns) {
+            if (town.getFullName().equals(city)) {
+                thisTown = town;
                 thisTown.setCoordinates(coordinates);
                 return;
             }
@@ -313,8 +321,8 @@ public class Town implements Serializable{
         return towns;
     }
 
-    public String printCoordinates(){
-        if (coordinates != null){
+    public String printCoordinates() {
+        if (coordinates != null) {
             return "(" + coordinates.getLattitude() + "," + coordinates.getLongitude() + ")";
         } else {
             return "";
@@ -322,18 +330,36 @@ public class Town implements Serializable{
 
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return name == null && detail == null;
     }
 
+    /**
+     * Function toString : toString
+     *
+     * @return the final String
+     */
     @Override
     public String toString() {
         String print = "Town{" +
                 "name='" + name + '\'' +
                 ", detail='" + detail + '\'';
-        if (coordinates != null){
-            print +=  ", 'coordinates=" + printCoordinates()  + '\'';
+        if (coordinates != null) {
+            print += ", 'coordinates=" + printCoordinates() + '\'';
         }
-           return print + '}';
+        return print + '}';
+    }
+
+    /**
+     * Function toStringPrettyString : toString with pretty print
+     *
+     * @return the final String
+     */
+    public String toStringPrettyString() {
+        if (StringUtils.isBlank(detail)) {
+            return name;
+        } else {
+            return name + " (" + detail + ")";
+        }
     }
 }

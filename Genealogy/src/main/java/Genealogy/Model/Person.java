@@ -11,7 +11,7 @@ import Genealogy.Model.Date.MyDate;
 import Genealogy.Parsing.PDFStructure;
 import Genealogy.Parsing.ParsingStructure;
 import javafx.util.Pair;
-import org.apache.commons.codec.binary.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
@@ -49,12 +49,29 @@ public class Person {
             }
             return null;
         }
+
+        public String toStringPrettyPrint() {
+            if (this != null) {
+                switch (this) {
+                    case HOMME:
+                        return "man";
+                    case FEMME:
+                        return "woman";
+                    case INCONNU:
+                        return "sex unknown";
+                    default:
+                        break;
+                }
+            }
+            return null;
+        }
     }
 
     private Sex sex;
     private String name;
     private String surname;
     private Birth birth;
+    private Christening christening;
     private Death death;
     private String profession;
     private String note;
@@ -155,7 +172,11 @@ public class Person {
     }
 
     public String getFullName() {
-        return surname + " " + name;
+        if (StringUtils.isEmpty(surname)) {
+            return name;
+        } else {
+            return surname + " " + name;
+        }
     }
 
     /**
@@ -390,98 +411,177 @@ public class Person {
         }
     }
 
+    /**
+     * Function toString : pretty print of the object Person
+     *
+     * @return the final String
+     */
     @Override
     public String toString() {
-        String res = "Person{" +
-                "id='" + id + '\'' +
-                ", sex=" + sex +
-                ", age=" + age +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", birth=" + birth +
-                ", death=" + death +
-                ", profession='" + profession + '\'';
-
-
-        if (mother != null) {
-            res += ", mother='" + mother.getFullName() + '\'';
+        String res = "Person";
+        if (!StringUtils.isBlank(id)) {
+            res += "_" + id.substring(1, id.length() - 1);
+        }
+        res += "{";
+        if (age != -1) {
+            res += age + " y/o ";
+        }
+        res += sex.toStringPrettyPrint() + ", name='" + name + '\'';
+        if (!StringUtils.isEmpty(surname)) {
+            res += ", surname='" + surname + '\'';
+        }
+        if (birth != null) {
+            res += ", " + birth.toStringPrettyPrint();
+        }
+        if (christening != null) {
+            res += ", " + christening.toStringPrettyPrint();
+        }
+        if (death != null) {
+            res += ", " + death.toStringPrettyPrint();
+        }
+        if (!StringUtils.isEmpty(profession)) {
+            res += ", profession of " + profession;
         }
         if (father != null) {
             res += ", father='" + father.getFullName() + '\'';
         }
-
-        res += ", note='" + note + '\'' +
-                ", unions=" + unions + '\'' +
-                ", directAncestor=" + directAncestor + '\'' +
-                ", children={";
-
+        if (mother != null) {
+            res += ", mother='" + mother.getFullName() + '\'';
+        }
+        if (!unions.isEmpty()) {
+            if (unions.size() == 1) {
+                res += ", " + unions.get(0).toStringPrettyPrint(id);
+            } else {
+                res += ", unions=[" + unions.get(0).toStringPrettyPrint(id);
+                for (int i = 1; i < unions.size(); i++) {
+                    res += ", " + unions.get(i).toStringPrettyPrint(id);
+                }
+                res += "]";
+            }
+        }
+        if (directAncestor) {
+            res += ", directAncestor";
+        }
         if (!children.isEmpty()) {
-            res += children.get(0).getFullName();
+            if (children.size() == 1) {
+                res += ", child=[" + children.get(0).getFullName();
+            } else {
+                res += ", children=[" + children.get(0).getFullName();
+                for (int i = 1; i < children.size(); i++) {
+                    res += ", " + children.get(i).getFullName();
+                }
+            }
+            res += "]";
         }
-        for (int i = 1; i < children.size(); i++) {
-            res += ", " + children.get(i).getFullName();
+        if (!StringUtils.isEmpty(note)) {
+            res += ", note='" + note + '\'';
         }
-
-        return res + "}}";
+        return res + "}";
     }
 
     public Person(ArrayList<ParsingStructure> list, int offset, int indexMax) {
-        int index = offset;
-        if (offset >= indexMax) {
-            logger.error("Erreur dans le parsing de personne, offset >= indexMax");
-            return;
+        if (list != null) {
+
+            int index = offset;
+            if (offset >= indexMax) {
+                logger.error("Erreur dans le parsing de personne, offset >= indexMax");
+                return;
+            }
+            String newId = list.get(index++).getId();
+            if (newId.contains("@I")) {
+                id = newId;
+            } else {
+                id = "";
+            }
+            name = AuxMethods.findField(list, "SURN", index++, indexMax);
+            surname = AuxMethods.findField(list, "GIVN", index++, indexMax);
+            if (StringUtils.isEmpty(name) && StringUtils.isEmpty(surname)) {
+                name = AuxMethods.findField(list, "NAME", offset - 1, indexMax);
+            }
+            int indexBirthday = AuxMethods.findIndexNumberString(list, "BIRT", index, indexMax);
+
+            if (indexBirthday != -1) {
+                indexBirthday++;
+                String input = AuxMethods.findField(list, "DATE", indexBirthday, indexBirthday + 3);
+                MyDate birthDay = null;
+                try {
+                    birthDay = (MyDate) MyDate.Mydate(input);
+                } catch (Exception e) {
+                    logger.debug("Impossible de parser la date de naissance de " + id, e);
+                }
+
+                Town birthTown = null;
+                try {
+                    birthTown = new Town(AuxMethods.findField(list, "PLAC", indexBirthday, indexBirthday + 3));
+                } catch (Exception e) {
+                    logger.debug("Impossible de parser la ville de naissance de " + id, e);
+                }
+                birth = new Birth(this, birthDay, birthTown);
+            }
+
+            int indexChristening = AuxMethods.findIndexNumberString(list, "CHR", index, indexMax);
+
+            if (indexChristening != -1) {
+                indexChristening++;
+                String input = AuxMethods.findField(list, "DATE", indexChristening, indexChristening + 5);
+                MyDate christeningDay = null;
+                try {
+                    christeningDay = (MyDate) MyDate.Mydate(input);
+                } catch (Exception e) {
+                    logger.debug("Impossible de parser la date de bapteme de " + id, e);
+                }
+
+                //christening Town
+                Town ChristeningTown = null;
+                try {
+                    ChristeningTown = new Town(AuxMethods.findField(list, "PLAC", indexChristening, indexChristening + 5));
+                } catch (Exception e) {
+                    logger.debug("Impossible de parser la ville de baptème de " + id, e);
+                }
+                //christening place
+                String christeningPlace = null;
+                try {
+                    christeningPlace = AuxMethods.findField(list, "ADDR", indexChristening, indexChristening + 5);
+                } catch (Exception e) {
+                    logger.debug("Impossible de parser le lieu du baptème de " + id, e);
+                }
+                //godparents
+                String godParents = null;
+                try {
+                    godParents = AuxMethods.findField(list, "_GODP", indexChristening, indexChristening + 5);
+                } catch (Exception e) {
+                    logger.debug("Impossible de trouver les parrains et marraines " + id, e);
+                }
+                christening = new Christening(this, christeningDay, ChristeningTown, godParents, christeningPlace);
+            }
+
+            sex = parseSex(AuxMethods.findField(list, "SEX", offset, indexMax));
+            profession = AuxMethods.findField(list, "OCCU", offset, indexMax);
+            note = AuxMethods.findField(list, "NOTE", offset, indexMax);
+            pdfStructure = PDFStructure.parsePDFStucture(note, id);
+
+            int indexDeath = AuxMethods.findIndexNumberString(list, "DEAT", index, indexMax);
+
+            if (indexDeath != -1) {
+                indexDeath++;
+                String input = AuxMethods.findField(list, "DATE", indexDeath, indexDeath + 3);
+                MyDate deathDay = null;
+                try {
+                    deathDay = (MyDate) MyDate.Mydate(input);
+                } catch (Exception e) {
+                    logger.debug("Impossible de parser la date de décès de " + id, e);
+                }
+
+                Town deathTown = null;
+                try {
+                    deathTown = new Town(AuxMethods.findField(list, "PLAC", indexDeath, indexDeath + 3));
+                } catch (Exception e) {
+                    logger.debug("Impossible de parser la ville de décès de " + id, e);
+                }
+                death = new Death(this, deathDay, deathTown);
+            }
+            calculateAge();
         }
-        id = list.get(index++).getId();
-        name = AuxMethods.findField(list, "SURN", index++, indexMax);
-        surname = AuxMethods.findField(list, "GIVN", index++, indexMax);
-        int indexBirthday = AuxMethods.findIndexNumberString(list, "BIRT", index, indexMax);
-
-        if (indexBirthday != -1) {
-            indexBirthday++;
-            String input = AuxMethods.findField(list, "DATE", indexBirthday, indexBirthday + 3);
-            MyDate birthDay = null;
-            try {
-                birthDay = (MyDate) MyDate.Mydate(input);
-            } catch (Exception e) {
-                logger.debug("Impossible de parser la date de naissance de " + id, e);
-            }
-
-            Town birthTown = null;
-            try {
-                birthTown = new Town(AuxMethods.findField(list, "PLAC", indexBirthday, indexBirthday + 3));
-            } catch (Exception e) {
-                logger.debug("Impossible de parser la ville de naissance de " + id, e);
-            }
-            birth = new Birth(this, birthDay, birthTown);
-        }
-
-        sex = parseSex(AuxMethods.findField(list, "SEX", offset, indexMax));
-        profession = AuxMethods.findField(list, "OCCU", offset, indexMax);
-        note = AuxMethods.findField(list, "NOTE", offset, indexMax);
-        pdfStructure = PDFStructure.parsePDFStucture(note, id);
-
-        int indexDeath = AuxMethods.findIndexNumberString(list, "DEAT", index, indexMax);
-
-        if (indexDeath != -1) {
-            indexDeath++;
-            String input = AuxMethods.findField(list, "DATE", indexDeath, indexDeath + 3);
-            MyDate deathDay = null;
-            try {
-                deathDay = (MyDate) MyDate.Mydate(input);
-            } catch (Exception e) {
-                logger.debug("Impossible de parser la date de décès de " + id, e);
-            }
-
-            Town deathTown = null;
-            try {
-                deathTown = new Town(AuxMethods.findField(list, "PLAC", indexDeath, indexDeath + 3));
-            } catch (Exception e) {
-                logger.debug("Impossible de parser la ville de décès de " + id, e);
-            }
-            death = new Death(this, deathDay, deathTown);
-        }
-
-        calculateAge();
     }
 
     private Union findUnion(Person partner) {
@@ -606,7 +706,7 @@ public class Person {
         }
         if (foundText) {
             if ((mother != null) && (father != null)) {
-                if (mother.findUnion(father).getState() == Union.State.MARIAGE_HETERO) {
+                if (mother.findUnion(father).getUnionType() == Union.UnionType.HETERO_MAR) {
                     txt += " du mariage de " + father.getFullName() + " et de " + mother.getFullName();
                 } else {
                     txt += " de l'union de " + father.getFullName() + " et de " + mother.getFullName();
@@ -661,7 +761,7 @@ public class Person {
             Union union = unions.get(i);
             Person partner = union.getOtherPerson(this);
             String marie = " s'est marié" + accord;
-            if (union.getState() != Union.State.MARIAGE_HETERO) {
+            if (union.getUnionType() != Union.UnionType.HETERO_MAR) {
                 marie = " a vécu";
             }
             if (foundText) {

@@ -8,6 +8,7 @@ import Genealogy.Model.Person;
 import Genealogy.Model.PersonNameComparator;
 import Genealogy.Model.Town;
 import Genealogy.Parsing.ParsingStructure;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -39,7 +40,7 @@ public class Genealogy {
     /**
      * List of Person in the tree
      */
-    private ArrayList<Person> persons = new ArrayList<Person>();
+    private ArrayList<Person> persons = new ArrayList<>();
     /**
      * The Genealogy itself
      */
@@ -164,8 +165,8 @@ public class Genealogy {
         //Header
         ArrayList<ParsingStructure> fileHeader = new ArrayList<>();
         for (int i = 0; i < contents.size(); i++) {
-            if ("@SUBM@".equals(contents.get(i).getId())) {
-                index = i + 1;
+            if ("@I1@".equals(contents.get(i).getId())) {
+                index = i;
                 break;
             }
             fileHeader.add(contents.get(i));
@@ -174,9 +175,19 @@ public class Genealogy {
             throw new ParsingException("Failed to parse header");
         }
         header = new Header(fileHeader);
-        author = contents.get(index).getText();
-        index++;
 
+        //Define Author
+        for (int i = 0; i < contents.size(); i++) {
+            if ("@SUBM@".equals(contents.get(i).getId()) && (contents.get(i).getNumber() == 0)) {
+                ParsingStructure line = contents.get(i + 1);
+                if ("NAME".equals(line.getId())) {
+                    author = line.getText();
+                    break;
+                } else {
+                    throw new ParsingException("Failed to define author");
+                }
+            }
+        }
         //Persons
         int newIndex = AuxMethods.findIndexNumberInteger(contents, 0, index + 1);
 
@@ -208,7 +219,7 @@ public class Genealogy {
      *
      * @param person
      */
-    private void setDirectAncestors(Person person) {
+    protected void setDirectAncestors(Person person) {
         if (person != null) {
             person.setDirectAncestor(true);
             if (person.getFather() != null) {
@@ -228,14 +239,20 @@ public class Genealogy {
      * @param index
      * @param maxIndex
      */
-    private void parseMarriageContents(ArrayList<Person> persons, ArrayList<ParsingStructure> contents, int index, int maxIndex) {
+    protected void parseMarriageContents(ArrayList<Person> persons, ArrayList<ParsingStructure> contents, int index, int maxIndex) {
         String husbId = AuxMethods.findField(contents, "HUSB", index, maxIndex);
         int husbIndex = AuxMethods.findIDInStructure(persons, husbId);
         String wifeId = AuxMethods.findField(contents, "WIFE", index, maxIndex);
         int wifeIndex = AuxMethods.findIDInStructure(persons, wifeId);
 
         String statutString = AuxMethods.findField(contents, "_STAT", index, maxIndex);
-        Union.State state = Union.parseState(statutString);
+        boolean divorce = false;
+        int indexDivorce = -1;
+        if (StringUtils.isBlank(statutString)) {
+            indexDivorce = AuxMethods.findIndexNumberString(contents, "DIV", index, maxIndex);
+            divorce = (indexDivorce != -1);
+        }
+        Union.UnionType unionType = Union.parseUnionType(statutString);
 
         //Marriage date
         String date = AuxMethods.findField(contents, "DATE", index, maxIndex);
@@ -264,7 +281,30 @@ public class Genealogy {
         }
 
         if ((mother != null) && (father != null)) {
-            Union union = new Union(father, mother, marriageDay, marriageTown, state);
+            Union union = new Union(father, mother, marriageDay, marriageTown, unionType);
+            father.addUnion(union);
+            mother.addUnion(union);
+        }
+
+        //Divorce
+        if (divorce) {
+            //Divorce date
+            String dateDivorce = AuxMethods.findField(contents, "DATE", indexDivorce, maxIndex);
+            MyDate divorceDay = null;
+            try {
+                divorceDay = (MyDate) MyDate.Mydate(dateDivorce);
+            } catch (Exception e) {
+                logger.debug("Impossible de parser la date de divorce de " + contents.get(index).getId(), e);
+            }
+
+            //Divorce city
+            Town divorceTown = null;
+            try {
+                divorceTown = new Town(AuxMethods.findField(contents, "PLAC", indexDivorce, maxIndex));
+            } catch (Exception e) {
+                logger.debug("Impossible de parser la ville de divorce de " + contents.get(index).getId(), e);
+            }
+            Union union = new Union(father, mother, divorceDay, divorceTown, Union.UnionType.DIVORCE);
             father.addUnion(union);
             mother.addUnion(union);
         }

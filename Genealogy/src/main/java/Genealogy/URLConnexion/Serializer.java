@@ -20,7 +20,8 @@ public class Serializer<T> {
     private static String serializerType;
     private static String townAssociationFile;
     private static String cityFile;
-    private static HashMap<String,String> cityFileMap;
+    private static ArrayList<String> townRegex = new ArrayList<>();
+    private static HashMap<String, String> cityFileMap;
 
     public static Serializer getSerializer() {
         return serializer;
@@ -42,11 +43,15 @@ public class Serializer<T> {
         Serializer.jar = jar;
     }
 
+    public static ArrayList<String> getTownRegex() {
+        return townRegex;
+    }
+
     /**
      * Fonction initGovernors
      * initialise les propriétés de la classe Serializer
      */
-    public void initProperties(){
+    public void initProperties() {
         Properties prop = new Properties();
         InputStream input = null;
         try {
@@ -55,6 +60,13 @@ public class Serializer<T> {
             serializerType = prop.getProperty("serializerType");
             townAssociationFile = prop.getProperty("townAssociationFile");
             cityFile = prop.getProperty("cityFile");
+            int indexCityFile = 1;
+            String property = prop.getProperty("townRegex" + indexCityFile);
+            while (property != null) {
+                townRegex.add(property);
+                property = prop.getProperty("townRegex" + indexCityFile);
+                indexCityFile++;
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         } finally {
@@ -79,25 +91,23 @@ public class Serializer<T> {
         initProperties();
         File f = new File(path + serializerType);
 
-        if(f.exists()){
+        if (f.exists()) {
             logger.info("Serializer file found");
             try {
                 serializedData = new ArrayList<>();
                 InputStream file = new FileInputStream(path + serializerType);
                 InputStream buffer = new BufferedInputStream(file);
-                ObjectInput input = new ObjectInputStream (buffer);
+                ObjectInput input = new ObjectInputStream(buffer);
                 //deserialize the List
                 serializedData = (ArrayList<T>) input.readObject();
                 logger.info("Serializer file well read");
-                }
-            catch(InvalidClassException ex){
+            } catch (InvalidClassException ex) {
                 logger.warn("Serializer Class not OK");
                 ex.printStackTrace();
-            }
-            catch(Exception ex){
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
-        }else{
+        } else {
             logger.info("Serializer file not found");
         }
         Serializer.serializer = this;
@@ -122,18 +132,19 @@ public class Serializer<T> {
      * Fonction initAssociation
      * Initialise la liste des associations de villes
      * Permet de gérer les alias
+     *
      * @throws Exception Si le fichier n'est pas trouvé
      */
-    public HashMap<String,String> initAssociation() throws Exception {
-        HashMap<String,String> association = new HashMap<String,String>();
+    public HashMap<String, String> initAssociation() throws Exception {
+        HashMap<String, String> association = new HashMap<String, String>();
         File f = new File(path + townAssociationFile);
-        if(f.exists()) {
+        if (f.exists()) {
             logger.info("Association file found");
             String sCurrentLine;
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path + townAssociationFile), "UTF-8"));
             while ((sCurrentLine = br.readLine()) != null) {
                 String[] temp = sCurrentLine.split("->");
-                association.put(temp[0],temp[1]);
+                association.put(temp[0], temp[1]);
             }
         } else {
             logger.error("Association file not found");
@@ -144,11 +155,12 @@ public class Serializer<T> {
     /**
      * Fonction saveTownAssociation
      * Met à jour le fichier des associations d'alias de villes
+     *
      * @param townAssociation
      */
-    public void saveTownAssociation(HashMap<String,String> townAssociation){
+    public void saveTownAssociation(HashMap<String, String> townAssociation) {
         String content = "";
-        for(Map.Entry<String, String> entry : townAssociation.entrySet()) {
+        for (Map.Entry<String, String> entry : townAssociation.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
             content += key + "----" + value + "\n";
@@ -166,28 +178,27 @@ public class Serializer<T> {
      * Fonction saveTownAssociation
      * Met à jour le fichier des associations d'alias de villes
      */
-    public void saveCity(String city, String lattitude, String longitude){
+    public void saveCity(String city, String lattitude, String longitude) {
         String citySeparator = "->";
         String coordinateSeparator = ":";
-        HashMap<String,String> cities = new HashMap<String,String>();
+        HashMap<String, String> cities = new HashMap<String, String>();
         String contents = "";
         //Read file
         try {
             File f = new File(path + cityFile);
-            if(f.exists()) {
+            if (f.exists()) {
                 logger.info("City file found");
                 String sCurrentLine;
                 BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path + cityFile), "UTF-8"));
                 while ((sCurrentLine = br.readLine()) != null) {
                     String[] temp = sCurrentLine.split(citySeparator);
-                    cities.put(temp[0],temp[1]);
+                    cities.put(temp[0], temp[1]);
                     contents += sCurrentLine + System.lineSeparator();
                 }
             } else {
                 logger.warn("city file not found");
             }
-        }
-        catch (IOException exception){
+        } catch (IOException exception) {
             logger.error(exception);
             logger.info("Reading City file update failed");
             return;
@@ -197,13 +208,13 @@ public class Serializer<T> {
         String newkey = city;
         String newValue = lattitude + coordinateSeparator + longitude;
         String newline = newkey + citySeparator + newValue + System.lineSeparator();
-        if (!contents.contains(city)){
+        if (!contents.contains(city)) {
             contents += newline;
         } else {
             cities.replace(city, newValue);
             cityFileMap = cities;
             contents = "";
-            for(Map.Entry<String, String> entry : cities.entrySet()) {
+            for (Map.Entry<String, String> entry : cities.entrySet()) {
                 String key = entry.getKey();
                 String value = entry.getValue();
                 contents += key + citySeparator + value + System.lineSeparator();
@@ -219,25 +230,24 @@ public class Serializer<T> {
         }
     }
 
-    public String getCoordinatesFromFile(String city){
+    public String getCoordinatesFromFile(String city) {
         String citySeparator = "->";
-        if (cityFileMap == null){
+        if (cityFileMap == null) {
             cityFileMap = new HashMap<>();
             try {
                 File f = new File(path + cityFile);
-                if(f.exists()) {
+                if (f.exists()) {
                     logger.info("City file found");
                     String sCurrentLine;
                     BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path + cityFile), "UTF-8"));
                     while ((sCurrentLine = br.readLine()) != null) {
                         String[] temp = sCurrentLine.split(citySeparator);
-                        cityFileMap.put(temp[0],temp[1]);
+                        cityFileMap.put(temp[0], temp[1]);
                     }
                 } else {
                     logger.warn("city file not found");
                 }
-            }
-            catch (IOException exception){
+            } catch (IOException exception) {
                 logger.error(exception);
                 logger.info("Reading City file update failed");
                 return null;
@@ -246,13 +256,12 @@ public class Serializer<T> {
         return cityFileMap.get(city);
     }
 
-    public void saveTown(List<Town> town){
-        try
-        {
+    public void saveTown(List<Town> town) {
+        try {
             File file0 = new File(path + serializerType);
-            if(file0.exists()){
+            if (file0.exists()) {
                 logger.info("Serializer file found for saving");
-            }else{
+            } else {
                 logger.info("Serializer file not found for saving");
                 file0.createNewFile();
                 logger.info("Serialized file created for saving");
@@ -263,16 +272,15 @@ public class Serializer<T> {
             out.close();
             fileOut.close();
             logger.info("Saved serialized list of town with success");
-        }catch(IOException i)
-        {
+        } catch (IOException i) {
             i.printStackTrace();
         }
     }
 
-    public static ArrayList<Town> getNullCoordinatesCities(ArrayList<Town> input){
+    public static ArrayList<Town> getNullCoordinatesCities(ArrayList<Town> input) {
         ArrayList<Town> towns = new ArrayList<>();
-        for (int i = 0 ; i < input.size() ; i++){
-            if (input.get(i).getCoordinates() == null){
+        for (int i = 0; i < input.size(); i++) {
+            if (input.get(i).getCoordinates() == null) {
                 towns.add(input.get(i));
             }
         }
