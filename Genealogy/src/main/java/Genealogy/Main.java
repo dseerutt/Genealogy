@@ -5,7 +5,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Created by Dan on 04/04/2016.
  * Main class : launch Genealogy project
  */
 public class Main {

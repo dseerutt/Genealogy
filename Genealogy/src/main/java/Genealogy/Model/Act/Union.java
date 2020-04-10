@@ -12,13 +12,6 @@ public class Union extends Act {
     protected Person partner;
     protected UnionType unionType;
 
-    public enum UnionType {
-        HETERO_MAR,
-        HOMO_MAR,
-        COHABITATION,
-        DIVORCE;
-    }
-
     public Union(Person person, Person person2, MyDate date, Town town, UnionType unionType0) {
 
         super(person, date, town);

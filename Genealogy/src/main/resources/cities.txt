@@ -305,3 +305,4 @@ Issoire|Puy-de-Dome->45.5432973:3.2502213
 Changy|Loiret->47.8582735:2.6855918
 Saint Sauveur sur Douve|Manche->32.9315755:10.4503961
 Grenoble|Isère->45.1875602:5.7357819
+Amiens|Somme->49.8941708:2.2956951

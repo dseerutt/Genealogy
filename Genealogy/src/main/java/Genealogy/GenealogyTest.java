@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Test class for GenealogyTest
+ * Test class for Genealogy
  */
 public class GenealogyTest {
 
@@ -26,13 +26,14 @@ public class GenealogyTest {
      *
      * @throws NoSuchFieldException
      * @throws IllegalAccessException
+     * @throws ParsingException
      */
     @Test
-    public void findPersonById() throws NoSuchFieldException, IllegalAccessException {
+    public void findPersonById() throws NoSuchFieldException, IllegalAccessException, ParsingException {
         //init
         Genealogy genealogy = new Genealogy();
         ArrayList<Person> persons = new ArrayList<Person>();
-        Person person1 = new Person(null, -1, -1);
+        Person person1 = new Person(genealogy, null, -1, -1);
 
         //Reflection init
         Field personsField = genealogy.getClass().getDeclaredField("persons");
@@ -42,13 +43,13 @@ public class GenealogyTest {
         //Reflection set
         idField.set(person1, "1");
         persons.add(person1);
-        Person person2 = new Person(null, -1, -1);
+        Person person2 = new Person(genealogy, null, -1, -1);
         idField.set(person2, "2");
         persons.add(person2);
-        Person person3 = new Person(null, -1, -1);
+        Person person3 = new Person(genealogy, null, -1, -1);
         idField.set(person3, "3");
         persons.add(person3);
-        Person person4 = new Person(null, -1, -1);
+        Person person4 = new Person(genealogy, null, -1, -1);
         idField.set(person4, "4");
         persons.add(person4);
         personsField.set(genealogy, persons);
@@ -73,17 +74,17 @@ public class GenealogyTest {
      * test direct ancestors with siblings and direct
      */
     @Test
-    public void setDirectAncestors() {
+    public void setDirectAncestors() throws ParsingException {
         //init
         Genealogy genealogy = new Genealogy();
-        Person person1 = new Person(null, -1, -1);
-        Person person2 = new Person(null, -1, -1);
-        Person person3 = new Person(null, -1, -1);
-        Person person4 = new Person(null, -1, -1);
-        Person person5 = new Person(null, -1, -1);
-        Person person6 = new Person(null, -1, -1);
-        Person person7 = new Person(null, -1, -1);
-        Person person8 = new Person(null, -1, -1);
+        Person person1 = new Person(genealogy, null, -1, -1);
+        Person person2 = new Person(genealogy, null, -1, -1);
+        Person person3 = new Person(genealogy, null, -1, -1);
+        Person person4 = new Person(genealogy, null, -1, -1);
+        Person person5 = new Person(genealogy, null, -1, -1);
+        Person person6 = new Person(genealogy, null, -1, -1);
+        Person person7 = new Person(genealogy, null, -1, -1);
+        Person person8 = new Person(genealogy, null, -1, -1);
         person1.setFather(person2);
         person2.setFather(person3);
         person3.setFather(person4);
