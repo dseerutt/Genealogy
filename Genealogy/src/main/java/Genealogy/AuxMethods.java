@@ -6,8 +6,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -55,22 +55,40 @@ public class AuxMethods {
         return SDF3.format(date);
     }
 
+    /**
+     * Function getMonth - get month from date
+     *
+     * @param date
+     * @return
+     */
     public static int getMonth(Date date) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        return cal.get(Calendar.MONTH);
+        return date.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate().getMonthValue();
     }
 
+    /**
+     * Function getYear - get year from date
+     *
+     * @param date
+     * @return
+     */
     public static int getYear(Date date) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        return cal.get(Calendar.YEAR);
+        return date.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate().getYear();
     }
 
+    /**
+     * Function getDay - get day of month from date
+     *
+     * @param date
+     * @return
+     */
     public static int getDay(Date date) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        return cal.get(Calendar.DAY_OF_MONTH);
+        return date.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate().getDayOfMonth();
     }
 
     public static Color getColor(int age) {
