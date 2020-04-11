@@ -1,6 +1,5 @@
 package Genealogy.GUI;
 
-import Genealogy.Model.Gedcom.Genealogy;
 import Genealogy.MapViewer.MapFrame;
 import Genealogy.MapViewer.Structures.FancyWaypointRenderer;
 import Genealogy.MapViewer.Structures.MapPoint;
@@ -10,6 +9,7 @@ import Genealogy.Model.Act.Act;
 import Genealogy.Model.Act.Birth;
 import Genealogy.Model.Act.Enum.ActType;
 import Genealogy.Model.Act.Union;
+import Genealogy.Model.Gedcom.Genealogy;
 import Genealogy.Model.Gedcom.Person;
 import Genealogy.Model.Gedcom.Town;
 import Genealogy.URLConnexion.MyHttpURLConnexion;

@@ -1,7 +1,7 @@
 package Genealogy.Model.Act;
 
-import Genealogy.Model.Gedcom.AuxMethods;
 import Genealogy.Model.Date.MyDate;
+import Genealogy.Model.Gedcom.AuxMethods;
 import Genealogy.Model.Gedcom.Person;
 import Genealogy.Model.Gedcom.Town;
 
@@ -64,11 +64,14 @@ public abstract class Act {
      */
     public String getNecessaryResearch() {
         String result = "";
-        if (date == null || !date.isFullDate()) {
-            result += " Date";
+        if (person == null) {
+            result += " person";
         }
-        if (town.isEmpty()) {
-            result += " Town";
+        if (date == null || !date.isFullDate()) {
+            result += " date";
+        }
+        if (town == null || town.isEmpty()) {
+            result += " town";
         }
         if (!result.equals("")) {
             return result.substring(1);

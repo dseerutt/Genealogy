@@ -12,6 +12,8 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import static Genealogy.Model.Act.Enum.UnionType.parseUnionType;
+
 /**
  * Class Genealogy : class that hosts the elements of a genealogical tree
  */
@@ -431,7 +433,7 @@ public class Genealogy {
             indexDivorce = findIndexIdString("DIV", minIndex, maxIndex);
         }
 
-        parseMarriage(partner1, partner2, Union.parseUnionType(statusString), minIndex, maxIndex);
+        parseMarriage(partner1, partner2, parseUnionType(statusString), minIndex, maxIndex);
         parseDivorce(partner1, partner2, indexDivorce, maxIndex);
         parseChildren(partner1, partner2, minIndex, maxIndex);
     }

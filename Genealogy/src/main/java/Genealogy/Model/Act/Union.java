@@ -57,7 +57,7 @@ public class Union extends Act {
     }
 
     /**
-     * Function toStringPrettyString : toString with pretty print
+     * Function toStringPrettyString : toString with pretty print given the person id, null if not found
      *
      * @return the final String
      */
@@ -67,6 +67,8 @@ public class Union extends Act {
             Person otherPerson = getOtherPerson(idPerson);
             if (otherPerson != null) {
                 res += " with " + otherPerson.getFullName();
+            } else {
+                return null;
             }
         }
         if (date != null) {
@@ -81,27 +83,30 @@ public class Union extends Act {
         return res;
     }
 
-    public static UnionType parseUnionType(String s) {
-        switch (s) {
-            case "NOT MARRIED":
-                return UnionType.COHABITATION;
-            case "F":
-                return UnionType.HOMO_MAR;
-            case "D":
-                return UnionType.DIVORCE;
-            default:
-                return UnionType.HETERO_MAR;
-        }
-    }
-
+    /**
+     * Partner getter
+     *
+     * @return
+     */
     public Person getPartner() {
         return partner;
     }
 
+    /**
+     * UnionType getter
+     *
+     * @return
+     */
     public UnionType getUnionType() {
         return unionType;
     }
 
+    /**
+     * Function getOtherPerson : given a parameter person, returns the other person of the union, null instead
+     *
+     * @param person
+     * @return
+     */
     public Person getOtherPerson(Person person) {
         if (this.person.getId().equals(person.getId())) {
             return partner;
@@ -112,6 +117,12 @@ public class Union extends Act {
         }
     }
 
+    /**
+     * Function getOtherPerson : given a parameter String idPerson, returns the other person of the union, null instead
+     *
+     * @param idPerson
+     * @return
+     */
     public Person getOtherPerson(String idPerson) {
         if (person.getId().equals(idPerson)) {
             return partner;
@@ -122,17 +133,28 @@ public class Union extends Act {
         }
     }
 
+    /**
+     * Function getNecessaryResearch : return the fields that are null, null if there is none
+     *
+     * @return
+     */
     @Override
     public String getNecessaryResearch() {
         String result = "";
         if (date == null || !date.isFullDate()) {
-            result += " Date";
+            result += " date";
         }
-        if (town.isEmpty()) {
-            result += " Town";
+        if (town == null || town.isEmpty()) {
+            result += " town";
         }
         if (person == null) {
-            result += " Partner";
+            result += " person";
+        }
+        if (partner == null) {
+            result += " partner";
+        }
+        if (unionType == null) {
+            result += " unionType";
         }
         if (!result.equals("")) {
             return result.substring(1);
