@@ -1,9 +1,10 @@
-package Genealogy.Model.Gedcom;
+package Genealogy.Model.GUI;
 
 import Genealogy.URLConnexion.Serializer;
 
 import javax.swing.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -12,7 +13,7 @@ import java.util.Scanner;
 /**
  * Created by Dan on 19/12/2017.
  */
-public class Governors {
+public class GovernorContainer {
 
     private HashMap<Integer, String> mappingDate = new HashMap<>();
     private String propertiesFileName;
@@ -28,7 +29,7 @@ public class Governors {
         this.beginningDate = beginningDate;
     }
 
-    public Governors(String propertiesFileName) {
+    public GovernorContainer(String propertiesFileName) {
         this.propertiesFileName = propertiesFileName;
         initGovernors();
     }

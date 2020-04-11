@@ -1,20 +1,12 @@
 package Genealogy.GUI;
 
-import Genealogy.Model.Gedcom.Genealogy;
-import Genealogy.MapViewer.Structures.FancyWaypointRenderer;
 import Genealogy.MapViewer.MapFrame;
-import Genealogy.MapViewer.Structures.MapPoint;
-import Genealogy.MapViewer.Structures.MyWaypoint;
+import Genealogy.MapViewer.Structures.*;
 import Genealogy.MapViewer.Worker;
 import Genealogy.Model.Act.Union;
-import Genealogy.Model.Gedcom.ActStructure;
-import Genealogy.MapViewer.Structures.MapStructure;
-import Genealogy.Model.Gedcom.Governor;
-import Genealogy.Model.Gedcom.Governors;
-import Genealogy.Model.Gedcom.Person;
-import Genealogy.Model.Gedcom.Town;
-import Genealogy.MapViewer.Structures.MyCoordinate;
-import Genealogy.Model.Gedcom.AuxMethods;
+import Genealogy.Model.GUI.Governor;
+import Genealogy.Model.GUI.GovernorContainer;
+import Genealogy.Model.Gedcom.*;
 import org.jdesktop.swingx.JXMapKit;
 import org.jdesktop.swingx.JXMapViewer;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
@@ -68,8 +60,8 @@ public class MapScreen extends JFrame {
     private ImageIcon image1;
     private ImageIcon image2;
     private JLabel labelImage;
-    private Governors frenchGovernors;
-    private Governors mauritianGovernors;
+    private GovernorContainer frenchGovernorContainer;
+    private GovernorContainer mauritianGovernorContainer;
     private JLabel labelImageFrenchGovernors;
     private JLabel labelImageMauritianGovernors;
 
@@ -120,10 +112,10 @@ public class MapScreen extends JFrame {
     }
 
     private void initGovernorsPanel() {
-        frenchGovernors = new Governors("FrenchGovernors");
+        frenchGovernorContainer = new GovernorContainer("FrenchGovernors");
         int minDate = (Integer) comboDate1.getItemAt(0);
         updateFrenchGovernors(minDate);
-        mauritianGovernors = new Governors("MauritianGovernors");
+        mauritianGovernorContainer = new GovernorContainer("MauritianGovernors");
         updateMauritianGovernors(minDate);
     }
 
@@ -499,12 +491,12 @@ public class MapScreen extends JFrame {
     }
 
     private void updateFrenchGovernorPicture(String filename) {
-        ImageIcon image = frenchGovernors.getImage(filename);
+        ImageIcon image = frenchGovernorContainer.getImage(filename);
         labelImageFrenchGovernors.setIcon(image);
     }
 
     private void updateMauritianGovernorPicture(String filename) {
-        ImageIcon image = mauritianGovernors.getImage(filename);
+        ImageIcon image = mauritianGovernorContainer.getImage(filename);
         labelImageMauritianGovernors.setIcon(image);
     }
 
@@ -526,30 +518,30 @@ public class MapScreen extends JFrame {
         worker.execute();
     }
 
-    public Governors getFrenchGovernors() {
-        return frenchGovernors;
+    public GovernorContainer getFrenchGovernorContainer() {
+        return frenchGovernorContainer;
     }
 
-    public void setFrenchGovernors(Governors frenchGovernors) {
-        this.frenchGovernors = frenchGovernors;
+    public void setFrenchGovernorContainer(GovernorContainer frenchGovernorContainer) {
+        this.frenchGovernorContainer = frenchGovernorContainer;
     }
 
-    public Governors getMauritianGovernors() {
-        return mauritianGovernors;
+    public GovernorContainer getMauritianGovernorContainer() {
+        return mauritianGovernorContainer;
     }
 
-    public void setMauritianGovernors(Governors mauritianGovernors) {
-        this.mauritianGovernors = mauritianGovernors;
+    public void setMauritianGovernorContainer(GovernorContainer mauritianGovernorContainer) {
+        this.mauritianGovernorContainer = mauritianGovernorContainer;
     }
 
     public void updateMauritianGovernors(int date) {
-        String mauritianGovernorName = mauritianGovernors.getGovernor(date);
+        String mauritianGovernorName = mauritianGovernorContainer.getGovernor(date);
         MauritianHistoryText.setText(mauritianGovernorName);
         updateMauritianGovernorPicture(mauritianGovernorName);
     }
 
     public void updateFrenchGovernors(int date) {
-        String frenchGovernorName = frenchGovernors.getGovernor(date);
+        String frenchGovernorName = frenchGovernorContainer.getGovernor(date);
         FrenchHistoryText.setText(frenchGovernorName);
         updateFrenchGovernorPicture(frenchGovernorName);
     }
@@ -632,7 +624,7 @@ public class MapScreen extends JFrame {
     private void initFrenchGovernorsPictures() {
         String path = "FrenchGovernors/";
         String extension = ".jpg";
-        for (Governor governor : frenchGovernors.getGovernors()) {
+        for (Governor governor : frenchGovernorContainer.getGovernors()) {
             String name = governor.getName();
             URL resource = getClass().getResource(path + name + extension);
             ImageIcon image = new ImageIcon(resource);
@@ -640,14 +632,14 @@ public class MapScreen extends JFrame {
         }
         //mindate is periods mindate used by comboDate1
         int minDate = (int) comboDate1.getSelectedItem();
-        String governor = frenchGovernors.getMappingDate().get(minDate);
+        String governor = frenchGovernorContainer.getMappingDate().get(minDate);
         updateFrenchGovernorPicture(governor);
     }
 
     private void initMauritianGovernorsPictures() throws Exception {
         String path = "MauritianGovernors/";
         String extension = ".jpg";
-        for (Governor governor : mauritianGovernors.getGovernors()) {
+        for (Governor governor : mauritianGovernorContainer.getGovernors()) {
             String name = governor.getName();
             URL resource = getClass().getResource(path + name + extension);
             if (resource != null) {
@@ -659,7 +651,7 @@ public class MapScreen extends JFrame {
         }
         //mindate is periods mindate used by comboDate1
         int minDate = (int) comboDate1.getSelectedItem();
-        String governor = mauritianGovernors.getMappingDate().get(minDate);
+        String governor = mauritianGovernorContainer.getMappingDate().get(minDate);
         updateMauritianGovernorPicture(governor);
     }
 }

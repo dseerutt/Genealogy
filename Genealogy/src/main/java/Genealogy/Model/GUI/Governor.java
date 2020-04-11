@@ -1,4 +1,4 @@
-package Genealogy.Model.Gedcom;
+package Genealogy.Model.GUI;
 
 import javax.swing.*;
 import java.awt.*;
