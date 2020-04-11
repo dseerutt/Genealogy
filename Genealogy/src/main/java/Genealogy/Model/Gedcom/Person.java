@@ -1,9 +1,12 @@
-package Genealogy.Model;
+package Genealogy.Model.Gedcom;
 
-import Genealogy.AuxMethods;
-import Genealogy.Genealogy;
 import Genealogy.MapViewer.Structures.MapStructure;
-import Genealogy.Model.Act.*;
+import Genealogy.Model.Act.Birth;
+import Genealogy.Model.Act.Christening;
+import Genealogy.Model.Act.Death;
+import Genealogy.Model.Act.Enum.ActType;
+import Genealogy.Model.Act.Enum.UnionType;
+import Genealogy.Model.Act.Union;
 import Genealogy.Model.Date.FullDate;
 import Genealogy.Model.Date.MyDate;
 import Genealogy.Model.Exception.ParsingException;
@@ -22,70 +25,90 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by Dan on 05/04/2016.
+ * Class Person : person object from genealogical tree
  */
 public class Person {
-
+    /**
+     * String gedcom id of the person
+     */
     private String id;
-
-    public enum Sex {
-        HOMME,
-        FEMME,
-        INCONNU;
-
-        public String toString() {
-            if (this != null) {
-                switch (this) {
-                    case HOMME:
-                        return "M";
-                    case FEMME:
-                        return "F";
-                    case INCONNU:
-                        return "U";
-                    default:
-                        break;
-                }
-            }
-            return null;
-        }
-
-        public String toStringPrettyPrint() {
-            if (this != null) {
-                switch (this) {
-                    case HOMME:
-                        return "man";
-                    case FEMME:
-                        return "woman";
-                    case INCONNU:
-                        return "sex unknown";
-                    default:
-                        break;
-                }
-            }
-            return null;
-        }
-    }
-
+    /**
+     * Sex enum of the person
+     */
     private Sex sex;
+    /**
+     * String family name
+     */
     private String name;
+    /**
+     * String first name
+     */
     private String surname;
+    /**
+     * Birth of the person
+     */
     private Birth birth;
+    /**
+     * Christening of the person, not very used
+     */
     private Christening christening;
+    /**
+     * Death of the person
+     */
     private Death death;
+    /**
+     * String profession of the person
+     */
     private String profession;
-    private String note;
+    /**
+     * String comments of the person
+     */
+    private String comments;
+    /**
+     * PDFStructure of the person
+     */
     private PDFStructure pdfStructure;
-    private ArrayList<Union> unions = new ArrayList<Union>();
+    /**
+     * List of unions
+     */
+    private ArrayList<Union> unions = new ArrayList<>();
+    /**
+     * Person father
+     */
     private Person father;
+    /**
+     * Person mother
+     */
     private Person mother;
-    private ArrayList<Person> children = new ArrayList<Person>();
+    /**
+     * Children are list of Person
+     */
+    private ArrayList<Person> children = new ArrayList<>();
+    /**
+     * Boolean directAncestor if related to the root
+     */
     private boolean directAncestor = false;
+    /**
+     * Int age
+     */
     private int age;
+    /**
+     * Boolean stillAlive if the person is still alive today
+     */
+    private boolean stillAlive = false;
+    /**
+     * Logger of the class Person
+     */
+    final static Logger logger = LogManager.getLogger(Person.class);
+    /**
+     * Map of list of MapStructures (name, age, town) per year
+     */
     private static HashMap<Integer, ArrayList<MapStructure>> periods = new HashMap<>();
+    /**
+     * Map of list of MapStructures (name, age, town) per year only for direct ancestors
+     */
     private static HashMap<Integer, ArrayList<MapStructure>> periodsDirectAncestors = new HashMap<>();
     private static int minimumPeriod = 10000;
-    private boolean stillAlive = false;
-    final static Logger logger = LogManager.getLogger(Person.class);
 
     public static HashMap<Integer, ArrayList<MapStructure>> getPeriods() {
         return periods;
@@ -102,11 +125,11 @@ public class Person {
     public static Sex parseSex(String s) {
         switch (s) {
             case "M":
-                return Sex.HOMME;
+                return Sex.MALE;
             case "F":
-                return Sex.FEMME;
+                return Sex.FEMALE;
             default:
-                return Sex.INCONNU;
+                return Sex.UNKNOWN;
         }
     }
 
@@ -142,8 +165,8 @@ public class Person {
         return profession;
     }
 
-    public String getNote() {
-        return note;
+    public String getComments() {
+        return comments;
     }
 
     public ArrayList<Union> getUnions() {
@@ -296,36 +319,36 @@ public class Person {
      */
     public void removePDFStructure() {
         String PDFStructureRegex = "¤PDF" + id + "¤";
-        if (note.contains(PDFStructureRegex)) {
+        if (comments.contains(PDFStructureRegex)) {
             String PDFRegex = "(.*)" + PDFStructureRegex + "{.*}(.*)";
             Pattern pattern = Pattern.compile(PDFRegex, Pattern.DOTALL);
-            Matcher matcher = pattern.matcher(note);
+            Matcher matcher = pattern.matcher(comments);
             if (matcher.find() && matcher.groupCount() == 2) {
-                note = matcher.group(1) + matcher.group(2);
+                comments = matcher.group(1) + matcher.group(2);
             }
         }
     }
 
     public void savePDFStructure() {
-        note += pdfStructure;
+        comments += pdfStructure;
     }
 
     /**
      * Fonction addProof
      *
-     * @param typeActe   Birth, Mariage, Death
+     * @param actType    Birth, Mariage, Death
      * @param proof      Nom du PDF String
      * @param unionIndex numéro de l'union
      */
-    public void addProof(Act.TypeActe typeActe, String proof, int unionIndex) throws Exception {
-        switch (typeActe) {
-            case Birth:
+    public void addProof(ActType actType, String proof, int unionIndex) throws Exception {
+        switch (actType) {
+            case BIRTH:
                 removePDFStructure();
                 birth.addProof(proof);
                 pdfStructure.addToPDFBirthList(proof);
                 savePDFStructure();
                 break;
-            case Mariage:
+            case MARRIAGE:
                 removePDFStructure();
                 if (unionIndex < unions.size()) {
                     unions.get(unionIndex).addProof(proof);
@@ -335,7 +358,7 @@ public class Person {
                     throw new Exception("Index trop élevé");
                 }
                 break;
-            case Death:
+            case DEATH:
                 removePDFStructure();
                 death.addProof(proof);
                 pdfStructure.addToPDGDeathList(proof);
@@ -349,11 +372,11 @@ public class Person {
     /**
      * Fonction addProof except marriage
      *
-     * @param typeActe Birth, Death
-     * @param proof    Nom du PDF String
+     * @param actType Birth, Death
+     * @param proof   Nom du PDF String
      */
-    public void addProof(Act.TypeActe typeActe, String proof) throws Exception {
-        addProof(typeActe, proof, 0);
+    public void addProof(ActType actType, String proof) throws Exception {
+        addProof(actType, proof, 0);
     }
 
     public static int getMinimumPeriod() {
@@ -472,8 +495,8 @@ public class Person {
             }
             res += "]";
         }
-        if (!StringUtils.isEmpty(note)) {
-            res += ", note='" + note + '\'';
+        if (!StringUtils.isEmpty(comments)) {
+            res += ", comments='" + comments + '\'';
         }
         return res + "}";
     }
@@ -504,7 +527,7 @@ public class Person {
             if (StringUtils.isEmpty(name) && StringUtils.isEmpty(surname)) {
                 name = genealogy.findFieldInContents("NAME", offset - 1, indexMax);
             }
-            int indexBirthday = AuxMethods.findIndexNumberString(list, "BIRT", index, indexMax);
+            int indexBirthday = genealogy.findIndexIdString("BIRT", index, indexMax);
 
             if (indexBirthday != -1) {
                 indexBirthday++;
@@ -525,7 +548,7 @@ public class Person {
                 birth = new Birth(this, birthDay, birthTown);
             }
 
-            int indexChristening = AuxMethods.findIndexNumberString(list, "CHR", index, indexMax);
+            int indexChristening = genealogy.findIndexIdString("CHR", index, indexMax);
 
             if (indexChristening != -1) {
                 indexChristening++;
@@ -563,10 +586,10 @@ public class Person {
 
             sex = parseSex(genealogy.findFieldInContents("SEX", offset, indexMax));
             profession = genealogy.findFieldInContents("OCCU", offset, indexMax);
-            note = genealogy.findFieldInContents("NOTE", offset, indexMax);
-            pdfStructure = PDFStructure.parsePDFStucture(note, id);
+            comments = genealogy.findFieldInContents("NOTE", offset, indexMax);
+            pdfStructure = PDFStructure.parsePDFStucture(comments, id);
 
-            int indexDeath = AuxMethods.findIndexNumberString(list, "DEAT", index, indexMax);
+            int indexDeath = genealogy.findIndexIdString("DEAT", index, indexMax);
 
             if (indexDeath != -1) {
                 indexDeath++;
@@ -595,7 +618,7 @@ public class Person {
             if (unions.get(i).getPartner().getId().equals(partner.getId())) {
                 return unions.get(i);
             }
-            if (unions.get(i).getCitizen().getId().equals(partner.getId())) {
+            if (unions.get(i).getPerson().getId().equals(partner.getId())) {
                 return unions.get(i);
             }
         }
@@ -690,7 +713,7 @@ public class Person {
         String fils = "le fils";
         String sfils = "fils";
         boolean foundText = false;
-        if (sex == Sex.FEMME) {
+        if (sex == Sex.FEMALE) {
             pronoun = "Elle";
             accord = "e";
             fils = "la fille";

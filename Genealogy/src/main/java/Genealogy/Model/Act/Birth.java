@@ -1,31 +1,35 @@
 package Genealogy.Model.Act;
 
 import Genealogy.Model.Date.MyDate;
-import Genealogy.Model.Person;
-import Genealogy.Model.Town;
+import Genealogy.Model.Gedcom.Person;
+import Genealogy.Model.Gedcom.Town;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * Created by Dan on 06/04/2016.
+ * Birth class : representation of a birth civil act
  */
 public class Birth extends Act {
 
+    /**
+     * Birth constructor
+     *
+     * @param person
+     * @param date
+     * @param town
+     */
     public Birth(Person person, MyDate date, Town town) {
         super(person, date, town);
-        if (town != null) {
-            town.addTown(this);
-        }
     }
 
     /**
-     * Function toString : toString
+     * Function toString : print the Birth
      *
      * @return the final String
      */
     @Override
     public String toString() {
         String res = "Birth{" +
-                "citizen=" + citizen.getFullName();
+                "citizen=" + person.getFullName();
         if (date != null) {
             res += ", date=" + date;
         }

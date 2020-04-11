@@ -1,6 +1,6 @@
 package Genealogy.Model.Date;
 
-import Genealogy.AuxMethods;
+import Genealogy.Model.Gedcom.AuxMethods;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

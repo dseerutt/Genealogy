@@ -1,6 +1,6 @@
 package Genealogy.Parsing;
 
-import Genealogy.Genealogy;
+import Genealogy.Model.Gedcom.Genealogy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

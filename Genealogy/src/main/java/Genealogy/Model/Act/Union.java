@@ -1,25 +1,37 @@
 package Genealogy.Model.Act;
 
+import Genealogy.Model.Act.Enum.UnionType;
 import Genealogy.Model.Date.MyDate;
-import Genealogy.Model.Person;
-import Genealogy.Model.Town;
+import Genealogy.Model.Gedcom.Person;
+import Genealogy.Model.Gedcom.Town;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * Created by Dan on 06/04/2016.
+ * Union class : representation of a union civil act
  */
 public class Union extends Act {
+    /**
+     * Person partner of the union
+     */
     protected Person partner;
+    /**
+     * Type of Union with enum UnionType, divorce possible
+     */
     protected UnionType unionType;
 
-    public Union(Person person, Person person2, MyDate date, Town town, UnionType unionType0) {
-
+    /**
+     * Union constructor
+     *
+     * @param person
+     * @param partner
+     * @param date
+     * @param town
+     * @param unionType0
+     */
+    public Union(Person person, Person partner, MyDate date, Town town, UnionType unionType0) {
         super(person, date, town);
         unionType = unionType0;
-        partner = person2;
-        if (town != null) {
-            town.addTown(this);
-        }
+        this.partner = partner;
     }
 
     /**
@@ -30,7 +42,7 @@ public class Union extends Act {
     @Override
     public String toString() {
         String res = unionType + "{" +
-                "citizen=" + citizen.getFullName();
+                "citizen=" + person.getFullName();
         if (date != null) {
             res += ", date=" + date;
         }
@@ -91,20 +103,20 @@ public class Union extends Act {
     }
 
     public Person getOtherPerson(Person person) {
-        if (citizen.getId().equals(person.getId())) {
+        if (this.person.getId().equals(person.getId())) {
             return partner;
         } else if (partner.getId().equals(person.getId())) {
-            return citizen;
+            return this.person;
         } else {
             return null;
         }
     }
 
     public Person getOtherPerson(String idPerson) {
-        if (citizen.getId().equals(idPerson)) {
+        if (person.getId().equals(idPerson)) {
             return partner;
         } else if (partner.getId().equals(idPerson)) {
-            return citizen;
+            return person;
         } else {
             return null;
         }
@@ -119,7 +131,7 @@ public class Union extends Act {
         if (town.isEmpty()) {
             result += " Town";
         }
-        if (citizen == null) {
+        if (person == null) {
             result += " Partner";
         }
         if (!result.equals("")) {

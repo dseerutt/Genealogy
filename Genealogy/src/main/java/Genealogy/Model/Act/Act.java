@@ -1,73 +1,133 @@
 package Genealogy.Model.Act;
 
-import Genealogy.AuxMethods;
+import Genealogy.Model.Gedcom.AuxMethods;
 import Genealogy.Model.Date.MyDate;
-import Genealogy.Model.Person;
-import Genealogy.Model.Town;
+import Genealogy.Model.Gedcom.Person;
+import Genealogy.Model.Gedcom.Town;
 
-import java.util.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Created by Dan on 06/04/2016.
+ * Abstract class Act : representation of a civil act
  */
 public abstract class Act {
-    protected Person citizen;
+    /**
+     * The Person linked to the act
+     */
+    protected Person person;
+    /**
+     * The date MyDate of the act
+     */
     protected MyDate date;
+    /**
+     * The Town of the act
+     */
     protected Town town;
-    protected static int minimumYear = Calendar.getInstance().get(Calendar.YEAR);
+    /**
+     * The minimum int year of all acts
+     */
+    protected static int minimumYear = LocalDate.now().getYear();
+    /**
+     * The list of String file proofs
+     */
     protected List<String> proofs = new ArrayList<>();
-    public enum TypeActe {
-        Birth, Mariage, Death
-    }
 
-    public Act(Person citizen, MyDate date, Town town) {
-        this.citizen = citizen;
+    /**
+     * Act Constructor : sets minimum year of act for whole program,
+     * links the acts to the towns
+     *
+     * @param person the person to be linked to
+     * @param date   the date of the act
+     * @param town   the Town of the act
+     */
+    public Act(Person person, MyDate date, Town town) {
+        this.person = person;
         this.date = date;
         this.town = town;
-        if (date != null){
+        if (date != null) {
             int yearDate = AuxMethods.getYear(date.getDate());
-            if (yearDate < minimumYear){
+            if (yearDate < minimumYear) {
                 minimumYear = yearDate;
             }
         }
+        if (town != null) {
+            town.addTown(this);
+        }
     }
 
-    public String getNecessaryResearch(){
+    /**
+     * Function getNecessaryResearch : return in a string the null fields or not FullDate dates
+     *
+     * @return
+     */
+    public String getNecessaryResearch() {
         String result = "";
-        if (date == null || !date.isFullDate()){
+        if (date == null || !date.isFullDate()) {
             result += " Date";
         }
-        if (town.isEmpty()){
+        if (town.isEmpty()) {
             result += " Town";
         }
-        if (!result.equals("")){
+        if (!result.equals("")) {
             return result.substring(1);
         } else {
             return null;
         }
     }
 
-    public Person getCitizen() {
-        return citizen;
+    /**
+     * Getter of person
+     *
+     * @return
+     */
+    public Person getPerson() {
+        return person;
     }
 
+    /**
+     * Getter of date
+     *
+     * @return
+     */
     public MyDate getDate() {
         return date;
     }
 
+    /**
+     * Getter of town
+     *
+     * @return
+     */
     public Town getTown() {
         return town;
     }
 
+    /**
+     * Getter of minimumYear
+     *
+     * @return
+     */
     public static int getMinimumYear() {
         return minimumYear;
     }
 
-    public void addProof(String proof){
+    /**
+     * Function addProof : add a String proof to the list proofs
+     *
+     * @param proof
+     */
+    public void addProof(String proof) {
         proofs.add(proof);
     }
 
-    public List<String> getProofs(){
+    /**
+     * Getter of getProofs
+     *
+     * @return
+     */
+    public List<String> getProofs() {
         return proofs;
     }
 }

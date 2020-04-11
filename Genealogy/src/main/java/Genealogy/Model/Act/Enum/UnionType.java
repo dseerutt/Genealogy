@@ -1,4 +1,4 @@
-package Genealogy.Model.Act;
+package Genealogy.Model.Act.Enum;
 
 /**
  * Enumeration class for Union type

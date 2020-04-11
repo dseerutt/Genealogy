@@ -1,7 +1,5 @@
 package Genealogy.Parsing;
 
-import Genealogy.Genealogy;
-
 /**
  * Created by Dan on 04/04/2016.
  */

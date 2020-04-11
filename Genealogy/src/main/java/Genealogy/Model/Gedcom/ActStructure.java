@@ -1,4 +1,4 @@
-package Genealogy.Model.Date;
+package Genealogy.Model.Gedcom;
 
 /**
  * Created by Dan on 22/04/2016.

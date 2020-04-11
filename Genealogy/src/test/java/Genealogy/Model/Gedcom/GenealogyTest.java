@@ -1,7 +1,6 @@
-package Genealogy;
+package Genealogy.Model.Gedcom;
 
 import Genealogy.Model.Exception.ParsingException;
-import Genealogy.Model.Person;
 import Genealogy.Parsing.MyGedcomReader;
 import Genealogy.URLConnexion.Serializer;
 import org.junit.jupiter.api.Test;
@@ -29,7 +28,7 @@ public class GenealogyTest {
      * @throws ParsingException
      */
     @Test
-    public void findPersonById() throws NoSuchFieldException, IllegalAccessException, ParsingException {
+    public void findPersonByIdTest() throws NoSuchFieldException, IllegalAccessException, ParsingException {
         //init
         Genealogy genealogy = new Genealogy();
         ArrayList<Person> persons = new ArrayList<Person>();
@@ -74,7 +73,7 @@ public class GenealogyTest {
      * test direct ancestors with siblings and direct
      */
     @Test
-    public void setDirectAncestors() throws ParsingException {
+    public void setDirectAncestorsTest() throws ParsingException {
         //init
         Genealogy genealogy = new Genealogy();
         Person person1 = new Person(genealogy, null, -1, -1);
@@ -112,7 +111,7 @@ public class GenealogyTest {
      * divorces, siblings, half siblings, missing parents, children and notes
      */
     @Test
-    public void parseContents() throws IOException, ParsingException, URISyntaxException {
+    public void parseContentsTest() throws IOException, ParsingException, URISyntaxException {
         //init
         URL url = getClass().getResource("/test/testParseContents.gedTest");
         File file = new File(url.toURI());
@@ -135,7 +134,7 @@ public class GenealogyTest {
         assertEquals("Person_I6{man, name='Beckman', surname='Joseph Arthur Wilhelm', born on 15/04/1929 at Allenstein (East Prussia), profession of clerk, father='Robert Martin Beckman', mother='Josephine Cook', HETERO_MAR with Regina Martha Klara Willner on 01/10/1953 at Dortmund, children=[Carl Beckman, Gregor Beckman]}", Genealogy.genealogy.getPersons().get(5).toString());
         assertEquals("Person_I7{man, name='Beckman', surname='Carl', born on 03/05/1955 at Dortmund, profession of teacher, father='Joseph Arthur Wilhelm Beckman', mother='Regina Martha Klara Willner', HETERO_MAR with Roswitha Touther on 07/09/1985 at Wesel}", Genealogy.genealogy.getPersons().get(6).toString());
         assertEquals("Person_I8{40 y/o man, name='Beckman', surname='Kurt Friedrich', born on 07/09/1829 at Tilsit (East Prussia), died on 23/12/1869 at Tilsit (East Prussia), profession of merchant, father='Bartholomaeus Ferdinand Beckman', mother='Minna Lehner', HETERO_MAR with Caroline Schmidt on 23/06/1862 at Tilsit (East Prussia), children=[Johann Friedrich Beckman, Francisca Minna Elisabeth Beckman, Berthold Ferdinand Beckman, Magdalena Charlotte Beckman]}", Genealogy.genealogy.getPersons().get(7).toString());
-        assertEquals("Person_I9{73 y/o man, name='Beckman', surname='Robert Martin', born on 21/11/1890 at Allenstein (East Prussia), died on 02/01/1964 at Oberhausen (DÃ¼sseldorf), profession of writer, father='Johann Friedrich Beckman', mother='Sophie Kowalski', HETERO_MAR with Josephine Cook on 16/07/1923 at Allenstein (East Prussia), children=[Joseph Arthur Wilhelm Beckman, Catharine Elisabeth Beckman, Paul Arthur Ferdinand Beckman], note='was active in the army as a commissioned officer in World War 1'}", Genealogy.genealogy.getPersons().get(8).toString());
+        assertEquals("Person_I9{73 y/o man, name='Beckman', surname='Robert Martin', born on 21/11/1890 at Allenstein (East Prussia), died on 02/01/1964 at Oberhausen (DÃ¼sseldorf), profession of writer, father='Johann Friedrich Beckman', mother='Sophie Kowalski', HETERO_MAR with Josephine Cook on 16/07/1923 at Allenstein (East Prussia), children=[Joseph Arthur Wilhelm Beckman, Catharine Elisabeth Beckman, Paul Arthur Ferdinand Beckman], comments='was active in the army as a commissioned officer in World War 1'}", Genealogy.genealogy.getPersons().get(8).toString());
         assertEquals("Person_I10{53 y/o woman, name='Frankikeit', surname='Emma', born on 11/03/1869 at Allenstein (East Prussia), died on 17/07/1922 at Allenstein (East Prussia), father='Ludwig Konstantin Frankikeit', mother='Leonore Elisabeth Bremer', HETERO_MAR with Eberhard Cook on 11/03/1889 at Allenstein (East Prussia), children=[Josephine Cook, Klaus Berthold Cook, Maria Caroline Cook]}", Genealogy.genealogy.getPersons().get(9).toString());
         assertEquals("Person_I11{48 y/o man, name='Cook', surname='Eberhard', born on 15/09/1867 at Allenstein (East Prussia), died on 14/05/1916 at Allenstein (East Prussia), profession of smith, father='Frank Herbert Cook', mother='Brunhilde Magarethe Dillborn', HETERO_MAR with Emma Frankikeit on 11/03/1889 at Allenstein (East Prussia), children=[Josephine Cook, Klaus Berthold Cook, Maria Caroline Cook]}", Genealogy.genealogy.getPersons().get(10).toString());
         assertEquals("Person_I12{73 y/o woman, name='Cook', surname='Josephine', born on 02/12/1897 at Allenstein (East Prussia), died on 17/06/1971 at Oberhausen (DÃ¼sseldorf), profession of seamstress, father='Eberhard Cook', mother='Emma Frankikeit', HETERO_MAR with Robert Martin Beckman on 16/07/1923 at Allenstein (East Prussia), children=[Joseph Arthur Wilhelm Beckman, Catharine Elisabeth Beckman, Paul Arthur Ferdinand Beckman]}", Genealogy.genealogy.getPersons().get(11).toString());
@@ -186,6 +185,5 @@ public class GenealogyTest {
         assertEquals("Person_I57{man, name='Frankikeit', surname='Ludwig Konstantin', HETERO_MAR with Leonore Elisabeth Bremer, child=[Emma Frankikeit]}", Genealogy.genealogy.getPersons().get(56).toString());
         assertEquals("Person_I58{woman, name='Bremer', surname='Leonore Elisabeth', HETERO_MAR with Ludwig Konstantin Frankikeit, child=[Emma Frankikeit]}", Genealogy.genealogy.getPersons().get(57).toString());
         assertEquals("Person_I59{man, name='Beckman', surname='Hubertus', child=[Carl Friedrich Emanuel Beckman]}", Genealogy.genealogy.getPersons().get(58).toString());
-
     }
 }

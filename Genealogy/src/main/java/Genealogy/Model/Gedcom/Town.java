@@ -1,4 +1,4 @@
-package Genealogy.Model;
+package Genealogy.Model.Gedcom;
 
 import Genealogy.MapViewer.Structures.MyCoordinate;
 import Genealogy.Model.Act.Act;

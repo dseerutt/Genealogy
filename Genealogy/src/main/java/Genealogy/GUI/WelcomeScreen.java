@@ -1,7 +1,7 @@
 package Genealogy.GUI;
 
-import Genealogy.Genealogy;
-import Genealogy.Model.Town;
+import Genealogy.Model.Gedcom.Genealogy;
+import Genealogy.Model.Gedcom.Town;
 import Genealogy.Parsing.MyGedcomReader;
 import Genealogy.URLConnexion.Serializer;
 import org.apache.logging.log4j.LogManager;

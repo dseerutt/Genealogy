@@ -1,4 +1,4 @@
-package Genealogy.Model.Date;
+package Genealogy.Model.Gedcom;
 
 import javax.swing.*;
 import java.awt.*;

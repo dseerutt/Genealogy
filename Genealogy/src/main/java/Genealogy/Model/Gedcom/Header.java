@@ -1,9 +1,9 @@
-package Genealogy.Model;
+package Genealogy.Model.Gedcom;
 
-import Genealogy.AuxMethods;
-import Genealogy.Genealogy;
 import Genealogy.Model.Exception.ParsingException;
 import Genealogy.Parsing.ParsingStructure;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,35 +12,71 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created by Dan on 05/04/2016.
+ * Header class of a genealogic tree
  */
 public class Header {
+    /**
+     * The String software of the gedcom file
+     */
     private String software;
+    /**
+     * The String version of the software
+     */
     private String version;
+    /**
+     * The last modified Date (LocalDate bug for gedcom format)
+     */
     private Date lastModified;
 
+    /**
+     * Logger of the class
+     */
+    public final static Logger logger = LogManager.getLogger(Header.class);
+
+    /**
+     * Getter of Software
+     *
+     * @return
+     */
     public String getSoftware() {
         return software;
     }
 
+    /**
+     * Getter of Version
+     *
+     * @return
+     */
     public String getVersion() {
         return version;
     }
 
+    /**
+     * Getter of lastModified
+     *
+     * @return
+     */
     public Date getLastModified() {
         return lastModified;
     }
 
+    /**
+     * Function ToString : print the object
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return "Header{" +
                 "software='" + software + '\'' +
                 ", version='" + version + '\'' +
-                ", lastModified='" + AuxMethods.getStringDate(lastModified) + '\'' +
+                ", lastModified='" + lastModified + '\'' +
                 '}';
     }
 
     /**
+     * Header constructor
+     *
      * @param genealogy
      * @param fileHeader
      * @throws ParsingException if it could not parse the file fields
@@ -55,7 +91,7 @@ public class Header {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy hh:mm:ss", Locale.ENGLISH);
             lastModified = simpleDateFormat.parse(lastModifiedDate0 + " " + lastModifiedHour0);
         } catch (ParseException e) {
-            e.printStackTrace();
+            logger.error("Failed to parse the gedcom modification date" + lastModifiedDate0 + " " + lastModifiedHour0, e);
         }
     }
 }

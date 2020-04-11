@@ -1,13 +1,14 @@
 package Genealogy.URLConnexion.Geneanet;
 
-import Genealogy.Genealogy;
 import Genealogy.Model.Act.Birth;
 import Genealogy.Model.Act.Death;
 import Genealogy.Model.Act.Union;
 import Genealogy.Model.Date.MyDate;
 import Genealogy.Model.Exception.ParsingException;
-import Genealogy.Model.Person;
-import Genealogy.Model.Town;
+import Genealogy.Model.Gedcom.Genealogy;
+import Genealogy.Model.Gedcom.Person;
+import Genealogy.Model.Gedcom.Sex;
+import Genealogy.Model.Gedcom.Town;
 import Genealogy.Parsing.MyGedcomReader;
 import Genealogy.URLConnexion.Serializer;
 import org.apache.commons.lang3.StringUtils;
@@ -17,8 +18,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static Genealogy.AuxMethods.removeDoubleGeneanetSuffix;
-import static Genealogy.Genealogy.genealogy;
+import static Genealogy.Model.Gedcom.AuxMethods.removeDoubleGeneanetSuffix;
+import static Genealogy.Model.Gedcom.Genealogy.genealogy;
 import static Genealogy.URLConnexion.Geneanet.GeneanetBrowser.logger;
 import static Genealogy.URLConnexion.Geneanet.GeneanetBrowser.mainSearchFullTree;
 import static Genealogy.URLConnexion.Geneanet.GeneanetPerson.printListofGeneanetPerson;
@@ -290,7 +291,7 @@ public class TreeComparator {
                 if (superEqualsAlias(genPersonToSearch.getFullName(), partner.getFullName())) {
                     superComparePartner(genPersonToSearch, partner, "partner", root);
                 }
-                Person citizen = union.getCitizen();
+                Person citizen = union.getPerson();
                 if (superEqualsAlias(genPersonToSearch.getFullName(), citizen.getFullName())) {
                     superComparePartner(genPersonToSearch, citizen, "partner", root);
                 }
@@ -434,8 +435,8 @@ public class TreeComparator {
     private static boolean supercontains(ArrayList<Union> marriageGed, GeneanetPerson person, MyDate date, String town) {
         Boolean isGenPersonMale = Gender.Male.equals(person.getGender());
         for (Union union : marriageGed) {
-            Person partner = union.getCitizen();
-            boolean isGedPersonMale = Person.Sex.HOMME.equals(partner.getSex());
+            Person partner = union.getPerson();
+            boolean isGedPersonMale = Sex.MALE.equals(partner.getSex());
             if (isGenPersonMale && !isGedPersonMale || !isGenPersonMale && isGedPersonMale) {
                 partner = union.getPartner();
             }

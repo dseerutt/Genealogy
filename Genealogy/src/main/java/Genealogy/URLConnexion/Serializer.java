@@ -1,6 +1,6 @@
 package Genealogy.URLConnexion;
 
-import Genealogy.Model.Town;
+import Genealogy.Model.Gedcom.Town;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

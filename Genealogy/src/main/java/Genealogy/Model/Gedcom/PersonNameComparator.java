@@ -1,4 +1,4 @@
-package Genealogy.Model;
+package Genealogy.Model.Gedcom;
 
 import java.util.Comparator;
 

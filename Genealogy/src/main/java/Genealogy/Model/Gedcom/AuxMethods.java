@@ -1,18 +1,13 @@
-package Genealogy;
-
-import Genealogy.Parsing.ParsingStructure;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+package Genealogy.Model.Gedcom;
 
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created by Dan on 05/04/2016.
+ * To remove
  */
 public class AuxMethods {
 
@@ -20,33 +15,6 @@ public class AuxMethods {
     public static String DATE_FORMAT3 = "dd/MM/yyyy";
     public static String DATE_FORMAT4 = "MMM yyyy";
     public static SimpleDateFormat SDF3 = new SimpleDateFormat(DATE_FORMAT3, Locale.ENGLISH);
-    final static Logger logger = LogManager.getLogger(AuxMethods.class);
-
-    public static int findIndexNumberInteger(ArrayList<ParsingStructure> list, int number, int offset) {
-        if (offset > list.size()) {
-            logger.error("Erreur dans le parsing, l'index est trop grand");
-            return -1;
-        }
-        for (int i = offset; i < list.size(); i++) {
-            if (list.get(i).getNumber() == number) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    public static int findIndexNumberString(ArrayList<ParsingStructure> list, String field, int offset, int maxIndex) {
-        if (offset > list.size()) {
-            logger.error("Erreur dans le parsing, l'index est trop grand");
-            return -1;
-        }
-        for (int i = offset; i < maxIndex; i++) {
-            if (list.get(i).getId().equals(field)) {
-                return i;
-            }
-        }
-        return -1;
-    }
 
     public static String getStringDate(Date date) {
         if (date == null) {

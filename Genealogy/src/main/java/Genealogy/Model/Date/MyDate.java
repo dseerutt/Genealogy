@@ -1,6 +1,5 @@
 package Genealogy.Model.Date;
 
-import javax.swing.plaf.FontUIResource;
 import java.io.Serializable;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;

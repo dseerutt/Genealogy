@@ -1,20 +1,20 @@
 package Genealogy.GUI;
 
-import Genealogy.Genealogy;
+import Genealogy.Model.Gedcom.Genealogy;
 import Genealogy.MapViewer.Structures.FancyWaypointRenderer;
 import Genealogy.MapViewer.MapFrame;
 import Genealogy.MapViewer.Structures.MapPoint;
 import Genealogy.MapViewer.Structures.MyWaypoint;
 import Genealogy.MapViewer.Worker;
 import Genealogy.Model.Act.Union;
-import Genealogy.Model.Date.ActStructure;
+import Genealogy.Model.Gedcom.ActStructure;
 import Genealogy.MapViewer.Structures.MapStructure;
-import Genealogy.Model.Date.Governor;
-import Genealogy.Model.Governors;
-import Genealogy.Model.Person;
-import Genealogy.Model.Town;
+import Genealogy.Model.Gedcom.Governor;
+import Genealogy.Model.Gedcom.Governors;
+import Genealogy.Model.Gedcom.Person;
+import Genealogy.Model.Gedcom.Town;
 import Genealogy.MapViewer.Structures.MyCoordinate;
-import Genealogy.AuxMethods;
+import Genealogy.Model.Gedcom.AuxMethods;
 import org.jdesktop.swingx.JXMapKit;
 import org.jdesktop.swingx.JXMapViewer;
 import org.jdesktop.swingx.mapviewer.GeoPosition;

@@ -1,6 +1,5 @@
-package Genealogy.Model;
+package Genealogy.Model.Gedcom;
 
-import Genealogy.Model.Date.Governor;
 import Genealogy.URLConnexion.Serializer;
 
 import javax.swing.*;

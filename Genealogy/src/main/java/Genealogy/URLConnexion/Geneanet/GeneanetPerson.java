@@ -1,14 +1,13 @@
 package Genealogy.URLConnexion.Geneanet;
 
 import Genealogy.Model.Date.MyDate;
-import Genealogy.Model.Person;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static Genealogy.AuxMethods.removeDoubleGeneanetSuffix;
+import static Genealogy.Model.Gedcom.AuxMethods.removeDoubleGeneanetSuffix;
 
 /**
  * Created by Dan on 07/11/2017.

@@ -4,7 +4,7 @@ package Genealogy.URLConnexion;
  * Created by Dan on 15/04/2016.
  */
 
-import Genealogy.Model.Town;
+import Genealogy.Model.Gedcom.Town;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

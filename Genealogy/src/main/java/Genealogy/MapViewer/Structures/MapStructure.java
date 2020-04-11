@@ -1,6 +1,6 @@
 package Genealogy.MapViewer.Structures;
 
-import Genealogy.Model.Town;
+import Genealogy.Model.Gedcom.Town;
 
 import java.io.Serializable;
 

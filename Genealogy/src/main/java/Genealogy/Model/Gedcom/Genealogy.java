@@ -1,13 +1,9 @@
-package Genealogy;
+package Genealogy.Model.Gedcom;
 
+import Genealogy.Model.Act.Enum.UnionType;
 import Genealogy.Model.Act.Union;
-import Genealogy.Model.Act.UnionType;
 import Genealogy.Model.Date.MyDate;
 import Genealogy.Model.Exception.ParsingException;
-import Genealogy.Model.Header;
-import Genealogy.Model.Person;
-import Genealogy.Model.PersonNameComparator;
-import Genealogy.Model.Town;
 import Genealogy.Parsing.ParsingStructure;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -48,7 +44,7 @@ public class Genealogy {
     /**
      * Logger of the class
      */
-    final static Logger logger = LogManager.getLogger(Genealogy.class);
+    public final static Logger logger = LogManager.getLogger(Genealogy.class);
 
     /**
      * Genealogy : Default Constructor
@@ -141,7 +137,7 @@ public class Genealogy {
      */
     @Override
     public String toString() {
-        return "Genealogy.Genealogy{" +
+        return "Genealogy.Model.Gedcom.Genealogy{" +
                 "contents=" + contents +
                 '}';
     }
@@ -206,13 +202,13 @@ public class Genealogy {
      */
     protected int parsePersons(int indexInput) throws ParsingException {
         int index = indexInput;
-        int newIndex = AuxMethods.findIndexNumberInteger(contents, 0, index + 1);
+        int newIndex = findIndexNumberInteger(0, index + 1);
 
         //Loop in Person contents
         while (contents.get(newIndex).getText().equals("INDI")) {
             Person person = new Person(this, contents, index, newIndex);
             index = newIndex;
-            newIndex = AuxMethods.findIndexNumberInteger(contents, 0, index + 1);
+            newIndex = findIndexNumberInteger(0, index + 1);
             persons.add(person);
         }
         Person person = new Person(this, contents, index, newIndex);
@@ -231,7 +227,7 @@ public class Genealogy {
         //Family
         int maxFamillyIndex = 0;
         while (!contents.get(maxFamillyIndex).getText().equals("_LOC")) {
-            maxFamillyIndex = AuxMethods.findIndexNumberInteger(contents, 0, index + 1);
+            maxFamillyIndex = findIndexNumberInteger(0, index + 1);
             if ("FAM".equals(contents.get(index).getText())) {
                 parseMarriageContents(index, maxFamillyIndex);
             }
@@ -432,7 +428,7 @@ public class Genealogy {
         String statusString = findFieldInContents("_STAT", minIndex, maxIndex);
         int indexDivorce = -1;
         if (StringUtils.isBlank(statusString)) {
-            indexDivorce = AuxMethods.findIndexNumberString(contents, "DIV", minIndex, maxIndex);
+            indexDivorce = findIndexIdString("DIV", minIndex, maxIndex);
         }
 
         parseMarriage(partner1, partner2, Union.parseUnionType(statusString), minIndex, maxIndex);
@@ -472,4 +468,46 @@ public class Genealogy {
         }
         return "";
     }
+
+    /**
+     * Function findIndexNumberInteger : find the parameter int number in contents list with offset and maxvalue
+     *
+     * @param number
+     * @param offset
+     * @return
+     * @throws ParsingException
+     */
+    public int findIndexNumberInteger(int number, int offset) throws ParsingException {
+        if (offset > contents.size()) {
+            throw new ParsingException("Could not find number " + number + " , index " + offset + " is too big for contents size of " + contents.size());
+        }
+        for (int i = offset; i < contents.size(); i++) {
+            if (contents.get(i).getNumber() == number) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Function findIndexIdString : find the parameter String id in contents list with offset and maxvalue
+     *
+     * @param id       to search
+     * @param offset   the index to start with
+     * @param maxIndex the index to stop
+     * @return
+     * @throws ParsingException
+     */
+    public int findIndexIdString(String id, int offset, int maxIndex) throws ParsingException {
+        if (offset > contents.size()) {
+            throw new ParsingException("Could not find id " + id + " , index " + offset + " is too big for contents size of " + contents.size());
+        }
+        for (int i = offset; i < maxIndex; i++) {
+            if (contents.get(i).getId().equals(id)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
 }

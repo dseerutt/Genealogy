@@ -2,7 +2,7 @@ package Genealogy.MapViewer;
 
 import Genealogy.GUI.MapScreen;
 import Genealogy.MapViewer.Structures.MapStructure;
-import Genealogy.Model.Person;
+import Genealogy.Model.Gedcom.Person;
 
 import javax.swing.*;
 import java.util.ArrayList;

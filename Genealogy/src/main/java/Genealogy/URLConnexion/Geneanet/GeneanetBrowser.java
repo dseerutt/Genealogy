@@ -17,8 +17,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static Genealogy.AuxMethods.removeDoubleGeneanetSuffix;
-import static Genealogy.AuxMethods.removeGeneanetSuffix;
+import static Genealogy.Model.Gedcom.AuxMethods.removeDoubleGeneanetSuffix;
+import static Genealogy.Model.Gedcom.AuxMethods.removeGeneanetSuffix;
 
 /**
  * Created by Dan on 01/11/2017.

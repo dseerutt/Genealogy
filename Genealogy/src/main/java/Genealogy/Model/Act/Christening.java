@@ -1,7 +1,8 @@
-package Genealogy.Model;
+package Genealogy.Model.Act;
 
-import Genealogy.Model.Act.Birth;
 import Genealogy.Model.Date.MyDate;
+import Genealogy.Model.Gedcom.Person;
+import Genealogy.Model.Gedcom.Town;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -87,7 +88,7 @@ public class Christening extends Birth {
     @Override
     public String toString() {
         String res = "Christening{" +
-                "citizen=" + citizen.getFullName();
+                "citizen=" + person.getFullName();
         if (date != null) {
             res += ", date=" + date;
         }

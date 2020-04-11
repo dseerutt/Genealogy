@@ -1,6 +1,6 @@
 package Genealogy.GUI;
 
-import Genealogy.Genealogy;
+import Genealogy.Model.Gedcom.Genealogy;
 import Genealogy.MapViewer.MapFrame;
 import Genealogy.MapViewer.Structures.FancyWaypointRenderer;
 import Genealogy.MapViewer.Structures.MapPoint;
@@ -8,9 +8,10 @@ import Genealogy.MapViewer.Structures.MyCoordinate;
 import Genealogy.MapViewer.Structures.MyWaypoint;
 import Genealogy.Model.Act.Act;
 import Genealogy.Model.Act.Birth;
+import Genealogy.Model.Act.Enum.ActType;
 import Genealogy.Model.Act.Union;
-import Genealogy.Model.Person;
-import Genealogy.Model.Town;
+import Genealogy.Model.Gedcom.Person;
+import Genealogy.Model.Gedcom.Town;
 import Genealogy.URLConnexion.MyHttpURLConnexion;
 import Genealogy.URLConnexion.Serializer;
 import Genealogy.URLConnexion.URLException;
@@ -266,12 +267,12 @@ public class MainScreen extends JFrame {
                     //handle file
                     Person person = Genealogy.genealogy.getPersons().get(ancestors.getSelectedIndex());
                     if (naissanceRadioButton.isSelected()) {
-                        person.addProof(Act.TypeActe.Birth, file);
+                        person.addProof(ActType.BIRTH, file);
                     } else if (mariageRadioButton.isSelected()) {
-                        person.addProof(Act.TypeActe.Mariage, "", person.getProofUnionSize());
+                        person.addProof(ActType.MARRIAGE, "", person.getProofUnionSize());
                         //TODO
                     } else if (deathRadioButton.isSelected()) {
-                        person.addProof(Act.TypeActe.Death, file);
+                        person.addProof(ActType.DEATH, file);
                     }
                 } catch (Exception e1) {
                     e1.printStackTrace();
@@ -292,7 +293,7 @@ public class MainScreen extends JFrame {
                     if (naissanceRadioButton.isSelected()) {
                         String file = person.getBirth().getProofs().get(0);
                     } else if (mariageRadioButton.isSelected()) {
-                        person.addProof(Act.TypeActe.Mariage, "", person.getProofUnionSize());
+                        person.addProof(ActType.MARRIAGE, "", person.getProofUnionSize());
                         //TODO
                     } else if (deathRadioButton.isSelected()) {
                         String file = person.getDeath().getProofs().get(0);
@@ -378,12 +379,12 @@ public class MainScreen extends JFrame {
                 ArrayList<String> deathList = new ArrayList<String>();
                 for (int i = 0; i < list.size(); i++) {
                     if (list.get(i) instanceof Birth) {
-                        birthList.add(naissances.getText() + list.get(i).getCitizen().getFullNameInverted() + "\n");
+                        birthList.add(naissances.getText() + list.get(i).getPerson().getFullNameInverted() + "\n");
                     } else if (list.get(i) instanceof Union) {
-                        unionsList.add(unions.getText() + list.get(i).getCitizen().getFullNameInverted() + " \navec " +
+                        unionsList.add(unions.getText() + list.get(i).getPerson().getFullNameInverted() + " \navec " +
                                 ((Union) list.get(i)).getPartner().getFullNameInverted() + "\n");
                     } else {
-                        deathList.add(deces.getText() + list.get(i).getCitizen().getFullNameInverted() + "\n");
+                        deathList.add(deces.getText() + list.get(i).getPerson().getFullNameInverted() + "\n");
                     }
                 }
                 Collections.sort(birthList);

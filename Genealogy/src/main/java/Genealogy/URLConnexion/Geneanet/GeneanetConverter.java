@@ -5,16 +5,11 @@ import Genealogy.Model.Date.MonthDate;
 import Genealogy.Model.Date.MyDate;
 import Genealogy.Model.Date.RepublicanDate.RepublicanCalendarDateConverter;
 import Genealogy.Model.Date.YearDate;
-import Genealogy.URLConnexion.Serializer;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import us.codecraft.xsoup.Xsoup;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
