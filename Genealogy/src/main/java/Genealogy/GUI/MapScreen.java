@@ -4,6 +4,7 @@ import Genealogy.MapViewer.MapFrame;
 import Genealogy.MapViewer.Structures.*;
 import Genealogy.MapViewer.Worker;
 import Genealogy.Model.Act.Union;
+import Genealogy.Model.GUI.ActStructure;
 import Genealogy.Model.GUI.Governor;
 import Genealogy.Model.GUI.GovernorContainer;
 import Genealogy.Model.Gedcom.*;

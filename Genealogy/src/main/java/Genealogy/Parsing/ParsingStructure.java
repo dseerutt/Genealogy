@@ -1,41 +1,73 @@
 package Genealogy.Parsing;
 
 /**
- * Created by Dan on 04/04/2016.
+ * ParsingStructure class to represent a line in the gedcom file
  */
 public class ParsingStructure {
+    /**
+     * Id number of the line
+     */
     private int number;
-    private String id;
-    private String text;
+    /**
+     * String name of the field
+     */
+    private String fieldName;
+    /**
+     * String value of the field
+     */
+    private String fieldValue;
 
-    public ParsingStructure(int number, String id, String text) {
+    /**
+     * ParsingStructure constructor
+     *
+     * @param number
+     * @param fieldName
+     * @param fieldValue
+     */
+    public ParsingStructure(int number, String fieldName, String fieldValue) {
         this.number = number;
-        this.id = id;
-        this.text = text;
+        this.fieldName = fieldName;
+        this.fieldValue = fieldValue;
     }
 
+    /**
+     * Classic function toString
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return "ParsingStructure{" +
                 "number=" + number +
-                ", id='" + id + '\'' +
-                ", text='" + text + '\'' +
+                ", id='" + fieldName + '\'' +
+                ", text='" + fieldValue + '\'' +
                 '}';
     }
 
-    public String toString2() {
-        return number + " " + id + " " + text;
-    }
-
+    /**
+     * Number getter
+     *
+     * @return
+     */
     public int getNumber() {
         return number;
     }
 
-    public String getId() {
-        return id;
+    /**
+     * FieldName getter
+     *
+     * @return
+     */
+    public String getFieldName() {
+        return fieldName;
     }
 
-    public String getText() {
-        return text;
+    /**
+     * FieldValue getter
+     *
+     * @return
+     */
+    public String getFieldValue() {
+        return fieldValue;
     }
 }

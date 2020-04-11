@@ -516,7 +516,7 @@ public class Person {
                 logger.error("Erreur dans le parsing de personne, offset >= indexMax");
                 return;
             }
-            String newId = list.get(index++).getId();
+            String newId = list.get(index++).getFieldName();
             if (newId.contains("@I")) {
                 id = newId;
             } else {

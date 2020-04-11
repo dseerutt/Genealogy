@@ -1,4 +1,4 @@
-package Genealogy.Model.Gedcom;
+package Genealogy.Model.GUI;
 
 /**
  * Created by Dan on 22/04/2016.

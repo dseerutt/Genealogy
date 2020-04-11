@@ -159,20 +159,18 @@ public class Genealogy {
      */
     protected int parseHeader() throws ParsingException {
         int index = 0;
-        ArrayList<ParsingStructure> fileHeader = new ArrayList<>();
 
         //Loop in header contents
         for (int i = 0; i < contents.size(); i++) {
-            if ("@I1@".equals(contents.get(i).getId())) {
+            if ("@I1@".equals(contents.get(i).getFieldName())) {
                 index = i;
                 break;
             }
-            fileHeader.add(contents.get(i));
         }
         if (index == 0) {
             throw new ParsingException("Failed to parse header");
         }
-        header = new Header(this, fileHeader);
+        header = new Header(this);
         return index;
     }
 
@@ -183,10 +181,10 @@ public class Genealogy {
      */
     protected void parseAuthor() throws ParsingException {
         for (int i = 0; i < contents.size(); i++) {
-            if ("@SUBM@".equals(contents.get(i).getId()) && (contents.get(i).getNumber() == 0)) {
+            if ("@SUBM@".equals(contents.get(i).getFieldName()) && (contents.get(i).getNumber() == 0)) {
                 ParsingStructure line = contents.get(i + 1);
-                if ("NAME".equals(line.getId())) {
-                    author = line.getText();
+                if ("NAME".equals(line.getFieldName())) {
+                    author = line.getFieldValue();
                     break;
                 } else {
                     throw new ParsingException("Failed to define author");
@@ -207,7 +205,7 @@ public class Genealogy {
         int newIndex = findIndexNumberInteger(0, index + 1);
 
         //Loop in Person contents
-        while (contents.get(newIndex).getText().equals("INDI")) {
+        while (contents.get(newIndex).getFieldValue().equals("INDI")) {
             Person person = new Person(this, contents, index, newIndex);
             index = newIndex;
             newIndex = findIndexNumberInteger(0, index + 1);
@@ -228,9 +226,9 @@ public class Genealogy {
     protected void parseFamilies(int index) throws ParsingException {
         //Family
         int maxFamillyIndex = 0;
-        while (!contents.get(maxFamillyIndex).getText().equals("_LOC")) {
+        while (!contents.get(maxFamillyIndex).getFieldValue().equals("_LOC")) {
             maxFamillyIndex = findIndexNumberInteger(0, index + 1);
-            if ("FAM".equals(contents.get(index).getText())) {
+            if ("FAM".equals(contents.get(index).getFieldValue())) {
                 parseMarriageContents(index, maxFamillyIndex);
             }
             index = maxFamillyIndex;
@@ -281,7 +279,7 @@ public class Genealogy {
         try {
             unionDay = (MyDate) MyDate.Mydate(date);
         } catch (Exception e) {
-            logger.debug("Failed to parse the union date of " + contents.get(minIndex).getId(), e);
+            logger.debug("Failed to parse the union date of " + contents.get(minIndex).getFieldName(), e);
         }
         return unionDay;
     }
@@ -298,7 +296,7 @@ public class Genealogy {
         try {
             marriageTown = new Town(findFieldInContents("PLAC", minIndex, maxIndex));
         } catch (Exception e) {
-            logger.debug("Failed to parse the marriage city of " + contents.get(minIndex).getId(), e);
+            logger.debug("Failed to parse the marriage city of " + contents.get(minIndex).getFieldName(), e);
         }
         return marriageTown;
     }
@@ -321,7 +319,7 @@ public class Genealogy {
             partner1.addUnion(union);
             partner2.addUnion(union);
         } else {
-            logger.debug("Failed to find the people linked to the marriage " + contents.get(minIndex).getId());
+            logger.debug("Failed to find the people linked to the marriage " + contents.get(minIndex).getFieldName());
         }
     }
 
@@ -354,8 +352,8 @@ public class Genealogy {
      */
     protected void parseChildren(Person partner1, Person partner2, int minIndex, int maxIndex) {
         for (int i = minIndex; i < maxIndex; i++) {
-            if (contents.get(i).getId().equals("CHIL")) {
-                String childId = contents.get(i).getText();
+            if (contents.get(i).getFieldName().equals("CHIL")) {
+                String childId = contents.get(i).getFieldValue();
                 Person child = findPersonById(childId);
                 if (partner1 != null) {
                     partner1.addChildren(child);
@@ -464,8 +462,8 @@ public class Genealogy {
             throw new ParsingException("Could not find field " + field + " , index " + offset + " is too big for contents size of " + contents.size());
         }
         for (int i = offset; i < maxValue; i++) {
-            if (contents.get(i).getId().equals(field)) {
-                return contents.get(i).getText();
+            if (contents.get(i).getFieldName().equals(field)) {
+                return contents.get(i).getFieldValue();
             }
         }
         return "";
@@ -505,7 +503,7 @@ public class Genealogy {
             throw new ParsingException("Could not find id " + id + " , index " + offset + " is too big for contents size of " + contents.size());
         }
         for (int i = offset; i < maxIndex; i++) {
-            if (contents.get(i).getId().equals(id)) {
+            if (contents.get(i).getFieldName().equals(id)) {
                 return i;
             }
         }

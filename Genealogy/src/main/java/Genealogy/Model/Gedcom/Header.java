@@ -1,13 +1,11 @@
 package Genealogy.Model.Gedcom;
 
 import Genealogy.Model.Exception.ParsingException;
-import Genealogy.Parsing.ParsingStructure;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -78,10 +76,9 @@ public class Header {
      * Header constructor
      *
      * @param genealogy
-     * @param fileHeader
      * @throws ParsingException if it could not parse the file fields
      */
-    public Header(Genealogy genealogy, ArrayList<ParsingStructure> fileHeader) throws ParsingException {
+    public Header(Genealogy genealogy) throws ParsingException {
         software = genealogy.findFieldInContents("NAME");
         version = genealogy.findFieldInContents("VERS");
         String lastModifiedDate0 = genealogy.findFieldInContents("DATE");
