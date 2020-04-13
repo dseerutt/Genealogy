@@ -31,7 +31,7 @@ public class GenealogyTest {
     public void findPersonByIdTest() throws NoSuchFieldException, IllegalAccessException, ParsingException {
         //init
         Genealogy genealogy = new Genealogy();
-        ArrayList<Person> persons = new ArrayList<Person>();
+        ArrayList<Person> persons = new ArrayList<>();
         Person person1 = new Person(genealogy, null, -1, -1);
 
         //Reflection init

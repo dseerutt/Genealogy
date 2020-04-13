@@ -1,8 +1,7 @@
 package Genealogy.Parsing;
 
+import Genealogy.Model.Exception.ParsingException;
 import Genealogy.Model.Gedcom.Genealogy;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -11,43 +10,42 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 /**
- * Created by Dan on 04/04/2016.
+ * MyGedcomReader class : read a Gedcom file
  */
 public class MyGedcomReader {
-    final static Logger logger = LogManager.getLogger(MyGedcomReader.class);
-    public static final String UTF8_BOM = "\uFEFF";
 
-    private static String removeUTF8BOM(String s) {
-        if (s.startsWith(UTF8_BOM)) {
-            s = s.substring(1);
-        }
-        return s;
-    }
-
-    public Genealogy read(String path) throws IOException {
-        //prepareFile(path);
+    /**
+     * Function read : read a gedcom file from a String path and return a Genealogy object with a ParsingStructure list
+     *
+     * @param path
+     * @return
+     * @throws IOException
+     * @throws ParsingException
+     */
+    public Genealogy read(String path) throws IOException, ParsingException {
         Genealogy genealogy = new Genealogy();
-        ArrayList<ParsingStructure> parsingStructureList = new ArrayList<ParsingStructure>();
-            BufferedReader br = null;
-            String sCurrentLine;
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(path), "ISO8859_1"));
-            while ((sCurrentLine = br.readLine()) != null) {
-                String[] temp = sCurrentLine.split(" ");
-                if (parsingStructureList.isEmpty()){
-                    temp = removeUTF8BOM(sCurrentLine).split(" ");
-                }
-                if (temp.length == 2){
-                    parsingStructureList.add(new ParsingStructure(Integer.parseInt("" + temp[0]),temp[1],""));
-                } else if (temp.length > 2) {
-                    String value = temp[0];
-                    String id = temp[1];
-                    int offset = value.length() + 1 + id.length() + 1;
-                    ParsingStructure parsingStructure = new ParsingStructure(Integer.parseInt(value),id,sCurrentLine.substring(offset));
-                    parsingStructureList.add(parsingStructure);
-                } else {
-                    logger.error("Erreur dans le parsing du fichier Gedcom");
-                }
+        ArrayList<ParsingStructure> parsingStructureList = new ArrayList<>();
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path), "ISO8859_1"));
+        String sCurrentLine;
+
+        //Reading all the lines
+        while ((sCurrentLine = br.readLine()) != null) {
+            String[] temp = sCurrentLine.split(" ");
+            if (parsingStructureList.isEmpty()) {
+                temp = sCurrentLine.split(" ");
             }
+            if (temp.length == 2) {
+                parsingStructureList.add(new ParsingStructure(Integer.parseInt("" + temp[0]), temp[1], ""));
+            } else if (temp.length > 2) {
+                String value = temp[0];
+                String id = temp[1];
+                int offset = value.length() + 1 + id.length() + 1;
+                ParsingStructure parsingStructure = new ParsingStructure(Integer.parseInt(value), id, sCurrentLine.substring(offset));
+                parsingStructureList.add(parsingStructure);
+            } else {
+                throw new ParsingException("Erreur parsing the Gedcom file : the number of lines is incorrect " + sCurrentLine);
+            }
+        }
         genealogy.setContents(parsingStructureList);
         return genealogy;
     }

@@ -1,0 +1,65 @@
+0 HEAD
+1 SOUR AHN
+2 VERS 2.99e
+2 NAME Ahnenblatt
+2 CORP Dirk Boettcher
+1 DATE 8 APR 2020
+2 TIME 18:17:40
+1 SUBM @SUBM@
+1 FILE testParseContents.ged
+1 GEDC
+2 VERS 5.5.1
+2 FORM LINEAGE-LINKED
+1 CHAR UTF-8
+1 _NAVM 2
+2 _NAVI @I4@
+1 _HOME @I4@
+0 @I1@ INDI
+1 _UID 1378C59B32D54C488004B2B48DF80A42411A
+1 SEX F
+1 NAME Martha /.../
+2 SURN ...
+2 GIVN Martha
+1 FAMS @F1@
+1 CHAN
+2 DATE 8 APR 2020
+3 TIME 11:12:20
+0 @I2@ INDI
+2 _GODP Paul Beckman, Catharine Beckman and Josephine Cook
+1 OCCU technical illustrator
+1 CONF
+2 DATE 3 MAY 1970
+2 ADDR Sankt Reinoldi
+2 PLAC Dortmund
+1 BIRT
+2 DATE 4 MAR 1956
+2 PLAC Essen
+0 @I5@ INDI
+1 _UID A15FE0880BE54341897ADFA8B984F4AC432F
+2 FILE .\Beispiel.pics\JohannBeckmann2.jpg
+3 FORM jpg
+2 TITL about 60 years old
+1 FAMS @F4@
+1 FAMC @F7@
+1 OBJE
+2 FILE .\Beispiel.pics\JohannBeckmann-SophieKowalski.jpg
+3 FORM jpg
+2 TITL wedding photo
+1 CHAN
+2 DATE 3 JUL 2014
+3 TIME 23:07:32
+0 @I6@ INDI
+1 _UID 002F38BE5F664AB289656C9C0783D5064167
+1 SEX M
+1 NAME Joseph Arthur Wilhelm /Beckman/
+2 SURN Beckman
+2 GIVN Joseph Arthur Wilhelm
+1 BIRT
+2 DATE 15 APR 1929
+3 _LOC @L2@
+1 OCCU writer
+1 DEAT
+2 DATE 2 JAN 1964
+2 PLAC Oberhausen, Düsseldorf
+3 _LOC @L7@
+1 NOTE was active in the army as a commissioned officer in World War 1

@@ -207,7 +207,7 @@ public class Person {
      * @return le nom puis le prénom
      */
     public String getFullNameInverted() {
-        if ((name != null) && (!name.equals(""))) {
+        if (!"".equals(name)) {
             return name + " " + surname;
         }
         return surname;
@@ -215,7 +215,7 @@ public class Person {
 
     public String getComparatorName() {
         String txt = "";
-        if ((name.equals("...")) || (surname.equals("..."))) {
+        if (("...".equals(name)) || ("...".equals(surname))) {
             txt = "z";
         }
         return txt + name + " " + surname;
