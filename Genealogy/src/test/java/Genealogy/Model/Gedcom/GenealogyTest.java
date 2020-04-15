@@ -7,9 +7,11 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.URISyntaxException;
-import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -113,8 +115,8 @@ public class GenealogyTest {
     @Test
     public void parseContentsTest() throws IOException, ParsingException, URISyntaxException {
         //init
-        URL url = getClass().getResource("/test/testParseContents.gedTest");
-        File file = new File(url.toURI());
+        String path = "src/test/resources/parseContents.gedTest";
+        File file = new File(path);
         MyGedcomReader myGedcomReader = new MyGedcomReader();
         Serializer serializer = new Serializer();
 
@@ -185,5 +187,42 @@ public class GenealogyTest {
         assertEquals("Person_I57{man, name='Frankikeit', surname='Ludwig Konstantin', HETERO_MAR with Leonore Elisabeth Bremer, child=[Emma Frankikeit]}", Genealogy.genealogy.getPersons().get(56).toString());
         assertEquals("Person_I58{woman, name='Bremer', surname='Leonore Elisabeth', HETERO_MAR with Ludwig Konstantin Frankikeit, child=[Emma Frankikeit]}", Genealogy.genealogy.getPersons().get(57).toString());
         assertEquals("Person_I59{man, name='Beckman', surname='Hubertus', child=[Carl Friedrich Emanuel Beckman]}", Genealogy.genealogy.getPersons().get(58).toString());
+    }
+
+    /**
+     * writeFile integration test, parse inputfile and write it, comparing the files with md5sum
+     *
+     * @throws IOException
+     * @throws ParsingException
+     */
+    @Test
+    public void testWriteFile() throws IOException, ParsingException {
+        //init
+        String fileInput = "src/test/resources/writeFile.gedTest";
+        String fileResult = "src/test/resources/writeFileTest.gedTest";
+        try {
+            File file = new File(fileInput);
+            MyGedcomReader myGedcomReader = new MyGedcomReader();
+            Serializer serializer = new Serializer();
+            String inputmd5 = "";
+            String resultmd5 = "";
+
+            //launch
+            Genealogy.genealogy = myGedcomReader.read(file.getAbsolutePath());
+            Genealogy.genealogy.parseContents();
+            Genealogy.genealogy.writeFile("src/test/resources/writeFileTest.gedTest");
+
+            //verification md5sum
+            try (InputStream is = Files.newInputStream(Paths.get(fileInput))) {
+                inputmd5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(is);
+            }
+            try (InputStream is = Files.newInputStream(Paths.get(fileResult))) {
+                resultmd5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(is);
+            }
+            assertEquals(inputmd5, resultmd5);
+        } finally {
+            File file = new File(fileResult);
+            file.delete();
+        }
     }
 }

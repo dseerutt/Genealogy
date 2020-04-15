@@ -9,6 +9,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -52,6 +56,22 @@ public class Genealogy {
      * Genealogy : Default Constructor
      */
     public Genealogy() {
+    }
+
+    /**
+     * Function writeFile : write gedcom file from contents to the parametered String path
+     *
+     * @param path
+     * @throws IOException
+     */
+    public void writeFile(String path) throws IOException {
+        StringBuilder text = new StringBuilder("");
+        for (ParsingStructure parsingStructure : contents) {
+            text = text.append(parsingStructure.toString()).append(System.lineSeparator());
+        }
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), "ISO8859_1"));
+        writer.write(text.toString());
+        writer.close();
     }
 
     /**

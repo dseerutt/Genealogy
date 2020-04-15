@@ -1,5 +1,7 @@
 package Genealogy.Parsing;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * ParsingStructure class to represent a line in the gedcom file
  */
@@ -31,17 +33,40 @@ public class ParsingStructure {
     }
 
     /**
-     * Classic function toString
+     * Function toStringComplete : to String complete
      *
      * @return
      */
-    @Override
-    public String toString() {
+    public String toStringComplete() {
         return "ParsingStructure{" +
                 "number=" + number +
                 ", id='" + fieldName + '\'' +
                 ", text='" + fieldValue + '\'' +
                 '}';
+    }
+
+    /**
+     * Function toString with no displaying of empty elements
+     *
+     * @return
+     */
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder().append(number);
+        if (fieldName.equals("CONT")) {
+            result = result.append(" ").append(fieldName).append(" ");
+            if (!StringUtils.isBlank(fieldValue)) {
+                result = result.append(fieldValue);
+            }
+        } else {
+            if (!StringUtils.isBlank(fieldName)) {
+                result = result.append(" ").append(fieldName);
+            }
+            if (!StringUtils.isBlank(fieldValue)) {
+                result = result.append(" ").append(fieldValue);
+            }
+        }
+        return result.toString();
     }
 
     /**
