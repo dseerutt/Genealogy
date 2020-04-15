@@ -26,7 +26,7 @@ public class BirthTest {
     @Test
     public void toStringPrettyPrintTest() throws ParsingException, ParseException {
         Genealogy genealogy = new Genealogy();
-        Person person = new Person(genealogy, null, -1, -1);
+        Person person = new Person(genealogy, null);
         Birth birth = new Birth(person, new FullDate("05 MAR 2020"), new Town("Saintes", "Charente-Maritime"));
         assertEquals("born on 05/03/2020 at Saintes (Charente-Maritime)", birth.toStringPrettyPrint());
     }

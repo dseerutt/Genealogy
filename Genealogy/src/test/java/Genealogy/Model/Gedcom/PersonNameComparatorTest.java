@@ -25,9 +25,9 @@ public class PersonNameComparatorTest {
     public void compareTest() throws ParsingException, NoSuchFieldException, IllegalAccessException {
         //Init
         Genealogy genealogy = new Genealogy();
-        Person person1 = new Person(genealogy, null, -1, -1);
-        Person person2 = new Person(genealogy, null, -1, -1);
-        Person person3 = new Person(genealogy, null, -1, -1);
+        Person person1 = new Person(genealogy, null);
+        Person person2 = new Person(genealogy, null);
+        Person person3 = new Person(genealogy, null);
         ArrayList<Person> persons = new ArrayList<>();
         persons.add(person1);
         persons.add(person2);

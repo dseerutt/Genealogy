@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import static Genealogy.Model.Act.Enum.UnionType.parseUnionType;
 
@@ -24,9 +26,9 @@ import static Genealogy.Model.Act.Enum.UnionType.parseUnionType;
 public class Genealogy {
 
     /**
-     * List of ParsingStructures - core of the genealogy file
+     * HashMap of <idObject,list of ParsingStructures></id,list> - core of the genealogy file
      */
-    private ArrayList<ParsingStructure> contents;
+    private HashMap<String, ArrayList<ParsingStructure>> contents;
     /**
      * Root person of the tree
      */
@@ -51,6 +53,10 @@ public class Genealogy {
      * Logger of the class
      */
     public final static Logger logger = LogManager.getLogger(Genealogy.class);
+    /**
+     * Author gedcom String id
+     */
+    private final String authorId = "SUBM";
 
     /**
      * Genealogy : Default Constructor
@@ -66,12 +72,18 @@ public class Genealogy {
      */
     public void writeFile(String path) throws IOException {
         StringBuilder text = new StringBuilder("");
-        for (ParsingStructure parsingStructure : contents) {
-            text = text.append(parsingStructure.toString()).append(System.lineSeparator());
+        for (ArrayList<ParsingStructure> parsingStructureList : contents.values()) {
+            for (ParsingStructure parsingStructure : parsingStructureList) {
+                text = text.append(parsingStructure.toString()).append(System.lineSeparator());
+            }
         }
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), "ISO8859_1"));
         writer.write(text.toString());
         writer.close();
+    }
+
+    //TODO
+    public void setComment(String idPerson, String comment) {
     }
 
     /**
@@ -103,7 +115,7 @@ public class Genealogy {
      *
      * @return
      */
-    public ArrayList<ParsingStructure> getContents() {
+    public HashMap<String, ArrayList<ParsingStructure>> getContents() {
         return contents;
     }
 
@@ -112,7 +124,7 @@ public class Genealogy {
      *
      * @param contents
      */
-    public void setContents(ArrayList<ParsingStructure> contents) {
+    public void setContents(HashMap<String, ArrayList<ParsingStructure>> contents) {
         this.contents = contents;
     }
 
@@ -171,101 +183,61 @@ public class Genealogy {
         Collections.sort(persons, new PersonNameComparator());
     }
 
-    /**
-     * Function parseHeader : parse the header from contents
-     *
-     * @return the index of the last element of the header
-     * @throws ParsingException if header not found
-     */
-    protected int parseHeader() throws ParsingException {
-        int index = 0;
-
-        //Loop in header contents
-        for (int i = 0; i < contents.size(); i++) {
-            if ("@I1@".equals(contents.get(i).getFieldName())) {
-                index = i;
-                break;
-            }
-        }
-        if (index == 0) {
-            throw new ParsingException("Failed to parse header");
-        }
-        header = new Header(this);
-        return index;
-    }
 
     /**
-     * Function parseAuthor : find and set the author of the file
+     * Function parseAuthor : from SUBM list, get second element with id name and set author
      *
-     * @throws ParsingException if the author can't be found near the NAME id
+     * @throws ParsingException
      */
     protected void parseAuthor() throws ParsingException {
-        for (int i = 0; i < contents.size(); i++) {
-            if ("@SUBM@".equals(contents.get(i).getFieldName()) && (contents.get(i).getNumber() == 0)) {
-                ParsingStructure line = contents.get(i + 1);
-                if ("NAME".equals(line.getFieldName())) {
-                    author = line.getFieldValue();
-                    break;
-                } else {
-                    throw new ParsingException("Failed to define author");
-                }
-            }
+        ArrayList<ParsingStructure> subm = contents.get("SUBM");
+        if (subm != null && subm.size() >= 2 && subm.get(1).getFieldName().equals("NAME")) {
+            author = subm.get(1).getFieldValue();
+        } else {
+            throw new ParsingException("Failed to find author with " + subm.toString());
         }
     }
 
     /**
-     * Function parsePersons : set all the Person objects from the file, set the root person with the first person added
+     * Function parsePerson : call Person constructor with list parameter and add the person to the persons list
      *
-     * @param indexInput the index from where to search
-     * @return the index where the search ended
-     * @throws ParsingException if it could not parse the file fields
+     * @param listInput
+     * @throws ParsingException
      */
-    protected int parsePersons(int indexInput) throws ParsingException {
-        int index = indexInput;
-        int newIndex = findIndexNumberInteger(0, index + 1);
-
-        //Loop in Person contents
-        while (contents.get(newIndex).getFieldValue().equals("INDI")) {
-            Person person = new Person(this, contents, index, newIndex);
-            index = newIndex;
-            newIndex = findIndexNumberInteger(0, index + 1);
-            persons.add(person);
-        }
-        Person person = new Person(this, contents, index, newIndex);
+    protected void getPersonByPartner(ArrayList<ParsingStructure> listInput) throws ParsingException {
+        Person person = new Person(this, listInput);
         persons.add(person);
-        root = persons.get(0);
-        return newIndex;
-    }
-
-    /**
-     * Function parseFamilies : parse and set families calling parseMarriageContents
-     *
-     * @param index the index from where to search
-     * @throws ParsingException if it could not parse the file fields
-     */
-    protected void parseFamilies(int index) throws ParsingException {
-        //Family
-        int maxFamillyIndex = 0;
-        while (!contents.get(maxFamillyIndex).getFieldValue().equals("_LOC")) {
-            maxFamillyIndex = findIndexNumberInteger(0, index + 1);
-            if ("FAM".equals(contents.get(index).getFieldValue())) {
-                parseMarriageContents(index, maxFamillyIndex);
-            }
-            index = maxFamillyIndex;
-        }
     }
 
     /**
      * Function parseContents : create the list of Persons from String contents
-     * set the direct ancestors recursively
+     * set the direct ancestors recursively, set the root as the first person
      *
-     * @throws ParsingException if the header is not handled
+     * @throws ParsingException
      */
     public void parseContents() throws ParsingException {
-        int index = parseHeader();
+        header = new Header(this);
         parseAuthor();
-        index = parsePersons(index);
-        parseFamilies(index);
+        for (Map.Entry<String, ArrayList<ParsingStructure>> entry : contents.entrySet()) {
+            String id = entry.getKey();
+            //Do not treat header or author or end of file
+            if (!id.matches("HEAD|SUBM|TRLR")) {
+                switch (id.charAt(0)) {
+                    case 'I':
+                        getPersonByPartner(entry.getValue());
+                        break;
+                    case 'F':
+                        parseFamily(entry.getValue());
+                        break;
+                    case 'L':
+                        //no treatment for localizations
+                        break;
+                    default:
+                        throw new ParsingException("Unrecognized Parsing Structure " + id);
+                }
+            }
+        }
+        root = persons.get(0);
         setDirectAncestors(root);
     }
 
@@ -287,75 +259,88 @@ public class Genealogy {
     }
 
     /**
-     * Function parseUnionDate : find union date from parameter indexes
+     * Function parseUnionDate : return the date of the union given a list and indexes to browse for
      *
+     * @param listInput
      * @param minIndex
      * @param maxIndex
-     * @return MyDate found
+     * @return
+     * @throws ParsingException
      */
-    protected MyDate parseUnionDate(int minIndex, int maxIndex) throws ParsingException {
-        String date = findFieldInContents("DATE", minIndex, maxIndex);
+    protected MyDate parseUnionDate(ArrayList<ParsingStructure> listInput, int minIndex, int maxIndex) throws ParsingException {
+        String date = findFieldInContents("DATE", listInput, minIndex, maxIndex);
         MyDate unionDay = null;
         try {
             unionDay = (MyDate) MyDate.Mydate(date);
         } catch (Exception e) {
-            logger.debug("Failed to parse the union date of " + contents.get(minIndex).getFieldName(), e);
+            logger.debug("Failed to parse the union date of " + listInput.get(minIndex).getFieldName(), e);
         }
         return unionDay;
     }
 
     /**
-     * Function parseUnionTown : find town date from parameter indexes
+     * Function parseUnionTown : return the town of the union given a list and indexes to browse for
      *
+     * @param listInput
      * @param minIndex
      * @param maxIndex
-     * @return Town found
+     * @return
      */
-    protected Town parseUnionTown(int minIndex, int maxIndex) {
+    protected Town parseUnionTown(ArrayList<ParsingStructure> listInput, int minIndex, int maxIndex) {
         Town marriageTown = null;
         try {
-            marriageTown = new Town(findFieldInContents("PLAC", minIndex, maxIndex));
+            marriageTown = new Town(findFieldInContents("PLAC", listInput, minIndex, maxIndex));
         } catch (Exception e) {
-            logger.debug("Failed to parse the marriage city of " + contents.get(minIndex).getFieldName(), e);
+            logger.debug("Failed to parse the marriage city of " + listInput.get(minIndex).getFieldName(), e);
         }
         return marriageTown;
     }
 
     /**
-     * Function parseMarriage : find the marriage date and town, and add the union to the partners
+     * Function parseMarriage : parse the marriage and add it to the partners
      *
-     * @param partner1  Person
-     * @param partner2  Person
-     * @param unionType enum
-     * @param minIndex
-     * @param maxIndex
-     * @throws ParsingException if it could not parse the file fields
+     * @param partner1
+     * @param partner2
+     * @param listInput      the input data
+     * @param unionTypeInput
+     * @throws ParsingException
      */
-    protected void parseMarriage(Person partner1, Person partner2, UnionType unionType, int minIndex, int maxIndex) throws ParsingException {
-        MyDate marriageDay = parseUnionDate(minIndex, maxIndex);
-        Town marriageTown = parseUnionTown(minIndex, maxIndex);
+    protected void parseMarriage(Person partner1, Person partner2, ArrayList<ParsingStructure> listInput, UnionType unionTypeInput) throws ParsingException {
+        int minIndex = findIndexIdString("MARR", listInput);
+        MyDate marriageDay = null;
+        Town marriageTown = null;
+        UnionType unionType = unionTypeInput;
+        if (minIndex != -1) {
+            marriageDay = parseUnionDate(listInput, minIndex, listInput.size());
+            marriageTown = parseUnionTown(listInput, minIndex, listInput.size());
+        } else {
+            int index = findIndexIdString("_MARR", listInput);
+            if (index != -1) {
+                unionType = UnionType.COHABITATION;
+            }
+        }
         if ((partner2 != null) && (partner1 != null)) {
             Union union = new Union(partner1, partner2, marriageDay, marriageTown, unionType);
             partner1.addUnion(union);
             partner2.addUnion(union);
         } else {
-            logger.debug("Failed to find the people linked to the marriage " + contents.get(minIndex).getFieldName());
+            logger.debug("Failed to find the people linked to the marriage " + listInput.toString());
         }
     }
 
     /**
-     * Function parseDivorce : find the divorce date and town, and add the union to the partners
+     * Function parseDivorce : parse the divorce and add it to the partners
      *
      * @param partner1
      * @param partner2
+     * @param listInput the input data
      * @param minIndex
-     * @param maxIndex
-     * @throws ParsingException if it could not parse the file fields
+     * @throws ParsingException
      */
-    protected void parseDivorce(Person partner1, Person partner2, int minIndex, int maxIndex) throws ParsingException {
+    protected void parseDivorce(Person partner1, Person partner2, ArrayList<ParsingStructure> listInput, int minIndex) throws ParsingException {
         if (minIndex != -1) {
-            MyDate divorceDay = parseUnionDate(minIndex, maxIndex);
-            Town divorceTown = parseUnionTown(minIndex, maxIndex);
+            MyDate divorceDay = parseUnionDate(listInput, minIndex, listInput.size());
+            Town divorceTown = parseUnionTown(listInput, minIndex, listInput.size());
             Union divorce = new Union(partner1, partner2, divorceDay, divorceTown, UnionType.DIVORCE);
             partner1.addUnion(divorce);
             partner2.addUnion(divorce);
@@ -363,17 +348,16 @@ public class Genealogy {
     }
 
     /**
-     * Function parseChildren : find the children related to the partners and add those children to the partners
+     * Function parseChildren : parse the children of the family and add them to the partner(s)
      *
      * @param partner1
      * @param partner2
-     * @param minIndex
-     * @param maxIndex
+     * @param listInput the input data
      */
-    protected void parseChildren(Person partner1, Person partner2, int minIndex, int maxIndex) {
-        for (int i = minIndex; i < maxIndex; i++) {
-            if (contents.get(i).getFieldName().equals("CHIL")) {
-                String childId = contents.get(i).getFieldValue();
+    protected void parseChildren(Person partner1, Person partner2, ArrayList<ParsingStructure> listInput) {
+        for (ParsingStructure parsingStructure : listInput) {
+            if (parsingStructure.getFieldName().equals("CHIL")) {
+                String childId = parsingStructure.getFieldValue();
                 Person child = findPersonById(childId);
                 if (partner1 != null) {
                     partner1.addChildren(child);
@@ -388,142 +372,139 @@ public class Genealogy {
     }
 
     /**
-     * Function parsePerson : find the person from the index and the field, HUSB for husband, WIFE for wife
+     * Function getPersonByPartner : find the id of the person from the list and returns the person linked in persons
      *
-     * @param minIndex
-     * @param maxIndex
      * @param field
+     * @param listInput
      * @return
-     * @throws ParsingException if it could not parse the file fields
+     * @throws ParsingException
      */
-    protected Person parsePerson(int minIndex, int maxIndex, String field) throws ParsingException {
-        String partnerId = findFieldInContents(field, minIndex, maxIndex);
+    protected Person getPersonByPartner(String field, ArrayList<ParsingStructure> listInput) throws ParsingException {
+        String partnerId = findFieldInContents(field, listInput);
         return findPersonById(partnerId);
     }
 
+
     /**
-     * Function parsePartner1 : call findPartner for HUSB and then WIFE if no result are shown
+     * Function findPartner1 : return the first partner of the family
      *
-     * @param minIndex
-     * @param maxIndex
+     * @param listInput
      * @return
-     * @throws ParsingException if it could not parse the file fields
+     * @throws ParsingException
      */
-    protected Person parsePartner1(int minIndex, int maxIndex) throws ParsingException {
-        Person person = parsePerson(minIndex, maxIndex, "HUSB");
+    protected Person findPartner1(ArrayList<ParsingStructure> listInput) throws ParsingException {
+        Person person = getPersonByPartner("HUSB", listInput);
         if (person != null) {
-            parsePerson(minIndex, maxIndex, "WIFE");
+            getPersonByPartner("WIFE", listInput);
         }
         return person;
     }
 
     /**
-     * Function parsePartner2 : call findPartner for WIFE and then HUSB if no result are shown
+     * Function findPartner1 : return the second partner of the family
      *
-     * @param minIndex
-     * @param maxIndex
+     * @param listInput
      * @return
-     * @throws ParsingException if it could not parse the file fields
+     * @throws ParsingException
      */
-    protected Person parsePartner2(int minIndex, int maxIndex) throws ParsingException {
-        Person person = parsePerson(minIndex, maxIndex, "WIFE");
+    protected Person findPartner2(ArrayList<ParsingStructure> listInput) throws ParsingException {
+        Person person = getPersonByPartner("WIFE", listInput);
         if (person != null) {
-            parsePerson(minIndex, maxIndex, "HUSB");
+            getPersonByPartner("HUSB", listInput);
         }
         return person;
     }
 
     /**
-     * Function parseMarriageContents : find the partners, their unions and children
+     * Function parseFamily : find the partners, their union, divorce and children
      *
-     * @param minIndex
-     * @param maxIndex
-     * @throws ParsingException if it could not parse the file fields
+     * @param listInput
+     * @throws ParsingException
      */
-    protected void parseMarriageContents(int minIndex, int maxIndex) throws ParsingException {
-        Person partner1 = parsePartner1(minIndex, maxIndex);
-        Person partner2 = parsePartner2(minIndex, maxIndex);
+    protected void parseFamily(ArrayList<ParsingStructure> listInput) throws ParsingException {
+        Person partner1 = findPartner1(listInput);
+        Person partner2 = findPartner2(listInput);
 
         //Init unionType and divorce
-        String statusString = findFieldInContents("_STAT", minIndex, maxIndex);
+        String statusString = findFieldInContents("_STAT", listInput);
         int indexDivorce = -1;
         if (StringUtils.isBlank(statusString)) {
-            indexDivorce = findIndexIdString("DIV", minIndex, maxIndex);
+            indexDivorce = findIndexIdString("DIV", listInput);
         }
 
-        parseMarriage(partner1, partner2, parseUnionType(statusString), minIndex, maxIndex);
-        parseDivorce(partner1, partner2, indexDivorce, maxIndex);
-        parseChildren(partner1, partner2, minIndex, maxIndex);
+        parseMarriage(partner1, partner2, listInput, parseUnionType(statusString));
+        parseDivorce(partner1, partner2, listInput, indexDivorce);
+        parseChildren(partner1, partner2, listInput);
     }
 
-    /**
-     * Function findFieldInContents : call findFieldInContents with no index reductions,
-     * find the parameter String field in contents list
-     *
-     * @param field
-     * @return
-     * @throws ParsingException if the offset provided is too big
-     */
-    public String findFieldInContents(String field) throws ParsingException {
-        return findFieldInContents(field, 0, contents.size());
-    }
 
     /**
-     * Function findFieldInContents : find the parameter String field in contents list with offset and maxvalue
+     * Function findFieldInContents : find fieldId in the parametered list
      *
-     * @param field    the string to find
-     * @param offset
-     * @param maxValue
+     * @param fieldId
+     * @param listInput
      * @return
-     * @throws ParsingException if the offset is too big
      */
-    public String findFieldInContents(String field, int offset, int maxValue) throws ParsingException {
-        if (offset > contents.size()) {
-            throw new ParsingException("Could not find field " + field + " , index " + offset + " is too big for contents size of " + contents.size());
-        }
-        for (int i = offset; i < maxValue; i++) {
-            if (contents.get(i).getFieldName().equals(field)) {
-                return contents.get(i).getFieldValue();
+    public String findFieldInContents(String fieldId, ArrayList<ParsingStructure> listInput) {
+        for (ParsingStructure parsingStructure : listInput) {
+            if (StringUtils.equals(fieldId, parsingStructure.getFieldName())) {
+                return parsingStructure.getFieldValue();
             }
         }
         return "";
     }
 
     /**
-     * Function findIndexNumberInteger : find the parameter int number in contents list with offset and maxvalue
+     * Function findFieldInContents : find field in input list with offset and maximum index
      *
-     * @param number
+     * @param fieldId
+     * @param listInput
      * @param offset
+     * @param maxIndexInput
      * @return
-     * @throws ParsingException
      */
-    public int findIndexNumberInteger(int number, int offset) throws ParsingException {
-        if (offset > contents.size()) {
-            throw new ParsingException("Could not find number " + number + " , index " + offset + " is too big for contents size of " + contents.size());
+    public String findFieldInContents(String fieldId, ArrayList<ParsingStructure> listInput, int offset, int maxIndexInput) {
+        int maxIndex = maxIndexInput;
+        if (maxIndex > listInput.size()) {
+            maxIndex = listInput.size();
         }
-        for (int i = offset; i < contents.size(); i++) {
-            if (contents.get(i).getNumber() == number) {
-                return i;
+        for (int i = offset; i < maxIndex; i++) {
+            ParsingStructure parsingStructure = listInput.get(i);
+            if (StringUtils.equals(fieldId, parsingStructure.getFieldName())) {
+                return parsingStructure.getFieldValue();
             }
         }
-        return -1;
+        return "";
     }
 
     /**
-     * Function findIndexIdString : find the parameter String id in contents list with offset and maxvalue
+     * Function findIndexIdString : find the list index of the id from the input list, call findIndexIdString wjtb indexes
      *
-     * @param id       to search
-     * @param offset   the index to start with
-     * @param maxIndex the index to stop
+     * @param id
+     * @param listInput
      * @return
      * @throws ParsingException
      */
-    public int findIndexIdString(String id, int offset, int maxIndex) throws ParsingException {
-        if (offset > contents.size()) {
+    public int findIndexIdString(String id, ArrayList<ParsingStructure> listInput) throws ParsingException {
+        return findIndexIdString(id, listInput, 0, listInput.size());
+    }
+
+    /**
+     * Function findIndexIdString : find the list index of the id from the input list with indexes
+     *
+     * @param id
+     * @param listInput
+     * @param offset
+     * @param maxIndex
+     * @return
+     * @throws ParsingException
+     */
+    public int findIndexIdString(String id, ArrayList<ParsingStructure> listInput, int offset, int maxIndex) throws ParsingException {
+        if (offset > listInput.size()) {
             throw new ParsingException("Could not find id " + id + " , index " + offset + " is too big for contents size of " + contents.size());
         }
         for (int i = offset; i < maxIndex; i++) {
-            if (contents.get(i).getFieldName().equals(id)) {
+            if (listInput.get(i).getFieldName().equals(id)) {
                 return i;
             }
         }

@@ -26,7 +26,7 @@ public class ChristeningTest {
     @Test
     public void toStringPrettyPrintTest() throws ParsingException, ParseException {
         Genealogy genealogy = new Genealogy();
-        Person person = new Person(genealogy, null, -1, -1);
+        Person person = new Person(genealogy, null);
         Christening christening = new Christening(person, new FullDate("05 MAR 2020"), new Town("Saintes", "Charente-Maritime"), "Super Parrain, Super Marraine", "Cathédrale de Reims");
         assertEquals("christened on 05/03/2020 at the place of 'Cathédrale de Reims' at Saintes (Charente-Maritime) with godparents='Super Parrain, Super Marraine'", christening.toStringPrettyPrint());
     }

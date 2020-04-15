@@ -501,37 +501,27 @@ public class Person {
         return res + "}";
     }
 
-    /**
-     * @param genealogy
-     * @param list
-     * @param offset
-     * @param indexMax
-     * @throws ParsingException if it could not parse the file fields
-     */
-    public Person(Genealogy genealogy, ArrayList<ParsingStructure> list, int offset, int indexMax) throws ParsingException {
+    public Person(Genealogy genealogy, ArrayList<ParsingStructure> list) throws ParsingException {
         if (list != null) {
 
-            int index = offset;
-            if (offset >= indexMax) {
-                logger.error("Erreur dans le parsing de personne, offset >= indexMax");
-                return;
-            }
+            int index = 0;
+            int indexMax = list.size();
             String newId = list.get(index++).getFieldName();
             if (newId.contains("@I")) {
                 id = newId;
             } else {
                 id = "";
             }
-            name = genealogy.findFieldInContents("SURN", index++, indexMax);
-            surname = genealogy.findFieldInContents("GIVN", index++, indexMax);
+            name = genealogy.findFieldInContents("SURN", list);
+            surname = genealogy.findFieldInContents("GIVN", list);
             if (StringUtils.isEmpty(name) && StringUtils.isEmpty(surname)) {
-                name = genealogy.findFieldInContents("NAME", offset - 1, indexMax);
+                name = genealogy.findFieldInContents("NAME", list);
             }
-            int indexBirthday = genealogy.findIndexIdString("BIRT", index, indexMax);
+            int indexBirthday = genealogy.findIndexIdString("BIRT", list, index, indexMax);
 
             if (indexBirthday != -1) {
                 indexBirthday++;
-                String input = genealogy.findFieldInContents("DATE", indexBirthday, indexBirthday + 3);
+                String input = genealogy.findFieldInContents("DATE", list, indexBirthday, indexBirthday + 3);
                 MyDate birthDay = null;
                 try {
                     birthDay = (MyDate) MyDate.Mydate(input);
@@ -541,18 +531,18 @@ public class Person {
 
                 Town birthTown = null;
                 try {
-                    birthTown = new Town(genealogy.findFieldInContents("PLAC", indexBirthday, indexBirthday + 3));
+                    birthTown = new Town(genealogy.findFieldInContents("PLAC", list, indexBirthday, indexBirthday + 3));
                 } catch (Exception e) {
                     logger.debug("Impossible de parser la ville de naissance de " + id, e);
                 }
                 birth = new Birth(this, birthDay, birthTown);
             }
 
-            int indexChristening = genealogy.findIndexIdString("CHR", index, indexMax);
+            int indexChristening = genealogy.findIndexIdString("CHR", list, index, indexMax);
 
             if (indexChristening != -1) {
                 indexChristening++;
-                String input = genealogy.findFieldInContents("DATE", indexChristening, indexChristening + 5);
+                String input = genealogy.findFieldInContents("DATE", list, indexChristening, indexChristening + 5);
                 MyDate christeningDay = null;
                 try {
                     christeningDay = (MyDate) MyDate.Mydate(input);
@@ -563,37 +553,37 @@ public class Person {
                 //christening Town
                 Town ChristeningTown = null;
                 try {
-                    ChristeningTown = new Town(genealogy.findFieldInContents("PLAC", indexChristening, indexChristening + 5));
+                    ChristeningTown = new Town(genealogy.findFieldInContents("PLAC", list, indexChristening, indexChristening + 5));
                 } catch (Exception e) {
                     logger.debug("Impossible de parser la ville de baptème de " + id, e);
                 }
                 //christening place
                 String christeningPlace = null;
                 try {
-                    christeningPlace = genealogy.findFieldInContents("ADDR", indexChristening, indexChristening + 5);
+                    christeningPlace = genealogy.findFieldInContents("ADDR", list);
                 } catch (Exception e) {
                     logger.debug("Impossible de parser le lieu du baptème de " + id, e);
                 }
                 //godparents
                 String godParents = null;
                 try {
-                    godParents = genealogy.findFieldInContents("_GODP", indexChristening, indexChristening + 5);
+                    godParents = genealogy.findFieldInContents("_GODP", list);
                 } catch (Exception e) {
                     logger.debug("Impossible de trouver les parrains et marraines " + id, e);
                 }
                 christening = new Christening(this, christeningDay, ChristeningTown, godParents, christeningPlace);
             }
 
-            sex = parseSex(genealogy.findFieldInContents("SEX", offset, indexMax));
-            profession = genealogy.findFieldInContents("OCCU", offset, indexMax);
-            comments = genealogy.findFieldInContents("NOTE", offset, indexMax);
-            pdfStructure = PDFStructure.parsePDFStucture(comments, id);
+            sex = parseSex(genealogy.findFieldInContents("SEX", list));
+            profession = genealogy.findFieldInContents("OCCU", list);
+            comments = genealogy.findFieldInContents("NOTE", list);
+            //pdfStructure = PDFStructure.parsePDFStucture(comments, id);
 
-            int indexDeath = genealogy.findIndexIdString("DEAT", index, indexMax);
+            int indexDeath = genealogy.findIndexIdString("DEAT", list, index, indexMax);
 
             if (indexDeath != -1) {
                 indexDeath++;
-                String input = genealogy.findFieldInContents("DATE", indexDeath, indexDeath + 3);
+                String input = genealogy.findFieldInContents("DATE", list, indexDeath, indexDeath + 3);
                 MyDate deathDay = null;
                 try {
                     deathDay = (MyDate) MyDate.Mydate(input);
@@ -603,7 +593,7 @@ public class Person {
 
                 Town deathTown = null;
                 try {
-                    deathTown = new Town(genealogy.findFieldInContents("PLAC", indexDeath, indexDeath + 3));
+                    deathTown = new Town(genealogy.findFieldInContents("PLAC", list, indexDeath, indexDeath + 3));
                 } catch (Exception e) {
                     logger.debug("Impossible de parser la ville de décès de " + id, e);
                 }

@@ -2,12 +2,15 @@ package Genealogy.Parsing;
 
 import Genealogy.Model.Exception.ParsingException;
 import Genealogy.Model.Gedcom.Genealogy;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * MyGedcomReader class : read a Gedcom file
@@ -24,29 +27,46 @@ public class MyGedcomReader {
      */
     public Genealogy read(String path) throws IOException, ParsingException {
         Genealogy genealogy = new Genealogy();
+        HashMap<String, ArrayList<ParsingStructure>> contents = new LinkedHashMap<>();
         ArrayList<ParsingStructure> parsingStructureList = new ArrayList<>();
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path), "ISO8859_1"));
         String sCurrentLine;
+        String idObject = "HEAD";
 
         //Reading all the lines
         while ((sCurrentLine = br.readLine()) != null) {
             String[] temp = sCurrentLine.split(" ");
-            if (parsingStructureList.isEmpty()) {
-                temp = sCurrentLine.split(" ");
+            String fieldValue = "";
+            //assign temp[2+] in fieldValue
+            if (temp.length > 3) {
+                fieldValue = temp[2];
+                for (int i = 3; i < temp.length; i++) {
+                    fieldValue += " " + temp[i];
+                }
             }
-            if (temp.length == 2) {
-                parsingStructureList.add(new ParsingStructure(Integer.parseInt("" + temp[0]), temp[1], ""));
-            } else if (temp.length > 2) {
-                String value = temp[0];
-                String id = temp[1];
-                int offset = value.length() + 1 + id.length() + 1;
-                ParsingStructure parsingStructure = new ParsingStructure(Integer.parseInt(value), id, sCurrentLine.substring(offset));
-                parsingStructureList.add(parsingStructure);
+            if (temp.length >= 2) {
+                int number = Integer.parseInt(temp[0]);
+                String fieldName = temp[1];
+                if (!StringUtils.isBlank(fieldName) && temp.length == 3) {
+                    fieldValue = temp[2];
+                }
+                if (number == 0 && !"HEAD".equals(fieldName)) {
+                    //add new element
+                    contents.put(idObject, parsingStructureList);
+                    //init new element and get id
+                    idObject = fieldName.replace("@", "");
+                    parsingStructureList = new ArrayList<>();
+                }
+                parsingStructureList.add(new ParsingStructure(number, fieldName, fieldValue));
             } else {
-                throw new ParsingException("Erreur parsing the Gedcom file : the number of lines is incorrect " + sCurrentLine);
+                throw new ParsingException("Erreur parsing the gedcom file : the number of fields is incorrect " + sCurrentLine);
             }
         }
-        genealogy.setContents(parsingStructureList);
+        //add last block
+        if (!"HEAD".equals(idObject)) {
+            contents.put(idObject, parsingStructureList);
+        }
+        genealogy.setContents(contents);
         return genealogy;
     }
 }

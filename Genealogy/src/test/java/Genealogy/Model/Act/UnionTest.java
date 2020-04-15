@@ -29,8 +29,8 @@ public class UnionTest {
     public void toStringPrettyPrintTest() throws ParsingException, ParseException, NoSuchFieldException, IllegalAccessException {
         //Init
         Genealogy genealogy = new Genealogy();
-        Person person = new Person(genealogy, null, -1, -1);
-        Person partner = new Person(genealogy, null, -1, -1);
+        Person person = new Person(genealogy, null);
+        Person partner = new Person(genealogy, null);
         Union union = new Union(person, partner, new FullDate("05 MAR 2020"), new Town("Saintes", "Charente-Maritime"), UnionType.HETERO_MAR);
 
         //Reflection init
@@ -67,9 +67,9 @@ public class UnionTest {
     public void getOtherPersonTestPerson() throws ParsingException, NoSuchFieldException, ParseException, IllegalAccessException {
         //Init
         Genealogy genealogy = new Genealogy();
-        Person person = new Person(genealogy, null, -1, -1);
-        Person partner = new Person(genealogy, null, -1, -1);
-        Person otherPerson = new Person(genealogy, null, -1, -1);
+        Person person = new Person(genealogy, null);
+        Person partner = new Person(genealogy, null);
+        Person otherPerson = new Person(genealogy, null);
         Union union = new Union(person, partner, new FullDate("05 MAR 2020"), new Town("Saintes", "Charente-Maritime"), UnionType.HETERO_MAR);
 
         //Reflection init
@@ -98,8 +98,8 @@ public class UnionTest {
     public void testGetOtherPersonTestId() throws ParsingException, ParseException, NoSuchFieldException, IllegalAccessException {
         //Init
         Genealogy genealogy = new Genealogy();
-        Person person = new Person(genealogy, null, -1, -1);
-        Person partner = new Person(genealogy, null, -1, -1);
+        Person person = new Person(genealogy, null);
+        Person partner = new Person(genealogy, null);
         Union union = new Union(person, partner, new FullDate("05 MAR 2020"), new Town("Saintes", "Charente-Maritime"), UnionType.HETERO_MAR);
 
         //Reflection init
@@ -126,8 +126,8 @@ public class UnionTest {
     public void getNecessaryResearchTest() throws ParsingException, ParseException {
         //Init
         Genealogy genealogy = new Genealogy();
-        Person person = new Person(genealogy, null, -1, -1);
-        Person partner = new Person(genealogy, null, -1, -1);
+        Person person = new Person(genealogy, null);
+        Person partner = new Person(genealogy, null);
         Union union1 = new Union(person, partner, new FullDate("05 MAR 2020"), new Town("Saintes", "Charente-Maritime"), UnionType.HETERO_MAR);
         Union union2 = new Union(null, partner, new FullDate("05 MAR 2020"), new Town("Saintes", "Charente-Maritime"), UnionType.HETERO_MAR);
         Union union3 = new Union(person, null, new FullDate("05 MAR 2020"), new Town("Saintes", "Charente-Maritime"), UnionType.HETERO_MAR);

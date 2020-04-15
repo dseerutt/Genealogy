@@ -345,7 +345,6 @@ public class MainScreen extends JFrame {
                 WelcomeScreen welcomeScreen = new WelcomeScreen("Ma généalogie");
             }
         });
-
         carteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

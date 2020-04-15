@@ -26,7 +26,7 @@ public class DeathTest {
     @Test
     public void toStringPrettyPrintTest() throws ParsingException, ParseException {
         Genealogy genealogy = new Genealogy();
-        Person person = new Person(genealogy, null, -1, -1);
+        Person person = new Person(genealogy, null);
         Death death = new Death(person, new FullDate("05 MAR 2020"), new Town("Saintes", "Charente-Maritime"));
         assertEquals("died on 05/03/2020 at Saintes (Charente-Maritime)", death.toStringPrettyPrint());
     }

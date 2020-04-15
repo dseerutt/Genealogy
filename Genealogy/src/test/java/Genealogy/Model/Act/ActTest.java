@@ -29,7 +29,7 @@ public class ActTest {
     public void getNecessaryResearchTest() throws ParsingException, ParseException {
         //Init
         Genealogy genealogy = new Genealogy();
-        Person person = new Person(genealogy, null, -1, -1);
+        Person person = new Person(genealogy, null);
         Act birth1 = new Birth(person, new FullDate("05 MAR 2020"), new Town("Saintes", "Charente-Maritime"));
         Act birth2 = new Birth(null, new FullDate("05 MAR 2020"), new Town("Saintes", "Charente-Maritime"));
         Act birth3 = new Birth(person, null, new Town("Saintes", "Charente-Maritime"));
@@ -54,11 +54,11 @@ public class ActTest {
     public void minimumYearTest() throws ParsingException, ParseException {
         //init
         Genealogy genealogy = new Genealogy();
-        Person person1 = new Person(genealogy, null, -1, -1);
-        Person person2 = new Person(genealogy, null, -1, -1);
-        Person person3 = new Person(genealogy, null, -1, -1);
-        Person person4 = new Person(genealogy, null, -1, -1);
-        Person person5 = new Person(genealogy, null, -1, -1);
+        Person person1 = new Person(genealogy, null);
+        Person person2 = new Person(genealogy, null);
+        Person person3 = new Person(genealogy, null);
+        Person person4 = new Person(genealogy, null);
+        Person person5 = new Person(genealogy, null);
 
         //Verification
         assertEquals(LocalDate.now().getYear(), Act.getMinimumYear());

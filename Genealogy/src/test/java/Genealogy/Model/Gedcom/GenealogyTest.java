@@ -34,7 +34,7 @@ public class GenealogyTest {
         //init
         Genealogy genealogy = new Genealogy();
         ArrayList<Person> persons = new ArrayList<>();
-        Person person1 = new Person(genealogy, null, -1, -1);
+        Person person1 = new Person(genealogy, null);
 
         //Reflection init
         Field personsField = genealogy.getClass().getDeclaredField("persons");
@@ -44,13 +44,13 @@ public class GenealogyTest {
         //Reflection set
         idField.set(person1, "1");
         persons.add(person1);
-        Person person2 = new Person(genealogy, null, -1, -1);
+        Person person2 = new Person(genealogy, null);
         idField.set(person2, "2");
         persons.add(person2);
-        Person person3 = new Person(genealogy, null, -1, -1);
+        Person person3 = new Person(genealogy, null);
         idField.set(person3, "3");
         persons.add(person3);
-        Person person4 = new Person(genealogy, null, -1, -1);
+        Person person4 = new Person(genealogy, null);
         idField.set(person4, "4");
         persons.add(person4);
         personsField.set(genealogy, persons);
@@ -78,14 +78,14 @@ public class GenealogyTest {
     public void setDirectAncestorsTest() throws ParsingException {
         //init
         Genealogy genealogy = new Genealogy();
-        Person person1 = new Person(genealogy, null, -1, -1);
-        Person person2 = new Person(genealogy, null, -1, -1);
-        Person person3 = new Person(genealogy, null, -1, -1);
-        Person person4 = new Person(genealogy, null, -1, -1);
-        Person person5 = new Person(genealogy, null, -1, -1);
-        Person person6 = new Person(genealogy, null, -1, -1);
-        Person person7 = new Person(genealogy, null, -1, -1);
-        Person person8 = new Person(genealogy, null, -1, -1);
+        Person person1 = new Person(genealogy, null);
+        Person person2 = new Person(genealogy, null);
+        Person person3 = new Person(genealogy, null);
+        Person person4 = new Person(genealogy, null);
+        Person person5 = new Person(genealogy, null);
+        Person person6 = new Person(genealogy, null);
+        Person person7 = new Person(genealogy, null);
+        Person person8 = new Person(genealogy, null);
         person1.setFather(person2);
         person2.setFather(person3);
         person3.setFather(person4);
@@ -124,8 +124,8 @@ public class GenealogyTest {
         Genealogy.genealogy = myGedcomReader.read(file.getAbsolutePath());
         Genealogy.genealogy.parseContents();
 
-        //control
-        assertEquals(1060, Genealogy.genealogy.getContents().size());
+        //control - 1 Header + 59 Persons + 23 Families + 7 Locations + 1 Author + 1 EOF
+        assertEquals(92, Genealogy.genealogy.getContents().size());
         assertEquals("demo data", Genealogy.genealogy.getAuthor());
         assertEquals(59, Genealogy.genealogy.getPersons().size());
         assertEquals("Person_I1{woman, name='...', surname='Martha', HETERO_MAR with Konrad Ferdinand Miller on 23/05/1874, directAncestor, child=[Gesine Miller]}", Genealogy.genealogy.getPersons().get(0).toString());
@@ -190,7 +190,7 @@ public class GenealogyTest {
     }
 
     /**
-     * writeFile integration test, parse inputfile and write it, comparing the files with md5sum
+     * writeFile integration test, parse input file and write it, comparing the files with md5sum
      *
      * @throws IOException
      * @throws ParsingException

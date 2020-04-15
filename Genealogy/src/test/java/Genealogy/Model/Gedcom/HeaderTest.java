@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,15 +28,17 @@ public class HeaderTest {
     public void HeaderTest() throws ParsingException, ParseException {
         //init
         Genealogy genealogy = new Genealogy();
-        ArrayList<ParsingStructure> contents = new ArrayList<>();
-        contents.add(new ParsingStructure(0, "HEAD", null));
-        contents.add(new ParsingStructure(1, "SOUR", "AHN"));
-        contents.add(new ParsingStructure(2, "VERS", "2.99e"));
-        contents.add(new ParsingStructure(2, "NAME", "Ahnenblatt"));
-        contents.add(new ParsingStructure(2, "CORP", "Dirk Boettcher"));
-        contents.add(new ParsingStructure(1, "DATE", "8 APR 2020"));
-        contents.add(new ParsingStructure(2, "TIME", "18:17:40"));
-        contents.add(new ParsingStructure(2, "VERS", "5.5.1"));
+        ArrayList<ParsingStructure> headerList = new ArrayList<>();
+        headerList.add(new ParsingStructure(0, "HEAD", null));
+        headerList.add(new ParsingStructure(1, "SOUR", "AHN"));
+        headerList.add(new ParsingStructure(2, "VERS", "2.99e"));
+        headerList.add(new ParsingStructure(2, "NAME", "Ahnenblatt"));
+        headerList.add(new ParsingStructure(2, "CORP", "Dirk Boettcher"));
+        headerList.add(new ParsingStructure(1, "DATE", "8 APR 2020"));
+        headerList.add(new ParsingStructure(2, "TIME", "18:17:40"));
+        headerList.add(new ParsingStructure(2, "VERS", "5.5.1"));
+        HashMap<String, ArrayList<ParsingStructure>> contents = new HashMap<>();
+        contents.put("HEAD", headerList);
         genealogy.setContents(contents);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy hh:mm:ss", Locale.ENGLISH);
         Date lastModified = simpleDateFormat.parse("8 APR 2020 18:17:40");
