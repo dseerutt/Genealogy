@@ -1,6 +1,6 @@
 package Genealogy.Model.Gedcom;
 
-import Genealogy.MapViewer.Structures.MapStructure;
+import Genealogy.MapViewer.Structures.Pinpoint;
 import Genealogy.Model.Act.Birth;
 import Genealogy.Model.Act.Christening;
 import Genealogy.Model.Act.Death;
@@ -19,10 +19,14 @@ import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import static Genealogy.MapViewer.Structures.Pinpoint.minimumYear;
+import static Genealogy.Model.Gedcom.Genealogy.findFieldInContents;
+import static Genealogy.Model.Gedcom.Genealogy.findIndexIdString;
+import static Genealogy.Model.Gedcom.Sex.parseSex;
 
 /**
  * Class Person : person object from genealogical tree
@@ -101,102 +105,381 @@ public class Person {
      */
     final static Logger logger = LogManager.getLogger(Person.class);
     /**
-     * Map of list of MapStructures (name, age, town) per year
+     * Map of list of Pinpoints (name, age, town) per year
      */
-    private static HashMap<Integer, ArrayList<MapStructure>> periods = new HashMap<>();
+    private static HashMap<Integer, ArrayList<Pinpoint>> pinpointsYearMap = new HashMap<>();
     /**
      * Map of list of MapStructures (name, age, town) per year only for direct ancestors
      */
-    private static HashMap<Integer, ArrayList<MapStructure>> periodsDirectAncestors = new HashMap<>();
-    private static int minimumPeriod = 10000;
+    private static HashMap<Integer, ArrayList<Pinpoint>> pinpointsYearMapDirectAncestors = new HashMap<>();
 
-    public static HashMap<Integer, ArrayList<MapStructure>> getPeriods() {
-        return periods;
+    /**
+     * Function initSimpleFields : init name, surname, id, sex, profession and comments from input list
+     *
+     * @param parsingStructurelist
+     */
+    private void initSimpleFields(ArrayList<ParsingStructure> parsingStructurelist) {
+        if (parsingStructurelist != null) {
+            String newId = parsingStructurelist.get(0).getFieldName();
+            if (newId.contains("@I")) {
+                id = newId;
+            } else {
+                id = "";
+            }
+            name = findFieldInContents("SURN", parsingStructurelist);
+            surname = findFieldInContents("GIVN", parsingStructurelist);
+            if (StringUtils.isEmpty(name) && StringUtils.isEmpty(surname)) {
+                name = findFieldInContents("NAME", parsingStructurelist);
+            }
+            sex = parseSex(findFieldInContents("SEX", parsingStructurelist));
+            profession = findFieldInContents("OCCU", parsingStructurelist);
+            comments = findFieldInContents("NOTE", parsingStructurelist);
+        }
     }
 
-    public static HashMap<Integer, ArrayList<MapStructure>> getPeriodsDirectAncestors() {
-        return periodsDirectAncestors;
+    /**
+     * Person constructor from the list of parsingStructures, call the initialization of fields,
+     * birth, christening, death and calculate age
+     *
+     * @param parsingStructurelist
+     * @throws ParsingException
+     */
+    public Person(ArrayList<ParsingStructure> parsingStructurelist) throws ParsingException {
+        initSimpleFields(parsingStructurelist);
+        initBirth(parsingStructurelist);
+        initChristening(parsingStructurelist);
+        initDeath(parsingStructurelist);
+        calculateAge();
     }
 
+    /**
+     * Function findDate : find the date from the input list given the index and maxIndex
+     * The string type of search is used in the failure message
+     *
+     * @param parsingStructurelist
+     * @param index
+     * @param maxIndex
+     * @param typeSearch
+     * @return
+     */
+    private MyDate findDate(ArrayList<ParsingStructure> parsingStructurelist, int index, int maxIndex, String typeSearch) {
+        String input = findFieldInContents("DATE", parsingStructurelist, index, maxIndex);
+        MyDate birthDay = null;
+        try {
+            birthDay = (MyDate) MyDate.Mydate(input);
+        } catch (Exception e) {
+            logger.debug("Failed to parse the " + typeSearch + " date of " + id, e);
+        }
+        return birthDay;
+    }
+
+    /**
+     * Function findTown : find the town from the input list given the index and maxIndex
+     * The string type of search is used in the failure message
+     *
+     * @param parsingStructurelist
+     * @param index
+     * @param maxIndex
+     * @param typeSearch
+     * @return
+     */
+    private Town findTown(ArrayList<ParsingStructure> parsingStructurelist, int index, int maxIndex, String typeSearch) {
+        Town town = null;
+        try {
+            town = new Town(findFieldInContents("PLAC", parsingStructurelist, index, maxIndex));
+        } catch (Exception e) {
+            logger.debug("Failed to parse the " + typeSearch + " town of " + id, e);
+        }
+        return town;
+    }
+
+    /**
+     * Function initBirth : find the birth date and town and initialize it if found
+     *
+     * @param parsingStructurelist
+     * @throws ParsingException
+     */
+    private void initBirth(ArrayList<ParsingStructure> parsingStructurelist) throws ParsingException {
+        if (parsingStructurelist != null) {
+            int indexBirthday = findIndexIdString("BIRT", parsingStructurelist);
+            if (indexBirthday != -1) {
+                indexBirthday++;
+                MyDate birthDay = findDate(parsingStructurelist, indexBirthday, indexBirthday + 3, "birth");
+                Town birthTown = findTown(parsingStructurelist, indexBirthday, indexBirthday + 3, "birth");
+                birth = new Birth(this, birthDay, birthTown);
+            }
+        }
+    }
+
+    /**
+     * Function initDeath : find the death date and town and initialize it if found
+     *
+     * @param parsingStructurelist
+     * @throws ParsingException
+     */
+    private void initDeath(ArrayList<ParsingStructure> parsingStructurelist) throws ParsingException {
+        if (parsingStructurelist != null) {
+            int indexDeath = findIndexIdString("DEAT", parsingStructurelist);
+            if (indexDeath != -1) {
+                indexDeath++;
+                MyDate deathDay = findDate(parsingStructurelist, indexDeath, indexDeath + 3, "death");
+                Town deathTown = findTown(parsingStructurelist, indexDeath, indexDeath + 3, "death");
+                death = new Death(this, deathDay, deathTown);
+            }
+        }
+    }
+
+    /**
+     * Function initChristening : find the christening date, town, place and godparents and initialize it if found
+     *
+     * @param parsingStructurelist
+     * @throws ParsingException
+     */
+    private void initChristening(ArrayList<ParsingStructure> parsingStructurelist) throws ParsingException {
+        if (parsingStructurelist != null) {
+            int indexChristening = findIndexIdString("CHR", parsingStructurelist);
+            if (indexChristening != -1) {
+                indexChristening++;
+                MyDate christeningDay = findDate(parsingStructurelist, indexChristening, indexChristening + 5, "christening");
+                Town ChristeningTown = findTown(parsingStructurelist, indexChristening, indexChristening + 5, "christening");
+                String christeningPlace = findFieldInContents("ADDR", parsingStructurelist);
+                String godParents = findFieldInContents("_GODP", parsingStructurelist);
+                christening = new Christening(this, christeningDay, ChristeningTown, godParents, christeningPlace);
+            }
+        }
+    }
+
+    /**
+     * Function calculateAge : init stillAlive and set age from birth and death.
+     * Set it to -1 if not found birth or death are not found
+     */
+    private void calculateAge() {
+        if ((birth == null) || (death == null)) {
+            age = -1;
+            if ((death == null) && (birth != null) && (birth.getDate() != null) && (AuxMethods.getYear(birth.getDate().getDate()) > 1916)) {
+                stillAlive = true;
+            }
+        } else if ((birth.getDate() == null) || (death.getDate() == null)) {
+            age = -1;
+        } else {
+            Date birthDate = birth.getDate().getDate();
+            Date deathDate = death.getDate().getDate();
+            age = getDiffYears(birthDate, deathDate);
+        }
+    }
+
+    /**
+     * PinpointsYearMap getter
+     *
+     * @return
+     */
+    public static HashMap<Integer, ArrayList<Pinpoint>> getPinpointsYearMap() {
+        return pinpointsYearMap;
+    }
+
+    /**
+     * PinpointsYearMapDirectAncestors getter
+     *
+     * @return
+     */
+    public static HashMap<Integer, ArrayList<Pinpoint>> getPinpointsYearMapDirectAncestors() {
+        return pinpointsYearMapDirectAncestors;
+    }
+
+    /**
+     * StillAlive boolean getter
+     *
+     * @return
+     */
     public boolean isStillAlive() {
         return stillAlive;
     }
 
-    public static Sex parseSex(String s) {
-        switch (s) {
-            case "M":
-                return Sex.MALE;
-            case "F":
-                return Sex.FEMALE;
-            default:
-                return Sex.UNKNOWN;
-        }
-    }
-
+    /**
+     * Age getter
+     *
+     * @return
+     */
     public int getAge() {
         return age;
     }
 
+    /**
+     * Id getter
+     *
+     * @return
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Sex getter
+     *
+     * @return
+     */
     public Sex getSex() {
         return sex;
     }
 
+    /**
+     * Name getter
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Surname getter
+     *
+     * @return
+     */
     public String getSurname() {
         return surname;
     }
 
+    /**
+     * Birth getter
+     *
+     * @return
+     */
     public Birth getBirth() {
         return birth;
     }
 
+    /**
+     * Death getter
+     *
+     * @return
+     */
     public Death getDeath() {
         return death;
     }
 
+    /**
+     * Profession getter
+     *
+     * @return
+     */
     public String getProfession() {
         return profession;
     }
 
+    /**
+     * Comments getter
+     *
+     * @return
+     */
     public String getComments() {
         return comments;
     }
 
-    public void  setComments(String comments) {
+    /**
+     * Comments setter
+     *
+     * @param comments
+     */
+    public void setComments(String comments) {
         this.comments = comments;
     }
 
+    /**
+     * Unions getter
+     *
+     * @return
+     */
     public ArrayList<Union> getUnions() {
         return unions;
     }
 
+    /**
+     * Father getter
+     *
+     * @return
+     */
     public Person getFather() {
         return father;
     }
 
+    /**
+     * Mother getter
+     *
+     * @return
+     */
     public Person getMother() {
         return mother;
     }
 
+    /**
+     * Children getter
+     *
+     * @return
+     */
     public ArrayList<Person> getChildren() {
         return children;
     }
 
+    /**
+     * DirectAncestor boolean getter
+     *
+     * @return
+     */
     public boolean isDirectAncestor() {
         return directAncestor;
     }
 
+    /**
+     * DirectAncestor setter
+     *
+     * @param directAncestor
+     */
     public void setDirectAncestor(boolean directAncestor) {
         this.directAncestor = directAncestor;
     }
 
+    /**
+     * Mother setter
+     *
+     * @param mother
+     */
+    public void setMother(Person mother) {
+        this.mother = mother;
+    }
+
+    /**
+     * Father setter
+     *
+     * @param father
+     */
+    public void setFather(Person father) {
+        this.father = father;
+    }
+
+    /**
+     * Function addUnion : add union input to unions list
+     *
+     * @param union
+     */
+    public void addUnion(Union union) {
+        unions.add(union);
+    }
+
+    /**
+     * Function addChildren : add person input to children list
+     *
+     * @param person
+     */
+    public void addChildren(Person person) {
+        children.add(person);
+    }
+
+    /**
+     * Function getFullName : return surname and name, name only if surname is empty
+     *
+     * @return
+     */
     public String getFullName() {
         if (StringUtils.isEmpty(surname)) {
             return name;
@@ -206,9 +489,9 @@ public class Person {
     }
 
     /**
-     * Fonction getFullNameInverted
+     * Function getFullNameInverted : return name and surname, surname only if name is empty
      *
-     * @return le nom puis le prénom
+     * @return
      */
     public String getFullNameInverted() {
         if (!"".equals(name)) {
@@ -217,6 +500,11 @@ public class Person {
         return surname;
     }
 
+    /**
+     * Function getComparatorName : return name and surname prefixed with z if the name or surname equal ...
+     *
+     * @return
+     */
     public String getComparatorName() {
         String txt = "";
         if (("...".equals(name)) || ("...".equals(surname))) {
@@ -225,34 +513,8 @@ public class Person {
         return txt + name + " " + surname;
     }
 
-    public void initPeriods2(ArrayList<Pair<MyDate, Town>> tempPeriods) {
-        //System.out.println(tempPeriods);
-        if (tempPeriods.size() >= 1) {
-            if (tempPeriods.size() == 1) {
-                Date date = new Date(tempPeriods.get(0).getKey().getDate().getTime());
-                MapStructure mapStructure =
-                        new MapStructure(tempPeriods.get(0).getValue(), getFullName(), getAge(date, 0));
-                addPeriod((int) tempPeriods.get(0).getKey().getYear(), mapStructure);
-            } else {
-                for (int i = 0; i < tempPeriods.size() - 1; i++) {
-                    int date1 = (int) tempPeriods.get(i).getKey().getYear();
-                    int date2 = (int) tempPeriods.get(i + 1).getKey().getYear();
-                    int index = 0;
-                    for (int k = date1; k < date2; k++) {
-                        Date date = new Date(tempPeriods.get(i).getKey().getDate().getTime());
-                        MapStructure mapStructure =
-                                new MapStructure(tempPeriods.get(i).getValue(), getFullName(), getAge(date, index));
-                        addPeriod(k, mapStructure);
-                        //System.out.println(periods);
-                        index++;
-                    }
-                }
-                Date date = new Date(tempPeriods.get(tempPeriods.size() - 1).getKey().getDate().getTime());
-                MapStructure mapStructure =
-                        new MapStructure(tempPeriods.get(tempPeriods.size() - 1).getValue(), getFullName(), getAge(date, 0));
-                addPeriod((int) tempPeriods.get(tempPeriods.size() - 1).getKey().getYear(), mapStructure);
-            }
-        }
+    public void initLifeSpans() {
+        initPeriods2(initPeriods1());
     }
 
     public ArrayList<Pair<MyDate, Town>> initPeriods1() {
@@ -309,6 +571,39 @@ public class Person {
         return tempPeriods;
     }
 
+    public void initPeriods2(ArrayList<Pair<MyDate, Town>> tempPeriods) {
+        if (tempPeriods.size() >= 1) {
+            if (tempPeriods.size() == 1) {
+                Date date = new Date(tempPeriods.get(0).getKey().getDate().getTime());
+                Pinpoint pinPoint =
+                        new Pinpoint(tempPeriods.get(0).getValue(), getFullName(), getAge(date, 0));
+                addPinpoint((int) tempPeriods.get(0).getKey().getYear(), pinPoint);
+            } else {
+                for (int i = 0; i < tempPeriods.size() - 1; i++) {
+                    int date1 = (int) tempPeriods.get(i).getKey().getYear();
+                    int date2 = (int) tempPeriods.get(i + 1).getKey().getYear();
+                    int index = 0;
+                    for (int k = date1; k < date2; k++) {
+                        Date date = new Date(tempPeriods.get(i).getKey().getDate().getTime());
+                        Pinpoint pinPoint =
+                                new Pinpoint(tempPeriods.get(i).getValue(), getFullName(), getAge(date, index));
+                        addPinpoint(k, pinPoint);
+                        index++;
+                    }
+                }
+                Date date = new Date(tempPeriods.get(tempPeriods.size() - 1).getKey().getDate().getTime());
+                Pinpoint pinPoint =
+                        new Pinpoint(tempPeriods.get(tempPeriods.size() - 1).getValue(), getFullName(), getAge(date, 0));
+                addPinpoint((int) tempPeriods.get(tempPeriods.size() - 1).getKey().getYear(), pinPoint);
+            }
+        }
+    }
+
+    /**
+     * Function getProofUnionSize : return the total of proofs from all unions of the person
+     *
+     * @return
+     */
     public int getProofUnionSize() {
         int nbUnions = 0;
         for (Union union : unions) {
@@ -318,23 +613,16 @@ public class Person {
     }
 
     /**
-     * Fonction removePDFStructure
-     * Remove PDFStructure in note
+     * Function removePDFStructure : remove PDFStructure in note
      */
     public void removePDFStructure() {
-        String PDFStructureRegex = "¤PDF" + id + "¤";
-        if (comments.contains(PDFStructureRegex)) {
-            String PDFRegex = "(.*)" + PDFStructureRegex + "{.*}(.*)";
-            Pattern pattern = Pattern.compile(PDFRegex, Pattern.DOTALL);
-            Matcher matcher = pattern.matcher(comments);
-            if (matcher.find() && matcher.groupCount() == 2) {
-                comments = matcher.group(1) + matcher.group(2);
-            }
-        }
+        //TODO
+        /*String PDFStructureRegex = "¤PDF" + id + "¤";
+        String PDFRegex = "(.*)" + PDFStructureRegex + "{.*}(.*)";*/
     }
 
     public void savePDFStructure() {
-        comments += pdfStructure;
+        //TODO
     }
 
     /**
@@ -345,6 +633,7 @@ public class Person {
      * @param unionIndex numéro de l'union
      */
     public void addProof(ActType actType, String proof, int unionIndex) throws Exception {
+        //TODO
         switch (actType) {
             case BIRTH:
                 removePDFStructure();
@@ -374,7 +663,7 @@ public class Person {
     }
 
     /**
-     * Fonction addProof except marriage
+     * Fonction addProof : call addProof except for marriages
      *
      * @param actType Birth, Death
      * @param proof   Nom du PDF String
@@ -383,16 +672,8 @@ public class Person {
         addProof(actType, proof, 0);
     }
 
-    public static int getMinimumPeriod() {
-        return minimumPeriod;
-    }
-
-    public void initLifeSpans() {
-        initPeriods2(initPeriods1());
-    }
-
     /**
-     * isPrintable retourne vrai si la personne a un prénom et un nom de famille différent de ...
+     * Function isPrintable : return true if the surname or name does not equal ...
      *
      * @return
      */
@@ -400,45 +681,251 @@ public class Person {
         return (name != null) && (surname != null) && (!name.equals("...")) && (!surname.equals("..."));
     }
 
-    public void addPeriod(int year, MapStructure mapStructure) {
-        if (year < minimumPeriod) {
-            minimumPeriod = year;
+    /**
+     * Function addPinpoint : add the couple (year,pinpoint) to pinpointsYearMap
+     * If the person is a direct ancestor, add it to pinpointsYearMapDirectAncestors
+     *
+     * @param year
+     * @param pinpoint
+     */
+    public void addPinpoint(int year, Pinpoint pinpoint) {
+        if (year < minimumYear) {
+            minimumYear = year;
         }
-        if (periods.containsKey(year)) {
-            periods.get(year).add(mapStructure);
+        if (pinpointsYearMap.containsKey(year)) {
+            pinpointsYearMap.get(year).add(pinpoint);
         } else {
-            ArrayList<MapStructure> structure = new ArrayList<>();
-            structure.add(mapStructure);
-            periods.put(year, structure);
+            ArrayList<Pinpoint> structure = new ArrayList<>();
+            structure.add(pinpoint);
+            pinpointsYearMap.put(year, structure);
         }
         if (directAncestor) {
-            if (periodsDirectAncestors.containsKey(year)) {
-                periodsDirectAncestors.get(year).add(mapStructure);
+            if (pinpointsYearMapDirectAncestors.containsKey(year)) {
+                pinpointsYearMapDirectAncestors.get(year).add(pinpoint);
             } else {
-                ArrayList<MapStructure> structure = new ArrayList<>();
-                structure.add(mapStructure);
-                periodsDirectAncestors.put(year, structure);
+                ArrayList<Pinpoint> pinpointList = new ArrayList<>();
+                pinpointList.add(pinpoint);
+                pinpointsYearMapDirectAncestors.put(year, pinpointList);
             }
         }
     }
 
-    public int getAge(Date date, int years) {
+    /**
+     * Function getAge : calculate the age of the person at the parameter date and add parameter yearsToAdd
+     * Return -1 if birth is not found
+     *
+     * @param date
+     * @param yearsToAdd
+     * @return
+     */
+    public int getAge(Date date, int yearsToAdd) {
         if ((birth != null) && (birth.getDate() != null)) {
-            Date d0 = birth.getDate().getDate();
-            long diff = date.getTime() - birth.getDate().getDate().getTime();
-            int days = (int) TimeUnit.DAYS.toDays(diff);
-            int a = days / 365;
             DateTime dateTime0 = new DateTime(birth.getDate().getDate().getTime());
             DateTime dateTime1 = new DateTime(date.getTime());
             Period period = new Period(dateTime0, dateTime1);
-            return period.getYears() + years;
+            return period.getYears() + yearsToAdd;
         } else {
             return -1;
         }
     }
 
     /**
-     * Function toString : pretty print of the object Person
+     * Function findUnion : return the union between the current person and the partner
+     *
+     * @param partner
+     * @return
+     */
+    private Union findUnion(Person partner) {
+        for (int i = 0; i < unions.size(); i++) {
+            if (unions.get(i).getPartner().getId().equals(partner.getId())) {
+                return unions.get(i);
+            }
+            if (unions.get(i).getPerson().getId().equals(partner.getId())) {
+                return unions.get(i);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Function findChildren : return the list of person/child of the current person and the partner
+     *
+     * @param partner
+     * @return
+     */
+    private ArrayList<Person> findChildren(Person partner) {
+        ArrayList<Person> list = new ArrayList<>();
+        for (int i = 0; i < children.size(); i++) {
+            Person thisFather = children.get(i).getFather();
+            Person thisMother = children.get(i).getMother();
+            if ((thisFather != null) && (thisMother != null)) {
+                if ((thisFather.getId().equals(partner.getId())) && (thisMother.getId().equals(getId()))) {
+                    list.add(children.get(i));
+                }
+                if ((thisMother.getId().equals(partner.getId())) && (thisFather.getId().equals(getId()))) {
+                    list.add(children.get(i));
+                }
+            }
+        }
+        return list;
+    }
+
+    /**
+     * Function findIllegitimateChildren : return the list of person/child of the current person with a partner missing
+     *
+     * @return
+     */
+    public ArrayList<Person> findIllegitimateChildren() {
+        ArrayList<Person> list = new ArrayList<>();
+        for (int i = 0; i < children.size(); i++) {
+            Person thisFather = children.get(i).getFather();
+            Person thisMother = children.get(i).getMother();
+            if ((thisFather == null) || (thisMother == null)) {
+                list.add(children.get(i));
+            }
+        }
+        return list;
+    }
+
+    /**
+     * Function getDiffYears : get the difference in years between the input date1 and date2
+     *
+     * @param date1
+     * @param date2
+     * @return
+     */
+    public static int getDiffYears(Date date1, Date date2) {
+        LocalDate localDate1 = date1.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        LocalDate localDate2 = date2.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        java.time.Period period = java.time.Period.between(localDate1, localDate2);
+        return period.getYears();
+    }
+
+    /**
+     * Function getHalfSiblings : get children of the father and mother with other people and return the list
+     *
+     * @return
+     */
+    public ArrayList<Person> getHalfSiblings() {
+        ArrayList<Person> result = new ArrayList<>();
+        if (father != null) {
+            ArrayList<Person> children = father.getChildren();
+            for (Person person : children) {
+                if (person.getMother() != null && !person.getMother().equals(mother) && !person.equals(this)) {
+                    result.add(person);
+                }
+            }
+        }
+        if (mother != null) {
+            ArrayList<Person> children = mother.getChildren();
+            for (Person person : children) {
+                if (!person.getMother().equals(father) && !person.equals(this)) {
+                    result.add(person);
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Function getSiblings : return all the list of siblings of the current person
+     *
+     * @return
+     */
+    public ArrayList<Person> getSiblings() {
+        ArrayList<Person> result = new ArrayList<>();
+        if (father != null) {
+            ArrayList<Person> children = father.getChildren();
+            for (Person person : children) {
+                if (person.getMother() != null && person.getMother().equals(mother) && !person.equals(this)) {
+                    result.add(person);
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Function printNecessaryResearchBirth : format and return birth getNecessaryResearch
+     *
+     * @return
+     */
+    private String printNecessaryResearchBirth() {
+        String result = "";
+        if (birth != null) {
+            String birthTxt = birth.getNecessaryResearch();
+            if (birthTxt != null) {
+                result += ", Birth=[" + birthTxt + "]";
+            }
+        } else {
+            result += ", Birth=[Date Town]";
+        }
+        return result;
+    }
+
+    /**
+     * Function printNecessaryResearchUnions : format and return unions getNecessaryResearch
+     *
+     * @return
+     */
+    private String printNecessaryResearchUnions() {
+        String result = "";
+        ArrayList<Union> unions = getUnions();
+        if (unions != null) {
+            String unionTxt = "";
+            for (Union union : unions) {
+                String inputUnion = union.getNecessaryResearch();
+                if (inputUnion != null) {
+                    unionTxt += inputUnion;
+                }
+            }
+            if (!unionTxt.equals("")) {
+                result += ", Union=[" + unionTxt + "]";
+            }
+        } else {
+            result += ", Union=[Date Town]";
+        }
+        return result;
+    }
+
+    /**
+     * Function printNecessaryResearchDeath : format and return death getNecessaryResearch
+     *
+     * @return
+     */
+    private String printNecessaryResearchDeath() {
+        String result = "";
+        if (death != null) {
+            String deathTxt = death.getNecessaryResearch();
+            if (deathTxt != null) {
+                result += ", Death=[" + deathTxt + "]";
+            }
+        } else {
+            result += ", Death=[Date Town]";
+        }
+        return result;
+    }
+
+    /**
+     * Function printNecessaryResearch : print the empty or blank fields to search in birth, unions and death
+     */
+    public void printNecessaryResearch() {
+        if (!StringUtils.equals(getSurname(), "...")) {
+            String result = printNecessaryResearchBirth();
+            result += printNecessaryResearchUnions();
+            result += printNecessaryResearchDeath();
+            if (!StringUtils.isBlank(result)) {
+                logger.info(getFullName() + " : " + result.substring(2));
+            }
+        }
+    }
+
+    /**
+     * Function toString : English pretty print of the object Person
      *
      * @return the final String
      */
@@ -505,458 +992,182 @@ public class Person {
         return res + "}";
     }
 
-    public Person(Genealogy genealogy, ArrayList<ParsingStructure> list) throws ParsingException {
-        if (list != null) {
-
-            int index = 0;
-            int indexMax = list.size();
-            String newId = list.get(index++).getFieldName();
-            if (newId.contains("@I")) {
-                id = newId;
-            } else {
-                id = "";
-            }
-            name = genealogy.findFieldInContents("SURN", list);
-            surname = genealogy.findFieldInContents("GIVN", list);
-            if (StringUtils.isEmpty(name) && StringUtils.isEmpty(surname)) {
-                name = genealogy.findFieldInContents("NAME", list);
-            }
-            int indexBirthday = genealogy.findIndexIdString("BIRT", list, index, indexMax);
-
-            if (indexBirthday != -1) {
-                indexBirthday++;
-                String input = genealogy.findFieldInContents("DATE", list, indexBirthday, indexBirthday + 3);
-                MyDate birthDay = null;
-                try {
-                    birthDay = (MyDate) MyDate.Mydate(input);
-                } catch (Exception e) {
-                    logger.debug("Impossible de parser la date de naissance de " + id, e);
-                }
-
-                Town birthTown = null;
-                try {
-                    birthTown = new Town(genealogy.findFieldInContents("PLAC", list, indexBirthday, indexBirthday + 3));
-                } catch (Exception e) {
-                    logger.debug("Impossible de parser la ville de naissance de " + id, e);
-                }
-                birth = new Birth(this, birthDay, birthTown);
-            }
-
-            int indexChristening = genealogy.findIndexIdString("CHR", list, index, indexMax);
-
-            if (indexChristening != -1) {
-                indexChristening++;
-                String input = genealogy.findFieldInContents("DATE", list, indexChristening, indexChristening + 5);
-                MyDate christeningDay = null;
-                try {
-                    christeningDay = (MyDate) MyDate.Mydate(input);
-                } catch (Exception e) {
-                    logger.debug("Impossible de parser la date de bapteme de " + id, e);
-                }
-
-                //christening Town
-                Town ChristeningTown = null;
-                try {
-                    ChristeningTown = new Town(genealogy.findFieldInContents("PLAC", list, indexChristening, indexChristening + 5));
-                } catch (Exception e) {
-                    logger.debug("Impossible de parser la ville de baptème de " + id, e);
-                }
-                //christening place
-                String christeningPlace = null;
-                try {
-                    christeningPlace = genealogy.findFieldInContents("ADDR", list);
-                } catch (Exception e) {
-                    logger.debug("Impossible de parser le lieu du baptème de " + id, e);
-                }
-                //godparents
-                String godParents = null;
-                try {
-                    godParents = genealogy.findFieldInContents("_GODP", list);
-                } catch (Exception e) {
-                    logger.debug("Impossible de trouver les parrains et marraines " + id, e);
-                }
-                christening = new Christening(this, christeningDay, ChristeningTown, godParents, christeningPlace);
-            }
-
-            sex = parseSex(genealogy.findFieldInContents("SEX", list));
-            profession = genealogy.findFieldInContents("OCCU", list);
-            comments = genealogy.findFieldInContents("NOTE", list);
-            //pdfStructure = PDFStructure.parsePDFStucture(comments, id);
-
-            int indexDeath = genealogy.findIndexIdString("DEAT", list, index, indexMax);
-
-            if (indexDeath != -1) {
-                indexDeath++;
-                String input = genealogy.findFieldInContents("DATE", list, indexDeath, indexDeath + 3);
-                MyDate deathDay = null;
-                try {
-                    deathDay = (MyDate) MyDate.Mydate(input);
-                } catch (Exception e) {
-                    logger.debug("Impossible de parser la date de décès de " + id, e);
-                }
-
-                Town deathTown = null;
-                try {
-                    deathTown = new Town(genealogy.findFieldInContents("PLAC", list, indexDeath, indexDeath + 3));
-                } catch (Exception e) {
-                    logger.debug("Impossible de parser la ville de décès de " + id, e);
-                }
-                death = new Death(this, deathDay, deathTown);
-            }
-            calculateAge();
-        }
-    }
-
-    private Union findUnion(Person partner) {
-        for (int i = 0; i < unions.size(); i++) {
-            if (unions.get(i).getPartner().getId().equals(partner.getId())) {
-                return unions.get(i);
-            }
-            if (unions.get(i).getPerson().getId().equals(partner.getId())) {
-                return unions.get(i);
-            }
-        }
-        return null;
-    }
-
-    private ArrayList<Person> findChildren(Person partner) {
-        ArrayList<Person> list = new ArrayList<Person>();
-        for (int i = 0; i < children.size(); i++) {
-            Person thisFather = children.get(i).getFather();
-            Person thisMother = children.get(i).getMother();
-            if ((thisFather != null) && (thisMother != null)) {
-                if ((thisFather.getId().equals(partner.getId())) && (thisMother.getId().equals(getId()))) {
-                    list.add(children.get(i));
-                }
-                if ((thisMother.getId().equals(partner.getId())) && (thisFather.getId().equals(getId()))) {
-                    list.add(children.get(i));
-                }
-            }
-        }
-        return list;
-    }
-
-    public ArrayList<Person> findNonDesire() {
-        ArrayList<Person> list = new ArrayList<Person>();
-        for (int i = 0; i < children.size(); i++) {
-            Person thisFather = children.get(i).getFather();
-            Person thisMother = children.get(i).getMother();
-            if ((thisFather == null) || (thisMother == null)) {
-                list.add(children.get(i));
-            }
-        }
-        return list;
-    }
-
-    private void calculateAge() {
-        if ((birth == null) || (death == null)) {
-            age = -1;
-            if ((death == null) && (birth != null) && (birth.getDate() != null) && (AuxMethods.getYear(birth.getDate().getDate()) > 1916)) {
-                stillAlive = true;
-            }
-        } else if ((birth.getDate() == null) || (death.getDate() == null)) {
-            age = -1;
-        } else {
-            Date birthDate = birth.getDate().getDate();
-            Date deathDate = death.getDate().getDate();
-            age = getDiffYears(birthDate, deathDate);
-            String res = "";
-        }
-    }
-
-    public static int getDiffYears(Date first, Date last) {
-        Calendar a = getCalendar(first);
-        Calendar b = getCalendar(last);
-        int diff = b.get(Calendar.YEAR) - a.get(Calendar.YEAR);
-        if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH) ||
-                (a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DATE) > b.get(Calendar.DATE))) {
-            diff--;
-        }
-        return diff;
-    }
-
-    public static Calendar getCalendar(Date date) {
-        Calendar cal = Calendar.getInstance(Locale.US);
-        cal.setTime(date);
-        return cal;
-    }
-
-    public void addUnion(Union union) {
-        unions.add(union);
-    }
-
-    public void addChildren(Person person) {
-        children.add(person);
-    }
-
-    public void setMother(Person mother) {
-        this.mother = mother;
-    }
-
-    public void setFather(Person father) {
-        this.father = father;
-    }
-
+    /**
+     * Function printPerson : return a string containing the French description of the person
+     *
+     * @return
+     */
     public String printPerson() {
-        String txt = "";
+        String text = "";
         if (surname.equals("...") || name.equals("...")) {
             return "";
         }
         String pronoun = "Il";
-        String accord = "";
-        String fils = "le fils";
-        String sfils = "fils";
+        String agreement = "";
+        String childFull = "le fils";
+        String child = "fils";
         boolean foundText = false;
         if (sex == Sex.FEMALE) {
             pronoun = "Elle";
-            accord = "e";
-            fils = "la fille";
-            sfils = "fille";
+            agreement = "e";
+            childFull = "la fille";
+            child = "fille";
         }
-        txt += surname + " " + name;
+        text += surname + " " + name;
         if (birth != null) {
             if ((birth.getDate() != null) && (birth.getTown() != null) && (birth.getTown().getName() != null)) {
                 foundText = true;
-                txt += " est né" + accord + " " + birth.getDate().descriptionDate() + " à "
+                text += " est né" + agreement + " " + birth.getDate().descriptionDate() + " à "
                         + birth.getTown().getName() + " (" + birth.getTown().getDetail() + ")";
             } else if (birth.getDate() != null) {
                 foundText = true;
-                txt += " est né" + accord + " " + birth.getDate().descriptionDate() + "";
+                text += " est né" + agreement + " " + birth.getDate().descriptionDate() + "";
             } else if ((birth.getTown() != null) && (birth.getTown().getName() != null)) {
                 foundText = true;
-                txt += " est né" + accord + " à " + birth.getTown().getName() + " (" + birth.getTown().getDetail() + ")";
+                text += " est né" + agreement + " à " + birth.getTown().getName() + " (" + birth.getTown().getDetail() + ")";
             }
         }
         if (foundText) {
             if ((mother != null) && (father != null)) {
                 if (mother.findUnion(father).getUnionType() == UnionType.HETERO_MAR) {
-                    txt += " du mariage de " + father.getFullName() + " et de " + mother.getFullName();
+                    text += " du mariage de " + father.getFullName() + " et de " + mother.getFullName();
                 } else {
-                    txt += " de l'union de " + father.getFullName() + " et de " + mother.getFullName();
+                    text += " de l'union de " + father.getFullName() + " et de " + mother.getFullName();
                 }
             } else if (mother != null) {
-                txt += ", " + sfils + " de " + mother.getFullName();
+                text += ", " + child + " de " + mother.getFullName();
             } else if (father != null) {
-                txt += ", " + sfils + " de " + father.getFullName();
+                text += ", " + child + " de " + father.getFullName();
             }
         } else {
             if ((mother != null) && (father != null)) {
-                txt += " est " + fils + " de ";
-                txt += father.getFullName() + " et de " + mother.getFullName();
+                text += " est " + childFull + " de ";
+                text += father.getFullName() + " et de " + mother.getFullName();
             } else if (mother != null) {
-                txt += " est " + fils + " de ";
-                txt += mother.getFullName();
+                text += " est " + childFull + " de ";
+                text += mother.getFullName();
             } else if (father != null) {
-                txt += " est " + fils + " de ";
-                txt += father.getFullName();
+                text += " est " + childFull + " de ";
+                text += father.getFullName();
             }
         }
-
-        //Vivant ?
+        //Alive ?
         String singularForm = "est";
         String pluralForm = "sont";
         if (death != null) {
             singularForm = "était";
             pluralForm = "étaient";
         }
-        //Métier
+        //Profession
         if ((profession == null) || (!profession.equals(""))) {
             foundText = true;
             String prof = getProfession();
             if (prof.indexOf(',') == -1) {
                 //Case where nothing was written before except names
-                if (txt.equals(surname + " " + name)) {
-                    txt += " " + singularForm + " " + prof;
+                if (text.equals(surname + " " + name)) {
+                    text += " " + singularForm + " " + prof;
                 } else {
-                    txt += "\nSon métier " + singularForm + " " + prof;
+                    text += "\nSon métier " + singularForm + " " + prof;
                 }
             } else {
-                if (txt.equals(surname + " " + name)) {
-                    txt += " " + pluralForm + " " + prof;
+                if (text.equals(surname + " " + name)) {
+                    text += " " + pluralForm + " " + prof;
                 } else {
-                    txt += "\nSes métiers " + pluralForm + " " + prof;
+                    text += "\nSes métiers " + pluralForm + " " + prof;
                 }
             }
         }
-
+        //Marriage
         for (int i = 0; i < unions.size(); i++) {
-            //Mariage
             Union union = unions.get(i);
             Person partner = union.getOtherPerson(this);
-            String marie = " s'est marié" + accord;
-            if (union.getUnionType() != UnionType.HETERO_MAR) {
-                marie = " a vécu";
+            String married = " s'est marié" + agreement;
+            if (union.getUnionType() == UnionType.COHABITATION) {
+                married = " a vécu";
+            } else {
+                if (union.getUnionType() == UnionType.DIVORCE) {
+                    married = " a divorcé";
+                }
             }
             if (foundText) {
-                txt += "\n" + pronoun + marie + " avec " +
+                text += "\n" + pronoun + married + " avec " +
                         partner.getFullName();
             } else {
                 foundText = true;
-                txt += marie + " avec " +
+                text += married + " avec " +
                         partner.getFullName();
             }
-
             if ((partner.getProfession() != null) && (!partner.getProfession().equals(""))) {
-                txt += ", " + partner.getProfession();
+                text += ", " + partner.getProfession();
             }
             if (union.getDate() != null) {
-                txt += " " + union.getDate().descriptionDate() + " ";
+                text += " " + union.getDate().descriptionDate() + " ";
             }
             if ((union.getTown() != null) && (union.getTown().getName() != null)) {
-                txt += "à " + union.getTown().getName() + " (" + union.getTown().getDetail() + ")";
+                text += "à " + union.getTown().getName() + " (" + union.getTown().getDetail() + ")";
             }
-
-            //Enfants
+            //Children
             ArrayList<Person> myChildren = findChildren(partner);
             if (!myChildren.isEmpty()) {
-                txt += " et a eu de cette union ";
+                text += " et a eu de cette union ";
                 int nbChildren = myChildren.size();
                 if (nbChildren > 1) {
-                    txt += nbChildren + " enfants nommés " + myChildren.get(0).getFullName();
+                    text += nbChildren + " enfants nommés " + myChildren.get(0).getFullName();
                     for (int j = 1; j < myChildren.size() - 1; j++) {
-                        txt += ", " + myChildren.get(j).getFullName();
+                        text += ", " + myChildren.get(j).getFullName();
                     }
-                    txt += " et " + myChildren.get(myChildren.size() - 1).getFullName();
+                    text += " et " + myChildren.get(myChildren.size() - 1).getFullName();
                 } else {
-                    txt += nbChildren + " enfant nommé " + myChildren.get(0).getFullName();
+                    text += nbChildren + " enfant nommé " + myChildren.get(0).getFullName();
                 }
             }
         }
-        ArrayList<Person> naturelChildren = findNonDesire();
-        if (!naturelChildren.isEmpty()) {
-            if (naturelChildren.size() > 1) {
-                txt += "\n" + pronoun + " a eu " + naturelChildren.size() + " enfants naturels nommés " + naturelChildren.get(0).getFullName();
-                for (int j = 1; j < naturelChildren.size() - 1; j++) {
-                    txt += ", " + naturelChildren.get(j).getFullName();
+        //natural children
+        ArrayList<Person> naturalChildren = findIllegitimateChildren();
+        if (!naturalChildren.isEmpty()) {
+            if (naturalChildren.size() > 1) {
+                text += "\n" + pronoun + " a eu " + naturalChildren.size() + " enfants naturels nommés " + naturalChildren.get(0).getFullName();
+                for (int j = 1; j < naturalChildren.size() - 1; j++) {
+                    text += ", " + naturalChildren.get(j).getFullName();
                 }
-                txt += " et " + naturelChildren.get(naturelChildren.size() - 1).getFullName();
+                text += " et " + naturalChildren.get(naturalChildren.size() - 1).getFullName();
             } else {
-                txt += "\n" + pronoun + " a eu 1 enfant naturel nommé " + naturelChildren.get(0).getFullName();
+                text += "\n" + pronoun + " a eu 1 enfant naturel nommé " + naturalChildren.get(0).getFullName();
             }
         }
-
-        boolean foundDeath = false;
-
+        //death
         if (death != null) {
             if ((death.getDate() != null) && (death.getTown() != null) && (death.getTown().getName() != null)) {
                 if (foundText) {
-                    txt += "\n" + pronoun;
+                    text += "\n" + pronoun;
                 }
-                txt += " est décédé" + accord + " " + death.getDate().descriptionDate() + " à "
+                text += " est décédé" + agreement + " " + death.getDate().descriptionDate() + " à "
                         + death.getTown().getName() + " (" + death.getTown().getDetail() + ")";
-                foundText = true;
-                foundDeath = true;
             } else if (death.getDate() != null) {
                 if (foundText) {
-                    txt += "\n" + pronoun;
+                    text += "\n" + pronoun;
                 }
-                foundText = true;
-                foundDeath = true;
-                txt += " est décédé" + accord + " " + death.getDate().descriptionDate();
+                text += " est décédé" + agreement + " " + death.getDate().descriptionDate();
             } else if ((death.getTown() != null) && (death.getTown().getName() != null)) {
                 if (foundText) {
-                    txt += "\n" + pronoun;
+                    text += "\n" + pronoun;
                 }
-                foundText = true;
-                foundDeath = true;
-                txt += " est décédé" + accord + " à " + death.getTown().getName() + " (" + death.getTown().getDetail() + ")";
+                text += " est décédé" + agreement + " à " + death.getTown().getName() + " (" + death.getTown().getDetail() + ")";
             }
         }
-
+        //age
         if (age != -1) {
             if (age < 2) {
-                txt += " à l'âge de " + age + " an";
+                text += " à l'âge de " + age + " an";
             } else {
-                txt += " à l'âge de " + age + " ans";
+                text += " à l'âge de " + age + " ans";
             }
         }
-
-        if (txt.equals(surname + " " + name)) {
-            txt = "";
+        if (text.equals(surname + " " + name)) {
+            text = "";
         } else {
-            txt += ".";
+            text += ".";
         }
-        return txt.replace("\n", ".\n");
-    }
-
-
-    public ArrayList<Person> getHalfSiblings() {
-        ArrayList<Person> result = new ArrayList<Person>();
-        if (father != null) {
-            ArrayList<Person> children = father.getChildren();
-            for (Person person : children) {
-                if (person.getMother() != null && !person.getMother().equals(mother) && !person.equals(this)) {
-                    result.add(person);
-                }
-            }
-        }
-        if (mother != null) {
-            ArrayList<Person> children = mother.getChildren();
-            for (Person person : children) {
-                if (!person.getMother().equals(father) && !person.equals(this)) {
-                    result.add(person);
-                }
-            }
-        }
-        return result;
-    }
-
-    public ArrayList<Person> getSiblings() {
-        ArrayList<Person> result = new ArrayList<Person>();
-        if (father != null) {
-            ArrayList<Person> children = father.getChildren();
-            for (Person person : children) {
-                if (person.getMother() != null && person.getMother().equals(mother) && !person.equals(this)) {
-                    result.add(person);
-                }
-            }
-        }
-        return result;
-    }
-
-    public void printNecessaryResearch() {
-        if (!StringUtils.equals(getSurname(), "...")) {
-            boolean found = false;
-            String result = "";
-            if (birth != null) {
-                String birthTxt = birth.getNecessaryResearch();
-                if (birthTxt != null) {
-                    found = true;
-                    result += ", Birth=[" + birthTxt + "]";
-                }
-            } else {
-                result += ", Birth=[Date Town]";
-            }
-
-            ArrayList<Union> unions = getUnions();
-            if (unions != null) {
-                String unionTxt = "";
-                for (Union union : unions) {
-                    String inputUnion = union.getNecessaryResearch();
-                    if (inputUnion != null) {
-                        unionTxt += inputUnion;
-                    }
-                }
-                if (!unionTxt.equals("")) {
-                    found = true;
-                    result += ", Union=[" + unionTxt + "]";
-                }
-            } else {
-                result += ", Union=[Date Town]";
-            }
-
-            if (death != null) {
-                String deathTxt = death.getNecessaryResearch();
-                if (deathTxt != null) {
-                    found = true;
-                    result += ", Death=[" + deathTxt + "]";
-                }
-            } else {
-                result += ", Death=[Date Town]";
-            }
-            if (found) {
-                logger.info(getFullName() + " : " + result.substring(2));
-            }
-        }
+        return text.replace("\n", ".\n");
     }
 }

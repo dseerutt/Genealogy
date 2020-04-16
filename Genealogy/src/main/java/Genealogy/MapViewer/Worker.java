@@ -1,7 +1,7 @@
 package Genealogy.MapViewer;
 
 import Genealogy.GUI.MapScreen;
-import Genealogy.MapViewer.Structures.MapStructure;
+import Genealogy.MapViewer.Structures.Pinpoint;
 import Genealogy.Model.Gedcom.Person;
 
 import javax.swing.*;
@@ -40,13 +40,13 @@ public class Worker extends SwingWorker<String, Object> {
         }
         mapScreen.removeTooltip();
         mapScreen.removeMarkers();
-        ArrayList<MapStructure> mapStructure;
+        ArrayList<Pinpoint> pinPoint;
         if (directAncestors){
-            mapStructure = Person.getPeriodsDirectAncestors().get(i);
+            pinPoint = Person.getPinpointsYearMapDirectAncestors().get(i);
         } else {
-            mapStructure = Person.getPeriods().get(i);
+            pinPoint = Person.getPinpointsYearMap().get(i);
         }
-        mapScreen.setSituation(mapStructure);
+        mapScreen.setSituation(pinPoint);
         mapScreen.getComboDate1().setSelectedItem(i);
         mapScreen.updateFrenchGovernors(i);
         mapScreen.updateMauritianGovernors(i);

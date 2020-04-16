@@ -65,7 +65,7 @@ public class Genealogy {
     }
 
     /**
-     * Function writeFile : write gedcom file from contents to the parametered String path
+     * Function writeFile : write gedcom file from contents to the input String path
      *
      * @param path
      * @throws IOException
@@ -226,7 +226,7 @@ public class Genealogy {
      * @throws ParsingException
      */
     protected void parsePerson(ArrayList<ParsingStructure> listInput) throws ParsingException {
-        Person person = new Person(this, listInput);
+        Person person = new Person(listInput);
         persons.add(person);
     }
 
@@ -460,13 +460,13 @@ public class Genealogy {
 
 
     /**
-     * Function findFieldInContents : find fieldId in the parametered list
+     * Function findFieldInContents : find fieldId in the input list
      *
      * @param fieldId
      * @param listInput
      * @return
      */
-    public String findFieldInContents(String fieldId, ArrayList<ParsingStructure> listInput) {
+    public static String findFieldInContents(String fieldId, ArrayList<ParsingStructure> listInput) {
         for (ParsingStructure parsingStructure : listInput) {
             if (StringUtils.equals(fieldId, parsingStructure.getFieldName())) {
                 return parsingStructure.getFieldValue();
@@ -484,7 +484,7 @@ public class Genealogy {
      * @param maxIndexInput
      * @return
      */
-    public String findFieldInContents(String fieldId, ArrayList<ParsingStructure> listInput, int offset, int maxIndexInput) {
+    public static String findFieldInContents(String fieldId, ArrayList<ParsingStructure> listInput, int offset, int maxIndexInput) {
         int maxIndex = maxIndexInput;
         if (maxIndex > listInput.size()) {
             maxIndex = listInput.size();
@@ -506,7 +506,7 @@ public class Genealogy {
      * @return
      * @throws ParsingException
      */
-    public int findIndexIdString(String id, ArrayList<ParsingStructure> listInput) throws ParsingException {
+    public static int findIndexIdString(String id, ArrayList<ParsingStructure> listInput) throws ParsingException {
         return findIndexIdString(id, listInput, 0, listInput.size());
     }
 
@@ -520,9 +520,9 @@ public class Genealogy {
      * @return
      * @throws ParsingException
      */
-    public int findIndexIdString(String id, ArrayList<ParsingStructure> listInput, int offset, int maxIndex) throws ParsingException {
+    public static int findIndexIdString(String id, ArrayList<ParsingStructure> listInput, int offset, int maxIndex) throws ParsingException {
         if (offset > listInput.size()) {
-            throw new ParsingException("Could not find id " + id + " , index " + offset + " is too big for contents size of " + contents.size());
+            throw new ParsingException("Could not find id " + id + " , index " + offset + " is too big for contents size of " + listInput.size());
         }
         for (int i = offset; i < maxIndex; i++) {
             if (listInput.get(i).getFieldName().equals(id)) {

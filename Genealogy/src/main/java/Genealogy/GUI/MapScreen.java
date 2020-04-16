@@ -7,7 +7,10 @@ import Genealogy.Model.Act.Union;
 import Genealogy.Model.GUI.ActStructure;
 import Genealogy.Model.GUI.Governor;
 import Genealogy.Model.GUI.GovernorContainer;
-import Genealogy.Model.Gedcom.*;
+import Genealogy.Model.Gedcom.AuxMethods;
+import Genealogy.Model.Gedcom.Genealogy;
+import Genealogy.Model.Gedcom.Person;
+import Genealogy.Model.Gedcom.Town;
 import org.jdesktop.swingx.JXMapKit;
 import org.jdesktop.swingx.JXMapViewer;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
@@ -167,7 +170,7 @@ public class MapScreen extends JFrame {
     }
 
     private void initComboBox() {
-        for (int i = Person.getMinimumPeriod(); i < maxDate + 1; i++) {
+        for (int i = Pinpoint.minimumYear; i < maxDate + 1; i++) {
             comboDate.addItem(i);
             comboDate1.addItem(i);
             comboDate2.addItem(i);
@@ -394,11 +397,11 @@ public class MapScreen extends JFrame {
         return convertStructureToMapPoints(map);
     }
 
-    public void setSituation(ArrayList<MapStructure> mapStructure) {
-        if ((mapStructure == null) || (mapStructure.isEmpty())) {
+    public void setSituation(ArrayList<Pinpoint> pinPoint) {
+        if ((pinPoint == null) || (pinPoint.isEmpty())) {
             return;
         }
-        ArrayList<MapPoint> mapPoints = convertMapPoints(mapStructure);
+        ArrayList<MapPoint> mapPoints = convertMapPoints(pinPoint);
         addMarkers(mapPoints);
     }
 
@@ -410,15 +413,15 @@ public class MapScreen extends JFrame {
                 removeMarkers();
                 if (generationALaDateRadioButton.isSelected()) {
                     int year = (int) comboDate.getSelectedItem();
-                    ArrayList<MapStructure> mapStructure;
+                    ArrayList<Pinpoint> pinPoint;
                     updateFrenchGovernors(year);
                     updateMauritianGovernors(year);
                     if (tousLesAncetresRadioButton.isSelected()) {
-                        mapStructure = Person.getPeriodsDirectAncestors().get(year);
+                        pinPoint = Person.getPinpointsYearMapDirectAncestors().get(year);
                     } else {
-                        mapStructure = Person.getPeriods().get(year);
+                        pinPoint = Person.getPinpointsYearMap().get(year);
                     }
-                    setSituation(mapStructure);
+                    setSituation(pinPoint);
                 } else if (actesDeNaissanceRadioButton.isSelected()) {
                     ArrayList<MapPoint> mapPoints = getBirth();
                     addMarkers(mapPoints);
@@ -445,7 +448,7 @@ public class MapScreen extends JFrame {
                     updateMauritianGovernors(date1);
                     handleWorker(date1, date2);
                 } else if (generationAutomatiqueRadioButton.isSelected()) {
-                    int date1 = Person.getMinimumPeriod();
+                    int date1 = Pinpoint.minimumYear;
                     int date2 = maxDate;
                     comboDate2.setSelectedItem(maxDate);
                     updateFrenchGovernors(date1);
@@ -556,16 +559,16 @@ public class MapScreen extends JFrame {
         return -1;
     }
 
-    private ArrayList<MapPoint> convertMapPoints(ArrayList<MapStructure> mapStructure) {
+    private ArrayList<MapPoint> convertMapPoints(ArrayList<Pinpoint> pinPoint) {
         ArrayList<MapPoint> mapPoints = new ArrayList<>();
         //Town town, String name, int age
-        for (int i = 0; i < mapStructure.size(); i++) {
+        for (int i = 0; i < pinPoint.size(); i++) {
             //String tooltip, MyCoordinate myCoordinate, int nbPeople, Color color
-            MyCoordinate myCoordinate = mapStructure.get(i).getTown().findCoordinate();
+            MyCoordinate myCoordinate = pinPoint.get(i).getTown().findCoordinate();
             int index = getMapStructure(mapPoints, myCoordinate);
-            MapStructure structure = mapStructure.get(i);
+            Pinpoint structure = pinPoint.get(i);
             if (index == -1) {
-                MapPoint mappoint = new MapPoint("<u><font size=\"5\"><b>" + mapStructure.get(i).getTown().getName()
+                MapPoint mappoint = new MapPoint("<u><font size=\"5\"><b>" + pinPoint.get(i).getTown().getName()
                         + " :</b></font></u><br>" + structure.getName(), myCoordinate,
                         1, AuxMethods.getColor(structure.getAge()), structure.getAge());
                 mapPoints.add(mappoint);

@@ -49,4 +49,21 @@ public enum Sex {
         }
         return null;
     }
+
+    /**
+     * Function parseSex : get sex from input String
+     *
+     * @param input
+     * @return
+     */
+    public static Sex parseSex(String input) {
+        switch (input) {
+            case "M":
+                return Sex.MALE;
+            case "F":
+                return Sex.FEMALE;
+            default:
+                return Sex.UNKNOWN;
+        }
+    }
 }

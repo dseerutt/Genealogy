@@ -130,7 +130,7 @@ public class Town implements Serializable {
         return result;
     }
 
-    public Town(String fullname) throws Exception {
+    public Town(String fullname) {
         for (String regex : Serializer.getTownRegex()) {
             Pattern p = Pattern.compile(regex);
             Matcher m = p.matcher(fullname);

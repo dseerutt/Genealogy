@@ -36,7 +36,7 @@ public class GenealogyTest {
         //init
         Genealogy genealogy = new Genealogy();
         ArrayList<Person> persons = new ArrayList<>();
-        Person person1 = new Person(genealogy, null);
+        Person person1 = new Person(null);
 
         //Reflection init
         Field personsField = genealogy.getClass().getDeclaredField("persons");
@@ -46,13 +46,13 @@ public class GenealogyTest {
         //Reflection set
         idField.set(person1, "1");
         persons.add(person1);
-        Person person2 = new Person(genealogy, null);
+        Person person2 = new Person(null);
         idField.set(person2, "2");
         persons.add(person2);
-        Person person3 = new Person(genealogy, null);
+        Person person3 = new Person(null);
         idField.set(person3, "3");
         persons.add(person3);
-        Person person4 = new Person(genealogy, null);
+        Person person4 = new Person(null);
         idField.set(person4, "4");
         persons.add(person4);
         personsField.set(genealogy, persons);
@@ -80,14 +80,14 @@ public class GenealogyTest {
     public void setDirectAncestorsTest() throws ParsingException {
         //init
         Genealogy genealogy = new Genealogy();
-        Person person1 = new Person(genealogy, null);
-        Person person2 = new Person(genealogy, null);
-        Person person3 = new Person(genealogy, null);
-        Person person4 = new Person(genealogy, null);
-        Person person5 = new Person(genealogy, null);
-        Person person6 = new Person(genealogy, null);
-        Person person7 = new Person(genealogy, null);
-        Person person8 = new Person(genealogy, null);
+        Person person1 = new Person(null);
+        Person person2 = new Person(null);
+        Person person3 = new Person(null);
+        Person person4 = new Person(null);
+        Person person5 = new Person(null);
+        Person person6 = new Person(null);
+        Person person7 = new Person(null);
+        Person person8 = new Person(null);
         person1.setFather(person2);
         person2.setFather(person3);
         person3.setFather(person4);
@@ -272,21 +272,21 @@ public class GenealogyTest {
         ArrayList<ParsingStructure> listPerson1 = new ArrayList<>();
         listPerson1.addAll(listBasicContents);
         contents.put("I1", listPerson1);
-        Person personNoComments = new Person(genealogy, listPerson1);
+        Person personNoComments = new Person(listPerson1);
         persons.add(personNoComments);
         idField.set(personNoComments, "I1");
         //one comment person I2
         ArrayList<ParsingStructure> listPerson2 = new ArrayList<>();
         listPerson2.addAll(listBasicContents);
         contents.put("I2", listPerson2);
-        Person person1Comment = new Person(genealogy, listPerson2);
+        Person person1Comment = new Person(listPerson2);
         persons.add(person1Comment);
         idField.set(person1Comment, "I2");
         //two comments person I3
         ArrayList<ParsingStructure> listPerson3 = new ArrayList<>();
         listPerson3.addAll(listBasicContents);
         contents.put("I3", listPerson3);
-        Person person2Comments = new Person(genealogy, listPerson3);
+        Person person2Comments = new Person(listPerson3);
         persons.add(person2Comments);
         idField.set(person2Comments, "I3");
 

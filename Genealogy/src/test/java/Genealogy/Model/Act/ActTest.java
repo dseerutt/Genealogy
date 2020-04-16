@@ -3,7 +3,6 @@ package Genealogy.Model.Act;
 import Genealogy.Model.Act.Enum.UnionType;
 import Genealogy.Model.Date.FullDate;
 import Genealogy.Model.Exception.ParsingException;
-import Genealogy.Model.Gedcom.Genealogy;
 import Genealogy.Model.Gedcom.Person;
 import Genealogy.Model.Gedcom.Town;
 import org.junit.jupiter.api.Test;
@@ -28,8 +27,7 @@ public class ActTest {
     @Test
     public void getNecessaryResearchTest() throws ParsingException, ParseException {
         //Init
-        Genealogy genealogy = new Genealogy();
-        Person person = new Person(genealogy, null);
+        Person person = new Person(null);
         Act birth1 = new Birth(person, new FullDate("05 MAR 2020"), new Town("Saintes", "Charente-Maritime"));
         Act birth2 = new Birth(null, new FullDate("05 MAR 2020"), new Town("Saintes", "Charente-Maritime"));
         Act birth3 = new Birth(person, null, new Town("Saintes", "Charente-Maritime"));
@@ -53,12 +51,11 @@ public class ActTest {
     @Test
     public void minimumYearTest() throws ParsingException, ParseException {
         //init
-        Genealogy genealogy = new Genealogy();
-        Person person1 = new Person(genealogy, null);
-        Person person2 = new Person(genealogy, null);
-        Person person3 = new Person(genealogy, null);
-        Person person4 = new Person(genealogy, null);
-        Person person5 = new Person(genealogy, null);
+        Person person1 = new Person(null);
+        Person person2 = new Person(null);
+        Person person3 = new Person(null);
+        Person person4 = new Person(null);
+        Person person5 = new Person(null);
 
         //Verification
         assertEquals(LocalDate.now().getYear(), Act.getMinimumYear());
