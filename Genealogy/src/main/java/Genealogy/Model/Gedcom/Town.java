@@ -2,7 +2,7 @@ package Genealogy.Model.Gedcom;
 
 import Genealogy.MapViewer.Structures.MyCoordinate;
 import Genealogy.Model.Act.Act;
-import Genealogy.URLConnexion.MyHttpURLConnexion;
+import Genealogy.URLConnexion.MyHttpUrlConnection;
 import Genealogy.URLConnexion.Serializer;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
@@ -212,7 +212,7 @@ public class Town implements Serializable {
                     if (alias.containsKey(thisTown.getFullName())) {
                         newName = alias.get(thisTown.getFullName());
                     }
-                    coo = Town.parseJsonArray((new MyHttpURLConnexion()).sendAddressRequest(city, county));
+                    coo = Town.parseJsonArray((new MyHttpUrlConnection()).sendGpsRequest(city, county));
                     if (!lostTowns.contains(newName)) {
                         townsToSave.add(thisTown);
                     }
@@ -248,7 +248,7 @@ public class Town implements Serializable {
                         break;
                     }
                     //Ajouter la ville
-                    coo = Town.parseJsonArray((new MyHttpURLConnexion()).sendAddressRequest(city, county));
+                    coo = Town.parseJsonArray((new MyHttpUrlConnection()).sendGpsRequest(city, county));
                     if (coo != null) {
                         thisTown.setCoordinates(coo);
                         if (useFileSave) {

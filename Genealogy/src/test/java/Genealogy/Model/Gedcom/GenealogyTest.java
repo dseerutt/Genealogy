@@ -2,6 +2,7 @@ package Genealogy.Model.Gedcom;
 
 import Genealogy.Model.Exception.ParsingException;
 import Genealogy.Parsing.MyGedcomReader;
+import Genealogy.Parsing.ParsingStructure;
 import Genealogy.URLConnexion.Serializer;
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +14,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -224,5 +226,89 @@ public class GenealogyTest {
             File file = new File(fileResult);
             file.delete();
         }
+    }
+
+    /**
+     * setComments test : test comments modifications on Person comments, genealogy contents comments
+     * 3 tests : person with no comments, person with 1 comment and person with 3 comments
+     *
+     * @throws ParsingException
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
+    @Test
+    public void testSetComments() throws ParsingException, NoSuchFieldException, IllegalAccessException {
+        //structures init
+        Genealogy genealogy = new Genealogy();
+        ArrayList<Person> persons = new ArrayList<>();
+        ArrayList<ParsingStructure> listBasicContents = new ArrayList<>();
+        listBasicContents.add(new ParsingStructure(0, "I1", "INDI"));
+        listBasicContents.add(new ParsingStructure(1, "_UID", "1378C59B32D54C488004B2B48DF80A42411A"));
+        listBasicContents.add(new ParsingStructure(1, "SEX", "M"));
+        listBasicContents.add(new ParsingStructure(1, "NAME", "Martin Matin"));
+        listBasicContents.add(new ParsingStructure(2, "SURN", "Matin"));
+        listBasicContents.add(new ParsingStructure(2, "GIVN", "Martin"));
+        listBasicContents.add(new ParsingStructure(1, "FAMS", "F1"));
+        listBasicContents.add(new ParsingStructure(1, "1", "CHAN"));
+        listBasicContents.add(new ParsingStructure(2, "DATE", "8 APR 2020"));
+        listBasicContents.add(new ParsingStructure(3, "TIME", "11:12:20"));
+        HashMap<String, ArrayList<ParsingStructure>> contents = new HashMap<>();
+        genealogy.setContents(contents);
+        //comments init
+        String comment1 = "This is the first comment";
+        String baseComment2 = "This is the second";
+        String baseComment3 = "This is the third";
+        String comment2 = comment1 + System.lineSeparator() + baseComment2;
+        String comment3 = comment2 + System.lineSeparator() + baseComment3;
+
+        //reflection
+        Field personsField = genealogy.getClass().getDeclaredField("persons");
+        personsField.setAccessible(true);
+        Field idField = Person.class.getDeclaredField("id");
+        idField.setAccessible(true);
+        personsField.set(genealogy, persons);
+
+        //no comment person I1
+        ArrayList<ParsingStructure> listPerson1 = new ArrayList<>();
+        listPerson1.addAll(listBasicContents);
+        contents.put("I1", listPerson1);
+        Person personNoComments = new Person(genealogy, listPerson1);
+        persons.add(personNoComments);
+        idField.set(personNoComments, "I1");
+        //one comment person I2
+        ArrayList<ParsingStructure> listPerson2 = new ArrayList<>();
+        listPerson2.addAll(listBasicContents);
+        contents.put("I2", listPerson2);
+        Person person1Comment = new Person(genealogy, listPerson2);
+        persons.add(person1Comment);
+        idField.set(person1Comment, "I2");
+        //two comments person I3
+        ArrayList<ParsingStructure> listPerson3 = new ArrayList<>();
+        listPerson3.addAll(listBasicContents);
+        contents.put("I3", listPerson3);
+        Person person2Comments = new Person(genealogy, listPerson3);
+        persons.add(person2Comments);
+        idField.set(person2Comments, "I3");
+
+        //launch
+        genealogy.setComments("I1", comment1);
+        genealogy.setComments("I2", comment2);
+        genealogy.setComments("I3", comment3);
+
+        //verification no comment
+        assertEquals(comment1, personNoComments.getComments());
+        assertTrue(genealogy.getContents().get("I1").containsAll(listPerson1));
+        assertEquals(("1 NOTE " + comment1), (genealogy.getContents().get("I1").get(10).toString()));
+        //verification 1 comment
+        assertEquals(comment2, person1Comment.getComments());
+        assertTrue(genealogy.getContents().get("I2").containsAll(listPerson2));
+        assertEquals(("1 NOTE " + comment1), (genealogy.getContents().get("I2").get(10).toString()));
+        assertEquals(("2 CONT " + baseComment2), (genealogy.getContents().get("I2").get(11).toString()));
+        //verification 2 comments
+        assertEquals(comment3, person2Comments.getComments());
+        assertTrue(genealogy.getContents().get("I3").containsAll(listPerson3));
+        assertEquals(("1 NOTE " + comment1), (genealogy.getContents().get("I3").get(10).toString()));
+        assertEquals(("2 CONT " + baseComment2), (genealogy.getContents().get("I3").get(11).toString()));
+        assertEquals(("2 CONT " + baseComment3), (genealogy.getContents().get("I3").get(12).toString()));
     }
 }

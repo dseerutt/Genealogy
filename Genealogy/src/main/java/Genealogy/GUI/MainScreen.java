@@ -12,9 +12,9 @@ import Genealogy.Model.Act.Union;
 import Genealogy.Model.Gedcom.Genealogy;
 import Genealogy.Model.Gedcom.Person;
 import Genealogy.Model.Gedcom.Town;
-import Genealogy.URLConnexion.MyHttpURLConnexion;
+import Genealogy.URLConnexion.MyHttpUrlConnection;
 import Genealogy.URLConnexion.Serializer;
-import Genealogy.URLConnexion.URLException;
+import Genealogy.Model.Exception.URLException;
 import edu.emory.mathcs.backport.java.util.Collections;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -73,7 +73,7 @@ public class MainScreen extends JFrame {
     private MapFrame mapFrame;
     private static MainScreen INSTANCE;
     final static Logger logger = LogManager.getLogger(MainScreen.class);
-    private MyHttpURLConnexion HTTPConnexion;
+    private MyHttpUrlConnection HTTPConnexion;
 
     public static MainScreen getINSTANCE() {
         return INSTANCE;
@@ -87,7 +87,7 @@ public class MainScreen extends JFrame {
         initComboBox();
         initTab1();
         initMissingCitiesTab();
-        HTTPConnexion = new MyHttpURLConnexion();
+        HTTPConnexion = new MyHttpUrlConnection();
 
         setPreferredSize(new Dimension(700, 500));
         pack();
@@ -350,7 +350,7 @@ public class MainScreen extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 try {
                     //Test connexion internet
-                    if (!MyHttpURLConnexion.testInternetConnexion()) {
+                    if (!MyHttpUrlConnection.testInternetConnection()) {
                         throw new URLException("Impossible d'afficher la carte sans connexion internet");
                     }
                     MapScreen mapScreen = new MapScreen();
@@ -556,7 +556,7 @@ public class MainScreen extends JFrame {
                 String city = StringUtils.strip(concat);
                 String county = tmpSplit[tmpSplit.length - 1];
                 String fullCity = city + " (" + county + ")";
-                MyCoordinate result = Town.parseJsonArray(HTTPConnexion.sendAddressRequest(city, county, false));
+                MyCoordinate result = Town.parseJsonArray(HTTPConnexion.sendGpsRequest(city, county, false));
                 logger.info("Coordonnées de la ville " + fullCity + " : " + result);
                 if (result != null) {
                     HashMap<String, String> townAssociation = Town.getTownAssociation();

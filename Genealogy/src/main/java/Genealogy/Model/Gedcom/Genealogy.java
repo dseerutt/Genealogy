@@ -82,8 +82,29 @@ public class Genealogy {
         writer.close();
     }
 
-    //TODO
-    public void setComment(String idPerson, String comment) {
+    /**
+     * Function setComments : set comments of a Person within the persons list and the write the file
+     *
+     * @param idPerson
+     * @param comments
+     */
+    public void setComments(String idPerson, String comments) {
+        Person person = findPersonById(idPerson);
+        person.setComments(comments);
+        //Update contents
+        ParsingStructure noteStructure = new ParsingStructure(1, "NOTE", "");
+        ArrayList<ParsingStructure> contLines = new ArrayList<>();
+        String[] tmpArray = comments.split(System.lineSeparator());
+        if (tmpArray != null && tmpArray.length > 0) {
+            noteStructure.setFieldValue(tmpArray[0]);
+        }
+        for (int i = 1; i < tmpArray.length; i++) {
+            contLines.add(new ParsingStructure(2, "CONT", tmpArray[i]));
+        }
+        ArrayList<ParsingStructure> parsingStructureList = contents.get(idPerson);
+        parsingStructureList.removeIf(parsingStructure -> parsingStructure.getFieldName().matches("NOTE|CONT"));
+        parsingStructureList.add(noteStructure);
+        parsingStructureList.addAll(contLines);
     }
 
     /**
@@ -204,7 +225,7 @@ public class Genealogy {
      * @param listInput
      * @throws ParsingException
      */
-    protected void getPersonByPartner(ArrayList<ParsingStructure> listInput) throws ParsingException {
+    protected void parsePerson(ArrayList<ParsingStructure> listInput) throws ParsingException {
         Person person = new Person(this, listInput);
         persons.add(person);
     }
@@ -224,7 +245,7 @@ public class Genealogy {
             if (!id.matches("HEAD|SUBM|TRLR")) {
                 switch (id.charAt(0)) {
                     case 'I':
-                        getPersonByPartner(entry.getValue());
+                        parsePerson(entry.getValue());
                         break;
                     case 'F':
                         parseFamily(entry.getValue());
@@ -379,7 +400,7 @@ public class Genealogy {
      * @return
      * @throws ParsingException
      */
-    protected Person getPersonByPartner(String field, ArrayList<ParsingStructure> listInput) throws ParsingException {
+    protected Person parsePerson(String field, ArrayList<ParsingStructure> listInput) throws ParsingException {
         String partnerId = findFieldInContents(field, listInput);
         return findPersonById(partnerId);
     }
@@ -393,9 +414,9 @@ public class Genealogy {
      * @throws ParsingException
      */
     protected Person findPartner1(ArrayList<ParsingStructure> listInput) throws ParsingException {
-        Person person = getPersonByPartner("HUSB", listInput);
+        Person person = parsePerson("HUSB", listInput);
         if (person != null) {
-            getPersonByPartner("WIFE", listInput);
+            parsePerson("WIFE", listInput);
         }
         return person;
     }
@@ -408,9 +429,9 @@ public class Genealogy {
      * @throws ParsingException
      */
     protected Person findPartner2(ArrayList<ParsingStructure> listInput) throws ParsingException {
-        Person person = getPersonByPartner("WIFE", listInput);
+        Person person = parsePerson("WIFE", listInput);
         if (person != null) {
-            getPersonByPartner("HUSB", listInput);
+            parsePerson("HUSB", listInput);
         }
         return person;
     }

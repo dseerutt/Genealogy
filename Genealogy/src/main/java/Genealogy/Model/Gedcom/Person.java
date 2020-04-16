@@ -169,6 +169,10 @@ public class Person {
         return comments;
     }
 
+    public void  setComments(String comments) {
+        this.comments = comments;
+    }
+
     public ArrayList<Union> getUnions() {
         return unions;
     }

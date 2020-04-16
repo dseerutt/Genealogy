@@ -56,7 +56,7 @@ public class UnionTest {
     }
 
     /**
-     * Test getOtherPerson(Person) : getting back the other person of the union from a parameter Person, null elsewhere
+     * Test getOtherPerson(Person) : getting back the other person of the union from a parameter Person, null otherwhise
      *
      * @throws ParsingException
      * @throws NoSuchFieldException
@@ -87,7 +87,7 @@ public class UnionTest {
     }
 
     /**
-     * Test getOtherPerson(String) : getting back the other person of the union from a parameter String, null elsewhere
+     * Test getOtherPerson(String) : getting back the other person of the union from a parameter String, null otherwise
      *
      * @throws ParsingException
      * @throws NoSuchFieldException

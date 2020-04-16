@@ -95,4 +95,31 @@ public class ParsingStructure {
     public String getFieldValue() {
         return fieldValue;
     }
+
+    /**
+     * Number setter
+     *
+     * @param number
+     */
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    /**
+     * FieldName setter
+     *
+     * @param fieldName
+     */
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
+    }
+
+    /**
+     * FieldValue setter
+     *
+     * @param fieldValue
+     */
+    public void setFieldValue(String fieldValue) {
+        this.fieldValue = fieldValue;
+    }
 }
