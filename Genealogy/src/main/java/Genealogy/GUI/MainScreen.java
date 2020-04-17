@@ -9,12 +9,12 @@ import Genealogy.Model.Act.Act;
 import Genealogy.Model.Act.Birth;
 import Genealogy.Model.Act.Enum.ActType;
 import Genealogy.Model.Act.Union;
+import Genealogy.Model.Exception.URLException;
 import Genealogy.Model.Gedcom.Genealogy;
 import Genealogy.Model.Gedcom.Person;
 import Genealogy.Model.Gedcom.Town;
 import Genealogy.URLConnexion.MyHttpUrlConnection;
 import Genealogy.URLConnexion.Serializer;
-import Genealogy.Model.Exception.URLException;
 import edu.emory.mathcs.backport.java.util.Collections;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -416,7 +416,7 @@ public class MainScreen extends JFrame {
         if (!townAssociation.isEmpty()) {
             String newCity = townAssociation.get(city);
             TownQuery.setText(newCity);
-            MyCoordinate coordinate = Town.findCoordinate(newCity);
+            MyCoordinate coordinate = Town.findCoordinateFromTowns(newCity);
             if (coordinate != null) {
                 GeoPosition geoPosition = new GeoPosition(coordinate.getLattitude(), coordinate.getLongitude());
                 jXMapKit.setCenterPosition(geoPosition);

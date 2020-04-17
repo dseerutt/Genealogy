@@ -19,6 +19,7 @@ import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -118,11 +119,11 @@ public class Person {
      *
      * @param parsingStructurelist
      */
-    private void initSimpleFields(ArrayList<ParsingStructure> parsingStructurelist) {
+    private void initSimpleFields(ArrayList<ParsingStructure> parsingStructurelist) throws ParsingException {
         if (parsingStructurelist != null) {
             String newId = parsingStructurelist.get(0).getFieldName();
             if (newId.contains("@I")) {
-                id = newId;
+                id = newId.replace("@", "");
             } else {
                 id = "";
             }
@@ -133,7 +134,30 @@ public class Person {
             }
             sex = parseSex(findFieldInContents("SEX", parsingStructurelist));
             profession = findFieldInContents("OCCU", parsingStructurelist);
-            comments = findFieldInContents("NOTE", parsingStructurelist);
+            String note = findFieldInContents("NOTE", parsingStructurelist);
+            String remarks = "";
+            if (!note.contains("¤PDF¤")) {
+                remarks = note;
+            }
+            int cont = findIndexIdString("CONT", parsingStructurelist);
+            if (cont != -1) {
+                for (int i = cont; i < parsingStructurelist.size(); i++) {
+                    String fieldValue = parsingStructurelist.get(i).getFieldValue();
+                    if ("CONT".equals(parsingStructurelist.get(i).getFieldName())) {
+                        note += System.lineSeparator() + fieldValue;
+                        if (!fieldValue.contains("¤PDF¤")) {
+                            if (StringUtils.isBlank(remarks)) {
+                                remarks += fieldValue;
+                            } else {
+                                remarks += System.lineSeparator() + fieldValue;
+                            }
+                            ;
+                        }
+                    }
+                }
+            }
+            comments = remarks;
+            pdfStructure = new PDFStructure(note);
         }
     }
 
@@ -440,6 +464,24 @@ public class Person {
     }
 
     /**
+     * PdfStructure getter
+     *
+     * @return
+     */
+    public PDFStructure getPdfStructure() {
+        return pdfStructure;
+    }
+
+    /**
+     * PdfStructure setter
+     *
+     * @param pdfStructure
+     */
+    public void setPdfStructure(PDFStructure pdfStructure) {
+        this.pdfStructure = pdfStructure;
+    }
+
+    /**
      * Mother setter
      *
      * @param mother
@@ -513,36 +555,41 @@ public class Person {
         return txt + name + " " + surname;
     }
 
-    public void initLifeSpans() {
-        initPeriods2(initPeriods1());
+    /**
+     * Function initLifespans : init pinpoints from lifespans pairs
+     */
+    public void initLifespans() {
+        initPinpoints(initLifespanPairs());
     }
 
-    public ArrayList<Pair<MyDate, Town>> initPeriods1() {
+    /**
+     * Function initLifespanPairs : return the current person list of pairs of dates and cities
+     * from acts of birth, union, death, children and sort by date
+     *
+     * @return
+     */
+    public ArrayList<Pair<MyDate, Town>> initLifespanPairs() {
         ArrayList<Pair<MyDate, Town>> tempPeriods = new ArrayList<>();
-
-        //Naissance
+        //Birth
         if ((birth != null) && (birth.getTown() != null) && (birth.getTown().getName() != null) && (birth.getDate() != null)) {
-            tempPeriods.add(new Pair<MyDate, Town>(birth.getDate(), birth.getTown()));
+            tempPeriods.add(new Pair<>(birth.getDate(), birth.getTown()));
         }
-
         //Unions
         for (int i = 0; i < unions.size(); i++) {
             if ((unions.get(i).getDate() != null) && (unions.get(i).getTown() != null) && (unions.get(i).getTown().getName() != null)) {
-                tempPeriods.add(new Pair<MyDate, Town>(unions.get(i).getDate(), unions.get(i).getTown()));
+                tempPeriods.add(new Pair<>(unions.get(i).getDate(), unions.get(i).getTown()));
             }
         }
-
-        //Enfants
+        //Children
         for (int i = 0; i < children.size(); i++) {
             if ((children.get(i).getBirth() != null) &&
                     (children.get(i).getBirth().getDate() != null) &&
                     (children.get(i).getBirth().getTown() != null) &&
                     (children.get(i).getBirth().getTown().getName() != null)) {
-                tempPeriods.add(new Pair<MyDate, Town>(children.get(i).getBirth().getDate(), children.get(i).getBirth().getTown()));
+                tempPeriods.add(new Pair<>(children.get(i).getBirth().getDate(), children.get(i).getBirth().getTown()));
             }
         }
-
-        //Décès
+        //Death
         if ((death != null) && (death.getTown() != null) && (death.getTown().getName() != null) && (death.getDate() != null)) {
             tempPeriods.add(new Pair<MyDate, Town>(death.getDate(), death.getTown()));
 
@@ -553,25 +600,26 @@ public class Person {
                 }
             });
 
-            //Cas des enfants nés après la mort
+            //Case of the children born after the death
             while (tempPeriods.get(tempPeriods.size() - 1).getKey().getDate().getTime() > death.getDate().getDate().getTime()) {
                 tempPeriods.remove(tempPeriods.size() - 1);
             }
         } else {
-            Collections.sort(tempPeriods, new Comparator<Pair<MyDate, Town>>() {
-                @Override
-                public int compare(Pair<MyDate, Town> o1, Pair<MyDate, Town> o2) {
-                    return o1.getKey().getDate().compareTo(o2.getKey().getDate());
-                }
-            });
+            Collections.sort(tempPeriods, Comparator.comparing(o -> o.getKey().getDate()));
             if ((stillAlive) && (!tempPeriods.isEmpty())) {
-                tempPeriods.add(new Pair<MyDate, Town>(new FullDate(), tempPeriods.get(tempPeriods.size() - 1).getValue()));
+                tempPeriods.add(new Pair<>(new FullDate(), tempPeriods.get(tempPeriods.size() - 1).getValue()));
             }
         }
         return tempPeriods;
     }
 
-    public void initPeriods2(ArrayList<Pair<MyDate, Town>> tempPeriods) {
+    /**
+     * Function initPinpoints : from a list of pair MyDate and Town, initialize the pinpoint collecting the year periods
+     * From 2 pinpoints for the current person, add a pinpoint for every year in this period
+     *
+     * @param tempPeriods
+     */
+    public void initPinpoints(ArrayList<Pair<MyDate, Town>> tempPeriods) {
         if (tempPeriods.size() >= 1) {
             if (tempPeriods.size() == 1) {
                 Date date = new Date(tempPeriods.get(0).getKey().getDate().getTime());
@@ -613,16 +661,13 @@ public class Person {
     }
 
     /**
-     * Function removePDFStructure : remove PDFStructure in note
+     * Function savePDFCommentAndFile : set the person comment with pdfStructure and comment, and write the file
+     *
+     * @throws IOException
      */
-    public void removePDFStructure() {
-        //TODO
-        /*String PDFStructureRegex = "¤PDF" + id + "¤";
-        String PDFRegex = "(.*)" + PDFStructureRegex + "{.*}(.*)";*/
-    }
-
-    public void savePDFStructure() {
-        //TODO
+    public void savePDFCommentAndFile() throws IOException {
+        Genealogy.genealogy.setComments(id, pdfStructure.toString() + System.lineSeparator() + comments);
+        Genealogy.genealogy.writeFile();
     }
 
     /**
@@ -631,31 +676,28 @@ public class Person {
      * @param actType    Birth, Mariage, Death
      * @param proof      Nom du PDF String
      * @param unionIndex numéro de l'union
+     * @throws Exception
      */
     public void addProof(ActType actType, String proof, int unionIndex) throws Exception {
-        //TODO
         switch (actType) {
             case BIRTH:
-                removePDFStructure();
                 birth.addProof(proof);
-                pdfStructure.addToPDFBirthList(proof);
-                savePDFStructure();
+                pdfStructure.addPDFBirth(proof);
+                savePDFCommentAndFile();
                 break;
             case MARRIAGE:
-                removePDFStructure();
                 if (unionIndex < unions.size()) {
                     unions.get(unionIndex).addProof(proof);
-                    pdfStructure.addToPDFMarriageList(proof);
-                    savePDFStructure();
+                    pdfStructure.addPDFUnion(proof);
+                    savePDFCommentAndFile();
                 } else {
-                    throw new Exception("Index trop élevé");
+                    throw new Exception("Index too big");
                 }
                 break;
             case DEATH:
-                removePDFStructure();
                 death.addProof(proof);
-                pdfStructure.addToPDGDeathList(proof);
-                savePDFStructure();
+                pdfStructure.addPDFDeath(proof);
+                savePDFCommentAndFile();
                 break;
             default:
                 return;
@@ -933,7 +975,7 @@ public class Person {
     public String toString() {
         String res = "Person";
         if (!StringUtils.isBlank(id)) {
-            res += "_" + id.substring(1, id.length() - 1);
+            res += "_" + id;
         }
         res += "{";
         if (age != -1) {
@@ -988,6 +1030,9 @@ public class Person {
         }
         if (!StringUtils.isEmpty(comments)) {
             res += ", comments='" + comments + '\'';
+        }
+        if (pdfStructure != null && !pdfStructure.isEmpty()) {
+            res += ", pdfStructure='" + pdfStructure.toString() + '\'';
         }
         return res + "}";
     }

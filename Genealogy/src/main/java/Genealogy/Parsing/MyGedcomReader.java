@@ -26,7 +26,7 @@ public class MyGedcomReader {
      * @throws ParsingException
      */
     public Genealogy read(String path) throws IOException, ParsingException {
-        Genealogy genealogy = new Genealogy();
+        Genealogy genealogy = new Genealogy(path);
         HashMap<String, ArrayList<ParsingStructure>> contents = new LinkedHashMap<>();
         ArrayList<ParsingStructure> parsingStructureList = new ArrayList<>();
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path), "ISO8859_1"));

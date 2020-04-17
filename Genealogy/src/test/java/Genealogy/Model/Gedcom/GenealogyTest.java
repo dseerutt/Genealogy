@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -34,7 +33,7 @@ public class GenealogyTest {
     @Test
     public void findPersonByIdTest() throws NoSuchFieldException, IllegalAccessException, ParsingException {
         //init
-        Genealogy genealogy = new Genealogy();
+        Genealogy genealogy = new Genealogy(null);
         ArrayList<Person> persons = new ArrayList<>();
         Person person1 = new Person(null);
 
@@ -79,7 +78,7 @@ public class GenealogyTest {
     @Test
     public void setDirectAncestorsTest() throws ParsingException {
         //init
-        Genealogy genealogy = new Genealogy();
+        Genealogy genealogy = new Genealogy(null);
         Person person1 = new Person(null);
         Person person2 = new Person(null);
         Person person3 = new Person(null);
@@ -115,7 +114,7 @@ public class GenealogyTest {
      * divorces, siblings, half siblings, missing parents, children and notes
      */
     @Test
-    public void parseContentsTest() throws IOException, ParsingException, URISyntaxException {
+    public void parseContentsTest() throws IOException, ParsingException {
         //init
         String path = "src/test/resources/parseContents.gedTest";
         File file = new File(path);
@@ -133,7 +132,7 @@ public class GenealogyTest {
         assertEquals("Person_I1{woman, name='...', surname='Martha', HETERO_MAR with Konrad Ferdinand Miller on 23/05/1874, directAncestor, child=[Gesine Miller]}", Genealogy.genealogy.getPersons().get(0).toString());
         assertEquals("Person_I2{62 y/o man, name='Beckman', surname='Bartholomaeus Ferdinand', born on 24/01/1791 at Tilsit (East Prussia), died on 10/08/1853 at Tilsit (East Prussia), profession of draper, father='Carl Friedrich Emanuel Beckman', mother='Charlotte Weber', HETERO_MAR with Minna Lehner on 19/04/1820 at Tilsit (East Prussia), child=[Kurt Friedrich Beckman]}", Genealogy.genealogy.getPersons().get(1).toString());
         assertEquals("Person_I3{man, name='Beckman', surname='Carl Friedrich Emanuel', born on 1760, profession of merchant, father='Hubertus Beckman', HETERO_MAR with Charlotte Weber on 1788, child=[Bartholomaeus Ferdinand Beckman]}", Genealogy.genealogy.getPersons().get(2).toString());
-        assertEquals("Person_I4{man, name='Beckman', surname='Gregor', born on 04/03/1956 at Essen, christened on 05/03/1956 at the place of 'Sankt Reinoldi' at Dortmund with godparents='Paul Beckman, Catharine Beckman and Josephine Cook', profession of technical illustrator, father='Joseph Arthur Wilhelm Beckman', mother='Regina Martha Klara Willner', COHABITATION with Helga Timmen, child=[Sabine Timmen]}", Genealogy.genealogy.getPersons().get(3).toString());
+        assertEquals("Person_I4{man, name='Beckman', surname='Gregor', born on 04/03/1956 at Essen, christened on 05/03/1956 at the place of 'Sankt Reinoldi' at Dortmund with godparents='Paul Beckman, Catharine Beckman and Josephine Cook', profession of technical illustrator, father='Joseph Arthur Wilhelm Beckman', mother='Regina Martha Klara Willner', COHABITATION with Helga Timmen, child=[Sabine Timmen], comments='Premier commentaire" + System.lineSeparator() + "Second commentaire" + System.lineSeparator() + "Troisième commentaire'}", Genealogy.genealogy.getPersons().get(3).toString());
         assertEquals("Person_I5{71 y/o man, name='Beckman', surname='Johann Friedrich', born on 03/01/1864 at Tilsit (East Prussia), died on 04/05/1935 at Allenstein (East Prussia), profession of mayor, father='Kurt Friedrich Beckman', mother='Caroline Schmidt', HETERO_MAR with Sophie Kowalski on 27/05/1889 at Allenstein (East Prussia), children=[Robert Martin Beckman, Martin Heinrich Beckman, Gertrud Catharina Beckman]}", Genealogy.genealogy.getPersons().get(4).toString());
         assertEquals("Person_I6{man, name='Beckman', surname='Joseph Arthur Wilhelm', born on 15/04/1929 at Allenstein (East Prussia), profession of clerk, father='Robert Martin Beckman', mother='Josephine Cook', HETERO_MAR with Regina Martha Klara Willner on 01/10/1953 at Dortmund, children=[Carl Beckman, Gregor Beckman]}", Genealogy.genealogy.getPersons().get(5).toString());
         assertEquals("Person_I7{man, name='Beckman', surname='Carl', born on 03/05/1955 at Dortmund, profession of teacher, father='Joseph Arthur Wilhelm Beckman', mother='Regina Martha Klara Willner', HETERO_MAR with Roswitha Touther on 07/09/1985 at Wesel}", Genealogy.genealogy.getPersons().get(6).toString());
@@ -239,7 +238,7 @@ public class GenealogyTest {
     @Test
     public void testSetComments() throws ParsingException, NoSuchFieldException, IllegalAccessException {
         //structures init
-        Genealogy genealogy = new Genealogy();
+        Genealogy genealogy = new Genealogy(null);
         ArrayList<Person> persons = new ArrayList<>();
         ArrayList<ParsingStructure> listBasicContents = new ArrayList<>();
         listBasicContents.add(new ParsingStructure(0, "I1", "INDI"));

@@ -1,110 +1,174 @@
 package Genealogy.Parsing;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by Dan on 22/04/2018.
+ * PDFStructure class : class that hosts String PDF sources
  */
 public class PDFStructure {
-    private Set<String> birthPDFList = new HashSet<>();
-    private Set<String> marriagePDFList = new HashSet<>();
-    private Set<String> deathPDFList = new HashSet<>();
-    private String idPerson;
+    /**
+     * String set birth sources
+     */
+    private Set<String> birth = new HashSet<>();
+    /**
+     * String set unions sources
+     */
+    private Set<String> unions = new HashSet<>();
+    /**
+     * String set death sources
+     */
+    private Set<String> death = new HashSet<>();
 
-    public void addToPDFBirthList(String PDF){
-        birthPDFList.add(PDF);
+    /**
+     * Birth getter
+     *
+     * @return
+     */
+    public Set<String> getBirth() {
+        return birth;
     }
 
-    public void addToPDFMarriageList(String PDF){
-        marriagePDFList.add(PDF);
+    /**
+     * Birth setter
+     *
+     * @param birth
+     */
+    public void setBirth(HashSet<String> birth) {
+        this.birth = birth;
     }
 
-    public void addToPDGDeathList(String PDF){
-        deathPDFList.add(PDF);
+    /**
+     * Unions getter
+     *
+     * @return
+     */
+    public Set<String> getUnions() {
+        return unions;
     }
 
-    public String getIdPerson() {
-        return idPerson;
+    /**
+     * Unions setter
+     *
+     * @param unions
+     */
+    public void setUnions(HashSet<String> unions) {
+        this.unions = unions;
     }
 
-    public void setIdPerson(String idPerson) {
-        this.idPerson = idPerson;
+    /**
+     * Death getter
+     *
+     * @return
+     */
+    public Set<String> getDeath() {
+        return death;
     }
 
-    public Set<String> getBirthPDFList() {
-        return birthPDFList;
+    /**
+     * Death setter
+     *
+     * @param death
+     */
+    public void setDeath(HashSet<String> death) {
+        this.death = death;
     }
 
-    public void setBirthPDFList(HashSet<String> birthPDFList) {
-        this.birthPDFList = birthPDFList;
+    /**
+     * Function addPDFBirth : add String source path to set of births
+     *
+     * @param PDFPath
+     */
+    public void addPDFBirth(String PDFPath) {
+        birth.add(PDFPath);
     }
 
-    public Set<String> getMarriagePDFList() {
-        return marriagePDFList;
+    /**
+     * Function addPDFUnion : add String source path to set of unions
+     *
+     * @param PDFPath
+     */
+    public void addPDFUnion(String PDFPath) {
+        unions.add(PDFPath);
     }
 
-    public void setMarriagePDFList(HashSet<String> marriagePDFList) {
-        this.marriagePDFList = marriagePDFList;
+    /**
+     * Function addPDFDeath : add String source path to set of deaths
+     *
+     * @param PDFPath
+     */
+    public void addPDFDeath(String PDFPath) {
+        death.add(PDFPath);
     }
 
-    public Set<String> getDeathPDFList() {
-        return deathPDFList;
+    /**
+     * PDFStructure Constructor : parse string input
+     *
+     * @param input
+     * @return
+     */
+    public PDFStructure(String input) {
+        if (StringUtils.isNotBlank(input)) {
+            String PDFRegex = "¤PDF¤\\{birth=\\[(.*)\\], unions=\\[(.*)\\], death=\\[(.*)\\]\\}¤PDF¤";
+            Pattern pattern = Pattern.compile(PDFRegex, Pattern.DOTALL);
+            Matcher matcher = pattern.matcher(input);
+            if (matcher.find() && matcher.groupCount() == 3) {
+                String birthPDFList = matcher.group(1);
+                String marriagePDFList = matcher.group(2);
+                String deathPDFList = matcher.group(3);
+                if (StringUtils.isNotBlank(birthPDFList)) {
+                    setBirth(convertStringToSet(birthPDFList));
+                }
+                if (StringUtils.isNotBlank(marriagePDFList)) {
+                    setUnions(convertStringToSet(marriagePDFList));
+                }
+                if (StringUtils.isNotBlank(deathPDFList)) {
+                    setDeath(convertStringToSet(deathPDFList));
+                }
+            }
+        }
     }
 
-    public void setDeathPDFList(HashSet<String> deathPDFList) {
-        this.deathPDFList = deathPDFList;
+    /**
+     * Function isEmpty : test if the structure is empty, all the set inside empty
+     *
+     * @return
+     */
+    public boolean isEmpty() {
+        return (birth.isEmpty() && unions.isEmpty() && death.isEmpty());
     }
 
+    /**
+     * Function toString : classic print of the object
+     *
+     * @return
+     */
     @Override
     public String toString() {
-        return "¤PDF" + idPerson + "¤{" +
-                "birthPDFList=" + birthPDFList +
-                ", marriagePDFList=" + marriagePDFList +
-                ", deathPDFList=" + deathPDFList +
-                "}¤PDF" + idPerson + "¤";
+        return "¤PDF¤{" +
+                "birth=" + birth +
+                ", unions=" + unions +
+                ", death=" + death +
+                "}¤PDF¤";
     }
 
-    public static PDFStructure parsePDFStucture(String contents, String id){
-        PDFStructure pdfStructure = new PDFStructure();
-        pdfStructure.setIdPerson(id);
-        String PDFRegex = "¤PDF" + id + "¤\\{birthPDFList=\\[(.*)\\], marriagePDFList=\\[(.*)\\], deathPDFList=\\[(.*)\\]\\}¤PDF" + id + "¤";
-        Pattern pattern = Pattern.compile(PDFRegex,Pattern.DOTALL);
-        Matcher matcher = pattern.matcher(contents);
-        if (matcher.find() && matcher.groupCount() == 3){
-            String birthPDFList = matcher.group(1);
-            String marriagePDFList = matcher.group(2);
-            String deathPDFList = matcher.group(3);
-            pdfStructure.setBirthPDFList(convertStringToArrayList(birthPDFList));
-            pdfStructure.setMarriagePDFList(convertStringToArrayList(marriagePDFList));
-            pdfStructure.setDeathPDFList(convertStringToArrayList(deathPDFList));
-        }
-        return pdfStructure;
-    }
-
-    public static HashSet<String> convertStringToArrayList(String input){
+    /**
+     * Function convertStringToSet : convert string input separated by commas to a set
+     *
+     * @param input
+     * @return
+     */
+    public HashSet<String> convertStringToSet(String input) {
         String[] tab = input.split(", ");
         HashSet<String> result = new HashSet<>();
-        for (int i = 0 ; i < tab.length ; i++){
+        for (int i = 0; i < tab.length; i++) {
             result.add(tab[i]);
         }
         return result;
-    }
-
-    public static void main(String[] args ) throws Exception {
-        System.out.println("Hello");
-        PDFStructure pdfStructure = new PDFStructure();
-        pdfStructure.setIdPerson("1");
-        pdfStructure.addToPDFBirthList("address1");
-        pdfStructure.addToPDFMarriageList("address2");
-        pdfStructure.addToPDGDeathList("address3");
-        pdfStructure.addToPDGDeathList("address4");
-        String data = "" + pdfStructure;
-        System.out.println(data);
-        PDFStructure myStructure = parsePDFStucture(data,"1");
-        System.out.println(myStructure);
     }
 
 }

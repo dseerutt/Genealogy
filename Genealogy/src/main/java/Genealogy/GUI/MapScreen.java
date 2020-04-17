@@ -283,7 +283,7 @@ public class MapScreen extends JFrame {
             if ((allPeople) || (p.isDirectAncestor())) {
                 if ((p.getBirth() != null) && (p.getBirth().getDate() != null) && (p.getBirth().getTown() != null) && (p.getBirth().getTown().getName() != null)) {
                     Town town = p.getBirth().getTown();
-                    MyCoordinate coo = town.findCoordinate();
+                    MyCoordinate coo = town.findCoordinateFromTowns();
                     if (map.containsKey(coo)) {
                         map.get(coo).addNom(p.getFullName());
                     } else {
@@ -292,7 +292,7 @@ public class MapScreen extends JFrame {
                 }
                 if ((p.getDeath() != null) && (p.getDeath().getDate() != null) && (p.getDeath().getTown() != null) && (p.getDeath().getTown().getName() != null)) {
                     Town town = p.getDeath().getTown();
-                    MyCoordinate coo = town.findCoordinate();
+                    MyCoordinate coo = town.findCoordinateFromTowns();
                     if (map.containsKey(coo)) {
                         map.get(coo).addNom(p.getFullName());
                     } else {
@@ -304,7 +304,7 @@ public class MapScreen extends JFrame {
                     if ((union != null) && (union.getDate() != null) && (union.getTown() != null) && (union.getTown().getName() != null)) {
                         Town town = union.getTown();
                         if (p.isDirectAncestor()) {
-                            MyCoordinate coo = town.findCoordinate();
+                            MyCoordinate coo = town.findCoordinateFromTowns();
                             if (map.containsKey(coo)) {
                                 map.get(coo).addNom(p.getFullName() + " - " + union.getPartner().getFullName());
                             } else {
@@ -327,7 +327,7 @@ public class MapScreen extends JFrame {
             if ((allPeople) || (p.isDirectAncestor())) {
                 if ((p.getBirth() != null) && (p.getBirth().getDate() != null) && (p.getBirth().getTown() != null) && (p.getBirth().getTown().getName() != null)) {
                     Town town = p.getBirth().getTown();
-                    MyCoordinate coo = town.findCoordinate();
+                    MyCoordinate coo = town.findCoordinateFromTowns();
                     if (map.containsKey(coo)) {
                         map.get(coo).addNom(p.getFullName());
                     } else {
@@ -359,7 +359,7 @@ public class MapScreen extends JFrame {
             if ((allPeople) || (p.isDirectAncestor())) {
                 if ((p.getDeath() != null) && (p.getDeath().getDate() != null) && (p.getDeath().getTown() != null) && (p.getDeath().getTown().getName() != null)) {
                     Town town = p.getDeath().getTown();
-                    MyCoordinate coo = town.findCoordinate();
+                    MyCoordinate coo = town.findCoordinateFromTowns();
                     if (map.containsKey(coo)) {
                         map.get(coo).addNom(p.getFullName());
                     } else {
@@ -383,7 +383,7 @@ public class MapScreen extends JFrame {
                     if ((union != null) && (union.getDate() != null) && (union.getTown() != null) && (union.getTown().getName() != null)) {
                         Town town = union.getTown();
                         if (p.isDirectAncestor()) {
-                            MyCoordinate coo = town.findCoordinate();
+                            MyCoordinate coo = town.findCoordinateFromTowns();
                             if (map.containsKey(coo)) {
                                 map.get(coo).addNom(p.getFullName() + " - " + union.getPartner().getFullName());
                             } else {
@@ -564,7 +564,7 @@ public class MapScreen extends JFrame {
         //Town town, String name, int age
         for (int i = 0; i < pinPoint.size(); i++) {
             //String tooltip, MyCoordinate myCoordinate, int nbPeople, Color color
-            MyCoordinate myCoordinate = pinPoint.get(i).getTown().findCoordinate();
+            MyCoordinate myCoordinate = pinPoint.get(i).getTown().findCoordinateFromTowns();
             int index = getMapStructure(mapPoints, myCoordinate);
             Pinpoint structure = pinPoint.get(i);
             if (index == -1) {

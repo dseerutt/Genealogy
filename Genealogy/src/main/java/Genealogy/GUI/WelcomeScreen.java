@@ -45,15 +45,6 @@ public class WelcomeScreen extends JFrame {
         setVisible(true);
     }
 
-    private void initForm() {
-        selFichierButton = new JButton();
-        welcomePanel = new JPanel();
-        filePath = new JTextArea();
-        chargerFichierButton = new JButton();
-        loadingPanel = new JPanel();
-        progressBar1 = new JProgressBar();
-    }
-
     private void initTownAssociation(Serializer serializer) {
         //Gestion des associations
         try {
@@ -112,7 +103,7 @@ public class WelcomeScreen extends JFrame {
                                 Genealogy.genealogy = myGedcomReader.read(filePath.getText());
                                 Genealogy.genealogy.parseContents();
                                 Genealogy.genealogy.sortPersons();
-                                Town.setCoordinates();
+                                Town.setAllCoordinates();
                                 //Traitement de villes non trouvées
                                 ArrayList<String> lostTowns = Town.getLostTowns();
                                 if ((lostTowns != null) && (!lostTowns.isEmpty())) {

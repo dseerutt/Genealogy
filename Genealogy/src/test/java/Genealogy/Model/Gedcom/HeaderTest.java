@@ -27,7 +27,7 @@ public class HeaderTest {
     @Test
     public void HeaderTest() throws ParsingException, ParseException {
         //init
-        Genealogy genealogy = new Genealogy();
+        Genealogy genealogy = new Genealogy(null);
         ArrayList<ParsingStructure> headerList = new ArrayList<>();
         headerList.add(new ParsingStructure(0, "HEAD", null));
         headerList.add(new ParsingStructure(1, "SOUR", "AHN"));

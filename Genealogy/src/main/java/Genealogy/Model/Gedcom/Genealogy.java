@@ -59,9 +59,15 @@ public class Genealogy {
     private final String authorId = "SUBM";
 
     /**
-     * Genealogy : Default Constructor
+     * String default gedcom file path
      */
-    public Genealogy() {
+    private String defaultFilePath;
+
+    /**
+     * Genealogy Constructor from path
+     */
+    public Genealogy(String path) {
+        defaultFilePath = path;
     }
 
     /**
@@ -78,6 +84,23 @@ public class Genealogy {
             }
         }
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), "ISO8859_1"));
+        writer.write(text.toString());
+        writer.close();
+    }
+
+    /**
+     * Function writeFile : write gedcom file from contents to the default path
+     *
+     * @throws IOException
+     */
+    public void writeFile() throws IOException {
+        StringBuilder text = new StringBuilder("");
+        for (ArrayList<ParsingStructure> parsingStructureList : contents.values()) {
+            for (ParsingStructure parsingStructure : parsingStructureList) {
+                text = text.append(parsingStructure.toString()).append(System.lineSeparator());
+            }
+        }
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(defaultFilePath), "ISO8859_1"));
         writer.write(text.toString());
         writer.close();
     }
@@ -112,7 +135,7 @@ public class Genealogy {
      */
     public void initPersonsLifeSpans() {
         for (int i = 0; i < persons.size(); i++) {
-            persons.get(i).initLifeSpans();
+            persons.get(i).initLifespans();
         }
     }
 
@@ -124,7 +147,7 @@ public class Genealogy {
      */
     public Person findPersonById(String id) {
         for (Person person : persons) {
-            if (id.equals(person.getId())) {
+            if (id.replace("@", "").equals(person.getId())) {
                 return person;
             }
         }
@@ -211,7 +234,7 @@ public class Genealogy {
      * @throws ParsingException
      */
     protected void parseAuthor() throws ParsingException {
-        ArrayList<ParsingStructure> subm = contents.get("SUBM");
+        ArrayList<ParsingStructure> subm = contents.get(authorId);
         if (subm != null && subm.size() >= 2 && subm.get(1).getFieldName().equals("NAME")) {
             author = subm.get(1).getFieldValue();
         } else {
