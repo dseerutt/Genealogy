@@ -269,7 +269,7 @@ public class MainScreen extends JFrame {
                     if (naissanceRadioButton.isSelected()) {
                         person.addProof(ActType.BIRTH, file);
                     } else if (mariageRadioButton.isSelected()) {
-                        person.addProof(ActType.MARRIAGE, "", person.getProofUnionSize());
+                        person.addProof(ActType.UNION, "", person.getProofUnionSize());
                         //TODO
                     } else if (deathRadioButton.isSelected()) {
                         person.addProof(ActType.DEATH, file);
@@ -293,7 +293,7 @@ public class MainScreen extends JFrame {
                     if (naissanceRadioButton.isSelected()) {
                         String file = person.getBirth().getProofs().get(0);
                     } else if (mariageRadioButton.isSelected()) {
-                        person.addProof(ActType.MARRIAGE, "", person.getProofUnionSize());
+                        person.addProof(ActType.UNION, "", person.getProofUnionSize());
                         //TODO
                     } else if (deathRadioButton.isSelected()) {
                         String file = person.getDeath().getProofs().get(0);

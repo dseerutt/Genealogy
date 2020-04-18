@@ -685,10 +685,10 @@ public class Person {
                 pdfStructure.addPDFBirth(proof);
                 savePDFCommentAndFile();
                 break;
-            case MARRIAGE:
+            case UNION:
                 if (unionIndex < unions.size()) {
                     unions.get(unionIndex).addProof(proof);
-                    pdfStructure.addPDFUnion(proof);
+                    pdfStructure.addPDFUnion(proof, unionIndex);
                     savePDFCommentAndFile();
                 } else {
                     throw new Exception("Index too big");

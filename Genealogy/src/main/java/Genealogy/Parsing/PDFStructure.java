@@ -1,35 +1,35 @@
 package Genealogy.Parsing;
 
+import org.apache.commons.collections.list.SetUniqueList;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * PDFStructure class : class that hosts String PDF sources
+ * PDFStructure class : class that hosts String PDF sources - uses SetUniqueList to avoid duplicate and have order
  */
 public class PDFStructure {
     /**
-     * String set birth sources
+     * String SetUniqueList birth sources
      */
-    private Set<String> birth = new HashSet<>();
+    private SetUniqueList birth = SetUniqueList.decorate(new ArrayList<>());
     /**
-     * String set unions sources
+     * String SetUniqueList unions sources
      */
-    private Set<String> unions = new HashSet<>();
+    private SetUniqueList unions = SetUniqueList.decorate(new ArrayList<>());
     /**
-     * String set death sources
+     * String SetUniqueList death sources
      */
-    private Set<String> death = new HashSet<>();
+    private SetUniqueList death = SetUniqueList.decorate(new ArrayList<>());
 
     /**
      * Birth getter
      *
      * @return
      */
-    public Set<String> getBirth() {
+    public SetUniqueList getBirth() {
         return birth;
     }
 
@@ -38,7 +38,7 @@ public class PDFStructure {
      *
      * @param birth
      */
-    public void setBirth(HashSet<String> birth) {
+    public void setBirth(SetUniqueList birth) {
         this.birth = birth;
     }
 
@@ -47,7 +47,7 @@ public class PDFStructure {
      *
      * @return
      */
-    public Set<String> getUnions() {
+    public SetUniqueList getUnions() {
         return unions;
     }
 
@@ -56,7 +56,7 @@ public class PDFStructure {
      *
      * @param unions
      */
-    public void setUnions(HashSet<String> unions) {
+    public void setUnions(SetUniqueList unions) {
         this.unions = unions;
     }
 
@@ -65,7 +65,7 @@ public class PDFStructure {
      *
      * @return
      */
-    public Set<String> getDeath() {
+    public SetUniqueList getDeath() {
         return death;
     }
 
@@ -74,7 +74,7 @@ public class PDFStructure {
      *
      * @param death
      */
-    public void setDeath(HashSet<String> death) {
+    public void setDeath(SetUniqueList death) {
         this.death = death;
     }
 
@@ -88,16 +88,17 @@ public class PDFStructure {
     }
 
     /**
-     * Function addPDFUnion : add String source path to set of unions
+     * Function addPDFUnion : add String source path to list of unions
      *
      * @param PDFPath
+     * @param unionIndex
      */
-    public void addPDFUnion(String PDFPath) {
-        unions.add(PDFPath);
+    public void addPDFUnion(String PDFPath, int unionIndex) {
+        unions.add((unionIndex + 1) + ")" + PDFPath);
     }
 
     /**
-     * Function addPDFDeath : add String source path to set of deaths
+     * Function addPDFDeath : add String source path to list of deaths
      *
      * @param PDFPath
      */
@@ -157,14 +158,14 @@ public class PDFStructure {
     }
 
     /**
-     * Function convertStringToSet : convert string input separated by commas to a set
+     * Function convertStringToSet : convert string input separated by commas to a SetUniqueList
      *
      * @param input
      * @return
      */
-    public HashSet<String> convertStringToSet(String input) {
+    public SetUniqueList convertStringToSet(String input) {
         String[] tab = input.split(", ");
-        HashSet<String> result = new HashSet<>();
+        SetUniqueList result = SetUniqueList.decorate(new ArrayList<>());
         for (int i = 0; i < tab.length; i++) {
             result.add(tab[i]);
         }
