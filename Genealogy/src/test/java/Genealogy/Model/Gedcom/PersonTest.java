@@ -6,6 +6,7 @@ import Genealogy.Model.Act.Death;
 import Genealogy.Model.Act.Enum.ActType;
 import Genealogy.Model.Act.Enum.UnionType;
 import Genealogy.Model.Act.Union;
+import Genealogy.Model.Date.FullDate;
 import Genealogy.Model.Date.YearDate;
 import Genealogy.Model.Exception.ParsingException;
 import Genealogy.Parsing.MyGedcomReader;
@@ -17,9 +18,13 @@ import org.mockito.Mockito;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 import static Genealogy.Model.Gedcom.Genealogy.genealogy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 
@@ -263,27 +268,262 @@ public class PersonTest {
         assertEquals("MapStructure{age=27, name='Michel', town=Town{name='Bressuire', detail='Deux-Sèvres'}}", Person.getPinpointsYearMap().get(2005).get(2).toString());
     }
 
-    //@Test
-    public void getAgeTest() {
+    /**
+     * GetAge test : test getAge with no parameter, and with negative period, missing birth, and years to add, and with 0 years to add
+     *
+     * @throws ParsingException
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     * @throws ParseException
+     */
+    @Test
+    public void getAgeTest() throws ParsingException, NoSuchFieldException, IllegalAccessException, ParseException {
+        //init
+        Person person = new Person(null);
+        Person personNullBirth = new Person(null);
+        //birth reflection
+        Birth birth = new Birth(person, new FullDate("16 AUG 1985"), new Town("Saintes", "Charente-Maritime"));
+        Field birthField = person.getClass().getDeclaredField("birth");
+        birthField.setAccessible(true);
+        birthField.set(person, birth);
+
+        LocalDate localDate2015 = LocalDate.parse("2015-08-16");
+        LocalDate localDate1975 = LocalDate.parse("1975-08-16");
+
+        //verifications
+        assertEquals(-1, person.getAge());
+        assertEquals(30, person.getAge(localDate2015, 0));
+        assertEquals(40, person.getAge(localDate2015, 10));
+        assertEquals(-1, person.getAge(localDate1975, 10));
+        assertEquals(-1, personNullBirth.getAge(localDate2015, 0));
     }
 
-    //@Test
-    public void findIllegitimateChildrenTest() {
+    /**
+     * findIllegitimateChildrenTest test : test a child with 2 parents, 2 with a father only, 1 with a mother only
+     *
+     * @throws ParsingException
+     */
+    @Test
+    public void findIllegitimateChildrenTest() throws ParsingException {
+        //init
+        Person childNormal = new Person(null);
+        Person childFather = new Person(null);
+        Person childMother = new Person(null);
+        Person childFather2 = new Person(null);
+        Person father = new Person(null);
+        Person mother = new Person(null);
+        childNormal.setFather(father);
+        childNormal.setMother(mother);
+        childFather.setFather(father);
+        childMother.setMother(mother);
+        father.addChild(childNormal);
+        father.addChild(childFather);
+        father.addChild(childFather2);
+        mother.addChild(childNormal);
+        mother.addChild(childMother);
+
+        //launch
+        ArrayList<Person> illegitimateChildrenFather = father.findIllegitimateChildren();
+        ArrayList<Person> illegitimateChildrenMother = mother.findIllegitimateChildren();
+        ArrayList<Person> illegitimateChildrenEmpty = childNormal.findIllegitimateChildren();
+
+        //verification
+        assertEquals(2, illegitimateChildrenFather.size());
+        assertTrue(illegitimateChildrenFather.contains(childFather));
+        assertTrue(illegitimateChildrenFather.contains(childFather2));
+        assertEquals(1, illegitimateChildrenMother.size());
+        assertTrue(illegitimateChildrenMother.contains(childMother));
+        assertTrue(illegitimateChildrenEmpty.isEmpty());
+
     }
 
-    //@Test
+    /**
+     * getDiffYears test : test differences of dates in years, positive and negative
+     */
+    @Test
     public void getDiffYearsTest() {
+        //init
+        LocalDate localDate2015 = LocalDate.parse("2015-08-16");
+        LocalDate localDate1975 = LocalDate.parse("1975-08-16");
+        LocalDate localDate2025 = LocalDate.parse("2025-08-16");
+
+        //verification
+        assertEquals(-40, Person.getDiffYears(localDate2015, localDate1975));
+        assertEquals(40, Person.getDiffYears(localDate1975, localDate2015));
+        assertEquals(10, Person.getDiffYears(localDate2015, localDate2025));
     }
 
-    //@Test
-    public void getHalfSiblingsTest() {
+    /**
+     * getHalfSiblings test : test on same parents people * 2  + 2 half brother + 1 half sister + 1 father
+     *
+     * @throws ParsingException
+     */
+    @Test
+    public void getHalfSiblingsTest() throws ParsingException {
+        //init
+        Person siblingNormal = new Person(null);
+        Person siblingNormal2 = new Person(null);
+        Person halfFather = new Person(null);
+        Person halfMother = new Person(null);
+        Person halfFather2 = new Person(null);
+        Person otherPerson = new Person(null);
+        Person father = new Person(null);
+        Person mother = new Person(null);
+        siblingNormal.setFather(father);
+        siblingNormal.setMother(mother);
+        siblingNormal2.setFather(father);
+        siblingNormal2.setMother(mother);
+        halfFather.setFather(father);
+        halfMother.setMother(mother);
+        halfFather2.setFather(father);
+        halfFather2.setMother(otherPerson);
+        father.addChild(siblingNormal);
+        father.addChild(siblingNormal2);
+        father.addChild(halfFather);
+        father.addChild(halfFather2);
+        mother.addChild(siblingNormal);
+        mother.addChild(siblingNormal2);
+        mother.addChild(halfMother);
+
+        //launch
+        ArrayList<Person> halfSiblingsNormal = siblingNormal.getHalfSiblings();
+        ArrayList<Person> halfSiblingsNormal2 = siblingNormal2.getHalfSiblings();
+        ArrayList<Person> halfSiblingsFather = father.getHalfSiblings();
+        ArrayList<Person> halfSiblingHalfBrother = halfFather.getHalfSiblings();
+        ArrayList<Person> halfSiblingHalfBrother2 = halfFather2.getHalfSiblings();
+        ArrayList<Person> halfSiblingHalfSister = halfMother.getHalfSiblings();
+
+        //verification
+        assertEquals(3, halfSiblingsNormal.size());
+        assertTrue(halfSiblingsNormal.contains(halfFather));
+        assertTrue(halfSiblingsNormal.contains(halfMother));
+        assertTrue(halfSiblingsNormal.contains(halfFather2));
+        assertEquals(3, halfSiblingsNormal2.size());
+        assertTrue(halfSiblingsNormal2.contains(halfFather));
+        assertTrue(halfSiblingsNormal2.contains(halfMother));
+        assertTrue(halfSiblingsNormal2.contains(halfFather2));
+        assertTrue(halfSiblingsFather.isEmpty());
+        assertEquals(3, halfSiblingHalfBrother.size());
+        assertTrue(halfSiblingHalfBrother.contains(siblingNormal));
+        assertTrue(halfSiblingHalfBrother.contains(siblingNormal2));
+        assertTrue(halfSiblingHalfBrother.contains(halfFather2));
+        assertEquals(3, halfSiblingHalfBrother2.size());
+        assertTrue(halfSiblingHalfBrother2.contains(siblingNormal));
+        assertTrue(halfSiblingHalfBrother2.contains(siblingNormal2));
+        assertTrue(halfSiblingHalfBrother2.contains(halfFather));
+        assertEquals(2, halfSiblingHalfSister.size());
+        assertTrue(halfSiblingHalfSister.contains(siblingNormal));
+        assertTrue(halfSiblingHalfSister.contains(siblingNormal2));
     }
 
-    //@Test
-    public void getSiblingsTest() {
+    /**
+     * getSiblings test : test on same parents people * 2  + 2 half brother + 1 half sister + 1 father
+     *
+     * @throws ParsingException
+     */
+    @Test
+    public void getSiblingsTest() throws ParsingException {
+        //init
+        Person siblingNormal = new Person(null);
+        Person siblingNormal2 = new Person(null);
+        Person halfFather = new Person(null);
+        Person halfMother = new Person(null);
+        Person halfFather2 = new Person(null);
+        Person father = new Person(null);
+        Person mother = new Person(null);
+        siblingNormal.setFather(father);
+        siblingNormal.setMother(mother);
+        siblingNormal2.setFather(father);
+        siblingNormal2.setMother(mother);
+        halfFather.setFather(father);
+        halfMother.setMother(mother);
+        father.addChild(siblingNormal);
+        father.addChild(siblingNormal2);
+        father.addChild(halfFather);
+        father.addChild(halfFather2);
+        mother.addChild(siblingNormal);
+        mother.addChild(halfMother);
+        mother.addChild(siblingNormal2);
+
+        //launch
+        ArrayList<Person> siblingsNormal = siblingNormal.getSiblings();
+        ArrayList<Person> siblingsNormal2 = siblingNormal2.getSiblings();
+        ArrayList<Person> siblingsFather = father.getSiblings();
+        ArrayList<Person> siblingHalfBrother = halfFather.getSiblings();
+        ArrayList<Person> siblingHalfBrother2 = halfFather2.getSiblings();
+        ArrayList<Person> siblingHalfSister = halfMother.getSiblings();
+
+        //verification
+        assertEquals(1, siblingsNormal.size());
+        assertTrue(siblingsNormal.contains(siblingNormal2));
+        assertEquals(1, siblingsNormal2.size());
+        assertTrue(siblingsNormal2.contains(siblingNormal));
+        assertTrue(siblingsFather.isEmpty());
+        assertTrue(siblingHalfBrother.isEmpty());
+        assertTrue(siblingHalfBrother2.isEmpty());
+        assertTrue(siblingHalfSister.isEmpty());
     }
 
-    //@Test
-    public void printNecessaryResearchTest() {
+    @Test
+    public void printNecessaryResearchTest() throws ParsingException, ParseException, NoSuchFieldException, IllegalAccessException {
+        //init void person and void person with a missing union
+        Person personVoid = new Person(null);
+        Person partnerVoid = new Person(null);
+        Person child = new Person(null);
+        Person personVoidWithChild = new Person(null);
+        personVoidWithChild.addChild(child);
+        child.setFather(personVoidWithChild);
+        child.setMother(partnerVoid);
+
+        //launch person and void person with a missing union
+        String searchVoid = personVoid.printNecessaryResearch();
+        String searchVoidWithChild = personVoidWithChild.printNecessaryResearch();
+
+        //verification person and void person with a missing union
+        assertEquals("Birth=[Date Town], Death=[Date Town]", searchVoid);
+        assertEquals("Birth=[Date Town], Union=[1 Missing Union], Death=[Date Town]", searchVoidWithChild);
+
+        //init child 2
+        Person child2 = new Person(null);
+        Person partnerVoid2 = new Person(null);
+        child2.setFather(personVoidWithChild);
+        child2.setMother(partnerVoid2);
+        personVoidWithChild.addChild(child2);
+
+        //launch child 2
+        String searchVoidWithChildren = personVoidWithChild.printNecessaryResearch();
+
+        //verification child 2
+        assertEquals("Birth=[Date Town], Union=[2 Missing Unions], Death=[Date Town]", searchVoidWithChildren);
+
+        //init child 2 with one declared union
+        personVoidWithChild.addUnion(new Union(personVoidWithChild, partnerVoid, new FullDate("16 AUG 1985"), new Town("Montbouy", "Loiret"), UnionType.HETERO_MAR));
+
+        //launch child 2 with one declared union
+        String searchVoidWithUnionAndChildren = personVoidWithChild.printNecessaryResearch();
+
+        //verification child 2 with one declared union
+        assertEquals("Birth=[Date Town], Union=[1 Missing Union], Death=[Date Town]", searchVoidWithUnionAndChildren);
+
+        //init birth without death and death without birth
+        Person personMissingBirth = new Person(null);
+        Person personMissingDeath = new Person(null);
+        Birth birth = new Birth(personMissingDeath, new FullDate("16 AUG 1985"), new Town("Montbouy", "Loiret"));
+        Death death = new Death(personMissingBirth, new FullDate("16 AUG 1985"), new Town("Montbouy", "Loiret"));
+        //Birth and death refection
+        Field birthField = personMissingDeath.getClass().getDeclaredField("birth");
+        birthField.setAccessible(true);
+        birthField.set(personMissingDeath, birth);
+        Field deathField = personMissingBirth.getClass().getDeclaredField("death");
+        deathField.setAccessible(true);
+        deathField.set(personMissingBirth, death);
+
+        //launch birth without death and death without birth
+        String searchMissingBirth = personMissingBirth.printNecessaryResearch();
+        String searchMissingDeath = personMissingDeath.printNecessaryResearch();
+
+        //verification birth without death and death without birth
+        assertEquals("Birth=[Date Town]", searchMissingBirth);
+        assertEquals("Death=[Date Town]", searchMissingDeath);
     }
 }

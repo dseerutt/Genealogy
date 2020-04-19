@@ -404,11 +404,11 @@ public class Genealogy {
                 String childId = parsingStructure.getFieldValue();
                 Person child = findPersonById(childId);
                 if (partner1 != null) {
-                    partner1.addChildren(child);
+                    partner1.addChild(child);
                     child.setFather(partner1);
                 }
                 if (partner2 != null) {
-                    partner2.addChildren(child);
+                    partner2.addChild(child);
                     child.setMother(partner2);
                 }
             }

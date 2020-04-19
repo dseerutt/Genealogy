@@ -16,11 +16,10 @@ import javafx.util.Pair;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.joda.time.DateTime;
-import org.joda.time.Period;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.ZoneId;
 import java.util.*;
 
@@ -288,7 +287,11 @@ public class Person {
         } else {
             Date birthDate = birth.getDate().getDate();
             Date deathDate = death.getDate().getDate();
-            age = getDiffYears(birthDate, deathDate);
+            age = getDiffYears(birthDate.toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate(), deathDate.toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate());
         }
     }
 
@@ -509,11 +512,11 @@ public class Person {
     }
 
     /**
-     * Function addChildren : add person input to children list
+     * Function addChild: add person input to children list
      *
      * @param person
      */
-    public void addChildren(Person person) {
+    public void addChild(Person person) {
         children.add(person);
     }
 
@@ -624,7 +627,7 @@ public class Person {
             if (tempPeriods.size() == 1) {
                 Date date = new Date(tempPeriods.get(0).getKey().getDate().getTime());
                 Pinpoint pinPoint =
-                        new Pinpoint(tempPeriods.get(0).getValue(), getFullName(), getAge(date, 0));
+                        new Pinpoint(tempPeriods.get(0).getValue(), getFullName(), getAge(convertToLocalDateFromDate(date), 0));
                 addPinpoint((int) tempPeriods.get(0).getKey().getYear(), pinPoint);
             } else {
                 for (int i = 0; i < tempPeriods.size() - 1; i++) {
@@ -634,17 +637,29 @@ public class Person {
                     for (int k = date1; k < date2; k++) {
                         Date date = new Date(tempPeriods.get(i).getKey().getDate().getTime());
                         Pinpoint pinPoint =
-                                new Pinpoint(tempPeriods.get(i).getValue(), getFullName(), getAge(date, index));
+                                new Pinpoint(tempPeriods.get(i).getValue(), getFullName(), getAge(convertToLocalDateFromDate(date), index));
                         addPinpoint(k, pinPoint);
                         index++;
                     }
                 }
                 Date date = new Date(tempPeriods.get(tempPeriods.size() - 1).getKey().getDate().getTime());
                 Pinpoint pinPoint =
-                        new Pinpoint(tempPeriods.get(tempPeriods.size() - 1).getValue(), getFullName(), getAge(date, 0));
+                        new Pinpoint(tempPeriods.get(tempPeriods.size() - 1).getValue(), getFullName(), getAge(convertToLocalDateFromDate(date), 0));
                 addPinpoint((int) tempPeriods.get(tempPeriods.size() - 1).getKey().getYear(), pinPoint);
             }
         }
+    }
+
+    /**
+     * Function convertToLocalDateFromDate : convert date to LocalDate
+     *
+     * @param dateToConvert
+     * @return
+     */
+    public LocalDate convertToLocalDateFromDate(Date dateToConvert) {
+        return dateToConvert.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
     }
 
     /**
@@ -754,21 +769,21 @@ public class Person {
 
     /**
      * Function getAge : calculate the age of the person at the parameter date and add parameter yearsToAdd
-     * Return -1 if birth is not found
+     * Return -1 if birth is not found or negative period
      *
-     * @param date
+     * @param localDateInput
      * @param yearsToAdd
      * @return
      */
-    public int getAge(Date date, int yearsToAdd) {
+    public int getAge(LocalDate localDateInput, int yearsToAdd) {
         if ((birth != null) && (birth.getDate() != null)) {
-            DateTime dateTime0 = new DateTime(birth.getDate().getDate().getTime());
-            DateTime dateTime1 = new DateTime(date.getTime());
-            Period period = new Period(dateTime0, dateTime1);
-            return period.getYears() + yearsToAdd;
-        } else {
-            return -1;
+            LocalDate localDateBirth = convertToLocalDateFromDate(birth.getDate().getDate());
+            Period period = Period.between(localDateBirth, localDateInput);
+            if (!period.isNegative()) {
+                return period.getYears() + yearsToAdd;
+            }
         }
+        return -1;
     }
 
     /**
@@ -836,14 +851,8 @@ public class Person {
      * @param date2
      * @return
      */
-    public static int getDiffYears(Date date1, Date date2) {
-        LocalDate localDate1 = date1.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
-        LocalDate localDate2 = date2.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
-        java.time.Period period = java.time.Period.between(localDate1, localDate2);
+    public static int getDiffYears(LocalDate date1, LocalDate date2) {
+        java.time.Period period = java.time.Period.between(date1, date2);
         return period.getYears();
     }
 
@@ -857,7 +866,7 @@ public class Person {
         if (father != null) {
             ArrayList<Person> children = father.getChildren();
             for (Person person : children) {
-                if (person.getMother() != null && !person.getMother().equals(mother) && !person.equals(this)) {
+                if ((person.getMother() == null || person.getFather() == null || person.getMother() != null && !person.getMother().equals(mother)) && !person.equals(this)) {
                     result.add(person);
                 }
             }
@@ -865,7 +874,7 @@ public class Person {
         if (mother != null) {
             ArrayList<Person> children = mother.getChildren();
             for (Person person : children) {
-                if (!person.getMother().equals(father) && !person.equals(this)) {
+                if ((person.getFather() == null || person.getMother() == null || person.getFather() != null && !person.getFather().equals(father)) && !person.equals(this)) {
                     result.add(person);
                 }
             }
@@ -917,12 +926,28 @@ public class Person {
     private String printNecessaryResearchUnions() {
         String result = "";
         ArrayList<Union> unions = getUnions();
-        if (unions != null) {
+        if (unions != null || unions.isEmpty() && children != null && !children.isEmpty()) {
             String unionTxt = "";
+            if (children != null) {
+                //Missing unions
+                Set<Person> parents = new HashSet<>();
+                for (Person child : children) {
+                    parents.add(child.getFather());
+                    parents.add(child.getMother());
+                }
+                int missingUnionsCpt = parents.size() - 1;
+                if (unions != null && unions.size() < missingUnionsCpt) {
+                    int nbMissingUnions = missingUnionsCpt - unions.size();
+                    unionTxt += nbMissingUnions + " Missing Union";
+                    if (nbMissingUnions > 1) {
+                        unionTxt += "s";
+                    }
+                }
+            }
             for (Union union : unions) {
                 String inputUnion = union.getNecessaryResearch();
                 if (inputUnion != null) {
-                    unionTxt += inputUnion;
+                    unionTxt += " " + inputUnion;
                 }
             }
             if (!unionTxt.equals("")) {
@@ -955,15 +980,16 @@ public class Person {
     /**
      * Function printNecessaryResearch : print the empty or blank fields to search in birth, unions and death
      */
-    public void printNecessaryResearch() {
+    public String printNecessaryResearch() {
         if (!StringUtils.equals(getSurname(), "...")) {
             String result = printNecessaryResearchBirth();
             result += printNecessaryResearchUnions();
             result += printNecessaryResearchDeath();
             if (!StringUtils.isBlank(result)) {
-                logger.info(getFullName() + " : " + result.substring(2));
+                return result.substring(2);
             }
         }
+        return "";
     }
 
     /**
@@ -981,7 +1007,10 @@ public class Person {
         if (age != -1) {
             res += age + " y/o ";
         }
-        res += sex.toStringPrettyPrint() + ", name='" + name + '\'';
+        if (sex != null) {
+            res += sex.toStringPrettyPrint();
+        }
+        res += ", name='" + name + '\'';
         if (!StringUtils.isEmpty(surname)) {
             res += ", surname='" + surname + '\'';
         }
