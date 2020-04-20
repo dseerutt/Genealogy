@@ -33,24 +33,67 @@ import static org.mockito.Mockito.times;
  */
 public class PersonTest {
 
-    //@Test
-    public void getPinpointsYearMapTest() {
+    /**
+     * GetFullName test : print surname and name with a composed name and surname and an empty/null surname
+     *
+     * @throws ParsingException
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
+    @Test
+    public void getFullNameTest() throws ParsingException, NoSuchFieldException, IllegalAccessException {
+        //init
+        Person personClassic = new Person(null);
+        Person personNullSurname = new Person(null);
+        Person personEmptySurname = new Person(null);
+        //reflection name surname
+        Field nameField = personClassic.getClass().getDeclaredField("name");
+        nameField.setAccessible(true);
+        Field surnameField;
+        surnameField = personClassic.getClass().getDeclaredField("surname");
+        surnameField.setAccessible(true);
+        nameField.set(personClassic, "Pierre du village");
+        surnameField.set(personClassic, "Jean-Marie");
+        nameField.set(personEmptySurname, "Pierre");
+        nameField.set(personNullSurname, "Pierrot");
+        surnameField.set(personEmptySurname, "");
+
+        //launch and verification
+        assertEquals("Jean-Marie Pierre du village", personClassic.getFullName());
+        assertEquals("Pierre", personNullSurname.getFullName());
+        assertEquals("Pierrot", personEmptySurname.getFullName());
+
     }
 
-    //@Test
-    public void getPinpointsYearMapDirectAncestorsTest() {
-    }
+    /**
+     * GetFullNameInverted test : print name and surname with a composed name and surname and an empty/null name
+     *
+     * @throws ParsingException
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
+    @Test
+    public void getFullNameInvertedTest() throws ParsingException, NoSuchFieldException, IllegalAccessException {
+        //init
+        Person personClassic = new Person(null);
+        Person personNullName = new Person(null);
+        Person personEmptyName = new Person(null);
+        //reflection name surname
+        Field nameField = personClassic.getClass().getDeclaredField("name");
+        nameField.setAccessible(true);
+        Field surnameField;
+        surnameField = personClassic.getClass().getDeclaredField("surname");
+        surnameField.setAccessible(true);
+        surnameField.set(personClassic, "Pierre");
+        nameField.set(personClassic, "Georges du marché");
+        surnameField.set(personEmptyName, "Pierre");
+        surnameField.set(personNullName, "Pierrot");
+        nameField.set(personEmptyName, "");
 
-    //@Test
-    public void getFullNameTest() {
-    }
-
-    //@Test
-    public void getFullNameInvertedTest() {
-    }
-
-    //@Test
-    public void initLifespansTest() {
+        //launch and verification
+        assertEquals("Georges du marché Pierre", personClassic.getFullNameInverted());
+        assertEquals("Pierrot", personNullName.getFullNameInverted());
+        assertEquals("Pierre", personEmptyName.getFullNameInverted());
     }
 
     //@Test
@@ -61,8 +104,34 @@ public class PersonTest {
     public void initPinpointsTest() {
     }
 
-    //@Test
-    public void getProofUnionSizeTest() {
+    /**
+     * getProofUnionSizeTest test : test with no union to 3 unions with proofs gradually
+     *
+     * @throws ParsingException
+     * @throws ParseException
+     */
+    @Test
+    public void getProofUnionSizeTest() throws ParsingException, ParseException {
+        Person person = new Person(null);
+        Person partner1 = new Person(null);
+        Person partner2 = new Person(null);
+        Person partner3 = new Person(null);
+        assertEquals(0, person.getProofUnionSize());
+        Union union1 = new Union(person, partner1, new FullDate("05 MAR 2020"), new Town("Saintes", "Charente-Maritime"), UnionType.HETERO_MAR);
+        person.addUnion(union1);
+        assertEquals(0, person.getProofUnionSize());
+        Union union2 = new Union(person, partner2, new FullDate("05 MAR 2020"), new Town("Saintes", "Charente-Maritime"), UnionType.HETERO_MAR);
+        person.addUnion(union2);
+        assertEquals(0, person.getProofUnionSize());
+        union1.addProof("Proof1");
+        assertEquals(1, person.getProofUnionSize());
+        Union union3 = new Union(person, partner3, new FullDate("05 MAR 2020"), new Town("Saintes", "Charente-Maritime"), UnionType.HETERO_MAR);
+        person.addUnion(union3);
+        assertEquals(1, person.getProofUnionSize());
+        union2.addProof("Proof2");
+        assertEquals(2, person.getProofUnionSize());
+        union3.addProof("Proof3");
+        assertEquals(3, person.getProofUnionSize());
     }
 
     /**

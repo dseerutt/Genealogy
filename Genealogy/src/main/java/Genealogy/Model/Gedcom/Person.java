@@ -539,10 +539,15 @@ public class Person {
      * @return
      */
     public String getFullNameInverted() {
-        if (!"".equals(name)) {
-            return name + " " + surname;
+        if (StringUtils.isEmpty(name)) {
+            return surname;
+        } else {
+            if (StringUtils.isEmpty(surname)) {
+                return name;
+            } else {
+                return name + " " + surname;
+            }
         }
-        return surname;
     }
 
     /**
