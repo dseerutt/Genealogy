@@ -51,6 +51,7 @@ public class ActTest {
     @Test
     public void minimumYearTest() throws ParsingException, ParseException {
         //init
+        Act.minimumYear = LocalDate.now().getYear();
         Person person1 = new Person(null);
         Person person2 = new Person(null);
         Person person3 = new Person(null);

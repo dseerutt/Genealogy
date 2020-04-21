@@ -417,9 +417,9 @@ public class MapScreen extends JFrame {
                     updateFrenchGovernors(year);
                     updateMauritianGovernors(year);
                     if (tousLesAncetresRadioButton.isSelected()) {
-                        pinPoint = Person.getPinpointsYearMapDirectAncestors().get(year);
+                        pinPoint = Pinpoint.getPinpointsYearMapDirectAncestors().get(year);
                     } else {
-                        pinPoint = Person.getPinpointsYearMap().get(year);
+                        pinPoint = Pinpoint.getPinpointsYearMap().get(year);
                     }
                     setSituation(pinPoint);
                 } else if (actesDeNaissanceRadioButton.isSelected()) {

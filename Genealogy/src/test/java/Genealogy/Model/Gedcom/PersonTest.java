@@ -1,17 +1,18 @@
 package Genealogy.Model.Gedcom;
 
-import Genealogy.MapViewer.Structures.Pinpoint;
 import Genealogy.Model.Act.Birth;
 import Genealogy.Model.Act.Death;
 import Genealogy.Model.Act.Enum.ActType;
 import Genealogy.Model.Act.Enum.UnionType;
 import Genealogy.Model.Act.Union;
 import Genealogy.Model.Date.FullDate;
+import Genealogy.Model.Date.MyDate;
 import Genealogy.Model.Date.YearDate;
 import Genealogy.Model.Exception.ParsingException;
 import Genealogy.Parsing.MyGedcomReader;
 import Genealogy.Parsing.PDFStructure;
 import Genealogy.URLConnexion.Serializer;
+import javafx.util.Pair;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -60,8 +61,8 @@ public class PersonTest {
 
         //launch and verification
         assertEquals("Jean-Marie Pierre du village", personClassic.getFullName());
-        assertEquals("Pierre", personNullSurname.getFullName());
-        assertEquals("Pierrot", personEmptySurname.getFullName());
+        assertEquals("Pierrot", personNullSurname.getFullName());
+        assertEquals("Pierre", personEmptySurname.getFullName());
 
     }
 
@@ -81,8 +82,7 @@ public class PersonTest {
         //reflection name surname
         Field nameField = personClassic.getClass().getDeclaredField("name");
         nameField.setAccessible(true);
-        Field surnameField;
-        surnameField = personClassic.getClass().getDeclaredField("surname");
+        Field surnameField = personClassic.getClass().getDeclaredField("surname");
         surnameField.setAccessible(true);
         surnameField.set(personClassic, "Pierre");
         nameField.set(personClassic, "Georges du marché");
@@ -96,12 +96,112 @@ public class PersonTest {
         assertEquals("Pierre", personEmptyName.getFullNameInverted());
     }
 
-    //@Test
-    public void initLifespanPairsTest() {
-    }
+    /**
+     * initLifespanPair test : test 1(null person), 2(birth), 3(death), 4(birth, death), 5(birth, death, union),
+     * 6(birth, 2*death, union), 7(union and other act without town), 8(union and other act without date)
+     *
+     * @throws ParsingException
+     * @throws NoSuchFieldException
+     * @throws ParseException
+     * @throws IllegalAccessException
+     */
+    @Test
+    public void initLifespanPairsTest() throws ParsingException, NoSuchFieldException, ParseException, IllegalAccessException {
+        //init null person
+        Person personNull1 = new Person(null);
+        //reflection name surname
+        Field birthField = personNull1.getClass().getDeclaredField("birth");
+        birthField.setAccessible(true);
+        Field deathField = personNull1.getClass().getDeclaredField("death");
+        deathField.setAccessible(true);
+        //init birth only person
+        Person personBirth2 = new Person(null);
+        Birth birth2 = new Birth(personBirth2, new FullDate("01 MAR 1900"), new Town("Ville 1", "Département"));
+        birthField.set(personBirth2, birth2);
+        //init death only person
+        Person personDeath3 = new Person(null);
+        Death death3 = new Death(personDeath3, new FullDate("02 MAR 1900"), new Town("Ville 2", "Département"));
+        deathField.set(personDeath3, death3);
+        //init birth and death person
+        Person personBirthDeath4 = new Person(null);
+        Birth birth4 = new Birth(personBirthDeath4, new FullDate("03 MAR 1900"), new Town("Ville 3", "Département"));
+        birthField.set(personBirthDeath4, birth4);
+        Death death4 = new Death(personBirthDeath4, new FullDate("04 MAR 1900"), new Town("Ville 4", "Département"));
+        deathField.set(personBirthDeath4, death4);
+        //init birth, death and union person
+        Person personBirthUnionDeath5 = new Person(null);
+        Birth birth5 = new Birth(personBirthDeath4, new FullDate("05 MAR 1900"), new Town("Ville 5", "Département"));
+        birthField.set(personBirthUnionDeath5, birth5);
+        Death death5 = new Death(personBirthDeath4, new FullDate("07 MAR 1900"), new Town("Ville 6", "Département"));
+        deathField.set(personBirthUnionDeath5, death5);
+        Person partner = new Person(null);
+        Union union5 = new Union(personBirthUnionDeath5, partner, new FullDate("06 MAR 1900"), new Town("Ville 7", "Département"), UnionType.HETERO_MAR);
+        personBirthUnionDeath5.addUnion(union5);
+        //init birth, death and double union person
+        Person personBirthDoubleUnionDeath6 = new Person(null);
+        Birth birth6 = new Birth(personBirthDoubleUnionDeath6, new FullDate("08 MAR 1900"), new Town("Ville 8", "Département"));
+        birthField.set(personBirthDoubleUnionDeath6, birth6);
+        Death death6 = new Death(personBirthDoubleUnionDeath6, new FullDate("11 MAR 1900"), new Town("Ville 11", "Département"));
+        deathField.set(personBirthDoubleUnionDeath6, death6);
+        Union union6V1 = new Union(personBirthDoubleUnionDeath6, partner, new FullDate("09 MAR 1900"), new Town("Ville 9", "Département"), UnionType.HETERO_MAR);
+        personBirthDoubleUnionDeath6.addUnion(union6V1);
+        Union union6V2 = new Union(personBirthDoubleUnionDeath6, partner, new FullDate("10 MAR 1900"), new Town("Ville 10", "Département"), UnionType.HETERO_MAR);
+        personBirthDoubleUnionDeath6.addUnion(union6V2);
+        //init empty town birth, death, union and a correct union
+        Person personKOTown7 = new Person(null);
+        Birth birth7 = new Birth(personKOTown7, new FullDate("10 MAR 1900"), null);
+        birthField.set(personKOTown7, birth7);
+        Death death7 = new Death(personKOTown7, new FullDate("10 MAR 1900"), null);
+        deathField.set(personKOTown7, death7);
+        Union union7V1 = new Union(personKOTown7, partner, new FullDate("10 MAR 1900"), null, UnionType.HETERO_MAR);
+        personKOTown7.addUnion(union7V1);
+        Union union7V2 = new Union(personKOTown7, partner, new FullDate("12 MAR 1900"), new Town("Ville 12", "Département"), UnionType.HETERO_MAR);
+        personKOTown7.addUnion(union7V2);
+        //init empty date birth, death, union and a correct union
+        Person personKoDate8 = new Person(null);
+        Birth birth8 = new Birth(personKoDate8, null, new Town("Ville 5", "Département"));
+        birthField.set(personKoDate8, birth8);
+        Death death8 = new Death(personKoDate8, null, new Town("Ville 6", "Département"));
+        deathField.set(personKoDate8, death8);
+        Union union8V1 = new Union(personKoDate8, partner, null, new Town("Ville 7", "Département"), UnionType.HETERO_MAR);
+        personKoDate8.addUnion(union8V1);
+        Union union8V2 = new Union(personKoDate8, partner, new FullDate("13 MAR 1900"), new Town("Ville 13", "Département"), UnionType.HETERO_MAR);
+        personKoDate8.addUnion(union8V2);
 
-    //@Test
-    public void initPinpointsTest() {
+        //launch and init
+        ArrayList<Pair<MyDate, Town>> pairsNull1 = personNull1.initLifespanPairs();
+        ArrayList<Pair<MyDate, Town>> pairsBirth2 = personBirth2.initLifespanPairs();
+        ArrayList<Pair<MyDate, Town>> pairsDeath3 = personDeath3.initLifespanPairs();
+        ArrayList<Pair<MyDate, Town>> pairsBirthDeath4 = personBirthDeath4.initLifespanPairs();
+        ArrayList<Pair<MyDate, Town>> pairsBirthUnionDeath5 = personBirthUnionDeath5.initLifespanPairs();
+        ArrayList<Pair<MyDate, Town>> pairsBirthDoubleUnionDeath6 = personBirthDoubleUnionDeath6.initLifespanPairs();
+        ArrayList<Pair<MyDate, Town>> pairsKOTown7 = personKOTown7.initLifespanPairs();
+        ArrayList<Pair<MyDate, Town>> pairsKoDate8 = personKoDate8.initLifespanPairs();
+
+        //verification
+        assertTrue(pairsNull1.isEmpty());
+        assertEquals(1, pairsBirth2.size());
+        assertTrue(pairsBirth2.contains(new Pair<>(new FullDate("01 MAR 1900"), new Town("Ville 1", "Département"))));
+        assertEquals(1, pairsDeath3.size());
+        assertTrue(pairsDeath3.contains(new Pair<>(new FullDate("02 MAR 1900"), new Town("Ville 2", "Département"))));
+        assertEquals(1, pairsDeath3.size());
+        assertTrue(pairsDeath3.contains(new Pair<>(new FullDate("02 MAR 1900"), new Town("Ville 2", "Département"))));
+        assertEquals(2, pairsBirthDeath4.size());
+        assertTrue(pairsBirthDeath4.contains(new Pair<>(new FullDate("03 MAR 1900"), new Town("Ville 3", "Département"))));
+        assertTrue(pairsBirthDeath4.contains(new Pair<>(new FullDate("04 MAR 1900"), new Town("Ville 4", "Département"))));
+        assertEquals(3, pairsBirthUnionDeath5.size());
+        assertTrue(pairsBirthUnionDeath5.contains(new Pair<>(new FullDate("05 MAR 1900"), new Town("Ville 5", "Département"))));
+        assertTrue(pairsBirthUnionDeath5.contains(new Pair<>(new FullDate("07 MAR 1900"), new Town("Ville 6", "Département"))));
+        assertTrue(pairsBirthUnionDeath5.contains(new Pair<>(new FullDate("06 MAR 1900"), new Town("Ville 7", "Département"))));
+        assertEquals(4, pairsBirthDoubleUnionDeath6.size());
+        assertTrue(pairsBirthDoubleUnionDeath6.contains(new Pair<>(new FullDate("08 MAR 1900"), new Town("Ville 8", "Département"))));
+        assertTrue(pairsBirthDoubleUnionDeath6.contains(new Pair<>(new FullDate("09 MAR 1900"), new Town("Ville 9", "Département"))));
+        assertTrue(pairsBirthDoubleUnionDeath6.contains(new Pair<>(new FullDate("10 MAR 1900"), new Town("Ville 10", "Département"))));
+        assertTrue(pairsBirthDoubleUnionDeath6.contains(new Pair<>(new FullDate("11 MAR 1900"), new Town("Ville 11", "Département"))));
+        assertEquals(1, pairsKOTown7.size());
+        assertTrue(pairsKOTown7.contains(new Pair<>(new FullDate("12 MAR 1900"), new Town("Ville 12", "Département"))));
+        assertEquals(1, pairsKoDate8.size());
+        assertTrue(pairsKoDate8.contains(new Pair<>(new FullDate("13 MAR 1900"), new Town("Ville 13", "Département"))));
     }
 
     /**
@@ -297,48 +397,7 @@ public class PersonTest {
     }
 
     /**
-     * addPinpoint test : test add pinpoints of pinpointsYearMapDirectAncestors and pinpointsYearMap
-     *
-     * @throws ParsingException
-     */
-    @Test
-    public void addPinpointTest() throws ParsingException {
-        //init direct ancestor + other
-        Pinpoint pinpointNotDA = new Pinpoint(new Town("Saintes", "Charente-Maritime"), "Robert", 25);
-        Pinpoint pinpointDA = new Pinpoint(new Town("Rennes", "Ille-et-Vilaine"), "Roberta", 26);
-        Person personNotDA = new Person(null);
-        Person personDA = new Person(null);
-        personDA.setDirectAncestor(true);
-        personNotDA.setDirectAncestor(false);
-
-        //launch direct ancestor + other
-        personDA.addPinpoint(2005, pinpointDA);
-        personNotDA.addPinpoint(2005, pinpointNotDA);
-
-        //verification direct ancestor + other
-        assertEquals(1, Person.getPinpointsYearMapDirectAncestors().get(2005).size());
-        assertEquals("MapStructure{age=26, name='Roberta', town=Town{name='Rennes', detail='Ille-et-Vilaine'}}", Person.getPinpointsYearMapDirectAncestors().get(2005).get(0).toString());
-        assertEquals(2, Person.getPinpointsYearMap().get(2005).size());
-        assertEquals("MapStructure{age=26, name='Roberta', town=Town{name='Rennes', detail='Ille-et-Vilaine'}}", Person.getPinpointsYearMap().get(2005).get(0).toString());
-        assertEquals("MapStructure{age=25, name='Robert', town=Town{name='Saintes', detail='Charente-Maritime'}}", Person.getPinpointsYearMap().get(2005).get(1).toString());
-
-        //init direct ancestor 2
-        Person personDA2 = new Person(null);
-        Pinpoint pinpointDA2 = new Pinpoint(new Town("Bressuire", "Deux-Sèvres"), "Michel", 27);
-        personDA2.setDirectAncestor(true);
-
-        //launch direct ancestor 2
-        personDA2.addPinpoint(2005, pinpointDA2);
-
-        //verification direct ancestor 2
-        assertEquals(2, Person.getPinpointsYearMapDirectAncestors().get(2005).size());
-        assertEquals("MapStructure{age=27, name='Michel', town=Town{name='Bressuire', detail='Deux-Sèvres'}}", Person.getPinpointsYearMapDirectAncestors().get(2005).get(1).toString());
-        assertEquals(3, Person.getPinpointsYearMap().get(2005).size());
-        assertEquals("MapStructure{age=27, name='Michel', town=Town{name='Bressuire', detail='Deux-Sèvres'}}", Person.getPinpointsYearMap().get(2005).get(2).toString());
-    }
-
-    /**
-     * GetAge test : test getAge with no parameter, and with negative period, missing birth, and years to add, and with 0 years to add
+     * GetAgeWithMonths & getAgeWithoutMonths test : test with no parameter, and with negative period, missing birth, and years to add, and with 0 years to add
      *
      * @throws ParsingException
      * @throws NoSuchFieldException
@@ -358,13 +417,20 @@ public class PersonTest {
 
         LocalDate localDate2015 = LocalDate.parse("2015-08-16");
         LocalDate localDate1975 = LocalDate.parse("1975-08-16");
+        LocalDate localDate2005 = LocalDate.parse("2005-06-16");
 
         //verifications
         assertEquals(-1, person.getAge());
-        assertEquals(30, person.getAge(localDate2015, 0));
-        assertEquals(40, person.getAge(localDate2015, 10));
-        assertEquals(-1, person.getAge(localDate1975, 10));
-        assertEquals(-1, personNullBirth.getAge(localDate2015, 0));
+        assertEquals(30, person.getAgeWithMonths(localDate2015, 0));
+        assertEquals(30, person.getAgeWithoutMonths(localDate2015, 0));
+        assertEquals(40, person.getAgeWithMonths(localDate2015, 10));
+        assertEquals(40, person.getAgeWithoutMonths(localDate2015, 10));
+        assertEquals(29, person.getAgeWithMonths(localDate2005, 10));
+        assertEquals(30, person.getAgeWithoutMonths(localDate2005, 10));
+        assertEquals(-1, person.getAgeWithMonths(localDate1975, 10));
+        assertEquals(-1, person.getAgeWithoutMonths(localDate1975, 10));
+        assertEquals(-1, personNullBirth.getAgeWithMonths(localDate2015, 0));
+        assertEquals(-1, personNullBirth.getAgeWithoutMonths(localDate2015, 0));
     }
 
     /**

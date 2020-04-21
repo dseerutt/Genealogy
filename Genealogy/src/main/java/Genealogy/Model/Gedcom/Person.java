@@ -1,6 +1,5 @@
 package Genealogy.Model.Gedcom;
 
-import Genealogy.MapViewer.Structures.Pinpoint;
 import Genealogy.Model.Act.Birth;
 import Genealogy.Model.Act.Christening;
 import Genealogy.Model.Act.Death;
@@ -23,7 +22,7 @@ import java.time.Period;
 import java.time.ZoneId;
 import java.util.*;
 
-import static Genealogy.MapViewer.Structures.Pinpoint.minimumYear;
+import static Genealogy.MapViewer.Structures.Pinpoint.initPinpoints;
 import static Genealogy.Model.Gedcom.Genealogy.findFieldInContents;
 import static Genealogy.Model.Gedcom.Genealogy.findIndexIdString;
 import static Genealogy.Model.Gedcom.Sex.parseSex;
@@ -104,14 +103,6 @@ public class Person {
      * Logger of the class Person
      */
     final static Logger logger = LogManager.getLogger(Person.class);
-    /**
-     * Map of list of Pinpoints (name, age, town) per year
-     */
-    private static HashMap<Integer, ArrayList<Pinpoint>> pinpointsYearMap = new HashMap<>();
-    /**
-     * Map of list of MapStructures (name, age, town) per year only for direct ancestors
-     */
-    private static HashMap<Integer, ArrayList<Pinpoint>> pinpointsYearMapDirectAncestors = new HashMap<>();
 
     /**
      * Function initSimpleFields : init name, surname, id, sex, profession and comments from input list
@@ -293,24 +284,6 @@ public class Person {
                     .atZone(ZoneId.systemDefault())
                     .toLocalDate());
         }
-    }
-
-    /**
-     * PinpointsYearMap getter
-     *
-     * @return
-     */
-    public static HashMap<Integer, ArrayList<Pinpoint>> getPinpointsYearMap() {
-        return pinpointsYearMap;
-    }
-
-    /**
-     * PinpointsYearMapDirectAncestors getter
-     *
-     * @return
-     */
-    public static HashMap<Integer, ArrayList<Pinpoint>> getPinpointsYearMapDirectAncestors() {
-        return pinpointsYearMapDirectAncestors;
     }
 
     /**
@@ -567,7 +540,7 @@ public class Person {
      * Function initLifespans : init pinpoints from lifespans pairs
      */
     public void initLifespans() {
-        initPinpoints(initLifespanPairs());
+        initPinpoints(initLifespanPairs(), this);
     }
 
     /**
@@ -577,15 +550,15 @@ public class Person {
      * @return
      */
     public ArrayList<Pair<MyDate, Town>> initLifespanPairs() {
-        ArrayList<Pair<MyDate, Town>> tempPeriods = new ArrayList<>();
+        ArrayList<Pair<MyDate, Town>> lifespanPairs = new ArrayList<>();
         //Birth
         if ((birth != null) && (birth.getTown() != null) && (birth.getTown().getName() != null) && (birth.getDate() != null)) {
-            tempPeriods.add(new Pair<>(birth.getDate(), birth.getTown()));
+            lifespanPairs.add(new Pair<>(birth.getDate(), birth.getTown()));
         }
         //Unions
         for (int i = 0; i < unions.size(); i++) {
             if ((unions.get(i).getDate() != null) && (unions.get(i).getTown() != null) && (unions.get(i).getTown().getName() != null)) {
-                tempPeriods.add(new Pair<>(unions.get(i).getDate(), unions.get(i).getTown()));
+                lifespanPairs.add(new Pair<>(unions.get(i).getDate(), unions.get(i).getTown()));
             }
         }
         //Children
@@ -594,65 +567,24 @@ public class Person {
                     (children.get(i).getBirth().getDate() != null) &&
                     (children.get(i).getBirth().getTown() != null) &&
                     (children.get(i).getBirth().getTown().getName() != null)) {
-                tempPeriods.add(new Pair<>(children.get(i).getBirth().getDate(), children.get(i).getBirth().getTown()));
+                lifespanPairs.add(new Pair<>(children.get(i).getBirth().getDate(), children.get(i).getBirth().getTown()));
             }
         }
         //Death
         if ((death != null) && (death.getTown() != null) && (death.getTown().getName() != null) && (death.getDate() != null)) {
-            tempPeriods.add(new Pair<MyDate, Town>(death.getDate(), death.getTown()));
-
-            Collections.sort(tempPeriods, new Comparator<Pair<MyDate, Town>>() {
-                @Override
-                public int compare(Pair<MyDate, Town> o1, Pair<MyDate, Town> o2) {
-                    return o1.getKey().getDate().compareTo(o2.getKey().getDate());
-                }
-            });
-
+            lifespanPairs.add(new Pair<>(death.getDate(), death.getTown()));
+            Collections.sort(lifespanPairs, Comparator.comparing(o -> o.getKey().getDate()));
             //Case of the children born after the death
-            while (tempPeriods.get(tempPeriods.size() - 1).getKey().getDate().getTime() > death.getDate().getDate().getTime()) {
-                tempPeriods.remove(tempPeriods.size() - 1);
+            while (lifespanPairs.get(lifespanPairs.size() - 1).getKey().getDate().getTime() > death.getDate().getDate().getTime()) {
+                lifespanPairs.remove(lifespanPairs.size() - 1);
             }
         } else {
-            Collections.sort(tempPeriods, Comparator.comparing(o -> o.getKey().getDate()));
-            if ((stillAlive) && (!tempPeriods.isEmpty())) {
-                tempPeriods.add(new Pair<>(new FullDate(), tempPeriods.get(tempPeriods.size() - 1).getValue()));
+            Collections.sort(lifespanPairs, Comparator.comparing(o -> o.getKey().getDate()));
+            if ((stillAlive) && (!lifespanPairs.isEmpty())) {
+                lifespanPairs.add(new Pair<>(new FullDate(), lifespanPairs.get(lifespanPairs.size() - 1).getValue()));
             }
         }
-        return tempPeriods;
-    }
-
-    /**
-     * Function initPinpoints : from a list of pair MyDate and Town, initialize the pinpoint collecting the year periods
-     * From 2 pinpoints for the current person, add a pinpoint for every year in this period
-     *
-     * @param tempPeriods
-     */
-    public void initPinpoints(ArrayList<Pair<MyDate, Town>> tempPeriods) {
-        if (tempPeriods.size() >= 1) {
-            if (tempPeriods.size() == 1) {
-                Date date = new Date(tempPeriods.get(0).getKey().getDate().getTime());
-                Pinpoint pinPoint =
-                        new Pinpoint(tempPeriods.get(0).getValue(), getFullName(), getAge(convertToLocalDateFromDate(date), 0));
-                addPinpoint((int) tempPeriods.get(0).getKey().getYear(), pinPoint);
-            } else {
-                for (int i = 0; i < tempPeriods.size() - 1; i++) {
-                    int date1 = (int) tempPeriods.get(i).getKey().getYear();
-                    int date2 = (int) tempPeriods.get(i + 1).getKey().getYear();
-                    int index = 0;
-                    for (int k = date1; k < date2; k++) {
-                        Date date = new Date(tempPeriods.get(i).getKey().getDate().getTime());
-                        Pinpoint pinPoint =
-                                new Pinpoint(tempPeriods.get(i).getValue(), getFullName(), getAge(convertToLocalDateFromDate(date), index));
-                        addPinpoint(k, pinPoint);
-                        index++;
-                    }
-                }
-                Date date = new Date(tempPeriods.get(tempPeriods.size() - 1).getKey().getDate().getTime());
-                Pinpoint pinPoint =
-                        new Pinpoint(tempPeriods.get(tempPeriods.size() - 1).getValue(), getFullName(), getAge(convertToLocalDateFromDate(date), 0));
-                addPinpoint((int) tempPeriods.get(tempPeriods.size() - 1).getKey().getYear(), pinPoint);
-            }
-        }
+        return lifespanPairs;
     }
 
     /**
@@ -744,43 +676,33 @@ public class Person {
     }
 
     /**
-     * Function addPinpoint : add the couple (year,pinpoint) to pinpointsYearMap
-     * If the person is a direct ancestor, add it to pinpointsYearMapDirectAncestors
+     * Function getAgeWithoutMonths : calculate the age of the person at the parameter date and add parameter yearsToAdd
+     * Return -1 if birth is not found or negative period - does not take into account the birth month
      *
-     * @param year
-     * @param pinpoint
+     * @param localDateInput
+     * @param yearsToAdd
+     * @return
      */
-    public void addPinpoint(int year, Pinpoint pinpoint) {
-        if (year < minimumYear) {
-            minimumYear = year;
-        }
-        if (pinpointsYearMap.containsKey(year)) {
-            pinpointsYearMap.get(year).add(pinpoint);
-        } else {
-            ArrayList<Pinpoint> structure = new ArrayList<>();
-            structure.add(pinpoint);
-            pinpointsYearMap.put(year, structure);
-        }
-        if (directAncestor) {
-            if (pinpointsYearMapDirectAncestors.containsKey(year)) {
-                pinpointsYearMapDirectAncestors.get(year).add(pinpoint);
-            } else {
-                ArrayList<Pinpoint> pinpointList = new ArrayList<>();
-                pinpointList.add(pinpoint);
-                pinpointsYearMapDirectAncestors.put(year, pinpointList);
+    public int getAgeWithoutMonths(LocalDate localDateInput, int yearsToAdd) {
+        if ((birth != null) && (birth.getDate() != null)) {
+            LocalDate localDateBirth = convertToLocalDateFromDate(birth.getDate().getDate());
+            int age = localDateInput.getYear() - localDateBirth.getYear();
+            if (age >= 0) {
+                return age + yearsToAdd;
             }
         }
+        return -1;
     }
 
     /**
-     * Function getAge : calculate the age of the person at the parameter date and add parameter yearsToAdd
+     * Function getAgeWithMonths : calculate the age of the person at the parameter date and add parameter yearsToAdd
      * Return -1 if birth is not found or negative period
      *
      * @param localDateInput
      * @param yearsToAdd
      * @return
      */
-    public int getAge(LocalDate localDateInput, int yearsToAdd) {
+    public int getAgeWithMonths(LocalDate localDateInput, int yearsToAdd) {
         if ((birth != null) && (birth.getDate() != null)) {
             LocalDate localDateBirth = convertToLocalDateFromDate(birth.getDate().getDate());
             Period period = Period.between(localDateBirth, localDateInput);

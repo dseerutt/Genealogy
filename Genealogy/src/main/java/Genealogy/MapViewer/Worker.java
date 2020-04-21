@@ -2,7 +2,6 @@ package Genealogy.MapViewer;
 
 import Genealogy.GUI.MapScreen;
 import Genealogy.MapViewer.Structures.Pinpoint;
-import Genealogy.Model.Gedcom.Person;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ public class Worker extends SwingWorker<String, Object> {
 
     @Override
     protected String doInBackground() throws Exception {
-        for (int i = year1 ; i <= year2+1 ; i++){
+        for (int i = year1; i <= year2 + 1; i++) {
             publish(i);
             try {
                 Thread.sleep(1000);
@@ -34,17 +33,17 @@ public class Worker extends SwingWorker<String, Object> {
     protected void process(List<Object> item) {
         //This updates the UI
         int i = (int) item.get(0);
-        if (i == year2+1){
+        if (i == year2 + 1) {
             mapScreen.getComboDate1().setSelectedItem(year1);
             return;
         }
         mapScreen.removeTooltip();
         mapScreen.removeMarkers();
         ArrayList<Pinpoint> pinPoint;
-        if (directAncestors){
-            pinPoint = Person.getPinpointsYearMapDirectAncestors().get(i);
+        if (directAncestors) {
+            pinPoint = Pinpoint.getPinpointsYearMapDirectAncestors().get(i);
         } else {
-            pinPoint = Person.getPinpointsYearMap().get(i);
+            pinPoint = Pinpoint.getPinpointsYearMap().get(i);
         }
         mapScreen.setSituation(pinPoint);
         mapScreen.getComboDate1().setSelectedItem(i);
@@ -56,11 +55,11 @@ public class Worker extends SwingWorker<String, Object> {
         this.mapScreen = mapScreen;
     }
 
-    public void setYear1(int year){
+    public void setYear1(int year) {
         this.year1 = year;
     }
 
-    public void setYear2(int year){
+    public void setYear2(int year) {
         this.year2 = year;
     }
 
