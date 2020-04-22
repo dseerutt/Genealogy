@@ -17,9 +17,6 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static Genealogy.Model.Gedcom.AuxMethods.removeDoubleGeneanetSuffix;
-import static Genealogy.Model.Gedcom.AuxMethods.removeGeneanetSuffix;
-
 /**
  * Created by Dan on 01/11/2017.
  */
@@ -68,14 +65,14 @@ public class GeneanetBrowser implements Serializable {
     }
 
     public void initGeneanetTrees() throws Exception {
-        if (!geneanetTrees.isEmpty()){
+        if (!geneanetTrees.isEmpty()) {
             return;
         }
         Properties prop = new Properties();
         InputStream input = null;
         try {
             String path = Serializer.getPath();
-            if (path == null){
+            if (path == null) {
                 Serializer serializer = new Serializer();
                 path = serializer.getPath()
                 ;
@@ -85,7 +82,7 @@ public class GeneanetBrowser implements Serializable {
             String property = "tree";
             String tmpProperty = "";
             int index = 1;
-            while (index <= prop.size()){
+            while (index <= prop.size()) {
                 tmpProperty = prop.getProperty(property + index);
                 if (tmpProperty != null) {
                     String[] tmpTab = tmpProperty.split(";");
@@ -117,10 +114,10 @@ public class GeneanetBrowser implements Serializable {
         InputStream input = null;
         try {
             String path = Serializer.getPath();
-            if (path == null){
+            if (path == null) {
                 Serializer serializer = new Serializer();
                 path = Serializer.getPath()
-;
+                ;
             }
             input = new FileInputStream(Serializer.getPath() + "geneanet.properties");
             prop.load(input);
@@ -152,7 +149,7 @@ public class GeneanetBrowser implements Serializable {
             geneanetConverter.setXpathChildren(prop.getProperty("XpathChildren"));
             geneanetConverter.setXpathUrl(prop.getProperty("XpathUrl"));
             geneanetConverter.setXpathImage(prop.getProperty("XpathImage"));
-            if (geneanetURL == null){
+            if (geneanetURL == null) {
                 throw new Exception("Impossible de récupérer le fichier de propriétés");
             }
         } catch (IOException ex) {
@@ -177,19 +174,18 @@ public class GeneanetBrowser implements Serializable {
         this.geneanetTrees = geneanetTrees;
     }
 
-    public String getGedcomIdFromGeneanetTrees(){
-        for (GeneanetTree geneanetTree : geneanetTrees)
-        {
-            if (removeGeneanetSuffix(geneanetTree.getUrl()).equals(removeGeneanetSuffix(url))){
+    public String getGedcomIdFromGeneanetTrees() {
+        for (GeneanetTree geneanetTree : geneanetTrees) {
+            if (removeGeneanetSuffix(geneanetTree.getUrl()).equals(removeGeneanetSuffix(url))) {
                 return geneanetTree.getGedcomId();
             }
         }
         return "";
     }
-    public int getPeopleNumberFromGeneanetTrees(){
-        for (GeneanetTree geneanetTree : geneanetTrees)
-        {
-            if (removeGeneanetSuffix(geneanetTree.getUrl()).equals(removeGeneanetSuffix(url))){
+
+    public int getPeopleNumberFromGeneanetTrees() {
+        for (GeneanetTree geneanetTree : geneanetTrees) {
+            if (removeGeneanetSuffix(geneanetTree.getUrl()).equals(removeGeneanetSuffix(url))) {
                 return geneanetTree.getPeopleNumber();
             }
         }
@@ -200,6 +196,22 @@ public class GeneanetBrowser implements Serializable {
         return geneanetConverter;
     }
 
+
+    public static String removeDoubleGeneanetSuffix(String input) {
+        if (input != null) {
+            return input.replace("&ocz=0", "").replaceAll("&iz=.*?&", "&").replaceAll("&pz=.*?&", "&").replaceAll("&nz=.*?&", "&");
+        } else {
+            return null;
+        }
+    }
+
+    public static String removeGeneanetSuffix(String input) {
+        if (input != null) {
+            return input.replace("&ocz=0", "").replaceAll("&pz=.*?&", "&").replaceAll("&nz=.*?&", "&");
+        } else {
+            return null;
+        }
+    }
 
     /**
      * Méthode initConnexion
@@ -222,7 +234,7 @@ public class GeneanetBrowser implements Serializable {
             } catch (Exception exception) {
                 logger.info("Failed to connect " + exception.getMessage());
                 Thread.sleep(1000);
-                if (cptConnexion >= 3){
+                if (cptConnexion >= 3) {
                     logger.error("Exiting, failed to connect " + exception.getMessage());
                     throw new Exception("Cannot connect to url " + geneanetURL);
                 }
@@ -340,7 +352,7 @@ public class GeneanetBrowser implements Serializable {
         return null;
     }
 
-    public void searchTree(GeneanetPerson person){
+    public void searchTree(GeneanetPerson person) {
         searchPerson(person);
 
         //Call others
@@ -353,7 +365,7 @@ public class GeneanetBrowser implements Serializable {
 
     private void searchSiblings(GeneanetPerson person) {
         ArrayList<GeneanetPerson> newSiblings = new ArrayList<GeneanetPerson>();
-        for (GeneanetPerson sibling : person.getSiblings()){
+        for (GeneanetPerson sibling : person.getSiblings()) {
             searchPerson(sibling, true);
             searchSiblingPartner(sibling, "Sibling Partner");
             newSiblings.add(sibling);
@@ -363,7 +375,7 @@ public class GeneanetBrowser implements Serializable {
 
     private void searchHalfSiblings(GeneanetPerson person) {
         ArrayList<GeneanetPerson> newHalfSiblings = new ArrayList<GeneanetPerson>();
-        for (GeneanetPerson halfSibling : person.getHalfSiblings()){
+        for (GeneanetPerson halfSibling : person.getHalfSiblings()) {
             searchPerson(halfSibling, true);
             searchSiblingPartner(halfSibling, "Half Sibling Partner");
             newHalfSiblings.add(halfSibling);
@@ -371,8 +383,8 @@ public class GeneanetBrowser implements Serializable {
         person.setHalfSiblings(newHalfSiblings);
     }
 
-    public void searchRoot(){
-        rootPerson =  new GeneanetPerson(url);
+    public void searchRoot() {
+        rootPerson = new GeneanetPerson(url);
         rootPerson.setRootperson(true);
 
         searchPerson(rootPerson);
@@ -386,91 +398,91 @@ public class GeneanetBrowser implements Serializable {
 
     private void searchChildren(GeneanetPerson rootPerson) {
         ArrayList<GeneanetPerson> newChildren = new ArrayList<GeneanetPerson>();
-        for (GeneanetPerson child : rootPerson.getChildren()){
+        for (GeneanetPerson child : rootPerson.getChildren()) {
             searchPerson(child);
             newChildren.add(child);
         }
         rootPerson.setChildren(newChildren);
     }
 
-    public void searchFather(GeneanetPerson person){
+    public void searchFather(GeneanetPerson person) {
         GeneanetPerson father = person.getFather();
-        if (father != null && !father.getUrl().equals("") && !father.isSearched()){
+        if (father != null && !father.getUrl().equals("") && !father.isSearched()) {
             searchTree(father);
             person.setFather(father);
         }
     }
 
-    public void searchMother(GeneanetPerson person){
+    public void searchMother(GeneanetPerson person) {
         GeneanetPerson mother = person.getMother();
         if (mother != null && !mother.getUrl().equals("") && !mother.isSearched()) {
-            searchTree( mother);
+            searchTree(mother);
             person.setMother(mother);
         }
     }
 
-    public void researchPartner(GeneanetPerson person, boolean root, String type){
+    public void researchPartner(GeneanetPerson person, boolean root, String type) {
         boolean found = false;
         HashMap<GeneanetPerson, HashMap<MyDate, String>> marriage = person.getMarriage();
         HashMap<GeneanetPerson, HashMap<MyDate, String>> newMarriage = new HashMap<GeneanetPerson, HashMap<MyDate, String>>();
-        for (Map.Entry<GeneanetPerson, HashMap<MyDate, String>> entry :  marriage.entrySet()){
+        for (Map.Entry<GeneanetPerson, HashMap<MyDate, String>> entry : marriage.entrySet()) {
             GeneanetPerson partner = entry.getKey();
             if (!partner.getUrl().equals("") && !partner.isSearched()) {
-                if (!found){
-                    logger.info(type + " (" + marriage.size() +  ") research for " + person.getFirstName() + " " + person.getFamilyName());
+                if (!found) {
+                    logger.info(type + " (" + marriage.size() + ") research for " + person.getFirstName() + " " + person.getFamilyName());
                     found = true;
                 }
-                if (root){
+                if (root) {
                     searchTree(partner);
                 } else {
                     searchPerson(partner, true);
                     researchPartnerNoRecursive(partner, type);
                 }
-                newMarriage.put(partner,entry.getValue());
+                newMarriage.put(partner, entry.getValue());
             }
         }
         person.setMarriage(newMarriage);
     }
 
-    public void researchPartnerNoRecursive(GeneanetPerson person, String type){
-        if (person != null && person.getMarriage().size() > 1){
+    public void researchPartnerNoRecursive(GeneanetPerson person, String type) {
+        if (person != null && person.getMarriage().size() > 1) {
             logger.info("Recursive (" + type + ") partner research (" + person.getMarriage().size() + ") for " + person.getFirstName() + " " + person.getFamilyName());
             HashMap<GeneanetPerson, HashMap<MyDate, String>> marriage = person.getMarriage();
             HashMap<GeneanetPerson, HashMap<MyDate, String>> newMarriage = new HashMap<GeneanetPerson, HashMap<MyDate, String>>();
-            for (Map.Entry<GeneanetPerson, HashMap<MyDate, String>> entry :  marriage.entrySet()){
+            for (Map.Entry<GeneanetPerson, HashMap<MyDate, String>> entry : marriage.entrySet()) {
                 GeneanetPerson partner = entry.getKey();
                 if (!partner.getUrl().equals("") && !partner.isSearched()) {
                     searchPerson(partner, true);
-                    newMarriage.put(partner,entry.getValue());
+                    newMarriage.put(partner, entry.getValue());
                 }
             }
             person.setMarriage(newMarriage);
         }
     }
 
-    public void searchPartner(GeneanetPerson person, boolean root){
-        if (person != null){
-            if (person.getMarriage() != null && (person.getMarriage().size() > 1 || person.isRootperson())){
-                researchPartner(person, root , "Partner");
+    public void searchPartner(GeneanetPerson person, boolean root) {
+        if (person != null) {
+            if (person.getMarriage() != null && (person.getMarriage().size() > 1 || person.isRootperson())) {
+                researchPartner(person, root, "Partner");
             }
         }
     }
 
-    public void searchSiblingPartner(GeneanetPerson person, String type){
-        if (person != null){
-            if (person.getMarriage() != null ){
+    public void searchSiblingPartner(GeneanetPerson person, String type) {
+        if (person != null) {
+            if (person.getMarriage() != null) {
                 researchPartner(person, false, type);
             }
         }
     }
 
-    public void addPersonToSearchedOutputPersons(String input, GeneanetPerson person){
+    public void addPersonToSearchedOutputPersons(String input, GeneanetPerson person) {
         searchOutput += input + person.toString() + System.getProperty("line.separator");
     }
 
-    public void saveSearchOutput(){
+    public void saveSearchOutput() {
         String path = Serializer.getPath();
-        if (path == null){
+        if (path == null) {
             Serializer serializer = new Serializer();
             path = Serializer.getPath();
         }
@@ -481,7 +493,7 @@ public class GeneanetBrowser implements Serializable {
             fr.write(searchOutput);
         } catch (IOException e) {
             e.printStackTrace();
-        }finally{
+        } finally {
             //close resources
             try {
                 fr.close();
@@ -492,11 +504,11 @@ public class GeneanetBrowser implements Serializable {
     }
 
     private GeneanetPerson searchPerson(GeneanetPerson person) {
-        return searchPerson(person,false);
+        return searchPerson(person, false);
     }
 
     private GeneanetPerson searchPerson(GeneanetPerson person, boolean partialSearch) {
-        if (!peopleUrl.contains(person.getUrl()) && (!partialSearch ||  !allPeopleUrl.containsKey(person.getUrl()))){
+        if (!peopleUrl.contains(person.getUrl()) && (!partialSearch || !allPeopleUrl.containsKey(person.getUrl()))) {
             int tries = 1;
             String inputTxt = "";
             do {
@@ -505,17 +517,17 @@ public class GeneanetBrowser implements Serializable {
                     url = removeDoubleGeneanetSuffix(url);
                     Document inputDocument = connect(url);
                     //Double search for partners/siblings : don't add if partner
-                    if (!partialSearch){
+                    if (!partialSearch) {
                         peopleUrl.add(url);
                     }
-                    allPeopleUrl.put(url,person);
+                    allPeopleUrl.put(url, person);
                     geneanetConverter.parseDocument(inputDocument, person);
-                    if (expectedNbPeople != 0){
+                    if (expectedNbPeople != 0) {
                         inputTxt = getNbPeople() + "/" + expectedNbPeople + " ";
                     } else {
                         inputTxt = getNbPeople() + ") ";
                     }
-                    if (partialSearch){
+                    if (partialSearch) {
                         logger.info(inputTxt + "Partial Search " + person.getFirstName() + " " + person.getFamilyName() + " : " + person);
                     } else {
                         logger.info(inputTxt + "Search " + person.getFirstName() + " " + person.getFamilyName() + " : " + person);
@@ -534,7 +546,7 @@ public class GeneanetBrowser implements Serializable {
         return null;
     }
 
-    private static void testSearch(String url){
+    private static void testSearch(String url) {
         try {
             GeneanetBrowser browser = new GeneanetBrowser(url);
             GeneanetPerson person = new GeneanetPerson(url);
@@ -562,7 +574,7 @@ public class GeneanetBrowser implements Serializable {
         return mainSearchFullTree(url, 0);
     }
 
-    public static String findTreeName(String tree){
+    public static String findTreeName(String tree) {
         String regex = ".*\\.org/(.*)\\?.*";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(tree);
@@ -580,20 +592,20 @@ public class GeneanetBrowser implements Serializable {
             GeneanetBrowser browser = new GeneanetBrowser("");
             int cpt = 1;
             ArrayList<GeneanetTree> localGeneanetTrees = browser.geneanetTrees;
-            for (GeneanetTree tree : localGeneanetTrees){
-                if (cpt >= 0){
+            for (GeneanetTree tree : localGeneanetTrees) {
+                if (cpt >= 0) {
                     logger.info("Searching " + tree.getUrl());
                     String treeName = tree.getName();
                     Integer value = tree.getPeopleNumber();
                     GeneanetBrowser newBrowser = mainSearchFullTree(tree.getUrl(), tree.getPeopleNumber());
                     int people = newBrowser.getNbPeople();
-                    if (value != null && (value != people)){
+                    if (value != null && (value != people)) {
                         logger.error("Test KO for URL " + tree.getUrl() + " : expected " + value + " but got " + people);
                         newBrowser.saveSearchOutput();
                         return;
                     } else {
                         logger.info("Test OK for URL " + treeName);
-                        if (save){
+                        if (save) {
                             newBrowser.saveSearchOutput();
                         }
                     }
@@ -631,7 +643,7 @@ public class GeneanetBrowser implements Serializable {
         }
     }
 
-    private static void hidePrintOut(){
+    private static void hidePrintOut() {
         System.setOut(new PrintStream(new OutputStream() {
             public void write(int b) {
                 // Do nothing

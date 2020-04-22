@@ -18,10 +18,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static Genealogy.Model.Gedcom.AuxMethods.removeDoubleGeneanetSuffix;
 import static Genealogy.Model.Gedcom.Genealogy.genealogy;
-import static Genealogy.URLConnexion.Geneanet.GeneanetBrowser.logger;
-import static Genealogy.URLConnexion.Geneanet.GeneanetBrowser.mainSearchFullTree;
+import static Genealogy.URLConnexion.Geneanet.GeneanetBrowser.*;
 import static Genealogy.URLConnexion.Geneanet.GeneanetPerson.printListofGeneanetPerson;
 
 /**

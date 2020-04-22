@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static Genealogy.Model.Gedcom.AuxMethods.removeDoubleGeneanetSuffix;
+import static Genealogy.URLConnexion.Geneanet.GeneanetBrowser.removeDoubleGeneanetSuffix;
 
 /**
  * Created by Dan on 07/11/2017.
@@ -30,7 +30,7 @@ public class GeneanetPerson implements Serializable {
     private ArrayList<GeneanetPerson> siblings;
     private ArrayList<GeneanetPerson> halfSiblings;
     private ArrayList<GeneanetPerson> children;
-    private HashMap<GeneanetPerson,HashMap<MyDate,String>> marriage;
+    private HashMap<GeneanetPerson, HashMap<MyDate, String>> marriage;
     private boolean searched = false;
     private String geneanetUrl;
     private boolean rootperson = false;
@@ -241,8 +241,8 @@ public class GeneanetPerson implements Serializable {
 
     @Override
     public String toString() {
-        if (firstName != null ) {
-            String result =  "GeneanetPerson{";
+        if (firstName != null) {
+            String result = "GeneanetPerson{";
             result += (url != null) ? "url='" + url + '\'' : "";
             result += (geneanetUrl != null) ? ", geneanetURL='" + geneanetUrl + '\'' : "";
             result += (firstName != null) ? ", firstName='" + firstName + '\'' : "";
@@ -267,15 +267,15 @@ public class GeneanetPerson implements Serializable {
             result += (rootperson) ? ", rootperson='" + rootperson + '\'' : "";
             return result;
         } else {
-            return  "url='" + url;
+            return "url='" + url;
         }
     }
 
-    public static String printListofGeneanetPerson(ArrayList<GeneanetPerson> list){
+    public static String printListofGeneanetPerson(ArrayList<GeneanetPerson> list) {
         String result = "";
         Boolean first = true;
-        for (GeneanetPerson person : list){
-            if (!first){
+        for (GeneanetPerson person : list) {
+            if (!first) {
                 result += ";" + person.getUrl();
             } else {
                 result += person.getUrl();
@@ -285,9 +285,9 @@ public class GeneanetPerson implements Serializable {
         return result;
     }
 
-    public static String printHashMapofGeneanetPerson(HashMap<GeneanetPerson,HashMap<MyDate,String>> hashmap){
+    public static String printHashMapofGeneanetPerson(HashMap<GeneanetPerson, HashMap<MyDate, String>> hashmap) {
         String result = "";
-        for(Map.Entry<GeneanetPerson, HashMap<MyDate,String>> entry : hashmap.entrySet()) {
+        for (Map.Entry<GeneanetPerson, HashMap<MyDate, String>> entry : hashmap.entrySet()) {
             result += entry.getKey().getUrl() + ";" + entry.getValue();
 
         }
@@ -309,7 +309,7 @@ public class GeneanetPerson implements Serializable {
 
     public void addMarriage(String personString, MyDate date, String city) {
         HashMap<MyDate, String> partnerMap = new HashMap<MyDate, String>();
-        partnerMap.put(date,city);
+        partnerMap.put(date, city);
         GeneanetPerson person = new GeneanetPerson(personString);
         marriage.put(person, partnerMap);
     }
@@ -331,22 +331,50 @@ public class GeneanetPerson implements Serializable {
 
     public int customHashCode() {
         int resultInt = 0;
-        if (gender != null) {resultInt += gender.customHashCode();}
-        if (firstName != null) {resultInt += firstName.hashCode();}
-        if (familyName != null) {resultInt += familyName.hashCode();}
-        if (birthDate != null) {resultInt += birthDate.hashCode();}
-        if (placeOfBirth != null) {resultInt += placeOfBirth.hashCode();}
-        if (deathDate != null) {resultInt += deathDate.hashCode();}
-        if (placeOfDeath != null) {resultInt += placeOfDeath.hashCode();}
+        if (gender != null) {
+            resultInt += gender.customHashCode();
+        }
+        if (firstName != null) {
+            resultInt += firstName.hashCode();
+        }
+        if (familyName != null) {
+            resultInt += familyName.hashCode();
+        }
+        if (birthDate != null) {
+            resultInt += birthDate.hashCode();
+        }
+        if (placeOfBirth != null) {
+            resultInt += placeOfBirth.hashCode();
+        }
+        if (deathDate != null) {
+            resultInt += deathDate.hashCode();
+        }
+        if (placeOfDeath != null) {
+            resultInt += placeOfDeath.hashCode();
+        }
 
         //Recursive calls
-        if (father != null && father.getGeneanetUrl() != null && !father.getGeneanetUrl().contains("&i=")) {resultInt += father.getGeneanetUrl().hashCode();}
-        if (mother != null && mother.getGeneanetUrl() != null && !mother.getGeneanetUrl().contains("&i=")) {resultInt += mother.getGeneanetUrl().hashCode();}
-        for (GeneanetPerson person : siblings ) { if (person.getUrl() != null && !person.getUrl().contains("&i=")) {resultInt += person.getUrl().hashCode();}}
-        for (GeneanetPerson person : halfSiblings ) { if (person.getUrl() != null && !person.getUrl().contains("&i=")) {resultInt += person.getUrl().hashCode();}}
-        for (GeneanetPerson person : children ) {
+        if (father != null && father.getGeneanetUrl() != null && !father.getGeneanetUrl().contains("&i=")) {
+            resultInt += father.getGeneanetUrl().hashCode();
+        }
+        if (mother != null && mother.getGeneanetUrl() != null && !mother.getGeneanetUrl().contains("&i=")) {
+            resultInt += mother.getGeneanetUrl().hashCode();
+        }
+        for (GeneanetPerson person : siblings) {
             if (person.getUrl() != null && !person.getUrl().contains("&i=")) {
-                resultInt += person.getUrl().hashCode();}}
+                resultInt += person.getUrl().hashCode();
+            }
+        }
+        for (GeneanetPerson person : halfSiblings) {
+            if (person.getUrl() != null && !person.getUrl().contains("&i=")) {
+                resultInt += person.getUrl().hashCode();
+            }
+        }
+        for (GeneanetPerson person : children) {
+            if (person.getUrl() != null && !person.getUrl().contains("&i=")) {
+                resultInt += person.getUrl().hashCode();
+            }
+        }
         //No Hashmap because no order
         return resultInt;
     }

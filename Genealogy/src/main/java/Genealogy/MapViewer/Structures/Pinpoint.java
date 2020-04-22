@@ -157,7 +157,7 @@ public class Pinpoint implements Serializable {
                 Date date = new Date(lifespanPairsList.get(0).getKey().getDate().getTime());
                 Pinpoint pinPoint =
                         new Pinpoint(lifespanPairsList.get(0).getValue(), fullName, person.getAgeWithoutMonths(convertToLocalDateFromDate(date), 0));
-                addPinpoint((int) lifespanPairsList.get(0).getKey().getYear(), pinPoint, directAncestor);
+                addPinpoint(lifespanPairsList.get(0).getKey().getYear(), pinPoint, directAncestor);
             } else {
                 for (int i = 0; i < lifespanPairsList.size() - 1; i++) {
                     int startYear = (int) lifespanPairsList.get(i).getKey().getYear();
@@ -175,7 +175,7 @@ public class Pinpoint implements Serializable {
                 Pinpoint pinPoint =
                         new Pinpoint(lifespanPairsList.get(lifespanPairsList.size() - 1).getValue(), fullName, person.getAgeWithMonths(convertToLocalDateFromDate(lastDate), 0));
 
-                addPinpoint((int) lifespanPairsList.get(lifespanPairsList.size() - 1).getKey().getYear(), pinPoint, directAncestor);
+                addPinpoint(lifespanPairsList.get(lifespanPairsList.size() - 1).getKey().getYear(), pinPoint, directAncestor);
             }
         }
     }

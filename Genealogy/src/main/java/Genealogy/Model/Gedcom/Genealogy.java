@@ -315,7 +315,7 @@ public class Genealogy {
         String date = findFieldInContents("DATE", listInput, minIndex, maxIndex);
         MyDate unionDay = null;
         try {
-            unionDay = (MyDate) MyDate.Mydate(date);
+            unionDay = (MyDate) MyDate.MyDate(date);
         } catch (Exception e) {
             logger.debug("Failed to parse the union date of " + listInput.get(minIndex).getFieldName(), e);
         }

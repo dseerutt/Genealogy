@@ -180,7 +180,7 @@ public class Person {
         String input = findFieldInContents("DATE", parsingStructurelist, index, maxIndex);
         MyDate birthDay = null;
         try {
-            birthDay = (MyDate) MyDate.Mydate(input);
+            birthDay = (MyDate) MyDate.MyDate(input);
         } catch (Exception e) {
             logger.debug("Failed to parse the " + typeSearch + " date of " + id, e);
         }
@@ -270,7 +270,7 @@ public class Person {
     private void calculateAge() {
         if ((birth == null) || (death == null)) {
             age = -1;
-            if ((death == null) && (birth != null) && (birth.getDate() != null) && (AuxMethods.getYear(birth.getDate().getDate()) > 1916)) {
+            if ((death == null) && (birth != null) && (birth.getDate() != null) && (MyDate.getYear(birth.getDate().getDate()) > 1916)) {
                 stillAlive = true;
             }
         } else if ((birth.getDate() == null) || (death.getDate() == null)) {

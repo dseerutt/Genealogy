@@ -1,7 +1,6 @@
 package Genealogy.Model.Act;
 
 import Genealogy.Model.Date.MyDate;
-import Genealogy.Model.Gedcom.AuxMethods;
 import Genealogy.Model.Gedcom.Person;
 import Genealogy.Model.Gedcom.Town;
 
@@ -47,7 +46,7 @@ public abstract class Act {
         this.date = date;
         this.town = town;
         if (date != null) {
-            int yearDate = AuxMethods.getYear(date.getDate());
+            int yearDate = MyDate.getYear(date.getDate());
             if (yearDate < minimumYear) {
                 minimumYear = yearDate;
             }

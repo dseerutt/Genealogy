@@ -1,6 +1,5 @@
 package Genealogy.Model.Date;
 
-import Genealogy.Model.Gedcom.AuxMethods;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,46 +10,79 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created by Dan on 07/04/2016.
+ * FullDate class : host a date with day, month and year, inherit MyDate
  */
 public class FullDate extends MyDate implements Serializable {
+    /**
+     * Date date
+     */
     private Date date;
-    final static Logger logger = LogManager.getLogger(FullDate.class);
+    /**
+     * Class logger
+     */
+    public final static Logger logger = LogManager.getLogger(FullDate.class);
 
+    /**
+     * FullDate constructor : from String input, initialize date. If fails, returns ParseException
+     *
+     * @param input
+     * @throws ParseException
+     */
     public FullDate(String input) throws ParseException {
-            SimpleDateFormat format = new SimpleDateFormat(AuxMethods.DATE_FORMAT2, Locale.ENGLISH);
-            date =  format.parse(input);
+        SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_BIG_MONTHS, Locale.ENGLISH);
+        date = format.parse(input);
     }
-    public FullDate(Date input){
+
+    /**
+     * FullDate constructor from Date input
+     *
+     * @param input
+     */
+    public FullDate(Date input) {
         date = input;
     }
 
-    public FullDate(){
+    /**
+     * FullDate constructor from current instant input
+     */
+    public FullDate() {
         date = new Date();
     }
 
-    public FullDate(long timestamp){
-        date = new Date(timestamp);
-    }
-
+    /**
+     * Function toString : print date with DATE_FORMAT_SLASH format
+     *
+     * @return
+     */
     @Override
     public String toString() {
-        return AuxMethods.getStringDate(date);
+        return getStringDate(date);
     }
 
-    public long getYear(){
-        return AuxMethods.getYear(date);
+    /**
+     * Function getYear : get year of the date
+     *
+     * @return
+     */
+    public int getYear() {
+        return getYear(date);
     }
 
-    public Date getDate(){
-        try {
-            return date;
-        } catch (Exception e) {
-            logger.error("Impossible de créer un timestamp de FullDate " + AuxMethods.getStringDate(date));
-            return null;
-        }
+    /**
+     * Function getDate : date getter
+     *
+     * @return
+     */
+    public Date getDate() {
+        return date;
     }
 
+    /**
+     * Function equals : date comparison
+     *
+     * @param o
+     * @return
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -62,15 +94,25 @@ public class FullDate extends MyDate implements Serializable {
 
     }
 
+    /**
+     * Function hashCode : hashcode on date
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         return getDate() != null ? getDate().hashCode() : 0;
     }
 
-    public String descriptionDate(){
-        int day = AuxMethods.getDay(date);
-        int month = AuxMethods.getMonth(date);
-        int year = AuxMethods.getYear(date);
+    /**
+     * Function descriptionDate : return description of the date object
+     *
+     * @return
+     */
+    public String descriptionDate() {
+        int day = getDay(date);
+        int month = getMonth(date);
+        int year = getYear(date);
         return "le " + day + " " + getMonthForInt(month) + " " + year;
     }
 }

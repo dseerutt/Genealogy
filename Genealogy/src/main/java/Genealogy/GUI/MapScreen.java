@@ -7,7 +7,6 @@ import Genealogy.Model.Act.Union;
 import Genealogy.Model.GUI.ActStructure;
 import Genealogy.Model.GUI.Governor;
 import Genealogy.Model.GUI.GovernorContainer;
-import Genealogy.Model.Gedcom.AuxMethods;
 import Genealogy.Model.Gedcom.Genealogy;
 import Genealogy.Model.Gedcom.Person;
 import Genealogy.Model.Gedcom.Town;
@@ -345,7 +344,7 @@ public class MapScreen extends JFrame {
         for (Map.Entry<MyCoordinate, ActStructure> entry : map.entrySet()) {
             ActStructure actStructure = entry.getValue();
             MapPoint mapPoint = new MapPoint(actStructure.getTooltip(), entry.getKey(),
-                    actStructure.getNombre(), AuxMethods.getColor2(actStructure.getNombre()), 0);
+                    actStructure.getNombre(), getColor2(actStructure.getNombre()), 0);
             fullMapPoints.add(mapPoint);
         }
         return fullMapPoints;
@@ -395,6 +394,76 @@ public class MapScreen extends JFrame {
             }
         }
         return convertStructureToMapPoints(map);
+    }
+
+    public static Color getColor(int age) {
+        if (age >= 100) {
+            return new Color(16, 52, 166);
+        } else if (age >= 90) {
+            return new Color(16, 80, 166);
+        } else if (age >= 80) {
+            return new Color(21, 96, 189);
+        } else if (age >= 70) {
+            return new Color(49, 140, 231);
+        } else if (age >= 60) {
+            return new Color(10, 186, 181);
+        } else if (age >= 55) {
+            return new Color(9, 106, 9);
+        } else if (age >= 50) {
+            return new Color(20, 148, 20);
+        } else if (age >= 45) {
+            return new Color(0, 255, 0);
+        } else if (age >= 40) {
+            return new Color(1, 215, 88);
+        } else if (age >= 35) {
+            return new Color(135, 233, 144);
+        } else if (age >= 30) {
+            return new Color(205, 205, 13);
+        } else if (age >= 20) {
+            return new Color(255, 255, 0);
+        } else if (age >= 10) {
+            return new Color(239, 155, 15);
+        } else if (age >= 05) {
+            return new Color(231, 62, 1);
+        } else if (age >= 0) {
+            return new Color(255, 0, 0);
+        } else {
+            return Color.lightGray;
+        }
+    }
+
+    public static Color getColor2(int age) {
+        if (age >= 30) {
+            return new Color(21, 96, 189);
+        } else if (age >= 25) {
+            return new Color(49, 140, 231);
+        } else if (age >= 18) {
+            return new Color(10, 186, 181);
+        } else if (age >= 16) {
+            return new Color(116, 208, 241);
+        } else if (age >= 14) {
+            return new Color(169, 234, 234);
+        } else if (age >= 12) {
+            return new Color(9, 106, 9);
+        } else if (age >= 10) {
+            return new Color(86, 130, 3);
+        } else if (age >= 8) {
+            return new Color(20, 148, 20);
+        } else if (age >= 6) {
+            return new Color(0, 255, 0);
+        } else if (age >= 5) {
+            return new Color(1, 215, 88);
+        } else if (age >= 4) {
+            return new Color(205, 205, 13);
+        } else if (age >= 3) {
+            return new Color(255, 255, 0);
+        } else if (age >= 2) {
+            return new Color(255, 203, 96);
+        } else if (age >= 1) {
+            return new Color(239, 155, 15);
+        } else {
+            return Color.lightGray;
+        }
     }
 
     public void setSituation(ArrayList<Pinpoint> pinPoint) {
@@ -570,7 +639,7 @@ public class MapScreen extends JFrame {
             if (index == -1) {
                 MapPoint mappoint = new MapPoint("<u><font size=\"5\"><b>" + pinPoint.get(i).getTown().getName()
                         + " :</b></font></u><br>" + structure.getName(), myCoordinate,
-                        1, AuxMethods.getColor(structure.getAge()), structure.getAge());
+                        1, getColor(structure.getAge()), structure.getAge());
                 mapPoints.add(mappoint);
             } else {
                 MapPoint mappoint = mapPoints.get(index);
@@ -578,7 +647,7 @@ public class MapScreen extends JFrame {
                 mappoint.setNbPeople(mappoint.getNbPeople() + 1);
                 int age2 = mappoint.getMaxAge();
                 if (age2 < structure.getAge()) {
-                    mappoint.setColor(AuxMethods.getColor(structure.getAge()));
+                    mappoint.setColor(getColor(structure.getAge()));
                     mappoint.setMaxAge(structure.getAge());
                 }
                 mapPoints.remove(index);

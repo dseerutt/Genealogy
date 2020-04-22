@@ -1,6 +1,5 @@
 package Genealogy.Model.Date;
 
-import Genealogy.Model.Gedcom.AuxMethods;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,62 +10,113 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created by Dan on 07/04/2016.
+ * MonthDate class : gregorian date with month and year only, inherit MyDate
  */
 public class MonthDate extends MyDate implements Serializable {
+    /**
+     * Int month
+     */
     private int month;
+    /**
+     * Int year
+     */
     private int year;
-    final static Logger logger = LogManager.getLogger(MonthDate.class);
+    /**
+     * Class logger
+     */
+    public final static Logger logger = LogManager.getLogger(MonthDate.class);
 
+    /**
+     * MonthDate constructor from input String with MMM yyyy format
+     *
+     * @param input
+     * @throws ParseException
+     */
     public MonthDate(String input) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat(AuxMethods.DATE_FORMAT4, Locale.ENGLISH);
-        Date date =  format.parse(input);
-        month = AuxMethods.getMonth(date) + 1;
-        year = AuxMethods.getYear(date);
+        SimpleDateFormat format = new SimpleDateFormat(BIG_MONTH_YEAR_FORMAT, Locale.ENGLISH);
+        Date date = format.parse(input);
+        month = getMonth(date) + 1;
+        year = getYear(date);
     }
 
-    public MonthDate(int month0, int year0){
+    /**
+     * MonthDate constructor from int month and int year input
+     *
+     * @param month0
+     * @param year0
+     */
+    public MonthDate(int month0, int year0) {
         month = month0;
         year = year0;
     }
 
+    /**
+     * Function equals : compare month and year
+     *
+     * @param object
+     * @return
+     */
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof MonthDate)) return false;
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof MonthDate)) return false;
 
-        MonthDate monthDate = (MonthDate) o;
+        MonthDate monthDate = (MonthDate) object;
 
         if (month != monthDate.month) return false;
         return getYear() == monthDate.getYear();
 
     }
 
+    /**
+     * Function toString : return month/year
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return month + "/" + year;
     }
 
-    public long getYear(){
+    /**
+     * Year getter
+     *
+     * @return
+     */
+    public int getYear() {
         return year;
     }
 
-    public Date getDate(){
-        String DATE_FORMAT2 = "dd MM yyyy";
-        SimpleDateFormat SDF = new SimpleDateFormat(DATE_FORMAT2, Locale.ENGLISH);
+    /**
+     * Function getDate : return date from MonthDate object, return null if fails
+     *
+     * @return
+     */
+    public Date getDate() {
+        SimpleDateFormat SDF = new SimpleDateFormat(DATE_FORMAT_CLASSIC, Locale.ENGLISH);
         String input = "30 " + month + " " + year;
         try {
             return SDF.parse(input);
         } catch (ParseException e) {
-            logger.error("Impossible de créer un timestamp de MonthDate " + month + " " + year);
+            logger.error("Failed to create MonthDate for " + month + " " + year);
             return null;
         }
     }
 
-    public String descriptionDate(){
-        return "en " + getMonthForInt(month-1) + " " + year;
+    /**
+     * Function descriptionDate : return the String description of the object
+     *
+     * @return
+     */
+    public String descriptionDate() {
+        return "en " + getMonthForInt(month - 1) + " " + year;
     }
 
+    /**
+     * Function hashCode : return hash year added to hash month
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         return (new Integer(year)).hashCode() + (new Integer(month)).hashCode();
