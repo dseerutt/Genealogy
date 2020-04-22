@@ -1,6 +1,8 @@
 package Genealogy.Model.Date.RepublicanDate;
 
-//Code decompiled from external Jar
+/**
+ * Months enum for French months - code from Gary - Follow the code
+ */
 public enum Months {
     JANVIER("Janvier"),
     FEVRIER("Février"),
@@ -15,12 +17,25 @@ public enum Months {
     NOVEMBRE("Novembre"),
     DECEMBRE("Décembre");
 
+    /**
+     * String month
+     */
     private String month;
 
+    /**
+     * Month getter
+     *
+     * @return
+     */
     public String getMonth() {
         return this.month;
     }
 
+    /**
+     * Month constructor from String month input
+     *
+     * @param month
+     */
     private Months(String month) {
         this.month = month;
     }

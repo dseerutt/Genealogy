@@ -176,12 +176,13 @@ public class Serializer<T> {
 
     /**
      * Fonction saveTownAssociation
-     * Met à jour le fichier des associations d'alias de villes
+     * Met à jour le fichier des coordonnées des billes
      */
-    public void saveCity(String city, String lattitude, String longitude) {
+
+    public void saveCity(String city, String latitude, String longitude) {
         String citySeparator = "->";
         String coordinateSeparator = ":";
-        HashMap<String, String> cities = new HashMap<String, String>();
+        HashMap<String, String> cities = new HashMap<>();
         String contents = "";
         //Read file
         try {
@@ -206,7 +207,7 @@ public class Serializer<T> {
 
         //Write file
         String newkey = city;
-        String newValue = lattitude + coordinateSeparator + longitude;
+        String newValue = latitude + coordinateSeparator + longitude;
         String newline = newkey + citySeparator + newValue + System.lineSeparator();
         if (!contents.contains(city)) {
             contents += newline;
@@ -256,7 +257,12 @@ public class Serializer<T> {
         return cityFileMap.get(city);
     }
 
-    public void saveTown(List<Town> town) {
+    /**
+     * Function saveTownSerialized : save town list input serialized into serializerType properties file
+     *
+     * @param town
+     */
+    public void saveTownSerialized(List<Town> town) {
         try {
             File file0 = new File(path + serializerType);
             if (file0.exists()) {

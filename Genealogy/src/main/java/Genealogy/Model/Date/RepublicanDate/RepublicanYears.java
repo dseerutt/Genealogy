@@ -1,6 +1,9 @@
 package Genealogy.Model.Date.RepublicanDate;
 
-//Code decompiled from external Jar
+/**
+ * Enum RepublicanYears : Enum to represent the republican years
+ * Code from Gary - Follow the code
+ */
 public enum RepublicanYears {
     I("I", 1),
     II("II", 2),
@@ -17,17 +20,39 @@ public enum RepublicanYears {
     XIII("XIII", 13),
     XIV("XIV", 14);
 
+    /**
+     * String republican year
+     */
     private String year;
+    /**
+     * Int republican index year
+     */
     private int index;
 
+    /**
+     * Year getter
+     *
+     * @return
+     */
     public String getYear() {
         return this.year;
     }
 
+    /**
+     * Index getter
+     *
+     * @return
+     */
     public int getIndex() {
         return this.index;
     }
 
+    /**
+     * RepublicanYears constructor
+     *
+     * @param year
+     * @param index
+     */
     private RepublicanYears(String year, int index) {
         this.year = year;
         this.index = index;

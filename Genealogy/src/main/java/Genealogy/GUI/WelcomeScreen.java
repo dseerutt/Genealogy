@@ -114,7 +114,7 @@ public class WelcomeScreen extends JFrame {
                                             JOptionPane.ERROR_MESSAGE);
                                     logger.error("Les villes suivantes n'ont pas été trouvées : " + txt);
                                 }
-                                Serializer.getSerializer().saveTown(Town.getTownsToSave());
+                                Serializer.getSerializer().saveTownSerialized(Town.getTownsToSave());
                                 ArrayList<Town> myEmptyTowns = Serializer.getNullCoordinatesCities(Town.getTowns());
                                 if (!myEmptyTowns.isEmpty()) {
                                     logger.warn("Villes avec Coordonnées nulles : " + myEmptyTowns);

@@ -30,13 +30,31 @@ public class Town implements Serializable {
      * Coordinates MyCoordinate of the city
      */
     private MyCoordinate coordinates;
-    private static HashMap<Town, ArrayList<Act>> listOfTown = new HashMap<>();
+    /**
+     * HashMap mapTownAct of list of Act per Town
+     */
+    private static HashMap<Town, ArrayList<Act>> mapTownAct = new HashMap<>();
+    /**
+     * ArrayList of Towns towns : static list of all towns
+     */
     private static ArrayList<Town> towns = new ArrayList<>();
+    /**
+     * Arraylist of Town townsToSave : towns to save through serializer with complete coordinates
+     */
     private static ArrayList<Town> townsToSave = new ArrayList<>();
+    /**
+     * ArrayList of string fullName towns coordinates not found
+     */
     private static ArrayList<String> lostTowns = new ArrayList<>();
+    /**
+     * HashMap townAssociation : associations of string fullName of Towns.
+     * The first town is not found, and its coordinates will be searched on the second town
+     */
     private static HashMap<String, String> townAssociation;
-    private ArrayList<Town> serializerTowns;
-    private static boolean useFileSave = true;
+    /**
+     * Boolean saveCoordinatesTxtFile : save on serializer coordinates text file
+     */
+    private static boolean saveCoordinatesTxtFile = true;
 
     /**
      * Town constructor from name and detail
@@ -50,14 +68,14 @@ public class Town implements Serializable {
     }
 
     /**
-     * Town constructor with fullname, parsing with townRegex
+     * Town constructor with fullName, parsing with townRegex
      *
-     * @param fullname
+     * @param fullName
      */
-    public Town(String fullname) {
+    public Town(String fullName) {
         for (String regex : Serializer.getTownRegex()) {
             Pattern p = Pattern.compile(regex);
-            Matcher m = p.matcher(fullname);
+            Matcher m = p.matcher(fullName);
             if (m.find()) {
                 name = StringUtils.trim(m.group(1));
                 if (m.groupCount() > 1) {
@@ -107,24 +125,6 @@ public class Town implements Serializable {
     }
 
     /**
-     * SerializerTowns getter
-     *
-     * @return
-     */
-    public ArrayList<Town> getSerializerTowns() {
-        return serializerTowns;
-    }
-
-    /**
-     * SerializerTowns setter
-     *
-     * @param serializerTowns
-     */
-    public void setSerializerTowns(ArrayList<Town> serializerTowns) {
-        this.serializerTowns = serializerTowns;
-    }
-
-    /**
      * Name getter
      *
      * @return
@@ -147,8 +147,8 @@ public class Town implements Serializable {
      *
      * @return
      */
-    public static HashMap<Town, ArrayList<Act>> getListOfTown() {
-        return listOfTown;
+    public static HashMap<Town, ArrayList<Act>> getMapTownAct() {
+        return mapTownAct;
     }
 
     /**
@@ -186,7 +186,7 @@ public class Town implements Serializable {
      */
     public static void addLostTowns(String town, String county) {
         lostTowns.add(town);
-        townAssociation.put(town, county);
+        townAssociation.put(town + " " + county, "");
     }
 
     /**
@@ -258,12 +258,12 @@ public class Town implements Serializable {
     public void addTown(Act act) {
         if (this != null) {
             if (this.getName() != null) {
-                if (listOfTown.containsKey(this)) {
-                    listOfTown.get(this).add(act);
+                if (mapTownAct.containsKey(this)) {
+                    mapTownAct.get(this).add(act);
                 } else {
                     ArrayList<Act> actes = new ArrayList<Act>();
                     actes.add(act);
-                    listOfTown.put(this, actes);
+                    mapTownAct.put(this, actes);
                     towns.add(this);
                 }
             }
@@ -353,8 +353,8 @@ public class Town implements Serializable {
                 coo = Town.parseJsonArray((new MyHttpUrlConnection()).sendGpsRequest(city, county));
                 if (coo != null) {
                     thisTown.setCoordinates(coo);
-                    if (useFileSave) {
-                        saveCoordinateIntoFile(city, county, coo.getLattitude(), coo.getLongitude());
+                    if (saveCoordinatesTxtFile) {
+                        saveCoordinateIntoFile(city, county, coo.getLatitude(), coo.getLongitude());
                     }
                 }
                 if (!lostTowns.contains(aliasName)) {
@@ -397,8 +397,8 @@ public class Town implements Serializable {
 
                 if (coo != null) {
                     thisTown.setCoordinates(coo);
-                    if (useFileSave) {
-                        saveCoordinateIntoFile(city, county, coo.getLattitude(), coo.getLongitude());
+                    if (saveCoordinatesTxtFile) {
+                        saveCoordinateIntoFile(city, county, coo.getLatitude(), coo.getLongitude());
                     }
                 }
             }
@@ -422,7 +422,7 @@ public class Town implements Serializable {
     }
 
     /**
-     * Function saveCoordinateIntoFile : save city in serializer
+     * Function saveCoordinateIntoFile : save city in serializer coordinate String file
      *
      * @param city
      * @param county
@@ -464,7 +464,7 @@ public class Town implements Serializable {
      */
     public String getCoordinatesPrettyPrint() {
         if (coordinates != null) {
-            return "(" + coordinates.getLattitude() + "," + coordinates.getLongitude() + ")";
+            return "(" + coordinates.getLatitude() + "," + coordinates.getLongitude() + ")";
         } else {
             return "";
         }

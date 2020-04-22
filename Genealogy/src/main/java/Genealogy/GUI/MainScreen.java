@@ -372,7 +372,7 @@ public class MainScreen extends JFrame {
                 deces.setText("");
                 int index = towns.getSelectedIndex();
                 Town thisTown = Town.getTowns().get(index);
-                ArrayList<Act> list = Town.getListOfTown().get(thisTown);
+                ArrayList<Act> list = Town.getMapTownAct().get(thisTown);
                 ArrayList<String> birthList = new ArrayList<String>();
                 ArrayList<String> unionsList = new ArrayList<String>();
                 ArrayList<String> deathList = new ArrayList<String>();
@@ -418,7 +418,7 @@ public class MainScreen extends JFrame {
             TownQuery.setText(newCity);
             MyCoordinate coordinate = Town.findCoordinateFromTowns(newCity);
             if (coordinate != null) {
-                GeoPosition geoPosition = new GeoPosition(coordinate.getLattitude(), coordinate.getLongitude());
+                GeoPosition geoPosition = new GeoPosition(coordinate.getLatitude(), coordinate.getLongitude());
                 jXMapKit.setCenterPosition(geoPosition);
                 ArrayList<MapPoint> list = new ArrayList<>();
                 list.add(new MapPoint(coordinate, city));
@@ -438,7 +438,7 @@ public class MainScreen extends JFrame {
         if (!townAssociation.isEmpty()) {
             //View
             TownQuery.setText(townAssociation.get(city));
-            GeoPosition geoPosition = new GeoPosition(coordinates.getLattitude(), coordinates.getLongitude());
+            GeoPosition geoPosition = new GeoPosition(coordinates.getLatitude(), coordinates.getLongitude());
             jXMapKit.setCenterPosition(geoPosition);
             ArrayList<MapPoint> list = new ArrayList<>();
             list.add(new MapPoint(coordinates, city));
@@ -530,7 +530,7 @@ public class MainScreen extends JFrame {
                     townAssociation.remove(key);
                     townAssociation.put(key, value);
                     Serializer.getSerializer().saveTownAssociation(townAssociation);
-                    Serializer.getSerializer().saveTown(Town.getTowns());
+                    Serializer.getSerializer().saveTownSerialized(Town.getTowns());
                     String city = NotFoundPlaces.getSelectedItem().toString();
                     updateMissingCityTab(townAssociation, city);
                     JOptionPane.showMessageDialog(tabbedPane1,
