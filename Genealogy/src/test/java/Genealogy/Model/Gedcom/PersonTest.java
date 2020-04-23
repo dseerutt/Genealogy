@@ -6,6 +6,7 @@ import Genealogy.Model.Act.Enum.ActType;
 import Genealogy.Model.Act.Enum.UnionType;
 import Genealogy.Model.Act.Union;
 import Genealogy.Model.Date.FullDate;
+import Genealogy.Model.Date.MonthDate;
 import Genealogy.Model.Date.MyDate;
 import Genealogy.Model.Date.YearDate;
 import Genealogy.Model.Exception.ParsingException;
@@ -301,11 +302,11 @@ public class PersonTest {
      * @throws Exception
      */
     @Test
-    public void AddProofTest() throws Exception {
+    public void addProofTest() throws Exception {
         //init all
         Person person = new Person(null);
         person.setPdfStructure(new PDFStructure(""));
-        Union union1 = new Union(person, person, new YearDate("2005"), new Town("Saintes", "Charente-Maritime"), UnionType.HETERO_MAR);
+        Union union1 = new Union(person, person, new MonthDate("DEC 2005"), new Town("Saintes", "Charente-Maritime"), UnionType.HETERO_MAR);
         Union union2 = new Union(person, person, new YearDate("2006"), new Town("Saintes", "Charente-Maritime"), UnionType.HETERO_MAR);
         person.addUnion(union1);
         person.addUnion(union2);

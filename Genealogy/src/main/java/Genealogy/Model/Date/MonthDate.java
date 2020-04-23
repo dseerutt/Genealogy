@@ -4,10 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.time.LocalDate;
 
 /**
  * MonthDate class : gregorian date with month and year only, inherit MyDate
@@ -30,13 +27,11 @@ public class MonthDate extends MyDate implements Serializable {
      * MonthDate constructor from input String with MMM yyyy format
      *
      * @param input
-     * @throws ParseException
      */
-    public MonthDate(String input) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat(BIG_MONTH_YEAR_FORMAT, Locale.ENGLISH);
-        Date date = format.parse(input);
-        month = getMonth(date) + 1;
-        year = getYear(date);
+    public MonthDate(String input) {
+        LocalDate date = LocalDate.parse("1 " + input, DATE_FORMATTER_BIG_MONTHS);
+        month = date.getMonthValue();
+        year = date.getYear();
     }
 
     /**
@@ -92,14 +87,22 @@ public class MonthDate extends MyDate implements Serializable {
      *
      * @return
      */
-    public Date getDate() {
-        SimpleDateFormat SDF = new SimpleDateFormat(DATE_FORMAT_CLASSIC, Locale.ENGLISH);
-        String input = "30 " + month + " " + year;
-        try {
-            return SDF.parse(input);
-        } catch (ParseException e) {
-            logger.error("Failed to create MonthDate for " + month + " " + year);
-            return null;
+    public LocalDate getDate() {
+        String input = year + "-" + getPaddedMonth() + "-" + "28";
+        return LocalDate.parse(input);
+    }
+
+    /**
+     * Function getPaddedMonth : return string month with a 0 padded if the month is on one digit
+     *
+     * @return
+     */
+    public String getPaddedMonth() {
+        String monthPadded = "" + month;
+        if (monthPadded.length() == 1) {
+            return "0" + monthPadded;
+        } else {
+            return monthPadded;
         }
     }
 

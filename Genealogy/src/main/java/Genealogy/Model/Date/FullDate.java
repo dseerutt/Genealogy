@@ -4,19 +4,18 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
-import java.util.Locale;
 
 /**
  * FullDate class : host a date with day, month and year, inherit MyDate
  */
 public class FullDate extends MyDate implements Serializable {
     /**
-     * Date date
+     * LocalDate date
      */
-    private Date date;
+    private LocalDate date;
     /**
      * Class logger
      */
@@ -26,19 +25,28 @@ public class FullDate extends MyDate implements Serializable {
      * FullDate constructor : from String input, initialize date. If fails, returns ParseException
      *
      * @param input
-     * @throws ParseException
      */
-    public FullDate(String input) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_BIG_MONTHS, Locale.ENGLISH);
-        date = format.parse(input);
+    public FullDate(String input) {
+        date = LocalDate.parse(input, DATE_FORMATTER_BIG_MONTHS);
     }
 
     /**
-     * FullDate constructor from Date input
+     * FullDate constructor from Date input - for Geneanet converter only
      *
      * @param input
      */
     public FullDate(Date input) {
+        date = input.toInstant()
+                .atZone(ZoneId.of("GMT+1"))
+                .toLocalDate();
+    }
+
+    /**
+     * FullDate constructor from LocalDate input
+     *
+     * @param input
+     */
+    public FullDate(LocalDate input) {
         date = input;
     }
 
@@ -46,7 +54,7 @@ public class FullDate extends MyDate implements Serializable {
      * FullDate constructor from current instant input
      */
     public FullDate() {
-        date = new Date();
+        date = LocalDate.now();
     }
 
     /**
@@ -73,7 +81,7 @@ public class FullDate extends MyDate implements Serializable {
      *
      * @return
      */
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 

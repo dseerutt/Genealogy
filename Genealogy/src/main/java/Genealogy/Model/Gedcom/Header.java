@@ -5,10 +5,10 @@ import Genealogy.Parsing.ParsingStructure;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -25,9 +25,9 @@ public class Header {
      */
     private String version;
     /**
-     * The last modified Date (LocalDate bug for gedcom format)
+     * The last modified LocalDateTime
      */
-    private Date lastModified;
+    private LocalDateTime lastModified;
 
     /**
      * Logger of the class
@@ -62,7 +62,7 @@ public class Header {
      *
      * @return
      */
-    public Date getLastModified() {
+    public LocalDateTime getLastModified() {
         return lastModified;
     }
 
@@ -95,12 +95,8 @@ public class Header {
             String lastModifiedDate0 = genealogy.findFieldInContents("DATE", parsingStructureList);
             String lastModifiedHour0 = genealogy.findFieldInContents("TIME", parsingStructureList);
 
-            try {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy hh:mm:ss", Locale.ENGLISH);
-                lastModified = simpleDateFormat.parse(lastModifiedDate0 + " " + lastModifiedHour0);
-            } catch (ParseException e) {
-                logger.error("Failed to parse the gedcom modification date" + lastModifiedDate0 + " " + lastModifiedHour0, e);
-            }
+            DateTimeFormatter formatter = (new DateTimeFormatterBuilder()).parseCaseInsensitive().appendPattern("d MMM yyyy HH:mm:ss").toFormatter().withLocale(Locale.ENGLISH);
+            lastModified = LocalDateTime.parse(lastModifiedDate0 + " " + lastModifiedHour0, formatter);
         } else {
             throw new ParsingException("Header object was not initialized : failed to parse header");
         }

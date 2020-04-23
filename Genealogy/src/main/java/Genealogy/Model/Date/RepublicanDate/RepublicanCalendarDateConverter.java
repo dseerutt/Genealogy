@@ -1,8 +1,13 @@
 package Genealogy.Model.Date.RepublicanDate;
 
+import Genealogy.Model.Exception.RepublicanDateOutOfRangeException;
+
 import java.text.DateFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -25,6 +30,10 @@ public class RepublicanCalendarDateConverter {
      * PATTERN_REPUBLICAN_DATE Regex pattern
      */
     private static Pattern PATTERN_REPUBLICAN_DATE = Pattern.compile("(\\d+[er]*)\\s*(\\p{L}+[\\.]*)\\s*an\\s*([IVXLCDM]+)");
+    /**
+     * DATE_FORMATTER_FULL_MONTHS Localdate formatter
+     */
+    public static final DateTimeFormatter DATE_FORMATTER_FULL_MONTHS = (new DateTimeFormatterBuilder()).parseCaseInsensitive().appendPattern("d MMMM yyyy").toFormatter().withLocale(Locale.FRANCE);
     /**
      * Boolean log initialized to false
      */
@@ -55,8 +64,9 @@ public class RepublicanCalendarDateConverter {
      * @param republicanDate
      * @param pattern
      * @return
+     * @throws RepublicanDateOutOfRangeException
      */
-    public String convertAsString(String republicanDate, String pattern) {
+    public String convertAsString(String republicanDate, String pattern) throws RepublicanDateOutOfRangeException {
         String dateString = null;
         this.matcher = PATTERN_REPUBLICAN_DATE.matcher(republicanDate);
         if (this.matcher.find()) {
@@ -78,12 +88,13 @@ public class RepublicanCalendarDateConverter {
     }
 
     /**
-     * Function convertAsDate : convert string republicanDate to Date
+     * Function convertAsLocalDate : convert string republicanDate to LocalDate
      *
      * @param republicanDate
      * @return
+     * @throws RepublicanDateOutOfRangeException
      */
-    public Date convertAsDate(String republicanDate) {
+    public LocalDate convertAsLocalDate(String republicanDate) throws RepublicanDateOutOfRangeException {
         String dateString = null;
         this.matcher = PATTERN_REPUBLICAN_DATE.matcher(republicanDate);
         if (this.matcher.find()) {
@@ -91,7 +102,7 @@ public class RepublicanCalendarDateConverter {
         }
         if (dateString != null) {
             dateString = this.convertRepublicanToGregorian(dateString);
-            Date date = this.getDate(dateString);
+            LocalDate date = this.getLocalDate(dateString);
             if (date != null) {
                 return date;
             }
@@ -119,25 +130,31 @@ public class RepublicanCalendarDateConverter {
     }
 
     /**
-     * Function convertRepublicanToGregorian : from a republican string date, returns a gregorian dateString
+     * Function getLocalDate : from a dateString, return a LocalDate
      *
      * @param dateString
      * @return
      */
-    private String convertRepublicanToGregorian(String dateString) {
-        try {
-            int e = this.getDay(this.matcher.group(1));
-            int month = this.getMonth(this.matcher.group(2));
-            int year1 = this.getYear(this.matcher.group(3));
-            if (this.paramsAreValid(e, month, year1)) {
-                dateString = this.computeGregorianDate(e, month, year1);
-            } else if (log) {
-                System.out.println("failed to extract date from " + dateString);
-            }
-        } catch (Exception var5) {
-            if (log) {
-                System.out.println("ERROR: Non handled exception for " + dateString + ". error: " + var5);
-            }
+    private LocalDate getLocalDate(String dateString) {
+        LocalDate date = LocalDate.parse(dateString, DATE_FORMATTER_FULL_MONTHS);
+        return date;
+    }
+
+    /**
+     * Function convertRepublicanToGregorian : from a republican string date, returns a gregorian dateString
+     *
+     * @param dateString
+     * @return
+     * @throws RepublicanDateOutOfRangeException
+     */
+    private String convertRepublicanToGregorian(String dateString) throws RepublicanDateOutOfRangeException {
+        int e = this.getDay(this.matcher.group(1));
+        int month = this.getMonth(this.matcher.group(2));
+        int year1 = this.getYear(this.matcher.group(3));
+        if (this.paramsAreValid(e, month, year1)) {
+            dateString = this.computeGregorianDate(e, month, year1);
+        } else {
+            throw new RepublicanDateOutOfRangeException("Date " + dateString + " out of range");
         }
         return dateString;
     }

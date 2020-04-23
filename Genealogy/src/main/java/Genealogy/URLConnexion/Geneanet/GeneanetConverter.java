@@ -5,6 +5,7 @@ import Genealogy.Model.Date.MonthDate;
 import Genealogy.Model.Date.MyDate;
 import Genealogy.Model.Date.RepublicanDate.RepublicanCalendarDateConverter;
 import Genealogy.Model.Date.YearDate;
+import Genealogy.Model.Exception.RepublicanDateOutOfRangeException;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
@@ -479,10 +480,16 @@ public class GeneanetConverter {
         if (dateTab.length != 1) {
             resultDate = dateTab[1];
         }
-        return parseDate(resultDate);
+        try {
+            return parseDate(resultDate);
+        } catch (RepublicanDateOutOfRangeException e) {
+            logger.error("Failed to parse Republican date " + input, e);
+        } finally {
+            return null;
+        }
     }
 
-    private MyDate parseDate(String inputDate) {
+    private MyDate parseDate(String inputDate) throws RepublicanDateOutOfRangeException {
         SimpleDateFormat dateFormatFullMonth = new SimpleDateFormat("dd MMMM yyyy", Locale.FRANCE);
         SimpleDateFormat dateFormatFullMonthOnly = new SimpleDateFormat("MMMM yyyy", Locale.FRANCE);
         dateFormatFullMonthOnly.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -513,10 +520,11 @@ public class GeneanetConverter {
      *
      * @param inputDate
      * @return
+     * @throws RepublicanDateOutOfRangeException if the date is out of the range of the RepublicanCalendar
      */
-    protected MyDate parseRepublicanDate(String inputDate) {
+    protected MyDate parseRepublicanDate(String inputDate) throws RepublicanDateOutOfRangeException {
         RepublicanCalendarDateConverter converter = RepublicanCalendarDateConverter.getConverter();
-        Date date = converter.convertAsDate(inputDate);
+        LocalDate date = converter.convertAsLocalDate(inputDate);
         if (date == null) {
             return null;
         } else {

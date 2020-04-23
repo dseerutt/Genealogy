@@ -7,9 +7,7 @@ import javafx.util.Pair;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -131,18 +129,6 @@ public class Pinpoint implements Serializable {
     }
 
     /**
-     * Function convertToLocalDateFromDate : convert date to LocalDate
-     *
-     * @param dateToConvert
-     * @return
-     */
-    public static LocalDate convertToLocalDateFromDate(Date dateToConvert) {
-        return dateToConvert.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
-    }
-
-    /**
      * Function initPinpoints : from a list of pair MyDate and Town, initialize the pinpoint collecting the year periods
      * From 2 pinpoints for the current person, add a pinpoint for every year in this period
      *
@@ -154,9 +140,8 @@ public class Pinpoint implements Serializable {
         String fullName = person.getFullName();
         if (lifespanPairsList.size() >= 1) {
             if (lifespanPairsList.size() == 1) {
-                Date date = new Date(lifespanPairsList.get(0).getKey().getDate().getTime());
                 Pinpoint pinPoint =
-                        new Pinpoint(lifespanPairsList.get(0).getValue(), fullName, person.getAgeWithoutMonths(convertToLocalDateFromDate(date), 0));
+                        new Pinpoint(lifespanPairsList.get(0).getValue(), fullName, person.getAgeWithoutMonths(lifespanPairsList.get(0).getKey().getDate(), 0));
                 addPinpoint(lifespanPairsList.get(0).getKey().getYear(), pinPoint, directAncestor);
             } else {
                 for (int i = 0; i < lifespanPairsList.size() - 1; i++) {
@@ -164,16 +149,15 @@ public class Pinpoint implements Serializable {
                     int endYear = (int) lifespanPairsList.get(i + 1).getKey().getYear();
                     int index = 0;
                     for (int k = startYear; k < endYear; k++) {
-                        Date date = new Date(lifespanPairsList.get(i).getKey().getDate().getTime());
                         Pinpoint pinPoint =
-                                new Pinpoint(lifespanPairsList.get(i).getValue(), fullName, person.getAgeWithoutMonths(convertToLocalDateFromDate(date), index));
+                                new Pinpoint(lifespanPairsList.get(i).getValue(), fullName, person.getAgeWithoutMonths(lifespanPairsList.get(i).getKey().getDate(), index));
                         addPinpoint(k, pinPoint, directAncestor);
                         index++;
                     }
                 }
-                Date lastDate = new Date(lifespanPairsList.get(lifespanPairsList.size() - 1).getKey().getDate().getTime());
+                LocalDate lastDate = lifespanPairsList.get(lifespanPairsList.size() - 1).getKey().getDate();
                 Pinpoint pinPoint =
-                        new Pinpoint(lifespanPairsList.get(lifespanPairsList.size() - 1).getValue(), fullName, person.getAgeWithMonths(convertToLocalDateFromDate(lastDate), 0));
+                        new Pinpoint(lifespanPairsList.get(lifespanPairsList.size() - 1).getValue(), fullName, person.getAgeWithMonths(lastDate, 0));
 
                 addPinpoint(lifespanPairsList.get(lifespanPairsList.size() - 1).getKey().getYear(), pinPoint, directAncestor);
             }

@@ -3,45 +3,32 @@ package Genealogy.Model.Date;
 import java.io.Serializable;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.ZoneId;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Locale;
 
 /**
  * MyDate class : host date data and abstract methods for FullDate, MonthDate, YearDate
  */
 public abstract class MyDate implements Serializable {
+    /**
+     * LocalDate Big Months formatter case not sensitive with one digit dat=y
+     */
+    public static final DateTimeFormatter DATE_FORMATTER_BIG_MONTHS = (new DateTimeFormatterBuilder()).parseCaseInsensitive().appendPattern("d MMM yyyy").toFormatter().withLocale(Locale.ENGLISH);
+    /**
+     * LocalDate classic formatter
+     */
+    public static final DateTimeFormatter DATE_FORMATTER_CLASSIC = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     /**
-     * String date format classic, space separated
-     */
-    public static final String DATE_FORMAT_CLASSIC = "dd MM yyyy";
-    /**
-     * String date format with long months, space separated
-     */
-    public static final String DATE_FORMAT_BIG_MONTHS = "dd MMM yyyy";
-    /**
-     * String date format classic, slash separated
-     */
-    public static final String DATE_FORMAT_SLASH = "dd/MM/yyyy";
-    /**
-     * String big month and year date format, space separated
-     */
-    public static final String BIG_MONTH_YEAR_FORMAT = "MMM yyyy";
-
-    /**
-     * Function getStringDate : from a Date date, return a string date
+     * Function getStringDate : from a LocalDate date, return a string date
      *
      * @param date
      * @return
      */
-    public static String getStringDate(Date date) {
-        if (date == null) {
-            return "null";
-        }
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT_SLASH, Locale.ENGLISH);
-        return simpleDateFormat.format(date);
+    public static String getStringDate(LocalDate date) {
+        return date.format(DATE_FORMATTER_CLASSIC);
     }
 
     /**
@@ -73,7 +60,7 @@ public abstract class MyDate implements Serializable {
      *
      * @return
      */
-    public abstract Date getDate();
+    public abstract LocalDate getDate();
 
     /**
      * Abstract function descriptionDate : return the description of the object
@@ -91,16 +78,8 @@ public abstract class MyDate implements Serializable {
         return this instanceof FullDate;
     }
 
-    /**
-     * Function getMonth - get month from date
-     *
-     * @param date
-     * @return
-     */
-    public static int getMonth(Date date) {
-        return date.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate().getMonthValue();
+    public static int getMonth(LocalDate date) {
+        return date.getMonthValue();
     }
 
     /**
@@ -109,22 +88,13 @@ public abstract class MyDate implements Serializable {
      * @param date
      * @return
      */
-    public static int getYear(Date date) {
-        return date.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate().getYear();
+    public static int getYear(LocalDate date) {
+        return date.getYear();
     }
 
-    /**
-     * Function getDay - get day of month from date
-     *
-     * @param date
-     * @return
-     */
-    public static int getDay(Date date) {
-        return date.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate().getDayOfMonth();
+
+    public static int getDay(LocalDate date) {
+        return date.getYear();
     }
 
     /**

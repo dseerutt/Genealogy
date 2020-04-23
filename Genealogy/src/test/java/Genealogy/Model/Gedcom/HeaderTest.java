@@ -5,11 +5,8 @@ import Genealogy.Parsing.ParsingStructure;
 import org.junit.jupiter.api.Test;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -40,8 +37,6 @@ public class HeaderTest {
         HashMap<String, ArrayList<ParsingStructure>> contents = new HashMap<>();
         contents.put("HEAD", headerList);
         genealogy.setContents(contents);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy hh:mm:ss", Locale.ENGLISH);
-        Date lastModified = simpleDateFormat.parse("8 APR 2020 18:17:40");
 
         //launch
         Header header = new Header(genealogy);
@@ -49,7 +44,7 @@ public class HeaderTest {
         //Verification
         assertEquals("Ahnenblatt", header.getSoftware());
         assertEquals("2.99e", header.getVersion());
-        assertEquals(lastModified, header.getLastModified());
+        assertEquals("2020-04-08T18:17:40", header.getLastModified().toString());
 
     }
 

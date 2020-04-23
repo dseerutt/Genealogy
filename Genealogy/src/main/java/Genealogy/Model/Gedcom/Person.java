@@ -19,7 +19,6 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Period;
-import java.time.ZoneId;
 import java.util.*;
 
 import static Genealogy.MapViewer.Structures.Pinpoint.initPinpoints;
@@ -276,13 +275,10 @@ public class Person {
         } else if ((birth.getDate() == null) || (death.getDate() == null)) {
             age = -1;
         } else {
-            Date birthDate = birth.getDate().getDate();
-            Date deathDate = death.getDate().getDate();
-            age = getDiffYears(birthDate.toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate(), deathDate.toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate());
+            LocalDate birthDate = birth.getDate().getDate();
+            LocalDate deathDate = death.getDate().getDate();
+            Period period = Period.between(birthDate, deathDate);
+            age = period.getYears();
         }
     }
 
@@ -575,7 +571,7 @@ public class Person {
             lifespanPairs.add(new Pair<>(death.getDate(), death.getTown()));
             Collections.sort(lifespanPairs, Comparator.comparing(o -> o.getKey().getDate()));
             //Case of the children born after the death
-            while (lifespanPairs.get(lifespanPairs.size() - 1).getKey().getDate().getTime() > death.getDate().getDate().getTime()) {
+            while (lifespanPairs.get(lifespanPairs.size() - 1).getKey().getDate().isAfter(death.getDate().getDate())) {
                 lifespanPairs.remove(lifespanPairs.size() - 1);
             }
         } else {
@@ -585,18 +581,6 @@ public class Person {
             }
         }
         return lifespanPairs;
-    }
-
-    /**
-     * Function convertToLocalDateFromDate : convert date to LocalDate
-     *
-     * @param dateToConvert
-     * @return
-     */
-    public LocalDate convertToLocalDateFromDate(Date dateToConvert) {
-        return dateToConvert.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
     }
 
     /**
@@ -685,7 +669,7 @@ public class Person {
      */
     public int getAgeWithoutMonths(LocalDate localDateInput, int yearsToAdd) {
         if ((birth != null) && (birth.getDate() != null)) {
-            LocalDate localDateBirth = convertToLocalDateFromDate(birth.getDate().getDate());
+            LocalDate localDateBirth = birth.getDate().getDate();
             int age = localDateInput.getYear() - localDateBirth.getYear();
             if (age >= 0) {
                 return age + yearsToAdd;
@@ -704,7 +688,7 @@ public class Person {
      */
     public int getAgeWithMonths(LocalDate localDateInput, int yearsToAdd) {
         if ((birth != null) && (birth.getDate() != null)) {
-            LocalDate localDateBirth = convertToLocalDateFromDate(birth.getDate().getDate());
+            LocalDate localDateBirth = birth.getDate().getDate();
             Period period = Period.between(localDateBirth, localDateInput);
             if (!period.isNegative()) {
                 return period.getYears() + yearsToAdd;

@@ -4,10 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.time.LocalDate;
 
 /**
  * YearDate class : date with year only, inherit Mydate
@@ -64,15 +61,9 @@ public class YearDate extends MyDate implements Serializable {
      *
      * @return
      */
-    public Date getDate() {
-        SimpleDateFormat SDF = new SimpleDateFormat(DATE_FORMAT_BIG_MONTHS, Locale.ENGLISH);
-        String input = "31 DEC " + year;
-        try {
-            return SDF.parse(input);
-        } catch (ParseException e) {
-            logger.error("Failed to create YearDate with " + year);
-            return null;
-        }
+    public LocalDate getDate() {
+        String input = year + "-12-31";
+        return LocalDate.parse(input);
     }
 
     /**
