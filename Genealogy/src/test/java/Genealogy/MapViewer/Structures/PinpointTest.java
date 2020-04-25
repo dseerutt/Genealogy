@@ -49,10 +49,10 @@ public class PinpointTest {
 
         //verification direct ancestor + other
         assertEquals(1, Pinpoint.getPinpointsYearMapDirectAncestors().get(2005).size());
-        assertEquals("MapStructure{age=26, name='Roberta', town=Town{name='Rennes', detail='Ille-et-Vilaine'}}", Pinpoint.getPinpointsYearMapDirectAncestors().get(2005).get(0).toString());
+        assertEquals("MapStructure{age=26, name='Roberta', town=Town{name='Rennes', county='Ille-et-Vilaine'}}", Pinpoint.getPinpointsYearMapDirectAncestors().get(2005).get(0).toString());
         assertEquals(2, Pinpoint.getPinpointsYearMap().get(2005).size());
-        assertEquals("MapStructure{age=26, name='Roberta', town=Town{name='Rennes', detail='Ille-et-Vilaine'}}", Pinpoint.getPinpointsYearMap().get(2005).get(0).toString());
-        assertEquals("MapStructure{age=25, name='Robert', town=Town{name='Saintes', detail='Charente-Maritime'}}", Pinpoint.getPinpointsYearMap().get(2005).get(1).toString());
+        assertEquals("MapStructure{age=26, name='Roberta', town=Town{name='Rennes', county='Ille-et-Vilaine'}}", Pinpoint.getPinpointsYearMap().get(2005).get(0).toString());
+        assertEquals("MapStructure{age=25, name='Robert', town=Town{name='Saintes', county='Charente-Maritime'}}", Pinpoint.getPinpointsYearMap().get(2005).get(1).toString());
 
         //init direct ancestor 2
         Person personDA2 = new Person(null);
@@ -64,9 +64,9 @@ public class PinpointTest {
 
         //verification direct ancestor 2
         assertEquals(2, Pinpoint.getPinpointsYearMapDirectAncestors().get(2005).size());
-        assertEquals("MapStructure{age=27, name='Michel', town=Town{name='Bressuire', detail='Deux-Sèvres'}}", Pinpoint.getPinpointsYearMapDirectAncestors().get(2005).get(1).toString());
+        assertEquals("MapStructure{age=27, name='Michel', town=Town{name='Bressuire', county='Deux-Sèvres'}}", Pinpoint.getPinpointsYearMapDirectAncestors().get(2005).get(1).toString());
         assertEquals(3, Pinpoint.getPinpointsYearMap().get(2005).size());
-        assertEquals("MapStructure{age=27, name='Michel', town=Town{name='Bressuire', detail='Deux-Sèvres'}}", Pinpoint.getPinpointsYearMap().get(2005).get(2).toString());
+        assertEquals("MapStructure{age=27, name='Michel', town=Town{name='Bressuire', county='Deux-Sèvres'}}", Pinpoint.getPinpointsYearMap().get(2005).get(2).toString());
     }
 
     @Test

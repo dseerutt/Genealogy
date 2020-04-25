@@ -74,7 +74,7 @@ public class WelcomeScreen extends JFrame {
                 int rVal = c.showOpenDialog(WelcomeScreen.this);
                 if (rVal == JFileChooser.APPROVE_OPTION) {
                     filePath.setText(c.getCurrentDirectory().toString() + File.separator + c.getSelectedFile().getName());
-                    initTownAssociation(Serializer.getSerializer());
+                    initTownAssociation(Serializer.getInstance());
                 }
                 if (rVal == JFileChooser.CANCEL_OPTION) {
                 }
@@ -114,7 +114,7 @@ public class WelcomeScreen extends JFrame {
                                             JOptionPane.ERROR_MESSAGE);
                                     logger.error("Les villes suivantes n'ont pas été trouvées : " + txt);
                                 }
-                                Serializer.getSerializer().saveTownSerialized(Town.getTownsToSave());
+                                Serializer.getInstance().saveTownSerialized(Town.getTownsToSerialize());
                                 ArrayList<Town> myEmptyTowns = Serializer.getNullCoordinatesCities(Town.getTowns());
                                 if (!myEmptyTowns.isEmpty()) {
                                     logger.warn("Villes avec Coordonnées nulles : " + myEmptyTowns);

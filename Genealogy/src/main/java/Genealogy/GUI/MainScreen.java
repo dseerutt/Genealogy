@@ -529,8 +529,8 @@ public class MainScreen extends JFrame {
                     HashMap<String, String> townAssociation = Town.getTownAssociation();
                     townAssociation.remove(key);
                     townAssociation.put(key, value);
-                    Serializer.getSerializer().saveTownAssociation(townAssociation);
-                    Serializer.getSerializer().saveTownSerialized(Town.getTowns());
+                    Serializer.getInstance().saveTownAssociation(townAssociation);
+                    Serializer.getInstance().saveTownSerialized(Town.getTowns());
                     String city = NotFoundPlaces.getSelectedItem().toString();
                     updateMissingCityTab(townAssociation, city);
                     JOptionPane.showMessageDialog(tabbedPane1,

@@ -13,7 +13,7 @@ import java.util.*;
 public class Serializer<T> {
 
     final static Logger logger = LogManager.getLogger(Serializer.class);
-    private static Serializer serializer;
+    private static Serializer instance;
     private ArrayList<T> serializedData;
     private static String path;
     private static boolean jar = false;
@@ -23,8 +23,16 @@ public class Serializer<T> {
     private static ArrayList<String> townRegex = new ArrayList<>();
     private static HashMap<String, String> cityFileMap;
 
-    public static Serializer getSerializer() {
-        return serializer;
+    /**
+     * Serializer instance getter, initialize instance if null
+     *
+     * @return
+     */
+    public static Serializer getInstance() {
+        if (instance == null) {
+            new Serializer();
+        }
+        return instance;
     }
 
     public ArrayList<T> getTowns() {
@@ -44,6 +52,9 @@ public class Serializer<T> {
     }
 
     public static ArrayList<String> getTownRegex() {
+        if (instance == null) {
+            new Serializer();
+        }
         return townRegex;
     }
 
@@ -83,7 +94,7 @@ public class Serializer<T> {
     public Serializer() {
         initPath();
         initProperties();
-        Serializer.serializer = this;
+        Serializer.instance = this;
     }
 
     public Serializer(Class<T> cls) {
@@ -110,7 +121,7 @@ public class Serializer<T> {
         } else {
             logger.info("Serializer file not found");
         }
-        Serializer.serializer = this;
+        Serializer.instance = this;
     }
 
     public boolean isJar() {

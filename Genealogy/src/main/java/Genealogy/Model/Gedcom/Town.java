@@ -23,9 +23,9 @@ public class Town implements Serializable {
      */
     private String name;
     /**
-     * String detail of the city
+     * String county of the city
      */
-    private String detail;
+    private String county;
     /**
      * Coordinates MyCoordinate of the city
      */
@@ -39,9 +39,9 @@ public class Town implements Serializable {
      */
     private static ArrayList<Town> towns = new ArrayList<>();
     /**
-     * Arraylist of Town townsToSave : towns to save through serializer with complete coordinates
+     * Arraylist of Town townsToSerialize : towns to save through serializer with complete coordinates
      */
-    private static ArrayList<Town> townsToSave = new ArrayList<>();
+    private static ArrayList<Town> townsToSerialize = new ArrayList<>();
     /**
      * ArrayList of string fullName towns coordinates not found
      */
@@ -50,25 +50,28 @@ public class Town implements Serializable {
      * HashMap townAssociation : associations of string fullName of Towns.
      * The first town is not found, and its coordinates will be searched on the second town
      */
-    private static HashMap<String, String> townAssociation;
+    private static HashMap<String, String> townAssociation = new HashMap<>();
     /**
      * Boolean saveCoordinatesTxtFile : save on serializer coordinates text file
      */
     private static boolean saveCoordinatesTxtFile = true;
 
     /**
-     * Town constructor from name and detail
+     * Town constructor from name and county, and add the town to towns if not present
      *
      * @param name
-     * @param detail
+     * @param county
      */
-    public Town(String name, String detail) {
+    public Town(String name, String county) {
         this.name = name;
-        this.detail = detail;
+        this.county = county;
+        if (!towns.contains(this)) {
+            towns.add(this);
+        }
     }
 
     /**
-     * Town constructor with fullName, parsing with townRegex
+     * Town constructor with fullName, parsing with townRegex, and add the town to towns if not present
      *
      * @param fullName
      */
@@ -79,12 +82,15 @@ public class Town implements Serializable {
             if (m.find()) {
                 name = StringUtils.trim(m.group(1));
                 if (m.groupCount() > 1) {
-                    detail = StringUtils.trim(m.group(2));
+                    county = StringUtils.trim(m.group(2));
                 } else {
-                    detail = "";
+                    county = "";
                 }
                 break;
             }
+        }
+        if (!towns.contains(this)) {
+            towns.add(this);
         }
     }
 
@@ -93,8 +99,8 @@ public class Town implements Serializable {
      *
      * @return
      */
-    public static ArrayList<Town> getTownsToSave() {
-        return townsToSave;
+    public static ArrayList<Town> getTownsToSerialize() {
+        return townsToSerialize;
     }
 
     /**
@@ -138,8 +144,8 @@ public class Town implements Serializable {
      *
      * @return
      */
-    public String getDetail() {
-        return detail;
+    public String getCounty() {
+        return county;
     }
 
     /**
@@ -190,21 +196,25 @@ public class Town implements Serializable {
     }
 
     /**
-     * Function getFullName : return the name and detail surrounded by parenthesis without whitespace
+     * Function getFullName : return the name and county surrounded by parenthesis and trim whitespace
      *
      * @return
      */
     public String getFullName() {
-        return StringUtils.deleteWhitespace(Objects.toString(name, "") + " " + Objects.toString(detail, ""));
+        return StringUtils.trim(Objects.toString(name, "") + " " + Objects.toString(county, ""));
     }
 
     /**
-     * Function getFullName : return the name and detail surrounded by parenthesis without whitespace
+     * Function getFullName : return the name and county surrounded by parenthesis and trim whitespace
      *
      * @return
      */
     public String getFullNameWithParenthesis() {
-        return name + " (" + detail + ")";
+        if (StringUtils.isEmpty(county)) {
+            return StringUtils.trim(name);
+        } else {
+            return StringUtils.trim(name + " (" + county + ")");
+        }
     }
 
     /**
@@ -223,7 +233,7 @@ public class Town implements Serializable {
     }
 
     /**
-     * Function equals : equals on name, then detail
+     * Function equals : equals on name, then county
      *
      * @param o
      * @return
@@ -234,36 +244,36 @@ public class Town implements Serializable {
         if (!(o instanceof Town)) return false;
         Town town = (Town) o;
         if (getName() != null ? !getName().equals(town.getName()) : town.getName() != null) return false;
-        return getDetail() != null ? getDetail().equals(town.getDetail()) : town.getDetail() == null;
+        return getCounty() != null ? getCounty().equals(town.getCounty()) : town.getCounty() == null;
 
     }
 
     /**
-     * Function hashCode : hash the object with name and detail
+     * Function hashCode : hash the object with name and county
      *
      * @return
      */
     @Override
     public int hashCode() {
         int result = getName() != null ? getName().hashCode() : 0;
-        result = 31 * result + (getDetail() != null ? getDetail().hashCode() : 0);
+        result = 31 * result + (getCounty() != null ? getCounty().hashCode() : 0);
         return result;
     }
 
     /**
-     * Function addTown : add town to towns and listOfTown
+     * Function addAct : add act to mapTownAct and town to towns
      *
      * @param act
      */
-    public void addTown(Act act) {
+    public void addAct(Act act) {
         if (this != null) {
             if (this.getName() != null) {
                 if (mapTownAct.containsKey(this)) {
                     mapTownAct.get(this).add(act);
                 } else {
-                    ArrayList<Act> actes = new ArrayList<Act>();
-                    actes.add(act);
-                    mapTownAct.put(this, actes);
+                    ArrayList<Act> acts = new ArrayList<>();
+                    acts.add(act);
+                    mapTownAct.put(this, acts);
                     towns.add(this);
                 }
             }
@@ -325,21 +335,21 @@ public class Town implements Serializable {
         lostTowns = new ArrayList<>();
         //Handle alias - cities that changed names
         HashMap<String, String> alias = Town.getTownAssociation();
-        Serializer serializer = Serializer.getSerializer();
+        Serializer serializer = Serializer.getInstance();
         String separator = "|";
         //If the serializer file is not empty
         for (Town thisTown : towns) {
             Town town = findTown(townsInFile, thisTown);
             String aliasName = thisTown.getFullName();
             String city = thisTown.getName();
-            String county = thisTown.getDetail();
+            String county = thisTown.getCounty();
             if (alias.containsKey(aliasName)) {
                 aliasName = alias.get(thisTown.getFullName());
             }
             if ((town != null) && (town.getCoordinates() != null)) {
                 thisTown.setCoordinates(town.getCoordinates());
                 if (!lostTowns.contains(aliasName)) {
-                    townsToSave.add(thisTown);
+                    townsToSerialize.add(thisTown);
                 }
             } else {
                 MyCoordinate coo;
@@ -358,7 +368,7 @@ public class Town implements Serializable {
                     }
                 }
                 if (!lostTowns.contains(aliasName)) {
-                    townsToSave.add(thisTown);
+                    townsToSerialize.add(thisTown);
                 }
             }
         }
@@ -373,14 +383,14 @@ public class Town implements Serializable {
         lostTowns = new ArrayList<>();
         //Handle alias - cities that changed names
         HashMap<String, String> alias = Town.getTownAssociation();
-        Serializer serializer = Serializer.getSerializer();
+        Serializer serializer = Serializer.getInstance();
         String separator = "|";
         //if the serializer file is empty
         for (Town thisTown : towns) {
             MyCoordinate coo = null;
             String newName = thisTown.getFullName();
             String city = thisTown.getName();
-            String county = thisTown.getDetail();
+            String county = thisTown.getCounty();
 
             String coordinatesFromFile = serializer.getCoordinatesFromFile(city + separator + county);
             if (coordinatesFromFile != null) {
@@ -392,7 +402,7 @@ public class Town implements Serializable {
                 }
                 coo = Town.parseJsonArray((new MyHttpUrlConnection()).sendGpsRequest(city, county));
                 if (!lostTowns.contains(newName)) {
-                    townsToSave.add(thisTown);
+                    townsToSerialize.add(thisTown);
                 }
 
                 if (coo != null) {
@@ -413,7 +423,7 @@ public class Town implements Serializable {
      * @throws Exception
      */
     public static void setAllCoordinates() throws Exception {
-        ArrayList<Town> townsInFile = Serializer.getSerializer().getTowns();
+        ArrayList<Town> townsInFile = Serializer.getInstance().getTowns();
         if ((townsInFile == null) || (townsInFile.isEmpty())) {
             setAllCoordinatesFromSerializer();
         } else {
@@ -430,7 +440,7 @@ public class Town implements Serializable {
      * @param longitude
      */
     private static void saveCoordinateIntoFile(String city, String county, double latitude, double longitude) {
-        Serializer.getSerializer().saveCity(city + "|" + county, "" + latitude, "" + longitude);
+        Serializer.getInstance().saveCity(city + "|" + county, "" + latitude, "" + longitude);
     }
 
     /**
@@ -477,7 +487,7 @@ public class Town implements Serializable {
      * @return
      */
     public boolean isEmpty() {
-        return StringUtils.isBlank(name) && StringUtils.isBlank(detail);
+        return StringUtils.isBlank(name) && StringUtils.isBlank(county);
     }
 
     /**
@@ -489,7 +499,7 @@ public class Town implements Serializable {
     public String toString() {
         String print = "Town{" +
                 "name='" + name + '\'' +
-                ", detail='" + detail + '\'';
+                ", county='" + county + '\'';
         if (coordinates != null) {
             print += ", 'coordinates=" + getCoordinatesPrettyPrint() + '\'';
         }
@@ -502,10 +512,10 @@ public class Town implements Serializable {
      * @return the final String
      */
     public String toStringPrettyString() {
-        if (StringUtils.isBlank(detail)) {
+        if (StringUtils.isBlank(county)) {
             return name;
         } else {
-            return name + " (" + detail + ")";
+            return name + " (" + county + ")";
         }
     }
 }

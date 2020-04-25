@@ -1003,13 +1003,13 @@ public class Person {
             if ((birth.getDate() != null) && (birth.getTown() != null) && (birth.getTown().getName() != null)) {
                 foundText = true;
                 text += " est né" + agreement + " " + birth.getDate().descriptionDate() + " à "
-                        + birth.getTown().getName() + " (" + birth.getTown().getDetail() + ")";
+                        + birth.getTown().getName() + " (" + birth.getTown().getCounty() + ")";
             } else if (birth.getDate() != null) {
                 foundText = true;
                 text += " est né" + agreement + " " + birth.getDate().descriptionDate() + "";
             } else if ((birth.getTown() != null) && (birth.getTown().getName() != null)) {
                 foundText = true;
-                text += " est né" + agreement + " à " + birth.getTown().getName() + " (" + birth.getTown().getDetail() + ")";
+                text += " est né" + agreement + " à " + birth.getTown().getName() + " (" + birth.getTown().getCounty() + ")";
             }
         }
         if (foundText) {
@@ -1089,7 +1089,7 @@ public class Person {
                 text += " " + union.getDate().descriptionDate() + " ";
             }
             if ((union.getTown() != null) && (union.getTown().getName() != null)) {
-                text += "à " + union.getTown().getName() + " (" + union.getTown().getDetail() + ")";
+                text += "à " + union.getTown().getName() + " (" + union.getTown().getCounty() + ")";
             }
             //Children
             ArrayList<Person> myChildren = findChildren(partner);
@@ -1127,7 +1127,7 @@ public class Person {
                     text += "\n" + pronoun;
                 }
                 text += " est décédé" + agreement + " " + death.getDate().descriptionDate() + " à "
-                        + death.getTown().getName() + " (" + death.getTown().getDetail() + ")";
+                        + death.getTown().getName() + " (" + death.getTown().getCounty() + ")";
             } else if (death.getDate() != null) {
                 if (foundText) {
                     text += "\n" + pronoun;
@@ -1137,7 +1137,7 @@ public class Person {
                 if (foundText) {
                     text += "\n" + pronoun;
                 }
-                text += " est décédé" + agreement + " à " + death.getTown().getName() + " (" + death.getTown().getDetail() + ")";
+                text += " est décédé" + agreement + " à " + death.getTown().getName() + " (" + death.getTown().getCounty() + ")";
             }
         }
         //age

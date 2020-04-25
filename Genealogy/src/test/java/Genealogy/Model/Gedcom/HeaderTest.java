@@ -45,7 +45,6 @@ public class HeaderTest {
         assertEquals("Ahnenblatt", header.getSoftware());
         assertEquals("2.99e", header.getVersion());
         assertEquals("2020-04-08T18:17:40", header.getLastModified().toString());
-
     }
 
 }

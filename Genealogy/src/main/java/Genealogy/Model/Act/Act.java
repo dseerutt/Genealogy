@@ -52,7 +52,7 @@ public abstract class Act {
             }
         }
         if (town != null) {
-            town.addTown(this);
+            town.addAct(this);
         }
     }
 
