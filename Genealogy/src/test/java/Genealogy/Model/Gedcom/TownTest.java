@@ -7,6 +7,8 @@ import Genealogy.Model.Date.YearDate;
 import Genealogy.Model.Exception.ParsingException;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -143,28 +145,75 @@ public class TownTest {
         assertEquals(death2, Town.getMapTownAct().get(townSaintes).get(0));
     }
 
-    //@Test
+    /**
+     * FindTown test : check if a town is inside an arraylist parameter, check if it is, check if not
+     */
+    @Test
     public void findTownTest() {
+        //init
+        Town townParis = new Town("Paris (Paris@)");
+        Town townParis5 = new Town("Paris 5e (Paris 5)");
+        ArrayList towns = new ArrayList();
+        towns.add(townParis);
+
+        //launch
+        Town townParisResult = Town.findTown(towns, townParis);
+        Town townParis5Result = Town.findTown(towns, townParis5);
+
+        //verification
+        assertEquals(townParisResult, townParis);
+        assertNull(townParis5Result);
     }
 
-    //@Test
+    /**
+     * FindCoordinateFromTowns test : from the current city check if returns the coordinates set
+     * , or the one in Town list.
+     * Test if null is returned if the coordinates are not found
+     */
+    @Test
     public void findCoordinateFromTownsTest() {
+        //init
+        Town townParis = new Town("Paris (Paris)");
+        townParis.setCoordinates(new MyCoordinate(10, 10));
+        Town townParisWithoutCoordinates = new Town("Paris (Paris)");
+        Town otherTown = new Town("Reims (Marne)");
+        Town townNice = new Town("Nice (Alpes-Maritimes)");
+        townNice.setCoordinates(new MyCoordinate(11, 11));
+
+        //verification
+        assertEquals("MyCoordinate{latitude=10.0, longitude=10.0}", townParis.findCoordinateFromTowns().toString());
+        assertEquals("MyCoordinate{latitude=10.0, longitude=10.0}", townParisWithoutCoordinates.findCoordinateFromTowns().toString());
+        assertEquals("MyCoordinate{latitude=11.0, longitude=11.0}", townNice.findCoordinateFromTowns().toString());
+        assertNull(otherTown.findCoordinateFromTowns());
     }
 
-    //@Test
+    /**
+     * FindCoordinateFromTowns test : from the fullname string check if returns the coordinates set
+     * , or the one in Town list.
+     * Test if null is returned if the coordinates are not found
+     */
+    @Test
     public void testFindCoordinateFromTownsTest() {
+        //init
+        Town townParis = new Town("Paris (Paris)");
+        townParis.setCoordinates(new MyCoordinate(10, 10));
+        Town townParisWithoutCoordinates = new Town("Paris (Paris)");
+        Town otherTown = new Town("Reims (Marne)");
+        Town townNice = new Town("Nice (Alpes-Maritimes)");
+        townNice.setCoordinates(new MyCoordinate(11, 11));
+
+        //verification
+        assertEquals("MyCoordinate{latitude=10.0, longitude=10.0}", Town.findCoordinateFromTowns("Paris (Paris)").toString());
+        assertEquals("MyCoordinate{latitude=11.0, longitude=11.0}", Town.findCoordinateFromTowns("Nice (Alpes-Maritimes)").toString());
+        assertNull(Town.findCoordinateFromTowns("Nice (Alpes-Maritimes"));
     }
 
-    //@Test
+    @Test
     public void setAllCoordinatesFromFileTest() {
     }
 
     //@Test
     public void setAllCoordinatesFromSerializerTest() {
-    }
-
-    //@Test
-    public void setAllCoordinatesTest() {
     }
 
     //@Test

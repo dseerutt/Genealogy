@@ -281,7 +281,7 @@ public class Town implements Serializable {
     }
 
     /**
-     * Function findTown : find thisTown in towns, return null instead
+     * Function findTown : find thisTown in towns with getFullName , return null instead
      *
      * @param towns
      * @param thisTown
@@ -289,7 +289,7 @@ public class Town implements Serializable {
      */
     public static Town findTown(ArrayList<Town> towns, Town thisTown) {
         for (Town town : towns) {
-            if (town.getName().equals(thisTown.getName())) {
+            if (town.getFullName().equals(thisTown.getFullName())) {
                 return town;
             }
         }
@@ -297,17 +297,21 @@ public class Town implements Serializable {
     }
 
     /**
-     * Function findCoordinateFromTowns : find coordinate of the current city in towns
+     * Function findCoordinateFromTowns : find coordinates of the current city in towns
      *
      * @return
      */
     public MyCoordinate findCoordinateFromTowns() {
-        for (int i = 0; i < Town.getTowns().size(); i++) {
-            if (towns.get(i).getFullNameWithParenthesis().equals(this.getFullName())) {
-                return towns.get(i).getCoordinates();
+        if (coordinates != null) {
+            return coordinates;
+        } else {
+            for (int i = 0; i < Town.getTowns().size(); i++) {
+                if (towns.get(i).getFullNameWithParenthesis().equals(this.getFullNameWithParenthesis())) {
+                    return towns.get(i).getCoordinates();
+                }
             }
+            return null;
         }
-        return null;
     }
 
     /**
@@ -326,12 +330,12 @@ public class Town implements Serializable {
     }
 
     /**
-     * Function setAllCoordinatesFromFile : set town coordinates from file, or search it
+     * Function setAllCoordinatesFromFile : set town coordinates from file
      *
-     * @param townsInFile
+     * @param townCoordinatesList
      * @throws Exception
      */
-    public static void setAllCoordinatesFromFile(ArrayList<Town> townsInFile) throws Exception {
+    public static void setAllCoordinatesFromFile(ArrayList<Town> townCoordinatesList) throws Exception {
         lostTowns = new ArrayList<>();
         //Handle alias - cities that changed names
         HashMap<String, String> alias = Town.getTownAssociation();
@@ -339,7 +343,7 @@ public class Town implements Serializable {
         String separator = "|";
         //If the serializer file is not empty
         for (Town thisTown : towns) {
-            Town town = findTown(townsInFile, thisTown);
+            Town town = findTown(townCoordinatesList, thisTown);
             String aliasName = thisTown.getFullName();
             String city = thisTown.getName();
             String county = thisTown.getCounty();
