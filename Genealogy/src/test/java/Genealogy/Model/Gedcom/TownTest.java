@@ -6,6 +6,7 @@ import Genealogy.Model.Act.Death;
 import Genealogy.Model.Date.YearDate;
 import Genealogy.Model.Exception.ParsingException;
 import Genealogy.URLConnexion.MyHttpUrlConnection;
+import Genealogy.URLConnexion.Serializer;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -64,9 +65,9 @@ public class TownTest {
 
         //verification
         assertEquals(1, Town.getLostTowns().size());
-        assertEquals("Ville Département", Town.getLostTowns().get(0));
+        assertEquals("Ville (Département)", Town.getLostTowns().get(0));
         assertEquals(1, Town.getTownAssociation().size());
-        assertEquals("", Town.getTownAssociation().get("Ville Département"));
+        assertEquals("", Town.getTownAssociation().get("Ville (Département)"));
     }
 
     /**
@@ -236,7 +237,7 @@ public class TownTest {
 
     /**
      * SetAllCoordinatesFromFile test : test with empty coordinates cities, already coordinates, and no coordinates,
-     * alias with coordinates and alias without coordinates, and alias not found
+     * alias with coordinates and alias without coordinates, alias not found, city with coordinates in cityFileMap
      *
      * @throws Exception
      */
@@ -255,7 +256,7 @@ public class TownTest {
         townCoordinatesList.add(townMarseille);
         townCoordinatesList.add(townLyon);
         townCoordinatesList.add(townRennes);
-        //reflection towns, saveCoordinatesTxtFile, MyHttpUrlConnection
+        //reflection towns, saveCoordinatesTxtFile, MyHttpUrlConnection, cityFileMap
         Field townField = townMarseille.getClass().getDeclaredField("towns");
         Field saveCoordinatesTxtFileField = townMarseille.getClass().getDeclaredField("saveCoordinatesTxtFile");
         townField.setAccessible(true);
@@ -266,6 +267,12 @@ public class TownTest {
         Field instanceField = MyHttpUrlConnection.class.getDeclaredField("instance");
         instanceField.setAccessible(true);
         instanceField.set(null, connection);
+        Field cityFileMapField = Serializer.class.getDeclaredField("cityFileMap");
+        cityFileMapField.setAccessible(true);
+        HashMap<String, String> cityFileMap = new HashMap<>();
+        cityFileMap.put("Gratot|Manche", "49:-1");
+        cityFileMap.put("Orléans|Loiret", "25:-5");
+        cityFileMapField.set(null, cityFileMap);
         String jsonResultReims = "[{\"place_id\":235317389,\"licence\":\"Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright\",\"osm_type\":\"relation\",\"osm_id\":7379,\"boundingbox\":[\"48.5152693\",\"49.407418\",\"3.3958932\",\"5.0401048\"],\"lat\":\"48.961264\",\"lon\":\"4.31224359285714\",\"display_name\":\"Marne, Grand Est, France métropolitaine, France\",\"class\":\"boundary\",\"type\":\"administrative\",\"importance\":0.7216023420982088,\"icon\":\"https://nominatim.openstreetmap.org/images/mapicons/poi_boundary_administrative.p.20.png\"}]";
         when(connection.sendGpsRequest("Reims", "Marne")).thenReturn(jsonResultReims);
         String jsonResultNowhere = "[]";
@@ -287,6 +294,7 @@ public class TownTest {
         Town townNCAliasSearched = new Town("Alias1S (AliasDep)");
         Town townNCAliasToSearch = new Town("Alias2TS (AliasDep)");
         Town townNCAliasNotFound = new Town("Alias3NF (AliasDep)");
+        Town townNCOrleansWithCoo = new Town("Orléans (Loiret)");
         Town.getTownAssociation().put("Alias1S (AliasDep)", "Marseille (Bouches du Rhône)");
         Town.getTownAssociation().put("Alias2TS (AliasDep)", "Brest (Finistère)");
         Town.getTownAssociation().put("Alias3NF (AliasDep)", "Nowhere2 (Nowhere)");
@@ -295,7 +303,7 @@ public class TownTest {
         Town.getLostTowns().add("Nowhere2 (Nowhere)");
 
         //init verification
-        assertEquals(8, Town.getTowns().size());
+        assertEquals(9, Town.getTowns().size());
         assertNull(townNCMarseille.getCoordinates());
         assertNull(townNCLyon.getCoordinates());
         assertNull(townNCRennes.getCoordinates());
@@ -304,6 +312,7 @@ public class TownTest {
         assertNull(townNCAliasSearched.getCoordinates());
         assertNull(townNCAliasToSearch.getCoordinates());
         assertNull(townNCAliasNotFound.getCoordinates());
+        assertNull(townNCOrleansWithCoo.getCoordinates());
 
         //launch
         Town.setAllCoordinatesFromFile(townCoordinatesList);
@@ -319,6 +328,7 @@ public class TownTest {
         assertNull(townNCNowhere.getCoordinates());
         assertEquals("MyCoordinate{latitude=11.0, longitude=11.0}", townNCAliasSearched.getCoordinates().toString());
         assertEquals("MyCoordinate{latitude=48.3905283, longitude=-4.4860088}", townNCAliasToSearch.getCoordinates().toString());
+        assertEquals("MyCoordinate{latitude=25.0, longitude=-5.0}", townNCOrleansWithCoo.getCoordinates().toString());
         assertNull(townNCAliasNotFound.getCoordinates());
         //verification pointer
         assertEquals(townNCMarseille.getCoordinates(), Town.getTowns().get(0).getCoordinates());
@@ -329,11 +339,8 @@ public class TownTest {
         assertEquals(townNCAliasSearched.getCoordinates(), Town.getTowns().get(5).getCoordinates());
         assertEquals(townNCAliasToSearch.getCoordinates(), Town.getTowns().get(6).getCoordinates());
         assertNull(Town.getTowns().get(7).getCoordinates());
-        assertEquals(6, Town.getTownsToSerialize().size());
-    }
-
-    //@Test
-    public void setAllCoordinatesFromSerializerTest() {
+        assertEquals(townNCOrleansWithCoo.getCoordinates(), Town.getTowns().get(8).getCoordinates());
+        assertEquals(7, Town.getTownsToSerialize().size());
     }
 
     //@Test
