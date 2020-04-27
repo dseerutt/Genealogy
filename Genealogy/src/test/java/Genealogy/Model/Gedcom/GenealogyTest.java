@@ -119,7 +119,7 @@ public class GenealogyTest {
         String path = "src/test/resources/parseContents.gedTest";
         File file = new File(path);
         MyGedcomReader myGedcomReader = new MyGedcomReader();
-        Serializer serializer = new Serializer();
+        Serializer serializer = Serializer.getInstance();
 
         //launch
         Genealogy.genealogy = myGedcomReader.read(file.getAbsolutePath());
@@ -204,7 +204,7 @@ public class GenealogyTest {
         try {
             File file = new File(fileInput);
             MyGedcomReader myGedcomReader = new MyGedcomReader();
-            Serializer serializer = new Serializer();
+            Serializer serializer = Serializer.getInstance();
             String inputmd5 = "";
             String resultmd5 = "";
 

@@ -601,8 +601,7 @@ public class TreeComparator {
             try {
                 String path = Serializer.getPath();
                 if (path == null) {
-                    Serializer serializer = new Serializer();
-                    path = serializer.getPath();
+                    path = Serializer.getInstance().getPath();
                 }
                 aliasCities = new LinkedHashMap<>();
                 aliasNames = new LinkedHashMap<>();
@@ -745,8 +744,7 @@ public class TreeComparator {
     private void saveDifference(String tree) {
         String path = Serializer.getPath();
         if (path == null) {
-            Serializer serializer = new Serializer();
-            path = Serializer.getPath();
+            path = Serializer.getInstance().getPath();
         }
         File file = new File(path + File.separator + "comparatorTrees" + File.separator + tree + ".bak2");
         FileWriter fr = null;
@@ -768,8 +766,7 @@ public class TreeComparator {
     public static void addDifferenceInFile(String treeName, String difference) {
         String path = Serializer.getPath();
         if (path == null) {
-            Serializer serializer = new Serializer();
-            path = Serializer.getPath();
+            path = Serializer.getInstance().getPath();
         }
         //logger.debug("For tree " + treeName + " , add line : " + difference);
         String fileName = path + File.separator + "comparatorTrees" + File.separator + treeName + ".bak";
@@ -805,8 +802,7 @@ public class TreeComparator {
         //read data
         String path = Serializer.getPath();
         if (path == null) {
-            Serializer serializer = new Serializer();
-            path = Serializer.getPath();
+            path = Serializer.getInstance().getPath();
         }
         String fileName = path + File.separator + "comparatorTrees" + File.separator + treeName + ".bak";
 
@@ -853,8 +849,7 @@ public class TreeComparator {
         HashMap<GeneanetPerson, String> result = new HashMap<GeneanetPerson, String>();
         String path = Serializer.getPath();
         if (path == null) {
-            Serializer serializer = new Serializer();
-            path = Serializer.getPath();
+            path = Serializer.getInstance().getPath();
         }
         try (BufferedReader br = new BufferedReader(new FileReader(path + File.separator + "comparatorTrees" + File.separator + tree + ".bak"))) {
             String line;
@@ -934,8 +929,7 @@ public class TreeComparator {
     public static void saveGeneanetBrowserIntoFile(GeneanetBrowser geneanetBrowser, String url) {
         String path = Serializer.getPath();
         if (path == null) {
-            Serializer serializer = new Serializer();
-            path = Serializer.getPath();
+            path = Serializer.getInstance().getPath();
         }
         File fichier = new File(path + File.separator + "geneanetTrees" + File.separator + url + ".ser");
 
@@ -965,8 +959,7 @@ public class TreeComparator {
         GeneanetBrowser geneanetBrowser = null;
         String path = Serializer.getPath();
         if (path == null) {
-            Serializer serializer = new Serializer();
-            path = Serializer.getPath();
+            path = Serializer.getInstance().getPath();
         }
         File fichier = new File(path + File.separator + "geneanetTrees" + File.separator + url + ".ser");
 

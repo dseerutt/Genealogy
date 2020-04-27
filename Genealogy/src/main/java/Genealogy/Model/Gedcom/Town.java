@@ -5,6 +5,8 @@ import Genealogy.Model.Act.Act;
 import Genealogy.URLConnexion.MyHttpUrlConnection;
 import Genealogy.URLConnexion.Serializer;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
 import java.io.Serializable;
@@ -55,6 +57,10 @@ public class Town implements Serializable {
      * Boolean saveCoordinatesTxtFile : save on serializer coordinates text file
      */
     private static boolean saveCoordinatesTxtFile = true;
+    /**
+     * Class logger
+     */
+    final static Logger logger = LogManager.getLogger(Town.class);
 
     /**
      * Town constructor from name and county, and add the town to towns if not present
@@ -191,8 +197,8 @@ public class Town implements Serializable {
      * @param county
      */
     public static void addLostTowns(String town, String county) {
-        lostTowns.add(town);
-        townAssociation.put(town + " " + county, "");
+        lostTowns.add(town + " (" + county + ")");
+        townAssociation.put(town + " (" + county, ")");
     }
 
     /**
@@ -224,7 +230,7 @@ public class Town implements Serializable {
      * @return
      */
     public static MyCoordinate parseJsonArray(String jsonObject) {
-        if (StringUtils.equals(jsonObject, "[]")) {
+        if (StringUtils.isBlank(jsonObject) || StringUtils.equals(jsonObject, "[]")) {
             return null;
         }
         JSONObject jsonObj = new JSONObject(jsonObject.substring(1, jsonObject.length() - 1));
@@ -281,7 +287,7 @@ public class Town implements Serializable {
     }
 
     /**
-     * Function findTown : find thisTown in towns with getFullName , return null instead
+     * Function findTown : find thisTown in towns with getFullName , return null if not found
      *
      * @param towns
      * @param thisTown
@@ -290,6 +296,22 @@ public class Town implements Serializable {
     public static Town findTown(ArrayList<Town> towns, Town thisTown) {
         for (Town town : towns) {
             if (town.getFullName().equals(thisTown.getFullName())) {
+                return town;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Function findTown : find thisTown in towns with getFullNameWithParenthesis , return null if not found
+     *
+     * @param towns
+     * @param fullNameWithParenthesis
+     * @return
+     */
+    public static Town findTown(ArrayList<Town> towns, String fullNameWithParenthesis) {
+        for (Town town : towns) {
+            if (town.getFullNameWithParenthesis().equals(fullNameWithParenthesis)) {
                 return town;
             }
         }
@@ -336,44 +358,45 @@ public class Town implements Serializable {
      * @throws Exception
      */
     public static void setAllCoordinatesFromFile(ArrayList<Town> townCoordinatesList) throws Exception {
-        lostTowns = new ArrayList<>();
         //Handle alias - cities that changed names
         HashMap<String, String> alias = Town.getTownAssociation();
         Serializer serializer = Serializer.getInstance();
-        String separator = "|";
-        //If the serializer file is not empty
         for (Town thisTown : towns) {
             Town town = findTown(townCoordinatesList, thisTown);
-            String aliasName = thisTown.getFullName();
+            String aliasName = thisTown.getFullNameWithParenthesis();
             String city = thisTown.getName();
             String county = thisTown.getCounty();
             if (alias.containsKey(aliasName)) {
-                aliasName = alias.get(thisTown.getFullName());
+                aliasName = alias.get(aliasName);
+                town = findTown(townCoordinatesList, aliasName);
+                String[] tab = aliasName.split("\\(");
+                if (tab != null && tab.length == 2) {
+                    city = StringUtils.trim(tab[0]);
+                    county = StringUtils.trim(tab[1].substring(0, tab[1].length() - 1));
+                } else {
+                    logger.error("Failed to read alias " + aliasName + " for town " + thisTown.getFullNameWithParenthesis());
+                }
             }
             if ((town != null) && (town.getCoordinates() != null)) {
                 thisTown.setCoordinates(town.getCoordinates());
-                if (!lostTowns.contains(aliasName)) {
-                    townsToSerialize.add(thisTown);
-                }
             } else {
                 MyCoordinate coo;
-                String coordinatesFromFile = serializer.getCoordinatesFromFile(city + separator + county);
+                String coordinatesFromFile = serializer.getCoordinatesFromFile(city, county);
                 if (coordinatesFromFile != null) {
                     coo = new MyCoordinate(coordinatesFromFile);
                     thisTown.setCoordinates(coo);
                     break;
                 }
-                //Add the town
-                coo = Town.parseJsonArray((new MyHttpUrlConnection()).sendGpsRequest(city, county));
+                coo = Town.parseJsonArray(MyHttpUrlConnection.getInstance().sendGpsRequest(city, county));
                 if (coo != null) {
                     thisTown.setCoordinates(coo);
                     if (saveCoordinatesTxtFile) {
                         saveCoordinateIntoFile(city, county, coo.getLatitude(), coo.getLongitude());
                     }
                 }
-                if (!lostTowns.contains(aliasName)) {
-                    townsToSerialize.add(thisTown);
-                }
+            }
+            if (!lostTowns.contains(aliasName)) {
+                townsToSerialize.add(thisTown);
             }
         }
     }
@@ -384,37 +407,32 @@ public class Town implements Serializable {
      * @throws Exception
      */
     public static void setAllCoordinatesFromSerializer() throws Exception {
-        lostTowns = new ArrayList<>();
         //Handle alias - cities that changed names
         HashMap<String, String> alias = Town.getTownAssociation();
         Serializer serializer = Serializer.getInstance();
-        String separator = "|";
-        //if the serializer file is empty
         for (Town thisTown : towns) {
-            MyCoordinate coo = null;
-            String newName = thisTown.getFullName();
+            MyCoordinate coo;
+            String aliasName = thisTown.getFullName();
             String city = thisTown.getName();
             String county = thisTown.getCounty();
-
-            String coordinatesFromFile = serializer.getCoordinatesFromFile(city + separator + county);
+            String coordinatesFromFile = serializer.getCoordinatesFromFile(city, county);
             if (coordinatesFromFile != null) {
                 coo = new MyCoordinate(coordinatesFromFile);
                 thisTown.setCoordinates(coo);
             } else {
                 if (alias.containsKey(thisTown.getFullName())) {
-                    newName = alias.get(thisTown.getFullName());
+                    aliasName = alias.get(thisTown.getFullName());
                 }
-                coo = Town.parseJsonArray((new MyHttpUrlConnection()).sendGpsRequest(city, county));
-                if (!lostTowns.contains(newName)) {
-                    townsToSerialize.add(thisTown);
-                }
-
+                coo = Town.parseJsonArray(MyHttpUrlConnection.getInstance().sendGpsRequest(city, county));
                 if (coo != null) {
                     thisTown.setCoordinates(coo);
                     if (saveCoordinatesTxtFile) {
                         saveCoordinateIntoFile(city, county, coo.getLatitude(), coo.getLongitude());
                     }
                 }
+            }
+            if (!lostTowns.contains(aliasName)) {
+                townsToSerialize.add(thisTown);
             }
         }
     }
@@ -428,6 +446,7 @@ public class Town implements Serializable {
      */
     public static void setAllCoordinates() throws Exception {
         ArrayList<Town> townsInFile = Serializer.getInstance().getTowns();
+        lostTowns = new ArrayList<>();
         if ((townsInFile == null) || (townsInFile.isEmpty())) {
             setAllCoordinatesFromSerializer();
         } else {

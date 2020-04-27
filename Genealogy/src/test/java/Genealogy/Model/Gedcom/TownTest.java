@@ -5,12 +5,17 @@ import Genealogy.Model.Act.Birth;
 import Genealogy.Model.Act.Death;
 import Genealogy.Model.Date.YearDate;
 import Genealogy.Model.Exception.ParsingException;
+import Genealogy.URLConnexion.MyHttpUrlConnection;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.*;
 
 public class TownTest {
 
@@ -19,7 +24,13 @@ public class TownTest {
      * slash, name only and same name and county
      */
     @Test
-    public void townConstructorTest() {
+    public void townConstructorTest() throws NoSuchFieldException, IllegalAccessException {
+        //init reflection
+        Town townTest = new Town("Ville 1", "Département");
+        Field mapTownsField = townTest.getClass().getDeclaredField("towns");
+        mapTownsField.setAccessible(true);
+        mapTownsField.set(townTest, new ArrayList());
+
         //launch
         Town townFromNameAndCounty = new Town("Ville 1", "Département");
         Town townFromParenthesis = new Town("Mon village 1 (mon département 1)");
@@ -53,7 +64,7 @@ public class TownTest {
 
         //verification
         assertEquals(1, Town.getLostTowns().size());
-        assertEquals("Ville", Town.getLostTowns().get(0));
+        assertEquals("Ville Département", Town.getLostTowns().get(0));
         assertEquals(1, Town.getTownAssociation().size());
         assertEquals("", Town.getTownAssociation().get("Ville Département"));
     }
@@ -117,10 +128,15 @@ public class TownTest {
      * @throws ParsingException
      */
     @Test
-    public void addActTest() throws ParsingException {
+    public void addActTest() throws ParsingException, NoSuchFieldException, IllegalAccessException {
         //init
         Person person = new Person(null);
         Town townParis = new Town("Paris (Paris)");
+
+        //reflection
+        Field mapTownActField = townParis.getClass().getDeclaredField("mapTownAct");
+        mapTownActField.setAccessible(true);
+        mapTownActField.set(townParis, new HashMap<>());
 
         //launch : the function is called in Act constructor
         Birth birth = new Birth(person, new YearDate("2005"), townParis);
@@ -171,7 +187,12 @@ public class TownTest {
      * Test if null is returned if the coordinates are not found
      */
     @Test
-    public void findCoordinateFromTownsTest() {
+    public void findCoordinateFromTownsTest() throws NoSuchFieldException, IllegalAccessException {
+        //init reflection
+        Town townTest = new Town("Ville 1", "Département");
+        Field mapTownsField = townTest.getClass().getDeclaredField("towns");
+        mapTownsField.setAccessible(true);
+        mapTownsField.set(townTest, new ArrayList());
         //init
         Town townParis = new Town("Paris (Paris)");
         townParis.setCoordinates(new MyCoordinate(10, 10));
@@ -193,7 +214,12 @@ public class TownTest {
      * Test if null is returned if the coordinates are not found
      */
     @Test
-    public void testFindCoordinateFromTownsTest() {
+    public void findCoordinateFromTownsStaticTest() throws NoSuchFieldException, IllegalAccessException {
+        //init reflection
+        Town townTest = new Town("Ville 1", "Département");
+        Field mapTownsField = townTest.getClass().getDeclaredField("towns");
+        mapTownsField.setAccessible(true);
+        mapTownsField.set(townTest, new ArrayList());
         //init
         Town townParis = new Town("Paris (Paris)");
         townParis.setCoordinates(new MyCoordinate(10, 10));
@@ -208,8 +234,102 @@ public class TownTest {
         assertNull(Town.findCoordinateFromTowns("Nice (Alpes-Maritimes"));
     }
 
+    /**
+     * SetAllCoordinatesFromFile test : test with empty coordinates cities, already coordinates, and no coordinates,
+     * alias with coordinates and alias without coordinates, and alias not found
+     *
+     * @throws Exception
+     */
     @Test
-    public void setAllCoordinatesFromFileTest() {
+    public void setAllCoordinatesFromFileTest() throws Exception {
+        //init input list
+        ArrayList<Town> townCoordinatesList = new ArrayList();
+        Town townMarseille = new Town("Marseille (Bouches du Rhône)");
+        townMarseille.setCoordinates(new MyCoordinate(10, 10));
+        Town townLyon = new Town("Lyon (Rhône)");
+        townLyon.setCoordinates(new MyCoordinate(20, 20));
+        Town townRennes = new Town("Rennes (Ille et Vilaine)");
+        townRennes.setCoordinates(new MyCoordinate(30, 30));
+        Town townLille = new Town("Lille (Nord)");
+        townLille.setCoordinates(new MyCoordinate(40, 40));
+        townCoordinatesList.add(townMarseille);
+        townCoordinatesList.add(townLyon);
+        townCoordinatesList.add(townRennes);
+        //reflection towns, saveCoordinatesTxtFile, MyHttpUrlConnection
+        Field townField = townMarseille.getClass().getDeclaredField("towns");
+        Field saveCoordinatesTxtFileField = townMarseille.getClass().getDeclaredField("saveCoordinatesTxtFile");
+        townField.setAccessible(true);
+        saveCoordinatesTxtFileField.setAccessible(true);
+        townField.set(townMarseille, new ArrayList<>());
+        saveCoordinatesTxtFileField.set(townMarseille, false);
+        MyHttpUrlConnection connection = mock(MyHttpUrlConnection.class);
+        Field instanceField = MyHttpUrlConnection.class.getDeclaredField("instance");
+        instanceField.setAccessible(true);
+        instanceField.set(null, connection);
+        String jsonResultReims = "[{\"place_id\":235317389,\"licence\":\"Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright\",\"osm_type\":\"relation\",\"osm_id\":7379,\"boundingbox\":[\"48.5152693\",\"49.407418\",\"3.3958932\",\"5.0401048\"],\"lat\":\"48.961264\",\"lon\":\"4.31224359285714\",\"display_name\":\"Marne, Grand Est, France métropolitaine, France\",\"class\":\"boundary\",\"type\":\"administrative\",\"importance\":0.7216023420982088,\"icon\":\"https://nominatim.openstreetmap.org/images/mapicons/poi_boundary_administrative.p.20.png\"}]";
+        when(connection.sendGpsRequest("Reims", "Marne")).thenReturn(jsonResultReims);
+        String jsonResultNowhere = "[]";
+        when(connection.sendGpsRequest("Nowhere", "Nowhere")).thenReturn(jsonResultNowhere);
+        String jsonResultBrest = "[{\"place_id\":235233191,\"licence\":\"Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright\",\"osm_type\":\"relation\",\"osm_id\":1076124,\"boundingbox\":[\"48.3572972\",\"48.4595521\",\"-4.5689169\",\"-4.4278311\"],\"lat\":\"48.3905283\",\"lon\":\"-4.4860088\",\"display_name\":\"Brest, Finistère, Bretagne, France métropolitaine, 29200, France\",\"class\":\"boundary\",\"type\":\"administrative\",\"importance\":0.8222453311672093,\"icon\":\"https://nominatim.openstreetmap.org/images/mapicons/poi_boundary_administrative.p.20.png\"},{\"place_id\":235504528,\"licence\":\"Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright\",\"osm_type\":\"relation\",\"osm_id\":1650034,\"boundingbox\":[\"48.2959567\",\"48.6857905\",\"-5.1440329\",\"-4.0457299\"],\"lat\":\"48.487141050000005\",\"lon\":\"-4.485837994884294\",\"display_name\":\"Brest, Finistère, Bretagne, France métropolitaine, France\",\"class\":\"boundary\",\"type\":\"administrative\",\"importance\":0.5438072630301356,\"icon\":\"https://nominatim.openstreetmap.org/images/mapicons/poi_boundary_administrative.p.20.png\"}]";
+        when(connection.sendGpsRequest("Brest", "Finistère")).thenReturn(jsonResultBrest);
+        when(connection.sendGpsRequest("Nowhere2", "Nowhere")).thenReturn(jsonResultNowhere);
+
+        //init verification
+        assertEquals(0, Town.getTowns().size());
+
+        //init towns without coordinates
+        Town townNCMarseille = new Town("Marseille (Bouches du Rhône)");
+        townMarseille.setCoordinates(new MyCoordinate(11, 11));
+        Town townNCLyon = new Town("Lyon (Rhône)");
+        Town townNCRennes = new Town("Rennes (Ille et Vilaine)");
+        Town townNCReims = new Town("Reims (Marne)");
+        Town townNCNowhere = new Town("Nowhere (Nowhere)");
+        Town townNCAliasSearched = new Town("Alias1S (AliasDep)");
+        Town townNCAliasToSearch = new Town("Alias2TS (AliasDep)");
+        Town townNCAliasNotFound = new Town("Alias3NF (AliasDep)");
+        Town.getTownAssociation().put("Alias1S (AliasDep)", "Marseille (Bouches du Rhône)");
+        Town.getTownAssociation().put("Alias2TS (AliasDep)", "Brest (Finistère)");
+        Town.getTownAssociation().put("Alias3NF (AliasDep)", "Nowhere2 (Nowhere)");
+        //init failed search within MyHttpUrlConnection
+        Town.getLostTowns().add("Nowhere (Nowhere)");
+        Town.getLostTowns().add("Nowhere2 (Nowhere)");
+
+        //init verification
+        assertEquals(8, Town.getTowns().size());
+        assertNull(townNCMarseille.getCoordinates());
+        assertNull(townNCLyon.getCoordinates());
+        assertNull(townNCRennes.getCoordinates());
+        assertNull(townNCReims.getCoordinates());
+        assertNull(townNCNowhere.getCoordinates());
+        assertNull(townNCAliasSearched.getCoordinates());
+        assertNull(townNCAliasToSearch.getCoordinates());
+        assertNull(townNCAliasNotFound.getCoordinates());
+
+        //launch
+        Town.setAllCoordinatesFromFile(townCoordinatesList);
+
+        //verification
+        Mockito.verify(connection, times(1)).sendGpsRequest("Reims", "Marne");
+        Mockito.verify(connection, times(1)).sendGpsRequest("Nowhere", "Nowhere");
+        Mockito.verify(connection, times(1)).sendGpsRequest("Brest", "Finistère");
+        assertEquals("MyCoordinate{latitude=11.0, longitude=11.0}", townNCMarseille.getCoordinates().toString());
+        assertEquals("MyCoordinate{latitude=20.0, longitude=20.0}", townNCLyon.getCoordinates().toString());
+        assertEquals("MyCoordinate{latitude=30.0, longitude=30.0}", townNCRennes.getCoordinates().toString());
+        assertEquals("MyCoordinate{latitude=48.961264, longitude=4.31224359285714}", townNCReims.getCoordinates().toString());
+        assertNull(townNCNowhere.getCoordinates());
+        assertEquals("MyCoordinate{latitude=11.0, longitude=11.0}", townNCAliasSearched.getCoordinates().toString());
+        assertEquals("MyCoordinate{latitude=48.3905283, longitude=-4.4860088}", townNCAliasToSearch.getCoordinates().toString());
+        assertNull(townNCAliasNotFound.getCoordinates());
+        //verification pointer
+        assertEquals(townNCMarseille.getCoordinates(), Town.getTowns().get(0).getCoordinates());
+        assertEquals(townNCLyon.getCoordinates(), Town.getTowns().get(1).getCoordinates());
+        assertEquals(townNCRennes.getCoordinates(), Town.getTowns().get(2).getCoordinates());
+        assertEquals(townNCReims.getCoordinates(), Town.getTowns().get(3).getCoordinates());
+        assertNull(Town.getTowns().get(4).getCoordinates());
+        assertEquals(townNCAliasSearched.getCoordinates(), Town.getTowns().get(5).getCoordinates());
+        assertEquals(townNCAliasToSearch.getCoordinates(), Town.getTowns().get(6).getCoordinates());
+        assertNull(Town.getTowns().get(7).getCoordinates());
+        assertEquals(6, Town.getTownsToSerialize().size());
     }
 
     //@Test

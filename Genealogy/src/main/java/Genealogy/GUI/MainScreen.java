@@ -87,7 +87,7 @@ public class MainScreen extends JFrame {
         initComboBox();
         initTab1();
         initMissingCitiesTab();
-        HTTPConnexion = new MyHttpUrlConnection();
+        HTTPConnexion = MyHttpUrlConnection.getInstance();
 
         setPreferredSize(new Dimension(700, 500));
         pack();
@@ -232,7 +232,7 @@ public class MainScreen extends JFrame {
     }
 
     protected static JFileChooser initJFileChooser() {
-        Serializer<Town> serializer = new Serializer<Town>(Town.class);
+        Serializer<Town> serializer = Serializer.getInstance();
         String myFolder = "D:\\Genealogie\\Preuves\\";
         String myJarFolder = System.getProperty("user.dir") + File.separator + "Preuves" + File.separator;
 

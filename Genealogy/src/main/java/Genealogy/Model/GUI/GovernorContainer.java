@@ -1,6 +1,8 @@
 package Genealogy.Model.GUI;
 
 import Genealogy.URLConnexion.Serializer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.io.File;
@@ -20,6 +22,7 @@ public class GovernorContainer {
     private int beginningDate = Calendar.getInstance().get(Calendar.YEAR);
     private String path;
     private ArrayList<Governor> governors = new ArrayList<>();
+    final static Logger logger = LogManager.getLogger(GovernorContainer.class);
 
     public int getBeginningDate() {
         return beginningDate;
@@ -105,8 +108,7 @@ public class GovernorContainer {
     public void initGovernors() {
         path = Serializer.getPath();
         if (path == null) {
-            Serializer serializer = new Serializer();
-            path = serializer.getPath();
+            path = Serializer.getInstance().getPath();
         }
         path += "Genealogy" + File.separator + "GUI" + File.separator + propertiesFileName + File.separator;
         File file = new File(path + propertiesFileName);
@@ -114,7 +116,7 @@ public class GovernorContainer {
         try {
             scanner = new Scanner(file);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            logger.error("Failed to init governors", e);
         }
         try {
             while (scanner.hasNextLine()) {

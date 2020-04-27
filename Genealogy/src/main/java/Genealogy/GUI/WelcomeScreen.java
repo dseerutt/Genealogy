@@ -56,7 +56,7 @@ public class WelcomeScreen extends JFrame {
     }
 
     private JFileChooser initSerializer() {
-        Serializer<Town> serializer = new Serializer<Town>(Town.class);
+        Serializer<Town> serializer = Serializer.getInstance();
         if (serializer.isJar()) {
             return new JFileChooser(myJarFolder);
         } else {

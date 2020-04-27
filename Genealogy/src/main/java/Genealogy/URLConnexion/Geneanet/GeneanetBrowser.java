@@ -73,8 +73,7 @@ public class GeneanetBrowser implements Serializable {
         try {
             String path = Serializer.getPath();
             if (path == null) {
-                Serializer serializer = new Serializer();
-                path = serializer.getPath()
+                path = Serializer.getInstance().getPath()
                 ;
             }
             input = new FileInputStream(path + "geneanetTrees.properties");
@@ -115,8 +114,7 @@ public class GeneanetBrowser implements Serializable {
         try {
             String path = Serializer.getPath();
             if (path == null) {
-                Serializer serializer = new Serializer();
-                path = Serializer.getPath()
+                path = Serializer.getInstance().getPath()
                 ;
             }
             input = new FileInputStream(Serializer.getPath() + "geneanet.properties");
@@ -483,8 +481,7 @@ public class GeneanetBrowser implements Serializable {
     public void saveSearchOutput() {
         String path = Serializer.getPath();
         if (path == null) {
-            Serializer serializer = new Serializer();
-            path = Serializer.getPath();
+            path = Serializer.getInstance().getPath();
         }
         File file = new File(path + File.separator + "geneanetTrees" + File.separator + findTreeName(url) + ".bak");
         FileWriter fr = null;

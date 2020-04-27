@@ -32,7 +32,7 @@ public class MyGedcomReaderTest {
         String path = "src/test/resources/read.gedTest";
         File file = new File(path);
         MyGedcomReader myGedcomReader = new MyGedcomReader();
-        Serializer serializer = new Serializer();
+        Serializer serializer = Serializer.getInstance();
 
         //launch
         Genealogy.genealogy = myGedcomReader.read(file.getAbsolutePath());

@@ -34,7 +34,7 @@ public class MyHttpUrlConnection {
     /**
      * Int timeoutCounter, set to 0 when the timeouts stop
      */
-    private static int timeoutCounter = 0;
+    private int timeoutCounter = 0;
     /**
      * String defaultLocation : result of defaultLocation query
      */
@@ -43,6 +43,26 @@ public class MyHttpUrlConnection {
      * String Nominatim default API call
      */
     private String openstreetmapApiDefault = "https://nominatim.openstreetmap.org/search?city=Tataouine&format=json";
+
+    private static MyHttpUrlConnection instance;
+
+    /**
+     * Instance getter + initialisation if null
+     *
+     * @return
+     */
+    public static MyHttpUrlConnection getInstance() {
+        if (instance == null) {
+            instance = new MyHttpUrlConnection();
+        }
+        return instance;
+    }
+
+    /**
+     * Private default constructor
+     */
+    private MyHttpUrlConnection() {
+    }
 
     /**
      * Function sendGet : send a get with the string url and returns the answer

@@ -249,7 +249,7 @@ public class PersonTest {
         String pathNewFile = "src/test/resources/savePDFCommentAndFileTest.gedTest";
         File file = new File(path);
         MyGedcomReader myGedcomReader = new MyGedcomReader();
-        Serializer serializer = new Serializer();
+        Serializer serializer = Serializer.getInstance();
 
         //init
         genealogy = myGedcomReader.read(file.getAbsolutePath());

@@ -30,7 +30,7 @@ public class Serializer<T> {
      */
     public static Serializer getInstance() {
         if (instance == null) {
-            new Serializer();
+            new Serializer<>(Town.class);
         }
         return instance;
     }
@@ -91,13 +91,13 @@ public class Serializer<T> {
         }
     }
 
-    public Serializer() {
+    private Serializer() {
         initPath();
         initProperties();
         Serializer.instance = this;
     }
 
-    public Serializer(Class<T> cls) {
+    private Serializer(Class<T> cls) {
         initPath();
         initProperties();
         File f = new File(path + serializerType);
@@ -242,7 +242,8 @@ public class Serializer<T> {
         }
     }
 
-    public String getCoordinatesFromFile(String city) {
+    public String getCoordinatesFromFile(String city, String county) {
+        String name = city + "|" + county;
         String citySeparator = "->";
         if (cityFileMap == null) {
             cityFileMap = new HashMap<>();
@@ -265,7 +266,7 @@ public class Serializer<T> {
                 return null;
             }
         }
-        return cityFileMap.get(city);
+        return cityFileMap.get(name);
     }
 
     /**
