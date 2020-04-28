@@ -445,11 +445,9 @@ public class Town implements Serializable {
      * @param city
      */
     public static void setCoordinates(MyCoordinate coordinates, String city) {
-        Town thisTown;
         for (Town town : towns) {
             if (town.getFullName().equals(city)) {
-                thisTown = town;
-                thisTown.setCoordinates(coordinates);
+                town.setCoordinates(coordinates);
                 return;
             }
         }

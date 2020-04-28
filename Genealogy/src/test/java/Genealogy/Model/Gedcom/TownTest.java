@@ -14,8 +14,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class TownTest {
@@ -343,27 +342,109 @@ public class TownTest {
         assertEquals(7, Town.getTownsToSerialize().size());
     }
 
-    //@Test
-    public void sortTownsTest() {
+    /**
+     * Test sortTownsTest : test sort towns by name using TownComparator
+     */
+    @Test
+    public void sortTownsTest() throws NoSuchFieldException, IllegalAccessException {
+        //init reflection
+        Town townLyon = new Town("Lyon Rhône");
+        Field townField = townLyon.getClass().getDeclaredField("towns");
+        townField.setAccessible(true);
+        townField.set(townLyon, new ArrayList<>());
+        //init
+        Town townRennes = new Town("Rennes Ille-et-Vilaine");
+        Town townReims2 = new Town("Reims2 Amarne");
+        Town townReims = new Town("Reims marne");
+        Town townZoo = new Town("Zoo AzooDep");
+
+        //init verification
+        assertEquals(townRennes, Town.getTowns().get(0));
+        assertEquals(townReims2, Town.getTowns().get(1));
+        assertEquals(townReims, Town.getTowns().get(2));
+        assertEquals(townZoo, Town.getTowns().get(3));
+
+        //launch
+        Town.sortTowns();
+
+        //verification
+        assertEquals(townReims, Town.getTowns().get(0));
+        assertEquals(townReims2, Town.getTowns().get(1));
+        assertEquals(townRennes, Town.getTowns().get(2));
+        assertEquals(townZoo, Town.getTowns().get(3));
     }
 
-    //@Test
-    public void testSetCoordinatesTest() {
+    /**
+     * SetCoordinates test : test set coordinates with fullName Town
+     */
+    @Test
+    public void setCoordinatesTest() throws NoSuchFieldException, IllegalAccessException {
+        //init reflection
+        Town townLyon = new Town("Lyon Rhône");
+        Field townField = townLyon.getClass().getDeclaredField("towns");
+        townField.setAccessible(true);
+        townField.set(townLyon, new ArrayList<>());
+        //init
+        townLyon = new Town("Lyon Rhône");
+        Town townRennes = new Town("Rennes Ille et Vilaine");
+        Town townReims = new Town("Reims Marne");
+        //town reflection
+
+        //launch
+        Town.setCoordinates(new MyCoordinate(10, 11), "Lyon Rhône");
+        Town.setCoordinates(new MyCoordinate(10, 15), "Reims Marnes");
+
+        //verification
+        assertEquals(3, Town.getTowns().size());
+        assertEquals(new MyCoordinate(10, 11), townLyon.getCoordinates());
+        assertNull(townRennes.getCoordinates());
+        assertNull(townReims.getCoordinates());
     }
 
-    //@Test
+    /**
+     * Test getCoordinatesPrettyPrint : test pretty print on null coordinates and town with coordinates
+     */
+    @Test
     public void getCoordinatesPrettyPrintTest() {
+        //init
+        Town townRennes = new Town("Rennes Ille et Vilaine");
+        Town townReims = new Town("Reims Marne");
+        townReims.setCoordinates(new MyCoordinate(10, 15));
+
+        //verification
+        assertEquals("", townRennes.getCoordinatesPrettyPrint());
+        assertEquals("(10.0,15.0)", townReims.getCoordinatesPrettyPrint());
     }
 
-    //@Test
+    /**
+     * Test isEmpty : test if a Town is empty with blank/empty/null name and county
+     */
+    @Test
     public void isEmptyTest() {
+        //init
+        Town townNull = new Town(null, null);
+        Town townEmpty = new Town("", "");
+        Town townBlank = new Town(" ", " ");
+        Town townNameOnly = new Town("Town", null);
+        Town townCountyOnly = new Town(null, "Dept");
+        Town townClassic = new Town("Reims", "Marne");
+
+        //verification
+        assertTrue(townNull.isEmpty());
+        assertTrue(townEmpty.isEmpty());
+        assertTrue(townBlank.isEmpty());
+        assertFalse(townNameOnly.isEmpty());
+        assertFalse(townCountyOnly.isEmpty());
+        assertFalse(townClassic.isEmpty());
     }
 
-    //@Test
-    public void testToStringTest() {
-    }
-
-    //@Test
+    /**
+     * Test toStringPrettyStringTest : test with an empty/null county and a classic name and county
+     */
+    @Test
     public void toStringPrettyStringTest() {
+        assertEquals("Reims (Marne)", new Town("Reims", "Marne").toStringPrettyString());
+        assertEquals("Reims", new Town("Reims", "").toStringPrettyString());
+        assertEquals("Reims", new Town("Reims", null).toStringPrettyString());
     }
 }
