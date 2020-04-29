@@ -266,7 +266,7 @@ public class TownTest {
         Field instanceField = MyHttpUrlConnection.class.getDeclaredField("instance");
         instanceField.setAccessible(true);
         instanceField.set(null, connection);
-        Field cityFileMapField = Serializer.class.getDeclaredField("cityFileMap");
+        Field cityFileMapField = Serializer.class.getDeclaredField("townCoordinatesMap");
         cityFileMapField.setAccessible(true);
         HashMap<String, String> cityFileMap = new HashMap<>();
         cityFileMap.put("Gratot|Manche", "49:-1");
