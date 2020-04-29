@@ -1,9 +1,12 @@
 package Genealogy.MapViewer.Structures;
 
+import Genealogy.GUI.WelcomeScreen;
 import Genealogy.Model.Date.MyDate;
 import Genealogy.Model.Gedcom.Person;
 import Genealogy.Model.Gedcom.Town;
 import javafx.util.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -39,6 +42,10 @@ public class Pinpoint implements Serializable {
      * Map of list of MapStructures (name, age, town) per year only for direct ancestors
      */
     private static HashMap<Integer, ArrayList<Pinpoint>> pinpointsYearMapDirectAncestors = new HashMap<>();
+    /**
+     * Class logger
+     */
+    public final static Logger logger = LogManager.getLogger(WelcomeScreen.class);
 
     /**
      * Town getter

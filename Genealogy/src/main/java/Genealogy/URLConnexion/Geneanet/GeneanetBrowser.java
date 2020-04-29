@@ -94,14 +94,14 @@ public class GeneanetBrowser implements Serializable {
                 index++;
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error("Failed to read geneanetTrees.properties file", ex);
             throw new Exception("Impossible de lire le fichier de propriétés");
         } finally {
             if (input != null) {
                 try {
                     input.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.error("Failed to close inputStream", e);
                 }
             }
         }
@@ -151,14 +151,14 @@ public class GeneanetBrowser implements Serializable {
                 throw new Exception("Impossible de récupérer le fichier de propriétés");
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
+            logger.error("Failed to read Geneanet Regex properties", ex);
             throw new Exception("Impossible de lire le fichier de propriétés");
         } finally {
             if (input != null) {
                 try {
                     input.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.error("Failed to close inputStream", e);
                 }
             }
         }
@@ -489,13 +489,13 @@ public class GeneanetBrowser implements Serializable {
             fr = new FileWriter(file);
             fr.write(searchOutput);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Failed to write geneanetTrees bak file", e);
         } finally {
             //close resources
             try {
                 fr.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("Failed to close FileWriter", e);
             }
         }
     }
@@ -532,8 +532,8 @@ public class GeneanetBrowser implements Serializable {
                     addPersonToSearchedOutputPersons(inputTxt, person);
                     return person;
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    System.out.println("Connexion " + tries + ":  erreur lors de la recherche de l'url " + url);
+                    logger.error("Failed to search Person " + person.getUrl(), e);
+                    logger.error("Connexion " + tries + ":  erreur lors de la recherche de l'url " + url);
                     tries++;
                 }
             } while (tries <= 3);
@@ -548,9 +548,9 @@ public class GeneanetBrowser implements Serializable {
             GeneanetBrowser browser = new GeneanetBrowser(url);
             GeneanetPerson person = new GeneanetPerson(url);
             GeneanetPerson resultPerson = browser.searchPerson(person);
-            System.out.println("HashCode de " + resultPerson.getFullName() + " : " + resultPerson.customHashCode());
+            logger.info("HashCode de " + resultPerson.getFullName() + " : " + resultPerson.customHashCode());
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to search url " + url, e);
         }
     }
 
@@ -559,10 +559,10 @@ public class GeneanetBrowser implements Serializable {
             GeneanetBrowser browser = new GeneanetBrowser(url);
             browser.expectedNbPeople = expectedNbPeople0;
             browser.searchRoot();
-            System.out.println("People searched : " + browser.getNbPeople());
+            logger.info("People searched : " + browser.getNbPeople());
             return browser;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to search mainFullTree for url " + url, e);
             return null;
         }
     }
@@ -610,7 +610,7 @@ public class GeneanetBrowser implements Serializable {
                 cpt++;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to search all trees", e);
         }
     }
 
@@ -623,9 +623,9 @@ public class GeneanetBrowser implements Serializable {
             GeneanetBrowser browser = new GeneanetBrowser("");
             Document doc = browser.connect(url);
             String result = Xsoup.compile(pattern).evaluate(doc).get();
-            System.out.println(result);
+            logger.info(result);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to test mainXpath for " + url + " with pattern " + pattern, e);
         }
     }
 
@@ -634,9 +634,9 @@ public class GeneanetBrowser implements Serializable {
             GeneanetBrowser browser = new GeneanetBrowser(url);
             Document doc = browser.connect(url);
             String data = browser.findXPath(doc, text);
-            System.out.println(data);
+            logger.info(data);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to findXpath for url " + url + " with text " + text, e);
         }
     }
 
@@ -658,8 +658,6 @@ public class GeneanetBrowser implements Serializable {
         //searchAllTrees(true);
         //mainSearchFullTree(testUrl, false);
         //GeneanetPerson person = mainSearchFullTree(testUrl, false).rootPerson;
-        //System.out.println(person.getFather());
-        //System.out.println(person.getMother());
         testSearch(testUrl3);
         //mainTestSearchTree();
         //mainTestXpath(testUrl,xpathPattern);

@@ -167,7 +167,7 @@ public class MyHttpUrlConnection {
             connexion.sendGet(testingInternetConnection);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to connect to internet with url " + testingInternetConnection, e);
             return false;
         }
     }

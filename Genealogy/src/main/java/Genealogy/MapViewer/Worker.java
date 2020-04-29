@@ -17,14 +17,13 @@ public class Worker extends SwingWorker<String, Object> {
     private boolean directAncestors = true;
 
     @Override
-    protected String doInBackground() throws Exception {
+    protected String doInBackground() {
         for (int i = year1; i <= year2 + 1; i++) {
             publish(i);
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                //e.printStackTrace();
             }
         }
         return null;

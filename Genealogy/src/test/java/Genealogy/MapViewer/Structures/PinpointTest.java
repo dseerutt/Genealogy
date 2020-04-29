@@ -179,7 +179,7 @@ public class PinpointTest {
             ObjectInputStream objInputStream = new ObjectInputStream(inputStream);
             return (HashMap<Integer, ArrayList<Pinpoint>>) objInputStream.readObject();
         } catch (Exception e) {
-            e.printStackTrace();
+            Pinpoint.logger.error("Failed to deep copy the pinpoint", e);
             return null;
         }
     }

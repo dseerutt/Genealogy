@@ -50,13 +50,13 @@ public class WelcomeScreen extends JFrame {
         try {
             Town.setTownAssociation(serializer.initAssociation());
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to initialize Town associations", e);
             logger.error("Problème dans le parsing du fichier d'associations de ville");
         }
     }
 
     private JFileChooser initSerializer() {
-        Serializer<Town> serializer = Serializer.getInstance();
+        Serializer serializer = Serializer.getInstance();
         if (serializer.isJar()) {
             return new JFileChooser(myJarFolder);
         } else {
@@ -114,7 +114,7 @@ public class WelcomeScreen extends JFrame {
                                             JOptionPane.ERROR_MESSAGE);
                                     logger.error("Les villes suivantes n'ont pas été trouvées : " + txt);
                                 }
-                                Serializer.getInstance().saveTownSerialized(Town.getTownsToSerialize());
+                                Serializer.getInstance().saveSerializedTown(Town.getTownsToSerialize());
                                 ArrayList<Town> myEmptyTowns = Serializer.getNullCoordinatesCities(Town.getTowns());
                                 if (!myEmptyTowns.isEmpty()) {
                                     logger.warn("Villes avec Coordonnées nulles : " + myEmptyTowns);
@@ -123,7 +123,7 @@ public class WelcomeScreen extends JFrame {
                                 setVisible(false);
                                 MainScreen mainScreen = new MainScreen("Ma Généalogie");
                             } catch (Exception exception) {
-                                exception.printStackTrace();
+                                logger.error("Failed to load the gedcom file", exception);
                                 JOptionPane.showMessageDialog(welcomePanel,
                                         "Impossible d'importer le fichier",
                                         "Erreur",

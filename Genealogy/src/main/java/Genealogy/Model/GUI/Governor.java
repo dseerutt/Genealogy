@@ -1,5 +1,9 @@
 package Genealogy.Model.GUI;
 
+import Genealogy.GUI.WelcomeScreen;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -12,6 +16,10 @@ public class Governor {
     private int beginDate;
     private int endDate;
     private ImageIcon image;
+    /**
+     * Class logger
+     */
+    public final static Logger logger = LogManager.getLogger(WelcomeScreen.class);
 
     public Governor(String name, int beginDate, int endDate) {
         this.name = name;
@@ -51,12 +59,12 @@ public class Governor {
         this.image = image;
     }
 
-    public void addImage(ImageIcon image, int height, int width){
-        if (height != 0 && width != 0){
-            Image newImage = image.getImage().getScaledInstance(height,width, Image.SCALE_DEFAULT);
+    public void addImage(ImageIcon image, int height, int width) {
+        if (height != 0 && width != 0) {
+            Image newImage = image.getImage().getScaledInstance(height, width, Image.SCALE_DEFAULT);
             this.image = new ImageIcon(newImage);
         } else {
-            System.out.println("Erreur : les dimensions de l'image ne sont pas correctes");
+            logger.info("Erreur : les dimensions de l'image ne sont pas correctes");
         }
     }
 

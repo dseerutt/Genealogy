@@ -1,6 +1,9 @@
 package Genealogy.Model.Date.RepublicanDate;
 
+import Genealogy.GUI.WelcomeScreen;
 import Genealogy.Model.Exception.RepublicanDateOutOfRangeException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.text.DateFormat;
 import java.text.ParsePosition;
@@ -38,6 +41,10 @@ public class RepublicanCalendarDateConverter {
      * Boolean log initialized to false
      */
     private static final boolean log = false;
+    /**
+     * Class logger
+     */
+    public final static Logger logger = LogManager.getLogger(WelcomeScreen.class);
 
     /**
      * RepublicanCalendarDateConverter default constructor
@@ -79,10 +86,10 @@ public class RepublicanCalendarDateConverter {
                 SimpleDateFormat format = new SimpleDateFormat(pattern);
                 dateString = format.format(date);
             } else if (log) {
-                System.out.println("Failed to parse date : " + dateString + " from " + republicanDate + ".");
+                logger.info("Failed to parse date : " + dateString + " from " + republicanDate + ".");
             }
         } else if (log) {
-            System.out.println("Failed to extract date from: " + republicanDate);
+            logger.info("Failed to extract date from: " + republicanDate);
         }
         return dateString;
     }
@@ -107,10 +114,10 @@ public class RepublicanCalendarDateConverter {
                 return date;
             }
             if (log) {
-                System.out.println("Failed to parse date : " + dateString + " from " + republicanDate + ".");
+                logger.info("Failed to parse date : " + dateString + " from " + republicanDate + ".");
             }
         } else if (log) {
-            System.out.println("Failed to extract date from: " + republicanDate);
+            logger.info("Failed to extract date from: " + republicanDate);
         }
         return null;
     }

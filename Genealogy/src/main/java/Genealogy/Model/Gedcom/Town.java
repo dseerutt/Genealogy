@@ -416,7 +416,7 @@ public class Town implements Serializable {
      */
     public static void setAllCoordinates() throws Exception {
         lostTowns = new ArrayList<>();
-        setAllCoordinatesFromFile(Serializer.getInstance().getTowns());
+        setAllCoordinatesFromFile(Serializer.getInstance().getSerializedTowns());
     }
 
     /**

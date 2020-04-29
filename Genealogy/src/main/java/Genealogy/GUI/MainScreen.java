@@ -232,7 +232,7 @@ public class MainScreen extends JFrame {
     }
 
     protected static JFileChooser initJFileChooser() {
-        Serializer<Town> serializer = Serializer.getInstance();
+        Serializer serializer = Serializer.getInstance();
         String myFolder = "D:\\Genealogie\\Preuves\\";
         String myJarFolder = System.getProperty("user.dir") + File.separator + "Preuves" + File.separator;
 
@@ -275,7 +275,7 @@ public class MainScreen extends JFrame {
                         person.addProof(ActType.DEATH, file);
                     }
                 } catch (Exception e1) {
-                    e1.printStackTrace();
+                    logger.error("Failed to initialize PDFButtons", e1);
                 }
             }
         });
@@ -299,7 +299,7 @@ public class MainScreen extends JFrame {
                         String file = person.getDeath().getProofs().get(0);
                     }
                 } catch (Exception e1) {
-                    e1.printStackTrace();
+                    logger.error("Failed to initialize voirButton actions", e1);
                 }
             }
         });
@@ -356,7 +356,7 @@ public class MainScreen extends JFrame {
                     MapScreen mapScreen = new MapScreen();
                     setVisible(false);
                 } catch (Exception e1) {
-                    e1.printStackTrace();
+                    logger.error("Failed to initialize carteButton actions", e1);
                     JOptionPane.showMessageDialog(mainPanel, e1.getMessage(),
                             "Erreur",
                             JOptionPane.ERROR_MESSAGE);
@@ -530,7 +530,7 @@ public class MainScreen extends JFrame {
                     townAssociation.remove(key);
                     townAssociation.put(key, value);
                     Serializer.getInstance().saveTownAssociation(townAssociation);
-                    Serializer.getInstance().saveTownSerialized(Town.getTowns());
+                    Serializer.getInstance().saveSerializedTown(Town.getTowns());
                     String city = NotFoundPlaces.getSelectedItem().toString();
                     updateMissingCityTab(townAssociation, city);
                     JOptionPane.showMessageDialog(tabbedPane1,
@@ -538,7 +538,7 @@ public class MainScreen extends JFrame {
                             "Information",
                             JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception e1) {
-                    e1.printStackTrace();
+                    logger.error("Failed to initialize remplacerButton actions", e1);
                 }
             }
         });

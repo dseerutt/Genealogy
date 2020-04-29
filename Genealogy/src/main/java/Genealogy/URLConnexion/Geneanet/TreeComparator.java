@@ -752,13 +752,13 @@ public class TreeComparator {
             fr = new FileWriter(file);
             fr.write(getDifferencesWithinString());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Failed to save differences for tree " + tree, e);
         } finally {
             //close resources
             try {
                 fr.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("Failed to close FileWriter", e);
             }
         }
     }
@@ -777,7 +777,6 @@ public class TreeComparator {
             fr.write(difference);
             fr.close();
         } catch (IOException e) {
-            e.printStackTrace();
             logger.error("Could not write into " + fileName);
         }
     }
@@ -821,7 +820,7 @@ public class TreeComparator {
             }
 
         } catch (IOException e) {
-            System.err.format("IOException: %s%n", e);
+            logger.error("IOException replacing differences in file: %s%n", e);
         }
 
         //replace data
@@ -831,7 +830,6 @@ public class TreeComparator {
             resultToPrint = resultToPrint.substring(0, resultToPrint.length() - 2);
         }
 
-
         //Printing data into file
         File file = new File(fileName);
         FileWriter fr = null;
@@ -840,7 +838,6 @@ public class TreeComparator {
             fr.write(resultToPrint);
             fr.close();
         } catch (IOException e) {
-            e.printStackTrace();
             logger.error("Could not write into " + fileName);
         }
     }
@@ -853,29 +850,25 @@ public class TreeComparator {
         }
         try (BufferedReader br = new BufferedReader(new FileReader(path + File.separator + "comparatorTrees" + File.separator + tree + ".bak"))) {
             String line;
-            try {
-                while ((line = br.readLine()) != null) {
-                    String[] tmpLine = line.split(";");
-                    if (tmpLine != null && tmpLine.length > 1) {
-                        GeneanetPerson person = new GeneanetPerson(removeDoubleGeneanetSuffix(tmpLine[0]));
-                        String txt = "";
-                        for (int i = 2; i < tmpLine.length; i++) {
-                            if (i != 2) {
-                                txt += ";" + tmpLine[i];
-                            } else {
-                                txt += tmpLine[i];
-                            }
+            while ((line = br.readLine()) != null) {
+                String[] tmpLine = line.split(";");
+                if (tmpLine != null && tmpLine.length > 1) {
+                    GeneanetPerson person = new GeneanetPerson(removeDoubleGeneanetSuffix(tmpLine[0]));
+                    String txt = "";
+                    for (int i = 2; i < tmpLine.length; i++) {
+                        if (i != 2) {
+                            txt += ";" + tmpLine[i];
+                        } else {
+                            txt += tmpLine[i];
                         }
-                        result.put(person, txt);
                     }
+                    result.put(person, txt);
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         } catch (FileNotFoundException e) {
             logger.info("Difference file not found for " + tree);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Failed to compare differences for tree " + tree, e);
         }
         return result;
     }
@@ -941,7 +934,7 @@ public class TreeComparator {
             // sérialization de l'objet
             oos.writeObject(geneanetBrowser);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Failed to serialize geneanet tree " + url, e);
         }
     }
 
@@ -970,7 +963,7 @@ public class TreeComparator {
             // désérialization de l'objet
             geneanetBrowser = (GeneanetBrowser) ois.readObject();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to read Serialized tree from url " + url, e);
             return null;
         }
         return geneanetBrowser;
