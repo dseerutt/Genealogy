@@ -52,6 +52,10 @@ public class Serializer {
      * HashMap of String towns and coordinates
      */
     private static HashMap<String, String> townCoordinatesMap;
+    /**
+     * String separator for Towns in townCoordinatesMap
+     */
+    private static final String townCoordinatesSeparator = "->";
 
     /**
      * Serializer instance getter, initialize instance if null
@@ -128,6 +132,15 @@ public class Serializer {
     private Serializer() {
         initPath();
         initProperties();
+        initSerializedTowns();
+        initTownCoordinatesMap();
+        Serializer.instance = this;
+    }
+
+    /**
+     * Function initSerializedTowns : init serializedTowns from serialized file
+     */
+    public void initSerializedTowns() {
         File f = new File(path + townSerializerFileName);
 
         if (f.exists()) {
@@ -148,7 +161,6 @@ public class Serializer {
         } else {
             logger.info("Serializer file not found");
         }
-        Serializer.instance = this;
     }
 
     /**
@@ -198,12 +210,12 @@ public class Serializer {
     }
 
     /**
-     * Fonction initAssociation : return TownAssociation alias map
+     * Fonction initTownAssociation : return TownAssociation alias map
      *
      * @throws Exception if the file is not found
      */
-    public HashMap<String, String> initAssociation() throws Exception {
-        HashMap<String, String> association = new HashMap<String, String>();
+    public HashMap<String, String> initTownAssociation() throws Exception {
+        HashMap<String, String> association = new HashMap<>();
         File f = new File(path + townAssociationFileName);
         if (f.exists()) {
             logger.info("Association file found");
@@ -235,24 +247,15 @@ public class Serializer {
             bw.write(content);
             logger.info("Town Association file updated");
         } catch (IOException e) {
-            logger.error(e);
-            logger.info("Town Association file update failed");
+            logger.error("Town Association file update failed", e);
         }
     }
 
     /**
-     * Function saveCity : read and write cityCoordinatesFileName
-     *
-     * @param city
-     * @param latitude
-     * @param longitude
+     * Function initTownCoordinatesMap : initialize townCoordinatesMap by reading cityCoordinatesFileName properties value file
      */
-    public void saveCity(String city, String latitude, String longitude) {
-        String citySeparator = "->";
-        String coordinateSeparator = ":";
-        HashMap<String, String> cities = new HashMap<>();
-        String contents = "";
-        //Read file
+    public void initTownCoordinatesMap() {
+        townCoordinatesMap = new HashMap<>();
         try {
             File f = new File(path + cityCoordinatesFileName);
             if (f.exists()) {
@@ -260,36 +263,51 @@ public class Serializer {
                 String sCurrentLine;
                 BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path + cityCoordinatesFileName), "UTF-8"));
                 while ((sCurrentLine = br.readLine()) != null) {
-                    String[] temp = sCurrentLine.split(citySeparator);
-                    cities.put(temp[0], temp[1]);
-                    contents += sCurrentLine + System.lineSeparator();
+                    String[] temp = sCurrentLine.split(townCoordinatesSeparator);
+                    townCoordinatesMap.put(temp[0], temp[1]);
                 }
             } else {
                 logger.warn("city file not found");
             }
         } catch (IOException exception) {
-            logger.error(exception);
-            logger.info("Reading City file update failed");
+            logger.info("Failed to read townCoordinatesMap file", exception);
             return;
         }
+    }
 
-        //Write file
-        String newkey = city;
+    /**
+     * Function addTownToCoordinateMap : add city and his coordinates to townCoordinatesMap
+     *
+     * @param city
+     * @param latitude
+     * @param longitude
+     */
+    public void addTownToCoordinateMap(String city, String latitude, String longitude) {
+        String coordinateSeparator = ":";
         String newValue = latitude + coordinateSeparator + longitude;
-        String newline = newkey + citySeparator + newValue + System.lineSeparator();
-        if (!contents.contains(city)) {
-            contents += newline;
-        } else {
-            cities.replace(city, newValue);
-            townCoordinatesMap = cities;
-            contents = "";
-            for (Map.Entry<String, String> entry : cities.entrySet()) {
-                String key = entry.getKey();
-                String value = entry.getValue();
-                contents += key + citySeparator + value + System.lineSeparator();
-            }
-        }
+        townCoordinatesMap.put(city, newValue);
+    }
 
+    /**
+     * Function printTownCoordinatesMap : print townCoordinatesMap with pretty print
+     *
+     * @return
+     */
+    public String printTownCoordinatesMap() {
+        String contents = "";
+        for (Map.Entry<String, String> entry : townCoordinatesMap.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            contents += key + townCoordinatesSeparator + value + System.lineSeparator();
+        }
+        return contents;
+    }
+
+    /**
+     * Function writeCoordinateMap : read and write cityCoordinatesFileName
+     */
+    public void writeCoordinateMap() {
+        String contents = printTownCoordinatesMap();
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(path + cityCoordinatesFileName))) {
             bw.write(contents);
             logger.info("City file updated");

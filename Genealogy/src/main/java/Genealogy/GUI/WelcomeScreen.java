@@ -48,7 +48,7 @@ public class WelcomeScreen extends JFrame {
     private void initTownAssociation(Serializer serializer) {
         //Gestion des associations
         try {
-            Town.setTownAssociation(serializer.initAssociation());
+            Town.setTownAssociation(serializer.initTownAssociation());
         } catch (Exception e) {
             logger.error("Failed to initialize Town associations", e);
             logger.error("Problème dans le parsing du fichier d'associations de ville");

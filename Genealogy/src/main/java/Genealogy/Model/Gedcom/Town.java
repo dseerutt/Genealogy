@@ -428,7 +428,8 @@ public class Town implements Serializable {
      * @param longitude
      */
     private static void saveCoordinateIntoFile(String city, String county, double latitude, double longitude) {
-        Serializer.getInstance().saveCity(city + "|" + county, "" + latitude, "" + longitude);
+        Serializer.getInstance().addTownToCoordinateMap(city + "|" + county, "" + latitude, "" + longitude);
+        Serializer.getInstance().writeCoordinateMap();
     }
 
     /**
