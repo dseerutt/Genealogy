@@ -48,7 +48,7 @@ public class WelcomeScreen extends JFrame {
     private void initTownAssociation(Serializer serializer) {
         //Gestion des associations
         try {
-            Town.setTownAssociation(serializer.initTownAssociation());
+            serializer.initTownAssociation();
         } catch (Exception e) {
             logger.error("Failed to initialize Town associations", e);
             logger.error("Problème dans le parsing du fichier d'associations de ville");
@@ -114,8 +114,8 @@ public class WelcomeScreen extends JFrame {
                                             JOptionPane.ERROR_MESSAGE);
                                     logger.error("Les villes suivantes n'ont pas été trouvées : " + txt);
                                 }
-                                Serializer.getInstance().saveSerializedTown(Town.getTownsToSerialize());
-                                ArrayList<Town> myEmptyTowns = Serializer.getNullCoordinatesCities(Town.getTowns());
+                                Serializer.getInstance().saveSerializedTownList();
+                                ArrayList<Town> myEmptyTowns = Town.getNullCoordinatesCities();
                                 if (!myEmptyTowns.isEmpty()) {
                                     logger.warn("Villes avec Coordonnées nulles : " + myEmptyTowns);
                                 }

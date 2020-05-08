@@ -474,7 +474,7 @@ public class MainScreen extends JFrame {
     }
 
     private void initMissingCitiesTab() {
-        final HashMap<String, String> townAssociation = Town.getTownAssociation();
+        final HashMap<String, String> townAssociation = Serializer.getTownAssociationMap();
         if (townAssociation != null) {
             for (Map.Entry<String, String> association : townAssociation.entrySet()) {
                 NotFoundPlaces.addItem(association.getKey());
@@ -526,11 +526,11 @@ public class MainScreen extends JFrame {
                     //MyCoordinate result = Town.parseJsonArray(HTTPConnexion.sendAddressRequest(value),value);
                     MyCoordinate result = null;//TODO
                     Town.setCoordinates(result, key);
-                    HashMap<String, String> townAssociation = Town.getTownAssociation();
+                    HashMap<String, String> townAssociation = Serializer.getTownAssociationMap();
                     townAssociation.remove(key);
                     townAssociation.put(key, value);
                     Serializer.getInstance().saveTownAssociation(townAssociation);
-                    Serializer.getInstance().saveSerializedTown(Town.getTowns());
+                    Serializer.getInstance().saveSerializedTownList();
                     String city = NotFoundPlaces.getSelectedItem().toString();
                     updateMissingCityTab(townAssociation, city);
                     JOptionPane.showMessageDialog(tabbedPane1,
@@ -559,7 +559,7 @@ public class MainScreen extends JFrame {
                 MyCoordinate result = Town.parseJsonArray(HTTPConnexion.sendGpsRequest(city, county, false));
                 logger.info("Coordonnées de la ville " + fullCity + " : " + result);
                 if (result != null) {
-                    HashMap<String, String> townAssociation = Town.getTownAssociation();
+                    HashMap<String, String> townAssociation = Serializer.getTownAssociationMap();
                     updateMissingCityTab(townAssociation, fullCity, result);
                 }
             } catch (Exception e1) {

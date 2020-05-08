@@ -1,0 +1,4 @@
+townSerializerFileName=cities.ser
+townAssociationFile=City names.txt
+cityCoordinatesFile=cities.txt
+townRegex1=a(.*)\\((.*)\\)

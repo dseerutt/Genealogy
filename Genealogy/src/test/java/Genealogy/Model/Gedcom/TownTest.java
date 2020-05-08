@@ -65,8 +65,8 @@ public class TownTest {
         //verification
         assertEquals(1, Town.getLostTowns().size());
         assertEquals("Ville (Département)", Town.getLostTowns().get(0));
-        assertEquals(1, Town.getTownAssociation().size());
-        assertEquals("", Town.getTownAssociation().get("Ville (Département)"));
+        assertEquals(1, Serializer.getTownAssociationMap().size());
+        assertEquals("", Serializer.getTownAssociationMap().get("Ville (Département)"));
     }
 
     /**
@@ -294,9 +294,9 @@ public class TownTest {
         Town townNCAliasToSearch = new Town("Alias2TS (AliasDep)");
         Town townNCAliasNotFound = new Town("Alias3NF (AliasDep)");
         Town townNCOrleansWithCoo = new Town("Orléans (Loiret)");
-        Town.getTownAssociation().put("Alias1S (AliasDep)", "Marseille (Bouches du Rhône)");
-        Town.getTownAssociation().put("Alias2TS (AliasDep)", "Brest (Finistère)");
-        Town.getTownAssociation().put("Alias3NF (AliasDep)", "Nowhere2 (Nowhere)");
+        Serializer.getTownAssociationMap().put("Alias1S (AliasDep)", "Marseille (Bouches du Rhône)");
+        Serializer.getTownAssociationMap().put("Alias2TS (AliasDep)", "Brest (Finistère)");
+        Serializer.getTownAssociationMap().put("Alias3NF (AliasDep)", "Nowhere2 (Nowhere)");
         //init failed search within MyHttpUrlConnection
         Town.getLostTowns().add("Nowhere (Nowhere)");
         Town.getLostTowns().add("Nowhere2 (Nowhere)");
@@ -339,7 +339,7 @@ public class TownTest {
         assertEquals(townNCAliasToSearch.getCoordinates(), Town.getTowns().get(6).getCoordinates());
         assertNull(Town.getTowns().get(7).getCoordinates());
         assertEquals(townNCOrleansWithCoo.getCoordinates(), Town.getTowns().get(8).getCoordinates());
-        assertEquals(7, Town.getTownsToSerialize().size());
+        assertEquals(7, Serializer.getTownsToSerialize().size());
     }
 
     /**
@@ -446,5 +446,41 @@ public class TownTest {
         assertEquals("Reims (Marne)", new Town("Reims", "Marne").toStringPrettyString());
         assertEquals("Reims", new Town("Reims", "").toStringPrettyString());
         assertEquals("Reims", new Town("Reims", null).toStringPrettyString());
+    }
+
+    /**
+     * Test getNullCoordinatesCities : test with empty towns and with 2 towns without coordinates
+     *
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
+    @Test
+    public void getNullCoordinatesCitiesTest() throws NoSuchFieldException, IllegalAccessException {
+        //init reflection
+        Town townTest = new Town("Ville 1", "Département");
+        Field mapTownsField = townTest.getClass().getDeclaredField("towns");
+        mapTownsField.setAccessible(true);
+        mapTownsField.set(townTest, new ArrayList());
+
+        //launch and verification no city
+        assertTrue(Town.getNullCoordinatesCities().isEmpty());
+
+        //init towns with and without coordinates
+        Town townNoCoordinates1 = new Town("Lille", "Nord");
+        Town townCoordinates1 = new Town("Reims", "Marne");
+        townCoordinates1.setCoordinates(new MyCoordinate(10, 11));
+        Town townNoCoordinates2 = new Town("Saintes", "Charente-Maritime");
+        Town townCoordinates2 = new Town("Paris", "Paris");
+        townCoordinates2.setCoordinates(new MyCoordinate(10, 11));
+        Town townCoordinates3 = new Town("Angoulême", "Charente");
+        townCoordinates3.setCoordinates(new MyCoordinate(10, 11));
+
+        //launch with and without coordinates
+        ArrayList<Town> nullCoordinatesCities = Town.getNullCoordinatesCities();
+
+        //verification with and without coordinates
+        assertEquals(2, nullCoordinatesCities.size());
+        assertTrue(nullCoordinatesCities.contains(townNoCoordinates1));
+        assertTrue(nullCoordinatesCities.contains(townNoCoordinates2));
     }
 }

@@ -41,18 +41,9 @@ public class Town implements Serializable {
      */
     private static ArrayList<Town> towns = new ArrayList<>();
     /**
-     * Arraylist of Town townsToSerialize : towns to save through serializer with complete coordinates
-     */
-    private static ArrayList<Town> townsToSerialize = new ArrayList<>();
-    /**
      * ArrayList of string fullName towns coordinates not found
      */
     private static ArrayList<String> lostTowns = new ArrayList<>();
-    /**
-     * HashMap townAssociation : associations of string fullName of Towns.
-     * The first town is not found, and its coordinates will be searched on the second town
-     */
-    private static HashMap<String, String> townAssociation = new HashMap<>();
     /**
      * Boolean saveCoordinatesTxtFile : save on serializer coordinates text file
      */
@@ -101,39 +92,12 @@ public class Town implements Serializable {
     }
 
     /**
-     * TownsToSave getter
-     *
-     * @return
-     */
-    public static ArrayList<Town> getTownsToSerialize() {
-        return townsToSerialize;
-    }
-
-    /**
      * LostTowns getter
      *
      * @return
      */
     public static ArrayList<String> getLostTowns() {
         return lostTowns;
-    }
-
-    /**
-     * TownAssociation getter
-     *
-     * @return
-     */
-    public static HashMap<String, String> getTownAssociation() {
-        return townAssociation;
-    }
-
-    /**
-     * townAssociation setter
-     *
-     * @param townAssociation
-     */
-    public static void setTownAssociation(HashMap<String, String> townAssociation) {
-        Town.townAssociation = townAssociation;
     }
 
     /**
@@ -191,14 +155,14 @@ public class Town implements Serializable {
     }
 
     /**
-     * Function addLostTowns : add town to lostTowns, put the town and county into townAssociation
+     * Function addLostTowns : add town to lostTowns, put the town and county into Serializer townAssociation
      *
      * @param town
      * @param county
      */
     public static void addLostTowns(String town, String county) {
         lostTowns.add(town + " (" + county + ")");
-        townAssociation.put(town + " (" + county + ")", "");
+        Serializer.getTownAssociationMap().put(town + " (" + county + ")", "");
     }
 
     /**
@@ -359,7 +323,7 @@ public class Town implements Serializable {
      */
     public static void setAllCoordinatesFromFile(ArrayList<Town> townCoordinatesList) throws Exception {
         //Handle alias - cities that changed names
-        HashMap<String, String> alias = Town.getTownAssociation();
+        HashMap<String, String> alias = Serializer.getTownAssociationMap();
         Serializer serializer = Serializer.getInstance();
         for (Town thisTown : towns) {
             Town town = findTown(townCoordinatesList, thisTown);
@@ -385,7 +349,7 @@ public class Town implements Serializable {
             }
             if (thisTown.getCoordinates() == null) {
                 MyCoordinate coo;
-                String coordinatesFromFile = serializer.getCoordinatesFromFile(city, county);
+                String coordinatesFromFile = serializer.readCoordinatesMap(city, county);
                 if (coordinatesFromFile != null) {
                     coo = new MyCoordinate(coordinatesFromFile);
                     thisTown.setCoordinates(coo);
@@ -401,7 +365,7 @@ public class Town implements Serializable {
                     saveCoordinateIntoFile(city, county, thisTown.getCoordinates().getLatitude(), thisTown.getCoordinates().getLongitude());
                 }
                 if (!lostTowns.contains(aliasName)) {
-                    townsToSerialize.add(thisTown);
+                    Serializer.getTownsToSerialize().add(thisTown);
                 }
             }
         }
@@ -429,7 +393,7 @@ public class Town implements Serializable {
      */
     private static void saveCoordinateIntoFile(String city, String county, double latitude, double longitude) {
         Serializer.getInstance().addTownToCoordinateMap(city + "|" + county, "" + latitude, "" + longitude);
-        Serializer.getInstance().writeCoordinateMap();
+        Serializer.getInstance().writeCoordinatesMap();
     }
 
     /**
@@ -504,5 +468,20 @@ public class Town implements Serializable {
         } else {
             return name + " (" + county + ")";
         }
+    }
+
+    /**
+     * Function getNullCoordinatesCities : from towns, return list of Town with null coordinates
+     *
+     * @return
+     */
+    public static ArrayList<Town> getNullCoordinatesCities() {
+        ArrayList<Town> townsWithNullCoordinates = new ArrayList<>();
+        for (int i = 0; i < towns.size(); i++) {
+            if (towns.get(i).getCoordinates() == null) {
+                townsWithNullCoordinates.add(towns.get(i));
+            }
+        }
+        return townsWithNullCoordinates;
     }
 }

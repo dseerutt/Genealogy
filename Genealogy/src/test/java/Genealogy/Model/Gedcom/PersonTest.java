@@ -51,8 +51,7 @@ public class PersonTest {
         //reflection name surname
         Field nameField = personClassic.getClass().getDeclaredField("name");
         nameField.setAccessible(true);
-        Field surnameField;
-        surnameField = personClassic.getClass().getDeclaredField("surname");
+        Field surnameField = personClassic.getClass().getDeclaredField("surname");
         surnameField.setAccessible(true);
         nameField.set(personClassic, "Pierre du village");
         surnameField.set(personClassic, "Jean-Marie");
