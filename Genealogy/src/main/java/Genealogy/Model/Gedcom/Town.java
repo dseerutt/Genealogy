@@ -73,21 +73,23 @@ public class Town implements Serializable {
      * @param fullName
      */
     public Town(String fullName) {
-        for (String regex : Serializer.getTownRegex()) {
-            Pattern p = Pattern.compile(regex);
-            Matcher m = p.matcher(fullName);
-            if (m.find()) {
-                name = StringUtils.trim(m.group(1));
-                if (m.groupCount() > 1) {
-                    county = StringUtils.trim(m.group(2));
-                } else {
-                    county = "";
+        if (StringUtils.isNotBlank(fullName)) {
+            for (String regex : Serializer.getTownRegex()) {
+                Pattern p = Pattern.compile(regex);
+                Matcher m = p.matcher(fullName);
+                if (m.find()) {
+                    name = StringUtils.trim(m.group(1));
+                    if (m.groupCount() > 1) {
+                        county = StringUtils.trim(m.group(2));
+                    } else {
+                        county = "";
+                    }
+                    break;
                 }
-                break;
             }
-        }
-        if (!towns.contains(this)) {
-            towns.add(this);
+            if (!towns.contains(this)) {
+                towns.add(this);
+            }
         }
     }
 
@@ -244,7 +246,6 @@ public class Town implements Serializable {
                     ArrayList<Act> acts = new ArrayList<>();
                     acts.add(act);
                     mapTownAct.put(this, acts);
-                    towns.add(this);
                 }
             }
         }
@@ -392,8 +393,10 @@ public class Town implements Serializable {
      * @param longitude
      */
     private static void saveCoordinateIntoFile(String city, String county, double latitude, double longitude) {
-        Serializer.getInstance().addTownToCoordinateMap(city + "|" + county, "" + latitude, "" + longitude);
-        Serializer.getInstance().writeCoordinatesMap();
+        boolean addedTown = Serializer.getInstance().addTownToCoordinateMap(city + "|" + county, "" + latitude, "" + longitude);
+        if (addedTown) {
+            Serializer.getInstance().writeCoordinatesMap();
+        }
     }
 
     /**

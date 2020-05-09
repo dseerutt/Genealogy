@@ -238,6 +238,7 @@ public class Serializer {
         initProperties();
         initSerializedTowns();
         initTownCoordinatesMap();
+        initTownAssociation();
         Serializer.instance = this;
     }
 
@@ -256,7 +257,7 @@ public class Serializer {
                 ObjectInput input = new ObjectInputStream(buffer);
                 //deserialize the List
                 serializedTowns = (ArrayList<Town>) input.readObject();
-                logger.info("Serializer file well read");
+                logger.debug("Serializer file well read");
             } catch (InvalidClassException ex) {
                 logger.warn("Failed to recognize Serializer class", ex);
             } catch (Exception ex) {
@@ -316,22 +317,24 @@ public class Serializer {
 
     /**
      * Fonction initTownAssociation : init TownAssociation alias map
-     *
-     * @throws IOException if the file is not found
      */
-    public void initTownAssociation() throws IOException {
+    public void initTownAssociation() {
         townAssociationMap = new HashMap<>();
-        File f = new File(path + townAssociationFileName);
-        if (f.exists()) {
-            logger.info("Association file found");
-            String sCurrentLine;
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path + townAssociationFileName), "UTF-8"));
-            while ((sCurrentLine = br.readLine()) != null) {
-                String[] temp = sCurrentLine.split("->");
-                townAssociationMap.put(temp[0], temp[1]);
+        try {
+            File f = new File(path + townAssociationFileName);
+            if (f.exists()) {
+                logger.info("Association file found");
+                String sCurrentLine;
+                BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path + townAssociationFileName), "UTF-8"));
+                while ((sCurrentLine = br.readLine()) != null) {
+                    String[] temp = sCurrentLine.split("->");
+                    townAssociationMap.put(temp[0], temp[1]);
+                }
+            } else {
+                logger.error("Association file not found");
             }
-        } else {
-            logger.error("Association file not found");
+        } catch (IOException e) {
+            logger.error("Failed to init Town associations", e);
         }
     }
 
@@ -384,16 +387,21 @@ public class Serializer {
     }
 
     /**
-     * Function addTownToCoordinateMap : add city and his coordinates to townCoordinatesMap
+     * Function addTownToCoordinateMap : add city and his coordinates to townCoordinatesMap,
+     * doesn't add if already there and return true is added it
      *
      * @param city
      * @param latitude
      * @param longitude
      */
-    public void addTownToCoordinateMap(String city, String latitude, String longitude) {
-        String coordinateSeparator = ":";
-        String newValue = latitude + coordinateSeparator + longitude;
-        townCoordinatesMap.put(city, newValue);
+    public boolean addTownToCoordinateMap(String city, String latitude, String longitude) {
+        if (!townCoordinatesMap.containsKey(city)) {
+            String coordinateSeparator = ":";
+            String newValue = latitude + coordinateSeparator + longitude;
+            townCoordinatesMap.put(city, newValue);
+            return true;
+        }
+        return false;
     }
 
     /**

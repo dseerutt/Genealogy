@@ -45,16 +45,6 @@ public class WelcomeScreen extends JFrame {
         setVisible(true);
     }
 
-    private void initTownAssociation(Serializer serializer) {
-        //Gestion des associations
-        try {
-            serializer.initTownAssociation();
-        } catch (Exception e) {
-            logger.error("Failed to initialize Town associations", e);
-            logger.error("Problème dans le parsing du fichier d'associations de ville");
-        }
-    }
-
     private JFileChooser initSerializer() {
         Serializer serializer = Serializer.getInstance();
         if (serializer.isJar()) {
@@ -74,7 +64,6 @@ public class WelcomeScreen extends JFrame {
                 int rVal = c.showOpenDialog(WelcomeScreen.this);
                 if (rVal == JFileChooser.APPROVE_OPTION) {
                     filePath.setText(c.getCurrentDirectory().toString() + File.separator + c.getSelectedFile().getName());
-                    initTownAssociation(Serializer.getInstance());
                 }
                 if (rVal == JFileChooser.CANCEL_OPTION) {
                 }
