@@ -59,6 +59,9 @@ public class TownTest {
      */
     @Test
     public void addLostTownsTest() {
+        //init
+        Serializer.setTownAssociationMap(new HashMap<>());
+
         //launch
         Town.addLostTowns("Ville", "Département");
 

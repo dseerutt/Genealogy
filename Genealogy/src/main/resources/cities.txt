@@ -97,6 +97,7 @@ Mesnil Amey|Manche->49.1061822:-1.2084634
 Castilly|Calvados->49.273821049999995:-1.0179218743158231
 L'Haÿ Les Roses|Val de Marne->48.7790514:2.3373021
 Langesse|Loiret->47.8200818:2.6593127
+Villeneuve sur Yonne|Yonne->48.0819636:3.2943395
 Rogny les sept écluses|Yonne->47.7421564:2.880949
 Escrignelles|Loiret->47.7152789:2.8216744
 Béthancourt|Oise->32.9315755:10.4503961
@@ -112,6 +113,7 @@ Ravin|Maurice->32.9315755:10.4503961
 Meung sur Loire|Loiret->47.8268972:1.6968055
 VIgnemont|Oise->49.5019632:2.7753498
 Beauvais|Oise->49.4300997:2.0823355
+Rivière du rempart|Rivière du rempart->-20.106789:57.6867219
 Brienon l'archevêque|Yonne->32.9315755:10.4503961
 Dampierre en Burly|Loiret->47.760981:2.517088
 La Bussière|Loiret->47.7453406:2.7496368
@@ -143,9 +145,11 @@ Avrolles|Yonne->48.0035465:3.6825925
 Rivière du Rempart|Rivière du Rempart->-20.106789:57.6867219
 Septfonds|Yonne->47.702173:3.0966674
 Esnon|Yonne->47.98398:3.57506
+Gonfreville|Manche->49.2387683:-1.3934869
 Saint Germain le Gaillard|Manche->49.486919:-1.7804671
 Bonny sur Loire|Loiret->47.5606119:2.8397824
 Saint Firmin des Bois|Loiret->47.9653367:2.9133537
+Lallmatie|Flacq->-20.190989:57.6671165
 La Cambe|Calvados->49.3437531:-1.0044906
 Pierreville|Manche->49.4724416:-1.7844693
 Néhou|Manche->49.420917:-1.5430464
@@ -153,11 +157,14 @@ Béthisy Saint Pierre|Oise->49.3054:2.8032
 Saint Loup|Nievre->47.44535:3.00265
 Vaux sur Aure|Calvados->49.3034626:-0.7019732
 Marly-la-Ville|Val d'Oise->49.0823913:2.5034402
+Béthancourt en Valois|Oise->49.2855164:2.8773053
 Laroche Saint Cydroine|Yonne->47.9642268:3.4843747
+Saint Martin de Bonfossé|Manche->49.0528081:-1.1695931
 Verberie|Oise->49.3094836:2.7288582
 Octeville|Manche->49.6254784:-1.6448063
 Saint Gilles|Manche->49.1043227:-1.1752596
 Grand Bois|Savanne->-20.4188774:57.5511401
+Amiens|Somme->49.8941708:2.2956951
 Brisée Verdière|Flacq->32.9315755:10.4503961
 Paris|Paris->48.8566969:2.3514616
 Saintines|Oise->49.3066982:2.7641135
@@ -169,6 +176,7 @@ Senan|Yonne->47.912094:3.3584674
 Saint Maurice sur Aveyron|Loiret->47.8505528:2.9277483
 Caen|Calvados->49.1828008:-0.3690815
 Triolet|Pamplemousses->-20.0574743:57.5521877
+Villeuve sur Yonne|Yonne->32.9315727:10.450413
 Saint Pierre du Regard|Orne->48.8425234:-0.5470719
 Le Mesnil Amey|Manche->49.1061822:-1.2084634
 Marchais-Beton|Yonne->47.8348092:3.0483671
@@ -202,6 +210,7 @@ Vacoas-Phoenix|Plaines Wilhems->-20.2988802:57.4927689
 La Croix Saint Ouen|Oise->32.9315755:10.4503961
 Soulles|Manche->49.0143615:-1.1896289
 Néry|Oise->49.2835798:2.7783243
+Bon Accueil|Flacq->-20.1745003:57.670382
 Château-Renard|Loiret->47.9316325:2.9269125
 Saint Jean des Champs|Manche->48.8277979:-1.4647078
 Villeneuve le Roi|Yonne->32.9315755:10.4503961
@@ -234,6 +243,7 @@ Pamplemousses|Pamplemousses->-20.1107201:57.5764944
 Belvédère|Flacq->32.9315755:10.4503961
 Canchy|Calvados->49.3297585:-0.9815916
 Berthecourt|Oise->49.3504915:2.2244617
+Lacroix Saint Ouen|Oise->49.356047:2.7895045
 Saonnet|Calvados->49.2738889:-0.8780556
 Guéhébert|Manche->48.9698952:-1.3733768
 Le Theil|Manche->49.6042209:-1.4681291940541223
@@ -259,6 +269,7 @@ Domjean|Manche->48.9872335:-1.031921
 Creil|Oise->49.2607914:2.4733771
 Brion|Yonne->47.9955011:3.4801141
 Sourdeval les Bois|Manche->48.9102245:-1.2639506
+Sebastopol|Flacq->-20.2909197:57.6891632
 Autry Le Châtel|Loiret->47.5985716:2.6003968
 Entrains sur Nohain|Nievre->47.4630257:3.2553919
 Pimprez|Oise->49.5140048:2.9503676
@@ -305,4 +316,3 @@ Issoire|Puy-de-Dome->45.5432973:3.2502213
 Changy|Loiret->47.8582735:2.6855918
 Saint Sauveur sur Douve|Manche->32.9315755:10.4503961
 Grenoble|Isère->45.1875602:5.7357819
-Amiens|Somme->49.8941708:2.2956951

@@ -29,19 +29,27 @@ public class SerializerTest {
      */
     @Test
     public void initSerializedTownsTest() throws NoSuchFieldException, IllegalAccessException {
-        //init reflection fileNotFound
+        //init
         Serializer serializer = Serializer.getInstance();
+
+        //init reflection fileNotFound
         Field townSerializerFileNameField = serializer.getClass().getDeclaredField("townSerializerFileName");
         Field pathField = serializer.getClass().getDeclaredField("path");
+        Field serializedTownsField = serializer.getClass().getDeclaredField("serializedTowns");
         townSerializerFileNameField.setAccessible(true);
         pathField.setAccessible(true);
+        serializedTownsField.setAccessible(true);
         townSerializerFileNameField.set(serializer, "initSerializedTowns.serTestFailure");
         pathField.set(serializer, "src/test/resources/");
+        serializedTownsField.set(serializer, new ArrayList<>());
+
+        //verification with no serializer file
+        assertTrue(serializer.getSerializedTowns().isEmpty());
 
         //launch with no serializer file
         serializer.initSerializedTowns();
 
-        //verification with 3 towns
+        //verification with no serializer file
         assertTrue(serializer.getSerializedTowns().isEmpty());
 
         //init reflection with 3 towns

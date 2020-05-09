@@ -7,7 +7,8 @@ import Genealogy.Model.Date.YearDate;
 import Genealogy.Model.Exception.ParsingException;
 import Genealogy.Model.Gedcom.Person;
 import Genealogy.Model.Gedcom.Town;
-import javafx.util.Pair;
+import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -94,16 +95,16 @@ public class PinpointTest {
         nameField.set(personBirth3, "Pierre");
         //init one pinpoint list
         ArrayList<Pair<MyDate, Town>> lifespanPairs1 = new ArrayList<>();
-        lifespanPairs1.add(new Pair<>(new YearDate("1950"), new Town("Ville 1", "Département")));
+        lifespanPairs1.add(new MutablePair<>(new YearDate("1950"), new Town("Ville 1", "Département")));
         //init 2 pinpoints list
         ArrayList<Pair<MyDate, Town>> lifespanPairs2 = new ArrayList<>();
-        lifespanPairs2.add(new Pair<>(new FullDate("01 JAN 1950"), new Town("Ville 2", "Département")));
-        lifespanPairs2.add(new Pair<>(new FullDate("01 MAR 1955"), new Town("Ville 3", "Département")));
+        lifespanPairs2.add(new MutablePair<>(new FullDate("01 JAN 1950"), new Town("Ville 2", "Département")));
+        lifespanPairs2.add(new MutablePair<>(new FullDate("01 MAR 1955"), new Town("Ville 3", "Département")));
         //init 3 pinpoints list
         ArrayList<Pair<MyDate, Town>> lifespanPairs3 = new ArrayList<>();
-        lifespanPairs3.add(new Pair<>(new FullDate("01 DEC 1954"), new Town("Ville 3", "Département")));
-        lifespanPairs3.add(new Pair<>(new FullDate("01 MAR 1958"), new Town("Ville 4", "Département")));
-        lifespanPairs3.add(new Pair<>(new FullDate("01 MAR 1962"), new Town("Ville 5", "Département")));
+        lifespanPairs3.add(new MutablePair<>(new FullDate("01 DEC 1954"), new Town("Ville 3", "Département")));
+        lifespanPairs3.add(new MutablePair<>(new FullDate("01 MAR 1958"), new Town("Ville 4", "Département")));
+        lifespanPairs3.add(new MutablePair<>(new FullDate("01 MAR 1962"), new Town("Ville 5", "Département")));
 
         //launch
         Pinpoint.initPinpoints(lifespanPairsNull, personNoBirth);

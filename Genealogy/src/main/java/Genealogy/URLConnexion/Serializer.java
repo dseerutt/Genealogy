@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -308,8 +309,8 @@ public class Serializer {
         path = System.getProperty("user.dir") + File.separator + "src" + File.separator + "main" +
                 File.separator + "resources" + File.separator;
         String className = Serializer.class.getName().replace('.', '/');
-        String classJar = Serializer.class.getClass().getResource("/" + className + ".class").toString();
-        if (classJar.startsWith("jar:")) {
+        URL classJar = Serializer.class.getClass().getResource("/" + className + ".class");
+        if (classJar != null && classJar.toString().startsWith("jar:")) {
             jar = true;
             path = System.getProperty("user.dir") + File.separator + "Properties" + File.separator;
         }

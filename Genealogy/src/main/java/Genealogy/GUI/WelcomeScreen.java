@@ -88,29 +88,7 @@ public class WelcomeScreen extends JFrame {
                         protected Void doInBackground() throws Exception {
                             // Worken hard or hardly worken...
                             try {
-                                MyGedcomReader myGedcomReader = new MyGedcomReader();
-                                Genealogy.genealogy = myGedcomReader.read(filePath.getText());
-                                Genealogy.genealogy.parseContents();
-                                Genealogy.genealogy.sortPersons();
-                                Town.setAllCoordinates();
-                                //Traitement de villes non trouvées
-                                ArrayList<String> lostTowns = Town.getLostTowns();
-                                if ((lostTowns != null) && (!lostTowns.isEmpty())) {
-                                    String txt = lostTowns.toString();
-                                    JOptionPane.showMessageDialog(welcomePanel,
-                                            "Les villes suivantes n'ont pas été trouvées : \n" + txt,
-                                            "Erreur",
-                                            JOptionPane.ERROR_MESSAGE);
-                                    logger.error("Les villes suivantes n'ont pas été trouvées : " + txt);
-                                }
-                                Serializer.getInstance().saveSerializedTownList();
-                                ArrayList<Town> myEmptyTowns = Town.getNullCoordinatesCities();
-                                if (!myEmptyTowns.isEmpty()) {
-                                    logger.warn("Villes avec Coordonnées nulles : " + myEmptyTowns);
-                                }
-                                Genealogy.genealogy.initPersonsLifeSpans();
-                                setVisible(false);
-                                MainScreen mainScreen = new MainScreen("Ma Généalogie");
+                                loadFile(filePath.getText());
                             } catch (Exception exception) {
                                 logger.error("Failed to load the gedcom file", exception);
                                 JOptionPane.showMessageDialog(welcomePanel,
@@ -130,6 +108,32 @@ public class WelcomeScreen extends JFrame {
                 }
             }
         });
+    }
+
+    public void loadFile(String path) throws Exception {
+        MyGedcomReader myGedcomReader = new MyGedcomReader();
+        Genealogy.genealogy = myGedcomReader.read(path);
+        Genealogy.genealogy.parseContents();
+        Genealogy.genealogy.sortPersons();
+        Town.setAllCoordinates();
+        //Traitement de villes non trouvées
+        ArrayList<String> lostTowns = Town.getLostTowns();
+        if ((lostTowns != null) && (!lostTowns.isEmpty())) {
+            String txt = lostTowns.toString();
+            JOptionPane.showMessageDialog(welcomePanel,
+                    "Les villes suivantes n'ont pas été trouvées : \n" + txt,
+                    "Erreur",
+                    JOptionPane.ERROR_MESSAGE);
+            logger.error("Les villes suivantes n'ont pas été trouvées : " + txt);
+        }
+        Serializer.getInstance().saveSerializedTownList();
+        ArrayList<Town> myEmptyTowns = Town.getNullCoordinatesCities();
+        if (!myEmptyTowns.isEmpty()) {
+            logger.warn("Villes avec Coordonnées nulles : " + myEmptyTowns);
+        }
+        Genealogy.genealogy.initPersonsLifeSpans();
+        setVisible(false);
+        MainScreen mainScreen = new MainScreen("Ma Généalogie");
     }
 
     private void initText() {

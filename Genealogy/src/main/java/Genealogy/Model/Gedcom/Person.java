@@ -11,8 +11,9 @@ import Genealogy.Model.Date.MyDate;
 import Genealogy.Model.Exception.ParsingException;
 import Genealogy.Parsing.PDFStructure;
 import Genealogy.Parsing.ParsingStructure;
-import javafx.util.Pair;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -549,12 +550,12 @@ public class Person {
         ArrayList<Pair<MyDate, Town>> lifespanPairs = new ArrayList<>();
         //Birth
         if ((birth != null) && (birth.getTown() != null) && (birth.getTown().getName() != null) && (birth.getDate() != null)) {
-            lifespanPairs.add(new Pair<>(birth.getDate(), birth.getTown()));
+            lifespanPairs.add(new MutablePair<>(birth.getDate(), birth.getTown()));
         }
         //Unions
         for (int i = 0; i < unions.size(); i++) {
             if ((unions.get(i).getDate() != null) && (unions.get(i).getTown() != null) && (unions.get(i).getTown().getName() != null)) {
-                lifespanPairs.add(new Pair<>(unions.get(i).getDate(), unions.get(i).getTown()));
+                lifespanPairs.add(new MutablePair<>(unions.get(i).getDate(), unions.get(i).getTown()));
             }
         }
         //Children
@@ -563,12 +564,12 @@ public class Person {
                     (children.get(i).getBirth().getDate() != null) &&
                     (children.get(i).getBirth().getTown() != null) &&
                     (children.get(i).getBirth().getTown().getName() != null)) {
-                lifespanPairs.add(new Pair<>(children.get(i).getBirth().getDate(), children.get(i).getBirth().getTown()));
+                lifespanPairs.add(new MutablePair<>(children.get(i).getBirth().getDate(), children.get(i).getBirth().getTown()));
             }
         }
         //Death
         if ((death != null) && (death.getTown() != null) && (death.getTown().getName() != null) && (death.getDate() != null)) {
-            lifespanPairs.add(new Pair<>(death.getDate(), death.getTown()));
+            lifespanPairs.add(new MutablePair<>(death.getDate(), death.getTown()));
             Collections.sort(lifespanPairs, Comparator.comparing(o -> o.getKey().getDate()));
             //Case of the children born after the death
             while (lifespanPairs.get(lifespanPairs.size() - 1).getKey().getDate().isAfter(death.getDate().getDate())) {
@@ -577,7 +578,7 @@ public class Person {
         } else {
             Collections.sort(lifespanPairs, Comparator.comparing(o -> o.getKey().getDate()));
             if ((stillAlive) && (!lifespanPairs.isEmpty())) {
-                lifespanPairs.add(new Pair<>(new FullDate(), lifespanPairs.get(lifespanPairs.size() - 1).getValue()));
+                lifespanPairs.add(new MutablePair<>(new FullDate(), lifespanPairs.get(lifespanPairs.size() - 1).getValue()));
             }
         }
         return lifespanPairs;

@@ -13,7 +13,8 @@ import Genealogy.Model.Exception.ParsingException;
 import Genealogy.Parsing.MyGedcomReader;
 import Genealogy.Parsing.PDFStructure;
 import Genealogy.URLConnexion.Serializer;
-import javafx.util.Pair;
+import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -181,27 +182,27 @@ public class PersonTest {
         //verification
         assertTrue(pairsNull1.isEmpty());
         assertEquals(1, pairsBirth2.size());
-        assertTrue(pairsBirth2.contains(new Pair<>(new FullDate("01 MAR 1900"), new Town("Ville 1", "Département"))));
+        assertTrue(pairsBirth2.contains(new MutablePair<>(new FullDate("01 MAR 1900"), new Town("Ville 1", "Département"))));
         assertEquals(1, pairsDeath3.size());
-        assertTrue(pairsDeath3.contains(new Pair<>(new FullDate("02 MAR 1900"), new Town("Ville 2", "Département"))));
+        assertTrue(pairsDeath3.contains(new MutablePair<>(new FullDate("02 MAR 1900"), new Town("Ville 2", "Département"))));
         assertEquals(1, pairsDeath3.size());
-        assertTrue(pairsDeath3.contains(new Pair<>(new FullDate("02 MAR 1900"), new Town("Ville 2", "Département"))));
+        assertTrue(pairsDeath3.contains(new MutablePair<>(new FullDate("02 MAR 1900"), new Town("Ville 2", "Département"))));
         assertEquals(2, pairsBirthDeath4.size());
-        assertTrue(pairsBirthDeath4.contains(new Pair<>(new FullDate("03 MAR 1900"), new Town("Ville 3", "Département"))));
-        assertTrue(pairsBirthDeath4.contains(new Pair<>(new FullDate("04 MAR 1900"), new Town("Ville 4", "Département"))));
+        assertTrue(pairsBirthDeath4.contains(new MutablePair<>(new FullDate("03 MAR 1900"), new Town("Ville 3", "Département"))));
+        assertTrue(pairsBirthDeath4.contains(new MutablePair<>(new FullDate("04 MAR 1900"), new Town("Ville 4", "Département"))));
         assertEquals(3, pairsBirthUnionDeath5.size());
-        assertTrue(pairsBirthUnionDeath5.contains(new Pair<>(new FullDate("05 MAR 1900"), new Town("Ville 5", "Département"))));
-        assertTrue(pairsBirthUnionDeath5.contains(new Pair<>(new FullDate("07 MAR 1900"), new Town("Ville 6", "Département"))));
-        assertTrue(pairsBirthUnionDeath5.contains(new Pair<>(new FullDate("06 MAR 1900"), new Town("Ville 7", "Département"))));
+        assertTrue(pairsBirthUnionDeath5.contains(new MutablePair<>(new FullDate("05 MAR 1900"), new Town("Ville 5", "Département"))));
+        assertTrue(pairsBirthUnionDeath5.contains(new MutablePair<>(new FullDate("07 MAR 1900"), new Town("Ville 6", "Département"))));
+        assertTrue(pairsBirthUnionDeath5.contains(new MutablePair<>(new FullDate("06 MAR 1900"), new Town("Ville 7", "Département"))));
         assertEquals(4, pairsBirthDoubleUnionDeath6.size());
-        assertTrue(pairsBirthDoubleUnionDeath6.contains(new Pair<>(new FullDate("08 MAR 1900"), new Town("Ville 8", "Département"))));
-        assertTrue(pairsBirthDoubleUnionDeath6.contains(new Pair<>(new FullDate("09 MAR 1900"), new Town("Ville 9", "Département"))));
-        assertTrue(pairsBirthDoubleUnionDeath6.contains(new Pair<>(new FullDate("10 MAR 1900"), new Town("Ville 10", "Département"))));
-        assertTrue(pairsBirthDoubleUnionDeath6.contains(new Pair<>(new FullDate("11 MAR 1900"), new Town("Ville 11", "Département"))));
+        assertTrue(pairsBirthDoubleUnionDeath6.contains(new MutablePair<>(new FullDate("08 MAR 1900"), new Town("Ville 8", "Département"))));
+        assertTrue(pairsBirthDoubleUnionDeath6.contains(new MutablePair<>(new FullDate("09 MAR 1900"), new Town("Ville 9", "Département"))));
+        assertTrue(pairsBirthDoubleUnionDeath6.contains(new MutablePair<>(new FullDate("10 MAR 1900"), new Town("Ville 10", "Département"))));
+        assertTrue(pairsBirthDoubleUnionDeath6.contains(new MutablePair<>(new FullDate("11 MAR 1900"), new Town("Ville 11", "Département"))));
         assertEquals(1, pairsKOTown7.size());
-        assertTrue(pairsKOTown7.contains(new Pair<>(new FullDate("12 MAR 1900"), new Town("Ville 12", "Département"))));
+        assertTrue(pairsKOTown7.contains(new MutablePair<>(new FullDate("12 MAR 1900"), new Town("Ville 12", "Département"))));
         assertEquals(1, pairsKoDate8.size());
-        assertTrue(pairsKoDate8.contains(new Pair<>(new FullDate("13 MAR 1900"), new Town("Ville 13", "Département"))));
+        assertTrue(pairsKoDate8.contains(new MutablePair<>(new FullDate("13 MAR 1900"), new Town("Ville 13", "Département"))));
     }
 
     /**

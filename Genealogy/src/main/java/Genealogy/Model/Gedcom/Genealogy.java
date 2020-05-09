@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static Genealogy.Model.Act.Enum.UnionType.parseUnionType;
 
@@ -262,10 +264,13 @@ public class Genealogy {
     public void parseContents() throws ParsingException {
         header = new Header(this);
         parseAuthor();
+        //Do not treat header or author or end of file
+        Pattern pattern = Pattern.compile("HEAD|SUBM|TRLR");
+        Matcher matcher = pattern.matcher("");
         for (Map.Entry<String, ArrayList<ParsingStructure>> entry : contents.entrySet()) {
             String id = entry.getKey();
-            //Do not treat header or author or end of file
-            if (!id.matches("HEAD|SUBM|TRLR")) {
+            matcher = matcher.reset(id);
+            if (!matcher.matches()) {
                 switch (id.charAt(0)) {
                     case 'I':
                         parsePerson(entry.getValue());
