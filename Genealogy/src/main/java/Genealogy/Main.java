@@ -9,8 +9,6 @@ import Genealogy.URLConnexion.Serializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.time.Instant;
-
 /**
  * Main class : launch Genealogy project
  */
@@ -48,7 +46,6 @@ public class Main {
         MyGedcomReader myGedcomReader = new MyGedcomReader();
         Genealogy.genealogy = myGedcomReader.read("src\\main\\resources\\famille1.ged");
         Genealogy.genealogy.parseContents();
-        logger.info("3 " + Instant.now());
         Genealogy.genealogy.sortPersons();
         Town.setAllCoordinates();
         Serializer.getInstance().saveSerializedTownList();

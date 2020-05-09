@@ -15,7 +15,6 @@ import Genealogy.Model.Gedcom.Person;
 import Genealogy.Model.Gedcom.Town;
 import Genealogy.URLConnexion.MyHttpUrlConnection;
 import Genealogy.URLConnexion.Serializer;
-import edu.emory.mathcs.backport.java.util.Collections;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -373,9 +372,9 @@ public class MainScreen extends JFrame {
                 int index = towns.getSelectedIndex();
                 Town thisTown = Town.getTowns().get(index);
                 ArrayList<Act> list = Town.getMapTownAct().get(thisTown);
-                ArrayList<String> birthList = new ArrayList<String>();
-                ArrayList<String> unionsList = new ArrayList<String>();
-                ArrayList<String> deathList = new ArrayList<String>();
+                ArrayList<String> birthList = new ArrayList<>();
+                ArrayList<String> unionsList = new ArrayList<>();
+                ArrayList<String> deathList = new ArrayList<>();
                 for (int i = 0; i < list.size(); i++) {
                     if (list.get(i) instanceof Birth) {
                         birthList.add(naissances.getText() + list.get(i).getPerson().getFullNameInverted() + "\n");
