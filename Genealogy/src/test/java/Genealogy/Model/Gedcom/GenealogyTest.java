@@ -8,13 +8,11 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static Genealogy.URLConnexion.SerializerTest.readFile;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -213,14 +211,9 @@ public class GenealogyTest {
             Genealogy.genealogy.parseContents();
             Genealogy.genealogy.writeFile("src/test/resources/writeFileTest.gedTest");
 
-            //verification md5sum
-            try (InputStream is = Files.newInputStream(Paths.get(fileInput))) {
-                inputmd5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(is);
-            }
-            try (InputStream is = Files.newInputStream(Paths.get(fileResult))) {
-                resultmd5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(is);
-            }
-            assertEquals(inputmd5, resultmd5);
+            String fileInputContents = readFile(fileInput);
+            String fileResultContents = readFile(fileResult);
+            assertEquals(fileInputContents, fileResultContents);
         } finally {
             File file = new File(fileResult);
             file.delete();

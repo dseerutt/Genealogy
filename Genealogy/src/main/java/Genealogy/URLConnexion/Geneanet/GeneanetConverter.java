@@ -7,7 +7,6 @@ import Genealogy.Model.Date.RepublicanDate.RepublicanCalendarDateConverter;
 import Genealogy.Model.Date.YearDate;
 import Genealogy.Model.Exception.RepublicanDateOutOfRangeException;
 import org.apache.commons.lang3.StringUtils;
-import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import us.codecraft.xsoup.Xsoup;
 
@@ -262,7 +261,7 @@ public class GeneanetConverter {
 
     public String getFirstName(Document doc) {
         String firstName = Xsoup.compile(XpathNames.replace("XXX", "" + 1)).evaluate(doc).get();
-        if (StringUtil.isBlank(firstName)) {
+        if (StringUtils.isBlank(firstName)) {
             firstName = Xsoup.compile(XpathNames2.replace("XXX", "" + 1).replace("YYY", "" + 1)).evaluate(doc).get();
             if (firstName != null) {
                 //Integer case
@@ -276,10 +275,10 @@ public class GeneanetConverter {
                 firstName = Xsoup.compile(XpathNames2.replace("XXX", "" + 1).replace("YYY", "" + 2)).evaluate(doc).get();
             }
         }
-        if (StringUtil.isBlank(firstName)) {
+        if (StringUtils.isBlank(firstName)) {
             firstName = Xsoup.compile(XpathNames3.replace("XXX", "" + 1)).evaluate(doc).get();
         }
-        if (!StringUtil.isBlank(firstName)) {
+        if (!StringUtils.isBlank(firstName)) {
             return firstName;
         }
         return null;
@@ -287,16 +286,16 @@ public class GeneanetConverter {
 
     public String getName(Document doc) {
         String name = Xsoup.compile(XpathNames.replace("XXX", "" + 2)).evaluate(doc).get();
-        if (StringUtil.isBlank(name)) {
+        if (StringUtils.isBlank(name)) {
             name = Xsoup.compile(XpathNames2.replace("XXX", "" + 2).replace("YYY", "" + 2)).evaluate(doc).get();
-            if (StringUtil.isBlank(name)) {
+            if (StringUtils.isBlank(name)) {
                 name = Xsoup.compile(XpathNames2.replace("XXX", "" + 2).replace("YYY", "" + 1)).evaluate(doc).get();
             }
         }
-        if (StringUtil.isBlank(name)) {
+        if (StringUtils.isBlank(name)) {
             name = Xsoup.compile(XpathNames3.replace("XXX", "" + 2)).evaluate(doc).get();
         }
-        if (!StringUtil.isBlank(name)) {
+        if (!StringUtils.isBlank(name)) {
             return name;
         }
         return null;
@@ -725,7 +724,7 @@ public class GeneanetConverter {
 
     private void setGender(GeneanetPerson person) {
         String gender = Xsoup.compile(XpathGender).evaluate(doc).get();
-        if (StringUtil.isBlank(gender)) {
+        if (StringUtils.isBlank(gender)) {
             gender = Xsoup.compile(XpathGender2).evaluate(doc).get();
         }
         person.setGender(Gender.getGender(gender));

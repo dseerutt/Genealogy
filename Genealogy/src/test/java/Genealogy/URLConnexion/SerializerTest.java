@@ -4,12 +4,8 @@ import Genealogy.MapViewer.Structures.MyCoordinate;
 import Genealogy.Model.Gedcom.Town;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.lang.reflect.Field;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -173,19 +169,34 @@ public class SerializerTest {
 
         //verification md5sum
         try {
-            String inputmd5 = "";
-            String resultmd5 = "";
-            try (InputStream is = Files.newInputStream(Paths.get(fileInput))) {
-                inputmd5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(is);
-            }
-            try (InputStream is = Files.newInputStream(Paths.get(fileResult))) {
-                resultmd5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(is);
-            }
-            assertEquals(inputmd5, resultmd5);
+            String fileInputContents = readFile(fileInput);
+            String fileResultContents = readFile(fileResult);
+            assertEquals(fileResultContents, fileInputContents);
         } finally {
-            File file = new File(fileInput);
+            File file = new File(fileInput + "");
+            System.out.println(fileInput + " " + file.exists());
             file.delete();
         }
+    }
+
+    /**
+     * Function readFile : read file from String path and return it
+     *
+     * @param path
+     * @return
+     * @throws IOException
+     */
+    public static String readFile(String path) throws IOException {
+        String result = "";
+        File f = new File(path);
+        if (f.exists()) {
+            String sCurrentLine;
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path), "UTF-8"));
+            while ((sCurrentLine = br.readLine()) != null) {
+                result += sCurrentLine + System.lineSeparator();
+            }
+        }
+        return result;
     }
 
     /**
@@ -311,15 +322,9 @@ public class SerializerTest {
         String fileInput = "src/test/resources/writeCoordinatesMap.txtTest";
         String fileResult = "src/test/resources/writeCoordinatesMapResult.txtTest";
         try {
-            String inputmd5 = "";
-            String resultmd5 = "";
-            try (InputStream is = Files.newInputStream(Paths.get(fileInput))) {
-                inputmd5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(is);
-            }
-            try (InputStream is = Files.newInputStream(Paths.get(fileResult))) {
-                resultmd5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(is);
-            }
-            assertEquals(inputmd5, resultmd5);
+            String fileInputContents = readFile(fileInput);
+            String fileResultContents = readFile(fileResult);
+            assertEquals(fileInputContents, fileResultContents);
         } finally {
             File file = new File(fileInput);
             file.delete();
@@ -392,15 +397,9 @@ public class SerializerTest {
         String fileInput = "src/test/resources/saveSerializedTownTest.serTest";
         String fileResult = "src/test/resources/saveSerializedTownTestResult.serTest";
         try {
-            String inputmd5 = "";
-            String resultmd5 = "";
-            try (InputStream is = Files.newInputStream(Paths.get(fileInput))) {
-                inputmd5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(is);
-            }
-            try (InputStream is = Files.newInputStream(Paths.get(fileResult))) {
-                resultmd5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(is);
-            }
-            assertEquals(inputmd5, resultmd5);
+            String fileInputContents = readFile(fileInput);
+            String fileResultContents = readFile(fileResult);
+            assertEquals(fileInputContents, fileResultContents);
         } finally {
             File file = new File(fileInput);
             file.delete();

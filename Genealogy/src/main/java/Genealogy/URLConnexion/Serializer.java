@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -351,7 +352,8 @@ public class Serializer {
             String value = entry.getValue();
             content += key + townAssociationSeparator + value + "\n";
         }
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(path + townAssociationFileName))) {
+        try (BufferedWriter bw = new BufferedWriter
+                (new OutputStreamWriter(new FileOutputStream(path + townAssociationFileName), StandardCharsets.UTF_8))) {
             bw.write(content);
             logger.info("Town Association file updated");
         } catch (IOException e) {
