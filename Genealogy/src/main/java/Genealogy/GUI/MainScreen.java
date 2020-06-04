@@ -98,38 +98,6 @@ public class MainScreen extends JFrame {
         INSTANCE = this;
     }
 
-    private void initForm() {
-        tabbedPane1 = new JTabbedPane();
-        retourButton = new JButton();
-        mainPanel = new JPanel();
-        directAncestors = new JComboBox();
-        ancestors = new JComboBox();
-        towns = new JComboBox();
-        textArea1 = new JTextArea();
-        textArea2 = new JTextArea();
-        naissances = new JTextArea();
-        unions = new JTextArea();
-        deces = new JTextArea();
-        printPanel = new JPanel();
-        carteButton = new JButton();
-        NotFoundPlaces = new JComboBox();
-        TownQuery = new JTextField();
-        searchField = new JTextField();
-        remplacerButton = new JButton();
-        rechercherButton = new JButton();
-        mapPanel = new JPanel();
-        panelForMap = new JPanel();
-        retrouverTousLesPDFButton = new JButton();
-        voirButton = new JButton();
-        remplacerPDFButton = new JButton();
-        naissanceRadioButton = new JRadioButton();
-        mariageRadioButton = new JRadioButton();
-        deathRadioButton = new JRadioButton();
-        ActePDF = new JComboBox();
-        ajouterPDFButton = new JButton();
-        verifierLesPDFButton = new JButton();
-    }
-
     private void initMap() {
         if (mapPoints == null) {
             mapPoints = new ArrayList<>();
