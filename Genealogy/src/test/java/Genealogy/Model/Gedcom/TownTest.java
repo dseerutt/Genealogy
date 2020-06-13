@@ -56,7 +56,7 @@ public class TownTest {
     }
 
     /**
-     * readTown test with name and county constructor, 4 regex with parenthesis, commas,
+     * readTown test with name and county, 4 regex with parenthesis, commas,
      * slash, name only and same name and county
      */
     @Test
