@@ -5,6 +5,8 @@ import Genealogy.Model.Act.Act;
 import Genealogy.URLConnexion.MyHttpUrlConnection;
 import Genealogy.URLConnexion.Serializer;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
@@ -91,6 +93,38 @@ public class Town implements Serializable {
                 towns.add(this);
             }
         }
+    }
+
+    /**
+     * Function readTown : read fullName town with regex and return a pair made of name and county
+     *
+     * @param fullName
+     * @return
+     */
+    public static Pair<String, String> readTown(String fullName) {
+        String name = "";
+        String county = "";
+        if (StringUtils.isNotBlank(fullName)) {
+            for (String regex : Serializer.getTownRegex()) {
+                Pattern p = Pattern.compile(regex);
+                Matcher m = p.matcher(fullName);
+                if (m.find()) {
+                    name = StringUtils.trim(m.group(1));
+                    if (m.groupCount() > 1) {
+                        county = StringUtils.trim(m.group(2));
+                    } else {
+                        county = "";
+                    }
+                    break;
+                }
+            }
+            if (StringUtils.isNotBlank(name) && StringUtils.isNotBlank(county)) {
+                return new MutablePair(name, county);
+            } else if (StringUtils.isNotBlank(name)) {
+                return new MutablePair(name, "");
+            }
+        }
+        return null;
     }
 
     /**
@@ -259,9 +293,11 @@ public class Town implements Serializable {
      * @return
      */
     public static Town findTown(ArrayList<Town> towns, Town thisTown) {
-        for (Town town : towns) {
-            if (town.getFullName().equals(thisTown.getFullName())) {
-                return town;
+        if (towns != null) {
+            for (Town town : towns) {
+                if (town.getFullName().equals(thisTown.getFullName())) {
+                    return town;
+                }
             }
         }
         return null;
@@ -270,14 +306,16 @@ public class Town implements Serializable {
     /**
      * Function findTown : find thisTown in towns with getFullNameWithParenthesis , return null if not found
      *
-     * @param towns
+     * @param townsList
      * @param fullNameWithParenthesis
      * @return
      */
-    public static Town findTown(ArrayList<Town> towns, String fullNameWithParenthesis) {
-        for (Town town : towns) {
-            if (town.getFullNameWithParenthesis().equals(fullNameWithParenthesis)) {
-                return town;
+    public static Town findTown(ArrayList<Town> townsList, String fullNameWithParenthesis) {
+        if (townsList != null) {
+            for (Town town : townsList) {
+                if (town.getFullNameWithParenthesis().equals(fullNameWithParenthesis)) {
+                    return town;
+                }
             }
         }
         return null;
@@ -308,7 +346,7 @@ public class Town implements Serializable {
      * @return
      */
     public static MyCoordinate findCoordinateFromTowns(String city) {
-        for (int i = 0; i < Town.getTowns().size(); i++) {
+        for (int i = 0; i < towns.size(); i++) {
             if (towns.get(i).getFullNameWithParenthesis().equals(city)) {
                 return towns.get(i).getCoordinates();
             }
@@ -353,20 +391,20 @@ public class Town implements Serializable {
                 String coordinatesFromFile = serializer.readCoordinatesMap(city, county);
                 if (coordinatesFromFile != null) {
                     coo = new MyCoordinate(coordinatesFromFile);
-                    thisTown.setCoordinates(coo);
+                } else {
+                    coo = Town.parseJsonArray(MyHttpUrlConnection.getInstance().sendGpsRequest(city, county));
                 }
-                coo = Town.parseJsonArray(MyHttpUrlConnection.getInstance().sendGpsRequest(city, county));
                 if (coo != null) {
                     thisTown.setCoordinates(coo);
                 }
             }
             //post-treatment
             if (thisTown.getCoordinates() != null) {
-                if (saveCoordinatesTxtFile) {
-                    saveCoordinateIntoFile(city, county, thisTown.getCoordinates().getLatitude(), thisTown.getCoordinates().getLongitude());
-                }
                 if (!lostTowns.contains(aliasName)) {
                     Serializer.getTownsToSerialize().add(thisTown);
+                    if (saveCoordinatesTxtFile) {
+                        saveCoordinateIntoFile(city, county, thisTown.getCoordinates().getLatitude(), thisTown.getCoordinates().getLongitude());
+                    }
                 }
             }
         }

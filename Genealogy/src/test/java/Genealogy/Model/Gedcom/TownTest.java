@@ -7,6 +7,7 @@ import Genealogy.Model.Date.YearDate;
 import Genealogy.Model.Exception.ParsingException;
 import Genealogy.URLConnexion.MyHttpUrlConnection;
 import Genealogy.URLConnexion.Serializer;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -52,6 +53,32 @@ public class TownTest {
         assertEquals(townFromCommas, Town.getTowns().get(2));
         assertEquals(townFromSlash, Town.getTowns().get(3));
         assertEquals(townFromOnlyName, Town.getTowns().get(4));
+    }
+
+    /**
+     * readTown test with name and county constructor, 4 regex with parenthesis, commas,
+     * slash, name only and same name and county
+     */
+    @Test
+    public void readTownTest() throws NoSuchFieldException, IllegalAccessException {
+        //init reflection
+        Town townTest = new Town("Ville 1", "Département");
+        Field mapTownsField = townTest.getClass().getDeclaredField("towns");
+        mapTownsField.setAccessible(true);
+        mapTownsField.set(townTest, new ArrayList());
+
+        //launch
+        Pair townFromParenthesis = Town.readTown("Mon village 1 (mon département 1)");
+        Pair townFromCommas = Town.readTown("Mon village 2,mon département 2");
+        Pair townFromSlash = Town.readTown("Mon village 3/mon département 3");
+        Pair townFromOnlyName = Town.readTown("Mon village 4");
+
+        //verification
+        assertEquals("(Mon village 1,mon département 1)", townFromParenthesis.toString());
+        assertEquals("(Mon village 2,mon département 2)", townFromCommas.toString());
+        assertEquals("(Mon village 3,mon département 3)", townFromSlash.toString());
+        assertEquals("(Mon village 4,)", townFromOnlyName.toString());
+        assertTrue(Town.getTowns().isEmpty());
     }
 
     /**

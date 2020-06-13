@@ -15,7 +15,7 @@ import Genealogy.Model.Gedcom.Person;
 import Genealogy.Model.Gedcom.Town;
 import Genealogy.URLConnexion.MyHttpUrlConnection;
 import Genealogy.URLConnexion.Serializer;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdesktop.swingx.JXMapKit;
@@ -39,7 +39,7 @@ public class MainScreen extends JFrame {
     public static final String myFolder = "C:\\Users\\Dan\\Desktop\\Programmation\\IntelliJ\\Genealogy\\Genealogy\\src\\main\\resources\\";
     public static final String myJarFolder = System.getProperty("user.dir") + File.separator + "Properties" + File.separator;
     private JTabbedPane tabbedPane1;
-    private JButton retourButton = new JButton();
+    private JButton retourButton;
     private JPanel mainPanel;
     private JComboBox directAncestors;
     private JComboBox ancestors;
@@ -55,7 +55,6 @@ public class MainScreen extends JFrame {
     private JTextField TownQuery;
     private JTextField searchField;
     private JButton remplacerButton;
-    private JButton rechercherButton;
     private JPanel mapPanel;
     private JPanel panelForMap;
     private JButton retrouverTousLesPDFButton;
@@ -246,12 +245,6 @@ public class MainScreen extends JFrame {
                 }
             }
         });
-        remplacerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //TODO
-            }
-        });
         voirButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -384,6 +377,9 @@ public class MainScreen extends JFrame {
             String newCity = townAssociation.get(city);
             TownQuery.setText(newCity);
             MyCoordinate coordinate = Town.findCoordinateFromTowns(newCity);
+            if (coordinate == null) {
+                coordinate = Town.findCoordinateFromTowns(city);
+            }
             if (coordinate != null) {
                 GeoPosition geoPosition = new GeoPosition(coordinate.getLatitude(), coordinate.getLongitude());
                 jXMapKit.setCenterPosition(geoPosition);
@@ -414,7 +410,6 @@ public class MainScreen extends JFrame {
         }
     }
 
-    //TODO
     private void updateMissingCitiesColor() {
         NotFoundPlaces.setRenderer(new DefaultListCellRenderer() {
             @Override
@@ -424,13 +419,11 @@ public class MainScreen extends JFrame {
                         list, value, index, isSelected, cellHasFocus);
                 if (c instanceof JLabel) {
                     JLabel l = (JLabel) c;
-                    ArrayList<String> notFoundCitiesList = new ArrayList<>();
-                    notFoundCitiesList.add("Mestry (Calvados)");
-                    if (notFoundCitiesList.contains(value)) {
+                    if (Town.getLostTowns().contains(value)) {
                         l.setBackground(Color.YELLOW);
                         if (isSelected) {
-                            list.setSelectionForeground(Color.RED);
-                            list.setSelectionBackground(Color.BLUE);
+                            l.setBackground(Color.GRAY);
+                            l.setForeground(Color.RED);
                         }
                     }
                     return l;
@@ -438,15 +431,22 @@ public class MainScreen extends JFrame {
                 return c;
             }
         });
+        if (Town.getLostTowns() != null && !Town.getLostTowns().isEmpty()) {
+            TownQuery.setBackground(Color.RED);
+        }
     }
 
     private void initMissingCitiesTab() {
         final HashMap<String, String> townAssociation = Serializer.getTownAssociationMap();
+        updateMissingCitiesColor();
         if (townAssociation != null) {
             for (Map.Entry<String, String> association : townAssociation.entrySet()) {
-                NotFoundPlaces.addItem(association.getKey());
+                String key = association.getKey();
+                NotFoundPlaces.addItem(key);
+                if (Town.getLostTowns().contains(key)) {
+                    NotFoundPlaces.setSelectedItem(key);
+                }
             }
-            updateMissingCitiesColor();
             NotFoundPlaces.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -460,8 +460,7 @@ public class MainScreen extends JFrame {
             }
         }
         TownQuery.setEditable(false);
-        rechercherVilleNonTrouvee();
-        remplacerAction();
+        remplaceVilleNonTrouvee();
     }
 
     public void addMarkers(ArrayList<MapPoint> mapPoints) {
@@ -483,52 +482,32 @@ public class MainScreen extends JFrame {
         jXMapKit.getMainMap().removeAll();
     }
 
-    private void remplacerAction() {
-        remplacerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    String key = (String) NotFoundPlaces.getSelectedItem();
-                    String value = searchField.getText();
-                    //MyCoordinate result = Town.parseJsonArray(HTTPConnexion.sendAddressRequest(value),value);
-                    MyCoordinate result = null;//TODO
-                    Town.setCoordinates(result, key);
-                    HashMap<String, String> townAssociation = Serializer.getTownAssociationMap();
-                    townAssociation.remove(key);
-                    townAssociation.put(key, value);
-                    Serializer.getInstance().saveTownAssociation(townAssociation);
-                    Serializer.getInstance().saveSerializedTownList();
-                    String city = NotFoundPlaces.getSelectedItem().toString();
-                    updateMissingCityTab(townAssociation, city);
-                    JOptionPane.showMessageDialog(tabbedPane1,
-                            "Mise à jour d'alias de ville effectuée avec succès",
-                            "Information",
-                            JOptionPane.INFORMATION_MESSAGE);
-                } catch (Exception e1) {
-                    logger.error("Failed to initialize remplacerButton actions", e1);
-                }
-            }
-        });
-    }
-
-    private void rechercheVille(boolean remplace) {
+    private void remplaceVille() {
         String search = searchField.getText();
         if (search != null && (!search.equals("") && (search.contains(" ")))) {
             try {
-                String[] tmpSplit = search.split(" ");
-                String concat = "";
-                for (int i = 0; i < tmpSplit.length - 1; i++) {
-                    concat += tmpSplit[i] + " ";
-                }
-                String city = StringUtils.strip(concat);
-                String county = tmpSplit[tmpSplit.length - 1];
+                Pair<String, String> searchPair = Town.readTown(search);
+                String city = searchPair.getKey();
+                String county = searchPair.getValue();
                 String fullCity = city + " (" + county + ")";
                 MyCoordinate result = Town.parseJsonArray(HTTPConnexion.sendGpsRequest(city, county, false));
                 logger.info("Coordonnées de la ville " + fullCity + " : " + result);
                 if (result != null) {
                     HashMap<String, String> townAssociation = Serializer.getTownAssociationMap();
                     updateMissingCityTab(townAssociation, fullCity, result);
+                    TownQuery.setText(fullCity);
+                    TownQuery.setBackground(UIManager.getColor("Panel.background"));
+                    String key = (String) NotFoundPlaces.getSelectedItem();
+                    townAssociation.remove(key);
+                    townAssociation.put(key, search);
+                    Town.getLostTowns().remove(key);
+                    Serializer.getInstance().saveTownAssociation(townAssociation);
+                    Serializer.getInstance().saveSerializedTownList();
                 }
+                JOptionPane.showMessageDialog(tabbedPane1,
+                        "Mise à jour d'alias de ville effectuée avec succès",
+                        "Information",
+                        JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception e1) {
                 logger.error("Erreur lors de la recherche de ville", e1);
                 JOptionPane.showMessageDialog(tabbedPane1,
@@ -544,11 +523,11 @@ public class MainScreen extends JFrame {
         }
     }
 
-    private void rechercherVilleNonTrouvee() {
-        rechercherButton.addActionListener(new ActionListener() {
+    private void remplaceVilleNonTrouvee() {
+        remplacerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                rechercheVille(false);
+                remplaceVille();
             }
         });
     }

@@ -96,7 +96,7 @@ public class Serializer {
      *
      * @return
      */
-    public HashMap<String, String> getTownCoordinatesMap() {
+    public static HashMap<String, String> getTownCoordinatesMap() {
         return townCoordinatesMap;
     }
 

@@ -82,7 +82,6 @@ Montpinchon|Manche->49.0222731:-1.3109641
 Saint Germain des Prés|Loiret->47.9550751:2.8481556
 Sebastopol Estate|Flacq->32.9315755:10.4503961
 Mosles|Calvados->49.3076334:-0.8179079
-Mestry|Calvados->32.9315755:10.4503961
 Sens|Yonne->48.1978559:3.282606
 Centre de Flacq|Flacq->-20.1948891:57.7229652
 Cherbourg|Manche->49.6425343:-1.6249565
@@ -207,13 +206,11 @@ Folligny|Manche->48.8244308:-1.410211
 Tracy sur Mer|Calvados->49.3364012:-0.6431891
 Jaux|Oise->49.3881042:2.7765151
 Vacoas-Phoenix|Plaines Wilhems->-20.2988802:57.4927689
-La Croix Saint Ouen|Oise->32.9315755:10.4503961
 Soulles|Manche->49.0143615:-1.1896289
 Néry|Oise->49.2835798:2.7783243
 Bon Accueil|Flacq->-20.1745003:57.670382
 Château-Renard|Loiret->47.9316325:2.9269125
 Saint Jean des Champs|Manche->48.8277979:-1.4647078
-Villeneuve le Roi|Yonne->32.9315755:10.4503961
 Coutances|Manche->49.047792:-1.4454857
 Carentan|Manche->49.29476595:-1.252311940606591
 Benoîtville|Manche->49.5275514:-1.780226
