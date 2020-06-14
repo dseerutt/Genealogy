@@ -1,6 +1,7 @@
 package Genealogy.URLConnexion;
 
 import Genealogy.MapViewer.Structures.MyCoordinate;
+import Genealogy.Model.Act.Proof;
 import Genealogy.Model.Gedcom.Town;
 import org.junit.jupiter.api.Test;
 
@@ -8,6 +9,7 @@ import java.io.*;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -86,6 +88,7 @@ public class SerializerTest {
         assertEquals("cities.ser", serializer.getTownSerializerFileName());
         assertEquals("City names.txt", serializer.getTownAssociationFileName());
         assertEquals("cities.txt", serializer.getCityCoordinatesFileName());
+        assertEquals("Preuves.txt", serializer.getProofFileName());
         assertEquals(4, Serializer.getTownRegex().size());
         assertEquals("(.*)\\((.*)\\)", Serializer.getTownRegex().get(0));
         assertEquals("(.*),(.*)", Serializer.getTownRegex().get(1));
@@ -102,6 +105,7 @@ public class SerializerTest {
         assertEquals("cities.ser", serializer.getTownSerializerFileName());
         assertEquals("City names.txt", serializer.getTownAssociationFileName());
         assertEquals("cities.txt", serializer.getCityCoordinatesFileName());
+        assertEquals("Preuves.txt", serializer.getProofFileName());
         assertEquals(1, Serializer.getTownRegex().size());
         assertEquals("a(.*)\\((.*)\\)", Serializer.getTownRegex().get(0));
     }
@@ -115,7 +119,7 @@ public class SerializerTest {
      * @throws IllegalAccessException
      */
     @Test
-    public void initTownAssociationTest() throws IOException, NoSuchFieldException, IllegalAccessException {
+    public void initTownAssociationTest() throws NoSuchFieldException, IllegalAccessException {
         //init
         Serializer serializer = Serializer.getInstance();
         Field pathField = serializer.getClass().getDeclaredField("path");
@@ -135,6 +139,38 @@ public class SerializerTest {
         assertEquals("Castilly (Calvados)", townCoordinatesMap.get("Mestry (Calvados)"));
         assertEquals("Brienon sur Armançon (Yonne)", townCoordinatesMap.get("Brienon l'archevêque (Yonne)"));
         assertNull(townCoordinatesMap.get("Saint Sauveur de Bonfossé (Manche)"));
+    }
+
+    /**
+     * Test initProofList : check if insert proofFileName contents properly into
+     * Serializer ProofList
+     *
+     * @throws IOException
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
+    @Test
+    public void initProofListTest() throws NoSuchFieldException, IllegalAccessException {
+        //init
+        Serializer serializer = Serializer.getInstance();
+        Field pathField = serializer.getClass().getDeclaredField("path");
+        Field proofFileFileNameField = serializer.getClass().getDeclaredField("proofFileName");
+        pathField.setAccessible(true);
+        proofFileFileNameField.setAccessible(true);
+        pathField.set(serializer, "src/test/resources/");
+        proofFileFileNameField.set(serializer, "initProofList.txtTest");
+
+        //launch
+        serializer.initProofList();
+
+        //verification
+        List<Proof> proofList = Serializer.getProofList();
+        assertEquals(5, proofList.size());
+        assertEquals("Proof{date='19/04/1888', town='Grenoble (Isère)', people='Henry Michel Legendre', typeAct='Décès'}", proofList.get(0).toString());
+        assertEquals("Proof{date='06/08/1605', town='L'Haÿ Les Roses (Val de Marne)', people='Eudes Morsou', typeAct='Naissance'}", proofList.get(1).toString());
+        assertEquals("Proof{date='19/11/1900', town='Issoire (Puy-de-Dome)', people='Jean Garilla', typeAct='Décès'}", proofList.get(2).toString());
+        assertEquals("Proof{date='15/04/1906', town='Issoire (Puy-de-Dome)', people='Michel Siroco Marie Louab', typeAct='Mariage'}", proofList.get(3).toString());
+        assertEquals("Proof{date='25/03/1985', town='Clermont-Ferrand (Puy-de-Dome)', people='Ornella Mizou', typeAct='Décès'}", proofList.get(4).toString());
     }
 
     /**

@@ -1,5 +1,6 @@
 package Genealogy.URLConnexion;
 
+import Genealogy.Model.Act.Proof;
 import Genealogy.Model.Gedcom.Town;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -7,10 +8,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Serializer class : handle Town serialization and Town save
@@ -50,6 +48,10 @@ public class Serializer {
      */
     private static String cityCoordinatesFileName;
     /**
+     * String name of proof file
+     */
+    private static String proofFileName;
+    /**
      * String ArrayList of Town regex
      */
     private static ArrayList<String> townRegex = new ArrayList<>();
@@ -57,6 +59,10 @@ public class Serializer {
      * HashMap of String towns and coordinates
      */
     private static HashMap<String, String> townCoordinatesMap = new HashMap<>();
+    /**
+     * ArrayList of Acts
+     */
+    private static List<Proof> proofList = new ArrayList<>();
     /**
      * HashMap of String towns association
      */
@@ -128,6 +134,15 @@ public class Serializer {
     }
 
     /**
+     * ProofFileName getter
+     *
+     * @return
+     */
+    public static String getProofFileName() {
+        return proofFileName;
+    }
+
+    /**
      * SerializerPropertiesFileName getter
      *
      * @return
@@ -161,6 +176,24 @@ public class Serializer {
      */
     public static void setTownAssociationMap(HashMap<String, String> townAssociationMap) {
         Serializer.townAssociationMap = townAssociationMap;
+    }
+
+    /**
+     * ProofList getter
+     *
+     * @return
+     */
+    public static List<Proof> getProofList() {
+        return proofList;
+    }
+
+    /**
+     * ProofList setter
+     *
+     * @param proofList
+     */
+    public static void setProofList(List<Proof> proofList) {
+        Serializer.proofList = proofList;
     }
 
     /**
@@ -241,6 +274,7 @@ public class Serializer {
         initSerializedTowns();
         initTownCoordinatesMap();
         initTownAssociation();
+        initProofList();
         Serializer.instance = this;
     }
 
@@ -282,6 +316,7 @@ public class Serializer {
             townSerializerFileName = prop.getProperty("townSerializerFileName");
             townAssociationFileName = prop.getProperty("townAssociationFile");
             cityCoordinatesFileName = prop.getProperty("cityCoordinatesFile");
+            proofFileName = prop.getProperty("proofFile");
             townRegex = new ArrayList<>();
             int indexCityFile = 1;
             String property = prop.getProperty("townRegex" + indexCityFile);
@@ -358,6 +393,31 @@ public class Serializer {
             logger.info("Town Association file updated");
         } catch (IOException e) {
             logger.error("Town Association file update failed", e);
+        }
+    }
+
+    /**
+     * Fonction initProofList : init Proof list
+     */
+    public void initProofList() {
+        proofList = new ArrayList<>();
+        try {
+            File f = new File(path + proofFileName);
+            if (f.exists()) {
+                logger.info("Proof file found");
+                String sCurrentLine;
+                BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path + proofFileName), "UTF-8"));
+                while ((sCurrentLine = br.readLine()) != null) {
+                    if (sCurrentLine.matches(Proof.getProofRegex())) {
+                        Proof proof = new Proof(sCurrentLine);
+                        proofList.add(proof);
+                    }
+                }
+            } else {
+                logger.error("Proof file not found");
+            }
+        } catch (IOException e) {
+            logger.error("Failed to init Proof file", e);
         }
     }
 

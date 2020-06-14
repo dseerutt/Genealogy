@@ -1,6 +1,7 @@
 townSerializerFileName=cities.ser
 townAssociationFile=City names.txt
 cityCoordinatesFile=cities.txt
+proofFile=Preuves.txt
 townRegex1=(.*)\\((.*)\\)
 townRegex2=(.*),(.*)
 townRegex3=(.*)\\/(.*)

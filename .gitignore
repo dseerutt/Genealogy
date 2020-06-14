@@ -52,8 +52,8 @@ target/
 log/
 *.ser
 *.jar
-!RepublicanDateConverter.jar
 
 *.iml
 Genealogy.jar
 City names.txt
+Preuves.txt
