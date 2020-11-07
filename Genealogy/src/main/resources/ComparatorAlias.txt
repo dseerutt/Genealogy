@@ -227,6 +227,7 @@ la chabassolerie;saint maurice sur aveyron;city
 chabassollerie;saint maurice sur aveyron;city
 la herbonniere;saint maurice sur aveyron;city
 la taupinniere;briare;city
+changy les bois;changy;city
 maison commune - saint-maurice-sur-aveyron;saint maurice sur aveyron;city
 saint-pierre-le-rond - sens;sens;city
 saint-pierre-le-rond;sens;city

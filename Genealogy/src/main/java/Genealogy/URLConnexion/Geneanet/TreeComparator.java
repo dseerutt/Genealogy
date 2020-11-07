@@ -297,7 +297,7 @@ public class TreeComparator {
         }
     }
 
-    private void searchRelatives(GeneanetPerson geneanetPerson, Person gedcomPerson, ArrayList<GeneanetPerson> siblingsGen, ArrayList<Person> siblingsGed, String txt) throws Exception {
+    private void searchRelatives(GeneanetPerson geneanetPerson, ArrayList<GeneanetPerson> siblingsGen, ArrayList<Person> siblingsGed, String txt) throws Exception {
         ArrayList<Person> gedcomPersonList = new ArrayList<>();
         if (geneanetPerson != null) {
             for (GeneanetPerson siblingGen : siblingsGen) {
@@ -308,7 +308,7 @@ public class TreeComparator {
                 for (Person siblingGed : siblingsGed) {
                     if (newSiblingGen != null && superEqualsAlias(newSiblingGen.getFullName(), siblingGed.getFullName()) && !gedcomPersonList.contains(siblingGed)
                             && !urlSearched.contains(newSiblingGen.getUrl())) {
-                        compareSibling(newSiblingGen, siblingGed, txt.equals("Children"));
+                        compareSibling(newSiblingGen, siblingGed, txt.contains("Children"));
                         gedcomPersonList.add(siblingGed);
                     }
                 }
@@ -322,19 +322,19 @@ public class TreeComparator {
     private void searchChildren(GeneanetPerson geneanetPerson, Person gedcomPerson) throws Exception {
         ArrayList<GeneanetPerson> childrenGen = geneanetPerson.getChildren();
         ArrayList<Person> childrenGed = gedcomPerson.getChildren();
-        searchRelatives(geneanetPerson, gedcomPerson, childrenGen, childrenGed, "Children");
+        searchRelatives(geneanetPerson, childrenGen, childrenGed, "Children");
     }
 
     private void searchSiblings(GeneanetPerson geneanetPerson, Person gedcomPerson) throws Exception {
         ArrayList<GeneanetPerson> siblingsGen = geneanetPerson.getSiblings();
         ArrayList<Person> siblingsGed = gedcomPerson.getSiblings();
-        searchRelatives(geneanetPerson, gedcomPerson, siblingsGen, siblingsGed, "Sibling");
+        searchRelatives(geneanetPerson, siblingsGen, siblingsGed, "Sibling");
     }
 
     private void searchHalfSiblings(GeneanetPerson geneanetPerson, Person gedcomPerson) throws Exception {
         ArrayList<GeneanetPerson> siblingsGen = geneanetPerson.getHalfSiblings();
         ArrayList<Person> siblingsGed = gedcomPerson.getHalfSiblings();
-        searchRelatives(geneanetPerson, gedcomPerson, siblingsGen, siblingsGed, "Half Sibling");
+        searchRelatives(geneanetPerson, siblingsGen, siblingsGed, "Half Sibling");
     }
 
     private void superCompareAndSearchPerson(GeneanetPerson geneanetPerson, Person gedcomPerson, String txt) throws Exception {
@@ -344,7 +344,7 @@ public class TreeComparator {
                 //searchFamily(geneanetPerson, gedcomPerson, false);
             }
         } else if (geneanetPerson != null) {
-            addDifference(geneanetPerson, "Missing " + txt + " : " + geneanetPerson.getUrl());
+            addDifference(geneanetPerson, "Missing " + txt);
         }
     }
 
@@ -354,7 +354,7 @@ public class TreeComparator {
                 partialCompare(geneanetPerson, gedcomPerson, root);
             }
         } else if (geneanetPerson != null) {
-            addDifference(geneanetPerson, "Missing " + txt + " for " + geneanetPerson.getUrl());
+            addDifference(geneanetPerson, "Missing " + txt + " of " + geneanetPerson.getFullName());
         }
     }
 
@@ -423,7 +423,7 @@ public class TreeComparator {
             for (Map.Entry<MyDate, String> entry2 : value.entrySet()) {
                 MyDate date = entry2.getKey();
                 String town = entry2.getValue();
-                if (!supercontains(marriageGed, fullGeneanetPerson, date, town) && (date != null || town != null)) {
+                if ((date != null || town != null) && !supercontains(marriageGed, fullGeneanetPerson, date, town)) {
                     addDifference(fullGeneanetPerson, "Marriage=" + fullGeneanetPerson.getFullName() + ";" + date + ";" + town);
                 }
             }
@@ -440,7 +440,7 @@ public class TreeComparator {
             }
             MyDate date1 = union.getDate();
             Town town1 = union.getTown();
-            if (superEqualsAlias(partner.getFullName(), person.getFullName()) && superEquals(date, date1) && superEquals(town, town1.getName())) {
+            if (superEqualsAlias(partner.getFullName(), person.getFullName()) && superEquals(date, date1) && town1 != null && superEquals(town, town1.getName())) {
                 return true;
             }
         }
@@ -637,9 +637,15 @@ public class TreeComparator {
 
     private void compareDifferences(HashMap<GeneanetPerson, String> differences2, boolean displayModeFull, boolean hideComparisons) throws Exception {
         String result = "";
+        int cptUnknownPeople = 0;
+        String printedUrl = "";
         //Differences missing in file
         for (Map.Entry<GeneanetPerson, String> entry : differences.entrySet()) {
             GeneanetPerson person = entry.getKey();
+            printedUrl = person.getUrl();
+            if (printedUrl.contains("&p=x&n=x")) {
+                printedUrl = "Person " + cptUnknownPeople++;
+            }
             if (!person.isSearched()) {
                 person = peopleUrl.get(person.getUrl());
             }
@@ -669,16 +675,21 @@ public class TreeComparator {
                 differencesForDisplay.put(person, valueTxt);
                 if ((!displayModeFull && differencesForDisplay.size() == 10) || (hideComparisons)) {
                     comparisonResultDisplay = result + System.lineSeparator() + person.getUrl();
-                    comparisonResultToReplace = person.getUrl() + ";" + person.getFullName() + ";" + differences2.get(person);
-                    comparisonResultReplacement = person.getUrl() + ";" + person.getFullName() + ";" + valueTxt;
+                    comparisonResultToReplace = printedUrl + ";" + person.getFullName() + ";" + differences2.get(person);
+                    comparisonResultReplacement = printedUrl + ";" + person.getFullName() + ";" + valueTxt;
                     return;
                 }
             }
         }
 
         //Differences added in file
+        cptUnknownPeople = 0;
         for (Map.Entry<GeneanetPerson, String> entry : differences2.entrySet()) {
             GeneanetPerson person = entry.getKey();
+            printedUrl = person.getUrl();
+            if (printedUrl.contains("&p=x&n=x&oc=")) {
+                printedUrl = "Person " + cptUnknownPeople++;
+            }
             String valueTxt = entry.getValue();
             if (!person.isSearched()) {
                 person = peopleUrl.get(person.getUrl());
@@ -705,9 +716,9 @@ public class TreeComparator {
                     if (differences.get(person) == null) {
                         comparisonResultReplacement = "";
                     } else {
-                        comparisonResultReplacement = person.getUrl() + ";" + person.getFullName() + ";" + differences.get(person);
+                        comparisonResultReplacement = printedUrl + ";" + person.getFullName() + ";" + differences.get(person);
                     }
-                    comparisonResultToReplace = person.getUrl() + ";" + person.getFullName() + ";" + valueTxt;
+                    comparisonResultToReplace = printedUrl + ";" + person.getFullName() + ";" + valueTxt;
                     return;
                 }
             }

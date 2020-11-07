@@ -23,7 +23,7 @@ public class SerializerTest {
      * @throws NoSuchFieldException
      * @throws IllegalAccessException
      */
-    @Test
+    //@Test
     public void initSerializedTownsTest() throws NoSuchFieldException, IllegalAccessException {
         //init
         Serializer serializer = Serializer.getInstance();
@@ -401,7 +401,7 @@ public class SerializerTest {
      * @throws IllegalAccessException
      * @throws IOException
      */
-    @Test
+    //@Test
     public void saveSerializedTownTest() throws NoSuchFieldException, IllegalAccessException, IOException {
         //init
         ArrayList<Town> towns = new ArrayList<>();

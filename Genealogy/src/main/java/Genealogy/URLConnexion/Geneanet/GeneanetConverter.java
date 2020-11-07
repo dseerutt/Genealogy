@@ -483,9 +483,8 @@ public class GeneanetConverter {
             return parseDate(resultDate);
         } catch (RepublicanDateOutOfRangeException e) {
             logger.error("Failed to parse Republican date " + input, e);
-        } finally {
-            return null;
         }
+        return null;
     }
 
     private MyDate parseDate(String inputDate) throws RepublicanDateOutOfRangeException {

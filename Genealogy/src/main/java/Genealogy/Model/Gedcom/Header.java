@@ -95,7 +95,7 @@ public class Header {
             String lastModifiedDate0 = genealogy.findFieldInContents("DATE", parsingStructureList);
             String lastModifiedHour0 = genealogy.findFieldInContents("TIME", parsingStructureList);
 
-            DateTimeFormatter formatter = (new DateTimeFormatterBuilder()).parseCaseInsensitive().appendPattern("d MMM yyyy HH:mm:ss").toFormatter().withLocale(Locale.ENGLISH);
+            DateTimeFormatter formatter = (new DateTimeFormatterBuilder()).parseCaseInsensitive().appendPattern("d MMM yyyy H:mm:ss").toFormatter().withLocale(Locale.ENGLISH);
             lastModified = LocalDateTime.parse(lastModifiedDate0 + " " + lastModifiedHour0, formatter);
         } else {
             throw new ParsingException("Header object was not initialized : failed to parse header");
