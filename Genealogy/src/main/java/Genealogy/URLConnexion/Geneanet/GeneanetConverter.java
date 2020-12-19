@@ -31,16 +31,21 @@ public class GeneanetConverter {
 
     private static String XpathGender;
     private static String XpathGender2;
+    private static String XpathGender3;
     private static String XpathNames;
     private static String XpathNames2;
     private static String XpathNames3;
+    private static String XpathNames4;
+    private static String XpathNames5;
     private static String XpathBirthAndDeath;
     private static String XpathFather;
     private static String XpathMother;
     private static String XpathParents2;
     private static String XpathFamily;
     private static String XpathFamily2;
+    private static String XpathFamily3;
     private static String XpathSection;
+    private static String XpathSection2;
     private static String geneanetSearchURL;
     private static String XpathMarriageDate;
     private static String XpathMarriageDate2;
@@ -52,6 +57,7 @@ public class GeneanetConverter {
     private static String XpathChildren;
     private static String XpathUrl;
     private static String XpathImage;
+    private static String XpathImage2;
     private Document doc;
     private final static Character space = (char) 160;
     private static ArrayList<String> wrongCities;
@@ -91,6 +97,14 @@ public class GeneanetConverter {
         XpathGender2 = xpathGender2;
     }
 
+    public static String getXpathGender3() {
+        return XpathGender3;
+    }
+
+    public static void setXpathGender3(String xpathGender3) {
+        XpathGender3 = xpathGender3;
+    }
+
     public static String getXpathBirthAndDeath() {
         return XpathBirthAndDeath;
     }
@@ -125,6 +139,14 @@ public class GeneanetConverter {
 
     public static void setXpathImage(String xpathImage) {
         XpathImage = xpathImage;
+    }
+
+    public static String getXpathImage2() {
+        return XpathImage2;
+    }
+
+    public static void setXpathImage2(String xpathImage2) {
+        XpathImage2 = xpathImage2;
     }
 
     public static void setXpathMother(String xpathMother) {
@@ -163,6 +185,14 @@ public class GeneanetConverter {
         XpathFamily2 = xpathFamily2;
     }
 
+    public static String getXpathFamily3() {
+        return XpathFamily3;
+    }
+
+    public static void setXpathFamily3(String xpathFamily3) {
+        XpathFamily3 = xpathFamily3;
+    }
+
     public static String getGeneanetSearchURL() {
         return geneanetSearchURL;
     }
@@ -177,6 +207,22 @@ public class GeneanetConverter {
 
     public static void setXpathNames3(String xpathNames3) {
         XpathNames3 = xpathNames3;
+    }
+
+    public static String getXpathNames4() {
+        return XpathNames4;
+    }
+
+    public static void setXpathNames4(String xpathNames4) {
+        XpathNames4 = xpathNames4;
+    }
+
+    public static String getXpathNames5() {
+        return XpathNames5;
+    }
+
+    public static void setXpathNames5(String xpathNames5) {
+        XpathNames5 = xpathNames5;
     }
 
     public Document getDoc() {
@@ -251,6 +297,14 @@ public class GeneanetConverter {
         XpathSection = xpathSection;
     }
 
+    public static String getXpathSection2() {
+        return XpathSection2;
+    }
+
+    public static void setXpathSection2(String xpathSection2) {
+        XpathSection2 = xpathSection2;
+    }
+
     public static String getXpathBrother2() {
         return XpathBrother2;
     }
@@ -278,6 +332,12 @@ public class GeneanetConverter {
         if (StringUtils.isBlank(firstName)) {
             firstName = Xsoup.compile(XpathNames3.replace("XXX", "" + 1)).evaluate(doc).get();
         }
+        if (StringUtils.isBlank(firstName)) {
+            firstName = Xsoup.compile(XpathNames4.replace("XXX", "" + 1)).evaluate(doc).get();
+        }
+        if (StringUtils.isBlank(firstName)) {
+            firstName = Xsoup.compile(XpathNames5.replace("XXX", "" + 1)).evaluate(doc).get();
+        }
         if (!StringUtils.isBlank(firstName)) {
             return firstName;
         }
@@ -295,6 +355,12 @@ public class GeneanetConverter {
         if (StringUtils.isBlank(name)) {
             name = Xsoup.compile(XpathNames3.replace("XXX", "" + 2)).evaluate(doc).get();
         }
+        if (StringUtils.isBlank(name)) {
+            name = Xsoup.compile(XpathNames4.replace("XXX", "" + 2)).evaluate(doc).get();
+        }
+        if (StringUtils.isBlank(name)) {
+            name = Xsoup.compile(XpathNames5.replace("XXX", "" + 2)).evaluate(doc).get();
+        }
         if (!StringUtils.isBlank(name)) {
             return name;
         }
@@ -302,8 +368,11 @@ public class GeneanetConverter {
     }
 
     public String getImage(Document doc) {
-        String name = Xsoup.compile(XpathImage).evaluate(doc).get();
-        return name;
+        String image = Xsoup.compile(XpathImage).evaluate(doc).get();
+        if (image == null) {
+            image = Xsoup.compile(XpathImage2).evaluate(doc).get();
+        }
+        return image;
     }
 
     public int setChristening(GeneanetPerson person, int index) {
@@ -326,10 +395,13 @@ public class GeneanetConverter {
         String birth = Xsoup.compile(XpathFamily.replace("XXX", "" + 1) + XpathBirthAndDeath.replace("XXX", "" + index)).evaluate(doc).get();
         if (birth == null || birth.replace(" ", "").equals("") || (birth.contains("Marié") && birth.contains("avec"))) {
             birth = Xsoup.compile(XpathFamily2 + XpathBirthAndDeath.replace("XXX", "" + index)).evaluate(doc).get();
-            if (birth == null || birth.replace(" ", "").equals("")) {
-                return index;
-            } else {
-                person.setUsingDateTable(true);
+            if (birth == null || birth.replace(" ", "").equals("") || (birth.contains("Marié") && birth.contains("avec"))) {
+                birth = Xsoup.compile(XpathFamily3 + XpathBirthAndDeath.replace("XXX", "" + index)).evaluate(doc).get();
+                if (birth == null || birth.replace(" ", "").equals("")) {
+                    return index;
+                } else {
+                    person.setUsingDateTable(true);
+                }
             }
         }
         Pattern pattern = Pattern.compile(regex);
@@ -479,6 +551,10 @@ public class GeneanetConverter {
         if (dateTab.length != 1) {
             resultDate = dateTab[1];
         }
+        if (resultDate.contains(",")) {
+            dateTab = resultDate.split(",");
+            resultDate = dateTab[0];
+        }
         try {
             return parseDate(resultDate);
         } catch (RepublicanDateOutOfRangeException e) {
@@ -536,6 +612,9 @@ public class GeneanetConverter {
         do {
             sectionIndex++;
             category = Xsoup.compile(XpathSection.replace("XXX", "" + sectionIndex)).evaluate(doc).get();
+            if (category == null) {
+                category = Xsoup.compile(XpathSection2.replace("XXX", "" + sectionIndex)).evaluate(doc).get();
+            }
             if (category != null) {
                 category = category.replaceAll(" ", "");
                 if (category.contains("Union(s)")) {
@@ -665,18 +744,21 @@ public class GeneanetConverter {
                 personString = Xsoup.compile(XpathFamily.replace("XXX", "" + index) + XpathMarriagePartner2.replace("XXX", "" + partnerNumber).replace("YYY", "" + aNumber)).evaluate(doc).get();
                 tmpXpathMarriagePartner = XpathMarriagePartner2;
                 tmpXpathMarriageDate = XpathMarriageDate2;
+                if (dateAndCity == null && personString == null) {
+                    dateAndCity = Xsoup.compile(XpathFamily.replace("XXX", "" + index) + XpathMarriageDate.replace("XXX", "" + partnerNumber)).evaluate(doc).get();
+                    personString = Xsoup.compile(XpathFamily.replace("XXX", "" + index) + XpathMarriagePartner.replace("XXX", "" + partnerNumber).replace("YYY", "" + aNumber)).evaluate(doc).get();
+                    tmpXpathMarriagePartner = XpathMarriagePartner;
+                    tmpXpathMarriageDate = XpathMarriageDate;
+                }
             }
         }
     }
 
     public void parseDocument(Document document, GeneanetPerson person) {
         doc = document;
-        String firstName = getFirstName(doc);
-        String name = getName(doc);
-        person.setFirstName(firstName);
-        person.setFamilyName(name);
-        String image = getImage(doc);
-        person.setImage(image);
+        person.setFirstName(getFirstName(doc));
+        person.setFamilyName(getName(doc));
+        person.setImage(getImage(doc));
         setGender(person);
         setGeneanetUrl(person);
         int index = setPersonDates(person, 1, BIRTH);
@@ -725,6 +807,9 @@ public class GeneanetConverter {
         String gender = Xsoup.compile(XpathGender).evaluate(doc).get();
         if (StringUtils.isBlank(gender)) {
             gender = Xsoup.compile(XpathGender2).evaluate(doc).get();
+            if (StringUtils.isBlank(gender)) {
+                gender = Xsoup.compile(XpathGender3).evaluate(doc).get();
+            }
         }
         person.setGender(Gender.getGender(gender));
     }

@@ -7,14 +7,14 @@ https://gw.geneanet.org/msebastien1?lang=fr&p=marie&n=pleiard;Marie PLEIARD;Marr
 https://gw.geneanet.org/msebastien1?lang=fr&p=anne&n=vilaine;Anne VILAINE;DeathDate=19/06/1750
 https://gw.geneanet.org/msebastien1?lang=fr&p=jean&n=serre&oc=2;Jean SERRÉ;firstName=Jean;BirthPlace=Bussy-en-Othe;Marriage=Jean SERRÉ;null;Bussy-en-Othe
 https://gw.geneanet.org/msebastien1?lang=fr&p=anne&n=meunier;Anne MEUNIER;Marriage=Anne MEUNIER;null;La Chapelle-sur-Aveyron;BirthPlace=La Chapelle-sur-Aveyron;DeathDate=01/09/1776
-https://gw.geneanet.org/msebastien1?lang=fr&p=charlotte&n=naudot;Charlotte NAUDOT;DeathPlace=Saint-Julien-du-Sault
+https://gw.geneanet.org/msebastien1?lang=fr&p=charlotte&n=naudot;Charlotte NAUDOT;BirthDate=10/05/1636;BirthPlace=Saint-Julien-du-Sault;DeathPlace=Saint-Julien-du-Sault
 https://gw.geneanet.org/msebastien1?lang=fr&p=girard&n=brusque;Girard BRUSQUE;Marriage=Girard BRUSQUE;null;Bussy-en-Othe
 https://gw.geneanet.org/msebastien1?lang=fr&p=anne&n=collinon;Anne COLLINON;Missing Mother
 https://gw.geneanet.org/msebastien1?lang=fr&p=francois&n=martignon;François MARTIGNON;DeathDate=23/03/1688;DeathPlace=Alligny-Cosne;Marriage=François MARTIGNON;18/02/1664;Alligny-Cosne
 https://gw.geneanet.org/msebastien1?lang=fr&p=jeanne&n=deslandes;Jeanne DESLANDES;BirthPlace=Saint-Maurice-sur-Fessard;DeathDate=16/12/1743
 https://gw.geneanet.org/msebastien1?lang=fr&p=louis+francois+jean+hippolyte&n=roy;Louis, François, Jean, Hippolyte ROY;Missing Sibling : https://gw.geneanet.org/msebastien1?lang=fr&p=frederic&n=roy
 https://gw.geneanet.org/msebastien1?lang=fr&p=pierre&n=collet;Pierre COLLET;DeathDate=15/10/1759;Marriage=Pierre COLLET;null;La Chapelle-sur-Aveyron
-https://gw.geneanet.org/msebastien1?lang=fr&p=francois&n=boyer;François BOYER;Marriage=François BOYER;null;Adon
+https://gw.geneanet.org/msebastien1?lang=fr&p=francois&n=boyer;François BOYER;familyName=BOYER;Marriage=François BOYER;1682;Adon
 https://gw.geneanet.org/msebastien1?lang=fr&p=catherine&n=collet;Catherine COLLET;BirthPlace=Saint-Julien-du-Sault
 https://gw.geneanet.org/msebastien1?lang=fr&p=pierre&n=bourlet;Pierre BOURLET;firstName=Pierre;DeathDate=30/03/1668;DeathPlace=Chemilly-sur-Yonne;Marriage=Pierre BOURLET;1655;null
 https://gw.geneanet.org/msebastien1?lang=fr&p=pierre&n=meunier;Pierre MEUNIER;familyName=MEUNIER
@@ -65,17 +65,16 @@ https://gw.geneanet.org/msebastien1?lang=fr&p=etienne&n=vincent;Étienne VINCENT
 https://gw.geneanet.org/msebastien1?lang=fr&p=jeanne&n=droin;Jeanne DROIN;Missing Mother
 https://gw.geneanet.org/msebastien1?lang=fr&p=claude&n=vincent;Claude VINCENT;DeathDate=04/06/1783;Missing Sibling : https://gw.geneanet.org/msebastien1?lang=fr&p=laurent&n=vincent;Missing Sibling : https://gw.geneanet.org/msebastien1?lang=fr&p=madeleine&n=vincent
 https://gw.geneanet.org/msebastien1?lang=fr&p=marie&n=rigault;Marie RIGAULT;DeathPlace=La Chapelle-sur-Aveyron
-https://gw.geneanet.org/msebastien1?lang=fr&p=michel&n=rigault;Michel RIGAULT;DeathPlace=Prunoy
-https://gw.geneanet.org/msebastien1?lang=fr&p=louise&n=nourry;Louise NOURRY;familyName=NOURRY;DeathPlace=Prunoy
+https://gw.geneanet.org/msebastien1?lang=fr&p=louise&n=nourry;Louise NOURRY;familyName=NOURRY
 https://gw.geneanet.org/msebastien1?lang=fr&p=louis+paul&n=vincent;Louis, Paul VINCENT;BirthDate=15/08/1754
 https://gw.geneanet.org/msebastien1?lang=fr&p=anne&n=collet&oc=2;Anne COLLET;DeathPlace=La Chapelle-sur-Aveyron;Missing Sibling : https://gw.geneanet.org/msebastien1?lang=fr&p=madeleine&n=collet
-https://gw.geneanet.org/msebastien1?lang=fr&p=marguerite&n=boyer;Marguerite BOYER;Marriage=Marguerite BOYER;null;La Chapelle-sur-Aveyron
+https://gw.geneanet.org/msebastien1?lang=fr&p=marguerite&n=boyer;Marguerite BOYER;Marriage=Marguerite BOYER;null;La Chapelle-sur-Aveyron;familyName=BOYER
 https://gw.geneanet.org/msebastien1?lang=fr&p=martin&n=collet&oc=3;Martin COLLET;DeathPlace=La Chapelle-sur-Aveyron
 https://gw.geneanet.org/msebastien1?lang=fr&p=jeanne&n=herve;Jeanne HERVÉ;familyName=HERVÉ
 https://gw.geneanet.org/msebastien1?lang=fr&p=marie&n=collet;Marie COLLET;BirthDate=20/12/1675;DeathPlace=La Chapelle-sur-Aveyron
 https://gw.geneanet.org/msebastien1?lang=fr&p=henri&n=larousse;Henri LAROUSSE;firstName=Henri
 https://gw.geneanet.org/msebastien1?lang=fr&p=marie&n=petit;Marie PETIT;DeathDate=27/09/1710
-https://gw.geneanet.org/msebastien1?lang=fr&p=francoise&n=mommault;Françoise MOMMAULT;Marriage=Françoise MOMMAULT;null;Adon
+https://gw.geneanet.org/msebastien1?lang=fr&p=francoise&n=mommault;Françoise MOMMAULT;Marriage=Françoise MOMMAULT;1682;Adon
 https://gw.geneanet.org/msebastien1?lang=fr&p=jacquette&n=louzeau;Jacquette LOUZEAU;Missing Mother
 https://gw.geneanet.org/msebastien1?lang=fr&p=pierre&n=collet&oc=2;Pierre COLLET;DeathPlace=La Chapelle-sur-Aveyron
 https://gw.geneanet.org/msebastien1?lang=fr&p=jean&n=meunier;Jean MEUNIER;Missing Father
@@ -132,8 +131,6 @@ https://gw.geneanet.org/msebastien1?lang=fr&p=madeleine&n=de+pollangis;Madeleine
 https://gw.geneanet.org/msebastien1?lang=fr&p=bon&n=de+pollangis;Bon De POLLANGIS;familyName=De POLLANGIS
 https://gw.geneanet.org/msebastien1?lang=fr&p=bon&n=de+pollangis&oc=2;Bon De POLLANGIS;Missing Father
 https://gw.geneanet.org/msebastien1?lang=fr&p=jeanne&n=balthazard;Jeanne BALTHAZARD;Missing Mother
-https://gw.geneanet.org/msebastien1?lang=fr&p=madeleine&n=moreau;Madeleine MOREAU;Missing Mother
-https://gw.geneanet.org/msebastien1?lang=fr&p=agnes&n=moreau;Agnès MOREAU;BirthDate=10/05/1699
 https://gw.geneanet.org/msebastien1?lang=fr&p=anthoine&n=brisset;Anthoine BRISSET;firstName=Anthoine;DeathDate=19/05/1632;DeathPlace=Brienon-sur-Armançon
 https://gw.geneanet.org/msebastien1?lang=fr&p=jehanne&n=larcher;Jehanne LARCHER;firstName=Jehanne;familyName=LARCHER
 https://gw.geneanet.org/msebastien1?lang=fr&p=felix&n=moreau;Félix MOREAU;DeathDate=8/1685
@@ -146,18 +143,18 @@ https://gw.geneanet.org/msebastien1?lang=fr&p=suzanne&n=roy;Suzanne ROY;DeathDat
 https://gw.geneanet.org/msebastien1?lang=fr&p=claude&n=deforceville;Claude DEFORCEVILLE;BirthPlace=Saint-Julien-du-Sault
 https://gw.geneanet.org/msebastien1?lang=fr&p=jacques+l+aisne&n=collet;Jacques L'Aisné COLLET;firstName=Jacques L'Aisné;BirthDate=02/11/1636;Marriage=Jacques L'Aisné COLLET;null;Saint-Julien-du-Sault
 https://gw.geneanet.org/msebastien1?lang=fr&p=francoise&n=gallois;Françoise GALLOIS;Marriage=Françoise GALLOIS;null;Saint-Julien-du-Sault;BirthDate=30/10/1639;BirthPlace=Saint-Julien-du-Sault
-https://gw.geneanet.org/msebastien1?lang=fr&p=jean&n=gallois;Jean GALLOIS;Missing Father : https://gw.geneanet.org/msebastien1?lang=fr&p=jean&n=gallois
-https://gw.geneanet.org/msebastien1?lang=fr&p=marie&n=champenois;Marie CHAMPENOIS;Missing Mother : https://gw.geneanet.org/msebastien1?lang=fr&p=marie&n=champenois
-https://gw.geneanet.org/msebastien1?lang=fr&p=marguerite+colombe+agnes&n=roy;Marguerite Colombe Agnès ROY;BirthDate=1774
+https://gw.geneanet.org/msebastien1?lang=fr&p=jean&n=gallois;Jean GALLOIS;Missing Father
+https://gw.geneanet.org/msebastien1?lang=fr&p=marie&n=champenois;Marie CHAMPENOIS;Missing Mother
+https://gw.geneanet.org/msebastien1?lang=fr&p=marguerite+colombe+agnes&n=roy;Marguerite Colombe Agnès ROY;BirthDate=1774;DeathDate=1855
 https://gw.geneanet.org/msebastien1?lang=fr&p=marie+anne&n=bergera&oc=2;Marie Anne BERGERA;familyName=BERGERA
-https://gw.geneanet.org/msebastien1?lang=fr&p=symeon&n=lavenue;Syméon LAVENUE;Missing Father : https://gw.geneanet.org/msebastien1?lang=fr&p=symeon&n=lavenue
-https://gw.geneanet.org/msebastien1?lang=fr&p=marie&n=boisaubal;Marie BOISAUBAL;Missing Mother : https://gw.geneanet.org/msebastien1?lang=fr&p=marie&n=boisaubal
+https://gw.geneanet.org/msebastien1?lang=fr&p=symeon&n=lavenue;Syméon LAVENUE;Missing Father
+https://gw.geneanet.org/msebastien1?lang=fr&p=marie&n=boisaubal;Marie BOISAUBAL;Missing Mother
 https://gw.geneanet.org/msebastien1?lang=fr&p=pierre&n=lavenue;Pierre LAVENUE;Marriage=Pierre LAVENUE;null;Sens
 https://gw.geneanet.org/msebastien1?lang=fr&p=jean&n=pleiard;Jean PLEIARD;BirthPlace=Sens;DeathPlace=Sens
 https://gw.geneanet.org/msebastien1?lang=fr&p=marie&n=bardet;Marie BARDET;DeathDate=19/11/1669
 https://gw.geneanet.org/msebastien1?lang=fr&p=marguerite&n=jacquet;Marguerite JACQUET;Marriage=Marguerite JACQUET;null;Bussy-en-Othe
-https://gw.geneanet.org/msebastien1?lang=fr&p=louis&n=mocquot;Louis MOCQUOT;Missing Father : https://gw.geneanet.org/msebastien1?lang=fr&p=louis&n=mocquot
-https://gw.geneanet.org/msebastien1?lang=fr&p=.&n=.&oc=2;. .;Missing Mother : https://gw.geneanet.org/msebastien1?lang=fr&p=.&n=.&oc=2
+https://gw.geneanet.org/msebastien1?lang=fr&p=louis&n=mocquot;Louis MOCQUOT;Missing Father
+https://gw.geneanet.org/msebastien1?lang=fr&p=.&n=.&oc=2;. .;Missing Mother
 https://gw.geneanet.org/msebastien1?lang=fr&p=louise&n=filly;Louise FILLY;familyName=FILLY
 https://gw.geneanet.org/msebastien1?lang=fr&p=elisabeth&n=dechambre;Élisabeth DECHAMBRE;firstName=Élisabeth;BirthDate=06/01/1658
 https://gw.geneanet.org/msebastien1?lang=fr&p=laurence&n=croisere;Laurence CROISERE;familyName=CROISERE
@@ -177,3 +174,7 @@ https://gw.geneanet.org/msebastien1?lang=fr&p=nicole&n=herve;Nicole HERVÉ;first
 https://gw.geneanet.org/msebastien1?lang=fr&p=nicolas&n=deforceville;Nicolas DEFORCEVILLE;BirthDate=01/12/1634;BirthPlace=Saint-Julien-du-Sault
 https://gw.geneanet.org/msebastien1?lang=fr&p=nicolass&n=deforceville;Nicolass DEFORCEVILLE;Missing Father
 https://gw.geneanet.org/msebastien1?lang=fr&p=anne&n=bougellet;Anne BOUGELLET;Missing Mother
+https://gw.geneanet.org/msebastien1?lang=fr&p=louise+josephine&n=thierry;Louise, Joséphine THIERRY;DeathPlace=La Chapelle-sur-Aveyron
+https://gw.geneanet.org/msebastien1?lang=fr&p=madeleine&n=moreau;Madeleine MOREAU;Missing Mother
+https://gw.geneanet.org/msebastien1?lang=fr&p=agnes&n=moreau;Agnès MOREAU;BirthDate=10/05/1699
+https://gw.geneanet.org/msebastien1?lang=fr&p=louise+augustine&n=thierry;Louise Augustine THIERRY;DeathPlace=Saint-Maurice-sur-Aveyron

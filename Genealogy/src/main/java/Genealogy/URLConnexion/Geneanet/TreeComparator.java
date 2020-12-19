@@ -682,7 +682,7 @@ public class TreeComparator {
             }
         }
 
-        //Differences added in file
+        //Differences added in file - deletion
         cptUnknownPeople = 0;
         for (Map.Entry<GeneanetPerson, String> entry : differences2.entrySet()) {
             GeneanetPerson person = entry.getKey();
@@ -694,11 +694,15 @@ public class TreeComparator {
             if (!person.isSearched()) {
                 person = peopleUrl.get(person.getUrl());
                 if (person == null) {
-                    throw new Exception("Could not find person " + entry.getKey().getUrl());
+                    logger.warn("Could not find person " + entry.getKey().getUrl());
+                    comparisonResultReplacement = "";
+                    comparisonResultDisplay = valueTxt;
+                    comparisonResultToReplace = printedUrl + ";" + entry.getKey().getImage() + ";" + valueTxt;
+                    return;
                 }
             }
             String newValue = differences.get(person);
-            if (newValue.contains("&i=")) {
+            if (newValue != null && newValue.contains("&i=")) {
                 Pattern pattern = Pattern.compile(".*&i=([0-9]*).*");
                 Matcher matcher = pattern.matcher(newValue);
                 if (matcher.matches() && matcher.groupCount() == 1) {
@@ -796,9 +800,6 @@ public class TreeComparator {
         String treeName = treeComparator.getTreeName();
         String find = treeComparator.getComparisonResultToReplace();
         String difference = treeComparator.getComparisonResultReplacement();
-        if (difference == null) {
-            difference = "";
-        }
         if (!delete && difference.equals("")) {
             logger.error("Can only remove field");
             return;
@@ -865,6 +866,7 @@ public class TreeComparator {
                 String[] tmpLine = line.split(";");
                 if (tmpLine != null && tmpLine.length > 1) {
                     GeneanetPerson person = new GeneanetPerson(removeDoubleGeneanetSuffix(tmpLine[0]));
+                    person.setImage(tmpLine[1]);
                     String txt = "";
                     for (int i = 2; i < tmpLine.length; i++) {
                         if (i != 2) {
@@ -1134,16 +1136,16 @@ public class TreeComparator {
         ArrayList<GeneanetTree> geneanetTrees = urlBrowser.getGeneanetTrees();
         boolean searchOnGeneanet = false;
         boolean saveGeneanetSearch = false;
-        boolean displayModeFull = false;
         boolean exceptionMode = true;
+        boolean displayModeFull = false;
         boolean hideComparisons = true;
         int index = 1;
         for (GeneanetTree geneanetTree : geneanetTrees) {
-            if (index >= 1) {
+            if (index >= 43) {
                 String url = geneanetTree.getUrl();
                 loopCompareTree(url, searchOnGeneanet, genealogy, saveComparisonInFile, saveGeneanetSearch, displayModeFull, exceptionMode, hideComparisons);
             }
             index++;
-        }//https://www.geneanet.org/fonds/individus/
+        }
     }
 }

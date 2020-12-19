@@ -38,12 +38,12 @@ public class GeneanetBrowser implements Serializable {
     final static Logger logger = LogManager.getLogger(GeneanetBrowser.class);
     private static transient ArrayList<GeneanetTree> geneanetTrees = new ArrayList<>();
 
-    public GeneanetBrowser(String url0) throws Exception {
-        url = url0;
+    public GeneanetBrowser() throws Exception {
         init();
     }
 
-    public GeneanetBrowser() throws Exception {
+    public GeneanetBrowser(String url0) throws Exception {
+        url = url0;
         init();
     }
 
@@ -68,7 +68,6 @@ public class GeneanetBrowser implements Serializable {
         if (!geneanetTrees.isEmpty()) {
             return;
         }
-        Properties prop = new Properties();
         InputStream input = null;
         try {
             String path = Serializer.getPath();
@@ -76,22 +75,16 @@ public class GeneanetBrowser implements Serializable {
                 path = Serializer.getInstance().getPath()
                 ;
             }
-            input = new FileInputStream(path + "geneanetTrees.properties");
-            prop.load(input);
-            String property = "tree";
-            String tmpProperty = "";
-            int index = 1;
-            while (index <= prop.size()) {
-                tmpProperty = prop.getProperty(property + index);
-                if (tmpProperty != null) {
-                    String[] tmpTab = tmpProperty.split(";");
-                    if (tmpTab.length == 4) {
-                        geneanetTrees.add(new GeneanetTree(tmpTab[0], tmpTab[1], tmpTab[2], tmpTab[3]));
-                    } else if (tmpTab.length < 4 && tmpTab.length > 1) {
-                        geneanetTrees.add(new GeneanetTree(tmpTab[0], tmpTab[1], tmpTab[2]));
-                    }
+            File f = new File(path + "geneanetTrees.properties");
+            BufferedReader b = new BufferedReader(new FileReader(f));
+            String line = "";
+            while ((line = b.readLine()) != null) {
+                String[] tmpTab = line.split(";");
+                if (tmpTab.length == 4) {
+                    geneanetTrees.add(new GeneanetTree(tmpTab[0], tmpTab[1], tmpTab[2], tmpTab[3]));
+                } else {
+                    logger.error("Could not read GeneanetTrees line : " + line);
                 }
-                index++;
             }
         } catch (Exception ex) {
             logger.error("Failed to read geneanetTrees.properties file", ex);
@@ -126,17 +119,22 @@ public class GeneanetBrowser implements Serializable {
             formRegex = prop.getProperty("formRegex");
             geneanetConverter.setXpathGender(prop.getProperty("XpathGender"));
             geneanetConverter.setXpathGender2(prop.getProperty("XpathGender2"));
+            geneanetConverter.setXpathGender3(prop.getProperty("XpathGender3"));
             geneanetConverter.setXpathNames(prop.getProperty("XpathNames"));
             geneanetConverter.setXpathNames2(prop.getProperty("XpathNames2"));
             geneanetConverter.setXpathNames3(prop.getProperty("XpathNames3"));
+            geneanetConverter.setXpathNames4(prop.getProperty("XpathNames4"));
+            geneanetConverter.setXpathNames5(prop.getProperty("XpathNames5"));
             geneanetConverter.setXpathBirthAndDeath(prop.getProperty("XpathBirthAndDeath"));
             geneanetConverter.setXpathFather(prop.getProperty("XpathFather"));
             geneanetConverter.setXpathMother(prop.getProperty("XpathMother"));
             geneanetConverter.setXpathFamily(prop.getProperty("XpathFamily"));
             geneanetConverter.setXpathFamily2(prop.getProperty("XpathFamily2"));
+            geneanetConverter.setXpathFamily3(prop.getProperty("XpathFamily3"));
             geneanetConverter.setXpathParents2(prop.getProperty("XpathParents2"));
             geneanetConverter.setGeneanetSearchURL(prop.getProperty("geneanetSearchURL"));
             geneanetConverter.setXpathSection(prop.getProperty("XpathSection"));
+            geneanetConverter.setXpathSection2(prop.getProperty("XpathSection2"));
             geneanetConverter.setXpathMarriageDate(prop.getProperty("XpathMarriageDate"));
             geneanetConverter.setXpathMarriageDate2(prop.getProperty("XpathMarriageDate2"));
             geneanetConverter.setXpathMarriagePartner(prop.getProperty("XpathMarriagePartner"));
@@ -147,6 +145,7 @@ public class GeneanetBrowser implements Serializable {
             geneanetConverter.setXpathChildren(prop.getProperty("XpathChildren"));
             geneanetConverter.setXpathUrl(prop.getProperty("XpathUrl"));
             geneanetConverter.setXpathImage(prop.getProperty("XpathImage"));
+            geneanetConverter.setXpathImage2(prop.getProperty("XpathImage2"));
             if (geneanetURL == null) {
                 throw new Exception("Impossible de récupérer le fichier de propriétés");
             }
@@ -543,15 +542,17 @@ public class GeneanetBrowser implements Serializable {
         return null;
     }
 
-    private static void testSearch(String url) {
+    protected static GeneanetPerson testSearch(String url) {
         try {
             GeneanetBrowser browser = new GeneanetBrowser(url);
             GeneanetPerson person = new GeneanetPerson(url);
             GeneanetPerson resultPerson = browser.searchPerson(person);
             logger.info("HashCode de " + resultPerson.getFullName() + " : " + resultPerson.customHashCode());
+            return resultPerson;
         } catch (Exception e) {
             logger.error("Failed to search url " + url, e);
         }
+        return null;
     }
 
     public static GeneanetBrowser mainSearchFullTree(String url, int expectedNbPeople0) {
@@ -586,7 +587,7 @@ public class GeneanetBrowser implements Serializable {
     public static void searchAllTrees(boolean save) {
         hidePrintOut();
         try {
-            GeneanetBrowser browser = new GeneanetBrowser("");
+            GeneanetBrowser browser = new GeneanetBrowser();
             int cpt = 1;
             ArrayList<GeneanetTree> localGeneanetTrees = browser.geneanetTrees;
             for (GeneanetTree tree : localGeneanetTrees) {
@@ -620,7 +621,7 @@ public class GeneanetBrowser implements Serializable {
 
     public static void mainTestXpath(String url, String pattern) {
         try {
-            GeneanetBrowser browser = new GeneanetBrowser("");
+            GeneanetBrowser browser = new GeneanetBrowser();
             Document doc = browser.connect(url);
             String result = Xsoup.compile(pattern).evaluate(doc).get();
             logger.info(result);
@@ -650,14 +651,15 @@ public class GeneanetBrowser implements Serializable {
 
     public static void main(String[] args) {
         String testUrl = "https://gw.geneanet.org/il?lang=fr&i=19978";
-        String testUrl2 = "https://gw.geneanet.org/dil?lang=fr&i=19906";
-        String testUrl3 = "https://gw.geneanet.org/roalda?lang=fr&p=jean+jacques&n=boyau";
+        String testUrl2 = "https://gw.geneanet.org/dil?lang=fr&p=marie&n=fremy";
+        String testUrl3 = "https://gw.geneanet.org/dil?lang=fr&p=jacques&n=de+silliers&oc=1";
         String xpathPattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/ul[2]/li[1]/table/tbody/tr/td[2]/em/text()";
         String xpathText = "Claude";
 
         //searchAllTrees(true);
         //mainSearchFullTree(testUrl, false);
         //GeneanetPerson person = mainSearchFullTree(testUrl, false).rootPerson;
+        //testSearch(testUrl2);
         testSearch(testUrl3);
         //mainTestSearchTree();
         //mainTestXpath(testUrl,xpathPattern);

@@ -9,9 +9,13 @@ https://gw.geneanet.org/dil?lang=fr&p=pierre&n=rocher;Pierre ROCHER;DeathPlace=S
 https://gw.geneanet.org/dil?lang=fr&p=jean&n=rocher;Jean ROCHER;DeathPlace=Dammarie-sur-Loing;Marriage=Jean ROCHER;23/10/1655;Dammarie-sur-Loing
 https://gw.geneanet.org/dil?lang=fr&p=marie&n=mace;Marie MACE;Marriage=Marie MACE;23/10/1655;Dammarie-sur-Loing;DeathPlace=Dammarie-sur-Loing;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=jacquette&n=mace
 https://gw.geneanet.org/dil?lang=fr&p=lazare&n=gendre;Lazare GENDRE;Marriage=Lazare GENDRE;20/06/1672;Dammarie-sur-Loing
+https://gw.geneanet.org/dil?lang=fr&z=782201015;? MACE;Missing Father
+https://gw.geneanet.org/dil?lang=fr&z=779842660;? ?;Missing Mother
 https://gw.geneanet.org/dil?lang=fr&p=etienne&n=rocher;Etienne ROCHER;DeathPlace=Dammarie-sur-Loing
 https://gw.geneanet.org/dil?lang=fr&p=martine&n=hamard;Martine HAMARD;DeathDate=21/01/1742;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=denise&n=hamard;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=martin&n=hamard&oc=1
 https://gw.geneanet.org/dil?lang=fr&p=martin&n=hamard;Martin HAMARD;DeathPlace=Dammarie-sur-Loing;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=sebastien&n=hamard
+https://gw.geneanet.org/dil?lang=fr&z=374962799;? HAMARD;Missing Father
+https://gw.geneanet.org/dil?lang=fr&z=-1748723757;? ?;Missing Mother
 https://gw.geneanet.org/dil?lang=fr&p=jeanne&n=larcanche;Jeanne LARCANCHÉ;firstName=Jeanne;familyName=LARCANCHÉ;DeathPlace=Dammarie-sur-Loing
 https://gw.geneanet.org/dil?lang=fr&p=jeanne&n=hamard;Jeanne HAMARD;DeathPlace=Dammarie-sur-Loing
 https://gw.geneanet.org/dil?lang=fr&p=marie&n=arrauld&oc=2;Marie ARRAULD;DeathPlace=Rogny-les-Sept-Écluses
@@ -20,11 +24,22 @@ https://gw.geneanet.org/dil?lang=fr&p=marie+jeanne&n=gallet;Marie-Jeanne GALLET;
 https://gw.geneanet.org/dil?lang=fr&p=marguerite&n=despons;Marguerite DESPONS;familyName=DESPONS
 https://gw.geneanet.org/dil?lang=fr&p=louis&n=depond;Louis DEPOND;DeathPlace=Châtillon-sur-Loire;Marriage=Louis DEPOND;1753;Châtillon-sur-Loire
 https://gw.geneanet.org/dil?lang=fr&p=marie+anne&n=ouvret;Marie-Anne OUVRET;Marriage=Marie-Anne OUVRET;1753;Châtillon-sur-Loire;firstName=Marie-Anne;familyName=OUVRET;BirthDate=21/01/1734
+https://gw.geneanet.org/dil?lang=fr&p=louis&n=depond&oc=1;Louis DEPOND;familyName=DEPOND;DeathDate=12/08/1747
 https://gw.geneanet.org/dil?lang=fr&p=sylvain&n=depond;Sylvain DEPOND;familyName=DEPOND;Marriage=Sylvain DEPOND;14/07/1684;Saint-Firmin-des-Bois
 https://gw.geneanet.org/dil?lang=fr&p=marie&n=meneau;Marie MENEAU;Marriage=Marie MENEAU;14/07/1684;Saint-Firmin-des-Bois;DeathPlace=Saint-Firmin-sur-Loire
-https://gw.geneanet.org/dil?lang=fr&p=annet&n=peigne;Annet PEIGNÉ;DeathPlace=Saint-Firmin-sur-Loire
+https://gw.geneanet.org/dil?lang=fr&p=guillaume&n=depond;Guillaume DEPOND;familyName=DEPOND
+https://gw.geneanet.org/dil?lang=fr&p=etiennette&n=beaubois;Etiennette BEAUBOIS;DeathPlace=Saint-Firmin-sur-Loire
+https://gw.geneanet.org/dil?lang=fr&p=edme&n=depond;Edme DEPOND;familyName=DEPOND;DeathPlace=Saint-Firmin-sur-Loire
+https://gw.geneanet.org/dil?lang=fr&p=marguerite&n=depond;Marguerite DEPOND;firstName=Marguerite;familyName=DEPOND
+https://gw.geneanet.org/dil?lang=fr&p=andre&n=meneau;André MENEAU;DeathPlace=Saint-Firmin-sur-Loire
+https://gw.geneanet.org/dil?lang=fr&p=francoise&n=penot;Françoise PENOT;DeathPlace=Saint-Firmin-sur-Loire;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=francois&n=penot
+https://gw.geneanet.org/dil?lang=fr&z=1816282872;? PENOT;Missing Father
+https://gw.geneanet.org/dil?lang=fr&z=1740268285;? ?;Missing Mother
+https://gw.geneanet.org/dil?lang=fr&p=jacques&n=depond;Jacques DEPOND;familyName=DEPOND
+https://gw.geneanet.org/dil?lang=fr&p=etiennette&n=champion;Etiennette CHAMPION;DeathPlace=Saint-Firmin-sur-Loire
 https://gw.geneanet.org/dil?lang=fr&p=noee&n=david;Noée (?) DAVID (?);firstName=Noée (?);familyName=DAVID (?)
-https://gw.geneanet.org/dil?lang=fr&p=germine&n=laurent;Germine LAURENT;firstName=Germine;DeathPlace=Saint-Firmin-sur-Loire
+https://gw.geneanet.org/dil?lang=fr&p=annet&n=peigne;Annet PEIGNÉ;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=marie&n=peigne&oc=1
+https://gw.geneanet.org/dil?lang=fr&p=germine&n=laurent;Germine LAURENT;firstName=Germine
 https://gw.geneanet.org/dil?lang=fr&p=pierre&n=laurent;Pierre LAURENT;DeathPlace=Saint-Firmin-sur-Loire;Marriage=Pierre LAURENT;null;Pierrefitte-Ès-Bois
 https://gw.geneanet.org/dil?lang=fr&p=perrette&n=goujat;Perrette GOUJAT;Marriage=Perrette GOUJAT;null;Pierrefitte-Ès-Bois;DeathPlace=Pierrefitte-Ès-Bois
 https://gw.geneanet.org/dil?lang=fr&p=guy&n=laurent;Guy LAURENT;BirthPlace=Pierrefitte-Ès-Bois
@@ -43,8 +58,27 @@ https://gw.geneanet.org/dil?lang=fr&p=jean&n=ouvret&oc=1;Jean OUVRET;familyName=
 https://gw.geneanet.org/dil?lang=fr&p=marguerite&n=brule;Marguerite BRULÉ;DeathDate=18/03/1796
 https://gw.geneanet.org/dil?lang=fr&p=pierre&n=brule;Pierre BRULÉ;familyName=BRULÉ;DeathDate=28/11/1751
 https://gw.geneanet.org/dil?lang=fr&p=jean&n=brule;Jean BRULÉ;firstName=Jean;familyName=BRULÉ;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=x&n=brule&oc=19206
+https://gw.geneanet.org/dil?lang=fr&p=pierre&n=brule&oc=1;Pierre BRULÉ;familyName=BRULÉ;DeathPlace=Saint-Jean-de-la-Ruelle
+https://gw.geneanet.org/dil?lang=fr&p=etiennette&n=dreux;Etiennette DREUX;DeathPlace=Saint-Jean-de-la-Ruelle
+https://gw.geneanet.org/dil?lang=fr&p=marie&n=brule;Marie BRULÉ;familyName=BRULÉ
+https://gw.geneanet.org/dil?lang=fr&p=gilles&n=moreau;Gilles MOREAU;firstName=Gilles;BirthDate=20/04/1616;BirthPlace=Saint-Jean-de-la-Ruelle;DeathPlace=Orléans;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=michel&n=moreau&oc=2
+https://gw.geneanet.org/dil?lang=fr&p=gilles&n=moreau&oc=1;Gilles MOREAU;firstName=Gilles;BirthPlace=Saint-Jean-de-la-Ruelle
+https://gw.geneanet.org/dil?lang=fr&p=jacquette&n=roulleau;Jacquette ROULLEAU;Missing Mother
+https://gw.geneanet.org/dil?lang=fr&p=tanneguy&n=haton;Tanneguy HATON;firstName=Tanneguy;BirthPlace=Saint-Jean-de-la-Ruelle;DeathPlace=Saint-Jean-de-la-Ruelle
+https://gw.geneanet.org/dil?lang=fr&p=pierre&n=haton;Pierre HATON;BirthPlace=Saint-Jean-de-la-Ruelle
+https://gw.geneanet.org/dil?lang=fr&p=thomasse&n=rocheboy;Thomasse ROCHEBOY;BirthPlace=Saint-Jean-de-la-Ruelle
+https://gw.geneanet.org/dil?lang=fr&p=louise&n=chesy;Louise CHESY;BirthPlace=Saint-Jean-de-la-Ruelle;DeathPlace=Saint-Jean-de-la-Ruelle
+https://gw.geneanet.org/dil?lang=fr&p=louis&n=chesy;Louis CHESY;BirthPlace=Saint-Jean-de-la-Ruelle
+https://gw.geneanet.org/dil?lang=fr&z=528511081;? ?;Missing Mother
+https://gw.geneanet.org/dil?lang=fr&p=madeleine&n=brosse;Madeleine BROSSE;firstName=Madeleine
+https://gw.geneanet.org/dil?lang=fr&p=gabriel&n=blondeau;Gabriel BLONDEAU;BirthDate=08/03/1656;BirthPlace=Saint-Laurent;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=simon&n=blondeau;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=jacques&n=blondeau;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=etienne&n=blondeau;Missing Half Sibling : https://gw.geneanet.org/dil?lang=fr&p=louis&n=blondeau
+https://gw.geneanet.org/dil?lang=fr&p=denis&n=blondeau;Denis BLONDEAU;Missing Father
+https://gw.geneanet.org/dil?lang=fr&p=jacquette&n=lesson+janson;Jacquette LESSON (JANSON);Missing Mother
+https://gw.geneanet.org/dil?lang=fr&p=jeanne&n=gauthier&oc=1;Jeanne GAUTHIER;DeathPlace=Saint-Louis
 https://gw.geneanet.org/dil?lang=fr&p=francois+etienne&n=ouvret;François, Etienne OUVRET;familyName=OUVRET;BirthDate=06/06/1736;DeathPlace=Châtillon-sur-Loire
 https://gw.geneanet.org/dil?lang=fr&p=marie&n=depond;Marie DEPOND;familyName=DEPOND
+https://gw.geneanet.org/dil?lang=fr&p=anne&n=depond;Anne DEPOND;familyName=DEPOND;BirthDate=1766
+https://gw.geneanet.org/dil?lang=fr&p=marguerite+elisabeth&n=berton;Marguerite, Elisabeth BERTON;BirthDate=29/01/1784
 https://gw.geneanet.org/dil?lang=fr&p=francois&n=berton;François BERTON;DeathPlace=Châtillon-Coligny
 https://gw.geneanet.org/dil?lang=fr&p=etienne&n=berton;Etienne BERTON;Marriage=Etienne BERTON;null;Aillant-sur-Milleron
 https://gw.geneanet.org/dil?lang=fr&p=pierre&n=courty;Pierre COURTY;DeathDate=06/12/1782
@@ -60,6 +94,8 @@ https://gw.geneanet.org/dil?lang=fr&p=edme&n=digue;Edme DIGUE;firstName=Edme;Bir
 https://gw.geneanet.org/dil?lang=fr&p=anne&n=brange;Anne BRANGE;BirthPlace=Villiers-Saint-Benoît;DeathDate=03/04/1719
 https://gw.geneanet.org/dil?lang=fr&p=abraham&n=brange;Abraham BRANGE;DeathPlace=Villeneuve les Genêts;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=x&n=brange&oc=15082
 https://gw.geneanet.org/dil?lang=fr&p=radegonde&n=meunier;Radegonde MEUNIER;Marriage=Radegonde MEUNIER;20/06/1696;Tannerre-en-Puisaye
+https://gw.geneanet.org/dil?lang=fr&z=-2087976459;? BRANGE;Missing Father
+https://gw.geneanet.org/dil?lang=fr&z=239724669;? ?;Missing Mother
 https://gw.geneanet.org/dil?lang=fr&p=madeleine&n=hamard;Madeleine HAMARD;DeathPlace=Tannerre-en-Puisaye
 https://gw.geneanet.org/dil?lang=fr&p=marie&n=brange;Marie BRANGE;DeathPlace=Villiers-Saint-Benoît
 https://gw.geneanet.org/dil?lang=fr&p=pierre&n=robinet&oc=1;Pierre ROBINET;Marriage=Pierre ROBINET;1711;Villiers-Saint-Benoît
@@ -74,18 +110,25 @@ https://gw.geneanet.org/dil?lang=fr&p=noel&n=quaizant;Noël QUAIZANT;familyName=
 https://gw.geneanet.org/dil?lang=fr&p=antoine&n=quaizant;Antoine QUAIZANT;DeathDate=28/01/1766
 https://gw.geneanet.org/dil?lang=fr&p=firmin&n=quaizant;Firmin QUAIZANT;BirthPlace=Saint-Maurice-sur-Aveyron;DeathPlace=Aillant-sur-Milleron;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=laurent&n=quaizant;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=catherine&n=quaizant&oc=1;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=marie&n=quaizant&oc=1;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=thomas&n=quaizant&oc=1;Marriage=Firmin QUAIZANT;null;La Châpelle sur Aveyron
 https://gw.geneanet.org/dil?lang=fr&p=etiennette&n=foucher;Etiennette FOUCHER;Marriage=Etiennette FOUCHER;null;La Châpelle sur Aveyron;BirthPlace=La Châpelle sur Aveyron;DeathPlace=Aillant-sur-Milleron
+https://gw.geneanet.org/dil?lang=fr&p=philibert&n=quaizant;Philibert QUAIZANT;Missing Father
+https://gw.geneanet.org/dil?lang=fr&p=jeanne&n=balsac;Jeanne BALSAC;Missing Mother
+https://gw.geneanet.org/dil?lang=fr&p=louis&n=foucher;Louis FOUCHER;Missing Father
+https://gw.geneanet.org/dil?lang=fr&p=potentienne&n=dechambre;Potentienne DECHAMBRE;Missing Mother
 https://gw.geneanet.org/dil?lang=fr&p=nicolas&n=archambault;Nicolas ARCHAMBAULT;DeathPlace=Champcevrais
 https://gw.geneanet.org/dil?lang=fr&p=edme+aime&n=archambault;Edme (Aimé) ARCHAMBAULT;firstName=Edme (Aimé);DeathPlace=Aillant-sur-Milleron;Marriage=Edme (Aimé) ARCHAMBAULT;10/06/1670;La Bussière
 https://gw.geneanet.org/dil?lang=fr&p=aime&n=archambault;Aimé ARCHAMBAULT;firstName=Aimé
 https://gw.geneanet.org/dil?lang=fr&p=guillemette&n=rondin;Guillemette RONDIN;DeathPlace=Aillant-sur-Tholon
 https://gw.geneanet.org/dil?lang=fr&p=francoise&n=nian;Françoise NIAN;familyName=NIAN;BirthPlace=La Bussière;DeathPlace=Aillant-sur-Milleron
 https://gw.geneanet.org/dil?lang=fr&p=michel&n=nian;Michel NIAN;familyName=NIAN;DeathPlace=La Bussière
-https://gw.geneanet.org/dil?lang=fr&p=jacques&n=nian;Jacques NIAN;familyName=NIAN;DeathPlace=La Bussière
+https://gw.geneanet.org/dil?lang=fr&p=jacques&n=nian;Jacques NIAN;familyName=NIAN
+https://gw.geneanet.org/dil?lang=fr&z=137126994;? ?;Missing Mother
 https://gw.geneanet.org/dil?lang=fr&p=francoise&n=baulger;Françoise BAULGER;familyName=BAULGER;BirthPlace=La Bussière;DeathPlace=La Bussière
 https://gw.geneanet.org/dil?lang=fr&p=antoine&n=baulget;Antoine BAULGET;firstName=Antoine;DeathPlace=La Bussière
 https://gw.geneanet.org/dil?lang=fr&p=catherine&n=baulget;Catherine BAULGET;BirthPlace=La Bussière
 https://gw.geneanet.org/dil?lang=fr&p=catherine&n=colas;Catherine COLAS;DeathPlace=Champcevrais;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=henri&n=colas;Missing Half Sibling : https://gw.geneanet.org/dil?lang=fr&p=louis&n=delaboire
 https://gw.geneanet.org/dil?lang=fr&p=paul&n=colas;Paul COLAS;DeathPlace=Saint-Maurice-sur-Aveyron
+https://gw.geneanet.org/dil?lang=fr&p=denis&n=divers;Denis DIVERS;Missing Father
+https://gw.geneanet.org/dil?lang=fr&p=catherine&n=colmier;Catherine COLMIER;Missing Mother
 https://gw.geneanet.org/dil?lang=fr&p=catherine&n=divers;Catherine DIVERS;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=francoise&n=divers;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=pierre&n=divers;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=savinienne&n=divers;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=denis&n=divers&oc=1;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=jean+claude&n=divers
 https://gw.geneanet.org/dil?lang=fr&p=firmin&n=quaizant&oc=1;Firmin QUAIZANT;DeathDate=27/06/1799
 https://gw.geneanet.org/dil?lang=fr&p=loup&n=quaizant;Loup QUAIZANT;DeathDate=08/07/1772
@@ -94,14 +137,20 @@ https://gw.geneanet.org/dil?lang=fr&p=jeanne&n=perthuiseau;Jeanne PERTHUISEAU;fa
 https://gw.geneanet.org/dil?lang=fr&p=genevieve&n=freneau;Geneviève FRENEAU;familyName=FRENEAU;DeathPlace=Saint-Maurice-sur-Aveyron
 https://gw.geneanet.org/dil?lang=fr&p=jean&n=freneau;Jean FRENEAU;familyName=FRENEAU
 https://gw.geneanet.org/dil?lang=fr&p=francois&n=fraineau;François FRAINEAU;familyName=FRAINEAU
+https://gw.geneanet.org/dil?lang=fr&p=pierre&n=fraineau;Pierre FRAINEAU;familyName=FRAINEAU;BirthPlace=Dammarie-sur-Loing;DeathDate=18/08/1685;DeathPlace=Briquemault
+https://gw.geneanet.org/dil?lang=fr&p=sebastien&n=guenard;Sébastien GUENARD;DeathPlace=Sainte-Geneviève-des-Bois
+https://gw.geneanet.org/dil?lang=fr&p=marguerite&n=seguin;Marguerite SEGUIN;familyName=SEGUIN
 https://gw.geneanet.org/dil?lang=fr&p=marie&n=hure;Marie HURÉ;BirthPlace=Ouzouer-sur-Trézée;DeathPlace=Sainte-Geneviève-des-Bois;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=henri&n=hure
-https://gw.geneanet.org/dil?lang=fr&p=pierre&n=hure;Pierre HURÉ;DeathPlace=Ouzouer-sur-Trézée
-https://gw.geneanet.org/dil?lang=fr&p=vrine+vraine&n=chollet;Vrine (Vraine) CHOLLET;firstName=Vrine (Vraine);DeathPlace=Ouzouer-sur-Trézée
 https://gw.geneanet.org/dil?lang=fr&p=vrain&n=mommault;Vrain MOMMAULT;Marriage=Vrain MOMMAULT;29/11/1688;Ouzouer-sur-Trézée
+https://gw.geneanet.org/dil?lang=fr&p=pierre&n=hure;Pierre HURÉ;DeathDate=09/02/1694;DeathPlace=Feins-en-Gâtinais
+https://gw.geneanet.org/dil?lang=fr&p=vrine+vraine&n=chollet;Vrine (Vraine) CHOLLET;firstName=Vrine (Vraine);DeathPlace=Ouzouer-sur-Trézée
+https://gw.geneanet.org/dil?lang=fr&p=pierre&n=hure&oc=1;Pierre HURÉ;DeathPlace=Sainte-Geneviève-des-Bois
+https://gw.geneanet.org/dil?lang=fr&p=jean&n=hure&oc=2;Jean HURÉ;DeathPlace=Sainte-Geneviève-des-Bois
 https://gw.geneanet.org/dil?lang=fr&p=fiacre&n=le+gue;Fiacre (LE) GUÉ;familyName=(LE) GUÉ;DeathPlace=Rogny-les-Sept-Écluses
 https://gw.geneanet.org/dil?lang=fr&p=marie+louise&n=dupin+lepin;Marie-Louise DUPIN (LEPIN);familyName=DUPIN (LEPIN);BirthPlace=La Chapelle-sur-Aveyron;DeathDate=22/12/1769
 https://gw.geneanet.org/dil?lang=fr&p=jean&n=dupin+lepin;Jean DUPIN (LEPIN);familyName=DUPIN (LEPIN)
 https://gw.geneanet.org/dil?lang=fr&p=antoine&n=dupin+lepin;Antoine DUPIN (LEPIN);Missing Father
+https://gw.geneanet.org/dil?lang=fr&z=46598903;? ?;Missing Mother
 https://gw.geneanet.org/dil?lang=fr&p=edmee&n=desruinos+raigneau+ruisseau;Edmée DESRUINOS (RAIGNEAU) (RUISSEAU);familyName=DESRUINOS (RAIGNEAU) (RUISSEAU)
 https://gw.geneanet.org/dil?lang=fr&p=edmee&n=dupin+lepin;Edmée DUPIN (LEPIN);familyName=DUPIN (LEPIN);BirthDate=30/12/1705
 https://gw.geneanet.org/dil?lang=fr&p=jean&n=dupin+lepin&oc=1;Jean DUPIN (LEPIN);familyName=DUPIN (LEPIN)
@@ -110,6 +159,7 @@ https://gw.geneanet.org/dil?lang=fr&p=marie+anne&n=quaizant;Marie-Anne QUAIZANT;
 https://gw.geneanet.org/dil?lang=fr&p=antoine&n=quaizant&oc=2;Antoine QUAIZANT;BirthDate=22/12/1770
 https://gw.geneanet.org/dil?lang=fr&p=marie+madeleine&n=gagnon;Marie-Madeleine GAGNON;Marriage=Marie-Madeleine GAGNON;03/01/1797;Saint-Maurice-sur-Aveyron
 https://gw.geneanet.org/dil?lang=fr&p=edme&n=quaizant;Edmé QUAIZANT;DeathDate=03/01/1784
+https://gw.geneanet.org/dil?lang=fr&p=catherine&n=courty;Catherine COURTY;Missing Half Sibling : https://gw.geneanet.org/dil?lang=fr&p=genevieve&n=courty
 https://gw.geneanet.org/dil?lang=fr&p=laurent+prosper&n=teigny;Laurent, Prosper TEIGNY;DeathPlace=Le Charme
 https://gw.geneanet.org/dil?lang=fr&p=pierre&n=loiseau;Pierre LOISEAU;DeathPlace=Marchais-Béton
 https://gw.geneanet.org/dil?lang=fr&p=louise+augustine&n=thierry;Louise, Augustine THIERRY;DeathPlace=la Croix-Lambert
@@ -118,12 +168,25 @@ https://gw.geneanet.org/dil?lang=fr&p=louis&n=thierry&oc=1;Louis THIERRY;familyN
 https://gw.geneanet.org/dil?lang=fr&p=louise&n=vincent;Louise VINCENT;Marriage=Louise VINCENT;12/07/1813;Montbouy;firstName=Louise;BirthDate=22/03/1779;Marriage=Louise VINCENT;12/06/1804;La Châpelle sur Aveyron
 https://gw.geneanet.org/dil?lang=fr&p=louis&n=thierry&oc=2;Louis THIERRY;familyName=THIERRY;BirthDate=11/07/1752
 https://gw.geneanet.org/dil?lang=fr&p=louis&n=thierry&oc=3;Louis THIERRY;DeathDate=05/05/1758;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=elisabeth+isabelle&n=thierry
+https://gw.geneanet.org/dil?lang=fr&p=marin&n=thierry;Marin THIERRY;BirthDate=17/02/1676;BirthPlace=Saint-Maurice-sur-Fessard;DeathDate=14/02/1746;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=marie&n=thierry&oc=5;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=hubert&n=thierry;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=marie&n=thierry&oc=4;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=sebastienne&n=thierry;Marriage=Marin THIERRY;1693;null
 https://gw.geneanet.org/dil?lang=fr&p=madeleine&n=guerin;Madeleine GUERIN;Marriage=Madeleine GUERIN;1693;null;firstName=Madeleine
+https://gw.geneanet.org/dil?lang=fr&p=marin&n=thierry&oc=2;Marin THIERRY;firstName=Marin;DeathPlace=Saint-Maurice-sur-Fessard;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=marguerite&n=thierry&oc=2
+https://gw.geneanet.org/dil?lang=fr&z=906843966;? THIERRY;Missing Father
+https://gw.geneanet.org/dil?lang=fr&z=1535093336;? ?;Missing Mother
+https://gw.geneanet.org/dil?lang=fr&p=marie&n=peron&oc=4;Marie PERON;firstName=Marie;familyName=PERON;DeathPlace=Saint-Maurice-sur-Fessard;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=denis&n=peron
+https://gw.geneanet.org/dil?lang=fr&z=-510073139;? PERON;Missing Father
+https://gw.geneanet.org/dil?lang=fr&z=-586091564;? ?;Missing Mother
+https://gw.geneanet.org/dil?lang=fr&p=denis&n=thierry&oc=2;Denis THIERRY;BirthDate=06/08/1666;BirthPlace=Saint-Maurice-sur-Fessard;DeathPlace=Saint-Maurice-sur-Fessard
+https://gw.geneanet.org/dil?lang=fr&p=anne&n=ducharme;Anne DUCHARME;Marriage=Anne DUCHARME;23/02/1705;Chevillon-sur-Huillard
+https://gw.geneanet.org/dil?lang=fr&p=marie&n=delaveau&oc=1;Marie DELAVEAU;Marriage=Marie DELAVEAU;01/12/1691;Saint-Maurice-sur-Fessard
+https://gw.geneanet.org/dil?lang=fr&p=jacques&n=thierry;Jacques THIERRY;BirthDate=28/03/1671;BirthPlace=Saint-Maurice-sur-Fessard
 https://gw.geneanet.org/dil?lang=fr&p=jeanne&n=deslandes;Jeanne DESLANDES;BirthPlace=Saint-Maurice-sur-Fessard;DeathDate=16/12/1743
 https://gw.geneanet.org/dil?lang=fr&p=jean&n=deslandes;Jean DESLANDES;DeathPlace=Saint-Maurice-sur-Fessard
-https://gw.geneanet.org/dil?lang=fr&p=etienne&n=deslandes;Etienne DESLANDES;DeathPlace=Quiers-sur-Bézonde
-https://gw.geneanet.org/dil?lang=fr&p=marthe&n=plessis;Marthe PLESSIS;familyName=PLESSIS
+https://gw.geneanet.org/dil?lang=fr&p=etienne&n=deslandes;Etienne DESLANDES;DeathPlace=Beauchamps-sur-Huillard
+https://gw.geneanet.org/dil?lang=fr&p=marthe&n=plessis;Marthe PLESSIS;familyName=PLESSIS;DeathPlace=Beauchamps-sur-Huillard
 https://gw.geneanet.org/dil?lang=fr&p=anne&n=pignault;Anne PIGNAULT;familyName=PIGNAULT;DeathPlace=Saint-Maurice-sur-Fessard
+https://gw.geneanet.org/dil?lang=fr&p=x&n=pignault&oc=18246;x PIGNAULT;Missing Father
+https://gw.geneanet.org/dil?lang=fr&z=2085762442;? ?;Missing Mother
 https://gw.geneanet.org/dil?lang=fr&p=francois&n=thierry&oc=1;François THIERRY;BirthDate=09/08/1713
 https://gw.geneanet.org/dil?lang=fr&p=jean&n=thierry;Jean THIERRY;DeathPlace=Château-Renard
 https://gw.geneanet.org/dil?lang=fr&p=nicolas&n=thierry;Nicolas THIERRY;DeathPlace=Triguères
@@ -134,20 +197,31 @@ https://gw.geneanet.org/dil?lang=fr&p=marie&n=thierry;Marie THIERRY;DeathPlace=C
 https://gw.geneanet.org/dil?lang=fr&p=jeanne&n=denis;Jeanne DENIS;DeathDate=25/11/1762
 https://gw.geneanet.org/dil?lang=fr&p=elisabeth&n=dechambre;Elisabeth DECHAMBRE;firstName=Elisabeth
 https://gw.geneanet.org/dil?lang=fr&p=etienne&n=dodinet;Etienne DODINET;DeathDate=23/02/1703;DeathPlace=Triguères
+https://gw.geneanet.org/dil?lang=fr&p=etienne&n=dodinet&oc=1;Etienne DODINET;firstName=Etienne
 https://gw.geneanet.org/dil?lang=fr&p=nicolas&n=denis&oc=1;Nicolas DENIS;DeathPlace=Château-Renard
 https://gw.geneanet.org/dil?lang=fr&p=elisabeth&n=rouet;Elisabeth ROUET;DeathPlace=Château-Renard
 https://gw.geneanet.org/dil?lang=fr&p=marie&n=denis;Marie DENIS;DeathPlace=Château-Renard
 https://gw.geneanet.org/dil?lang=fr&p=pavace&n=faisy;Pavace FAISY;DeathPlace=Château-Renard
 https://gw.geneanet.org/dil?lang=fr&p=marie+francoise&n=rabillon;Marie, "Françoise" RABILLON;firstName=Marie, "Françoise";BirthDate=12/04/1757
 https://gw.geneanet.org/dil?lang=fr&p=annet&n=rabillon;Annet RABILLON;DeathPlace=Château-Renard;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=x&n=rabillon&oc=20293
+https://gw.geneanet.org/dil?lang=fr&z=1693192043;? RABILLON;Missing Father
+https://gw.geneanet.org/dil?lang=fr&z=999187705;? ?;Missing Mother
 https://gw.geneanet.org/dil?lang=fr&p=edmee&n=chevalier;Edmée CHEVALIER;familyName=CHEVALIER;DeathPlace=Château-Renard
+https://gw.geneanet.org/dil?lang=fr&p=jeanne&n=brossard;Jeanne BROSSARD;DeathPlace=Château-Renard
+https://gw.geneanet.org/dil?lang=fr&p=henri&n=rabillon;Henri RABILLON;DeathDate=09/04/1714;DeathPlace=Melleroy
+https://gw.geneanet.org/dil?lang=fr&p=michelle&n=fouassin;Michelle FOUASSIN;Marriage=Michelle FOUASSIN;20/06/1666;Château-Renard
+https://gw.geneanet.org/dil?lang=fr&p=edme&n=rabillon&oc=1;Edmé RABILLON;DeathPlace=Château-Renard
+https://gw.geneanet.org/dil?lang=fr&p=jeanne&n=masson&oc=2;Jeanne MASSON;Marriage=Jeanne MASSON;23/11/1683;Triguères
+https://gw.geneanet.org/dil?lang=fr&p=nicole&n=herve;Nicole HERVÉ;firstName=Nicole
 https://gw.geneanet.org/dil?lang=fr&p=elisabeth&n=vilaine;Elisabeth VILAINE;firstName=Elisabeth
-https://gw.geneanet.org/dil?lang=fr&p=suzanne&n=meunier;Suzanne MEUNIER;firstName=Suzanne;familyName=MEUNIER;BirthDate=22/03/1684
 https://gw.geneanet.org/dil?lang=fr&p=marie&n=courillon;Marie COURILLON;DeathDate=23/08/1741
+https://gw.geneanet.org/dil?lang=fr&p=suzanne&n=meunier;Suzanne MEUNIER;firstName=Suzanne;familyName=MEUNIER;BirthDate=22/03/1684
 https://gw.geneanet.org/dil?lang=fr&p=pierre&n=meunier;Pierre MEUNIER;familyName=MEUNIER
 https://gw.geneanet.org/dil?lang=fr&p=marie+madeleine&n=meunier;Marie, Madeleine MEUNIER;firstName=Marie, Madeleine;familyName=MEUNIER
 https://gw.geneanet.org/dil?lang=fr&p=louis&n=join;Louis JOIN;Marriage=Louis JOIN;03/07/1703;Château-Renard
 https://gw.geneanet.org/dil?lang=fr&p=claude&n=meunier&oc=1;Claude MEUNIER;familyName=MEUNIER;DeathDate=16/04/1739;DeathPlace=Château-Renard
+https://gw.geneanet.org/dil?lang=fr&p=marie&n=meunier&oc=4;Marie MEUNIER;familyName=MEUNIER;BirthPlace=Château-Renard
+https://gw.geneanet.org/dil?lang=fr&p=edme&n=roze;Edmé ROZÉ;familyName=ROZÉ
 https://gw.geneanet.org/dil?lang=fr&p=pierre&n=meunier&oc=2;Pierre MEUNIER;familyName=MEUNIER
 https://gw.geneanet.org/dil?lang=fr&p=edmee&n=charmillon;Edmée CHARMILLON;Marriage=Edmée CHARMILLON;11/11/1706;Château-Renard
 https://gw.geneanet.org/dil?lang=fr&p=francois&n=meunier;François MEUNIER;Marriage=François MEUNIER;11/11/1706;Château-Renard
@@ -155,7 +229,16 @@ https://gw.geneanet.org/dil?lang=fr&p=madeleine&n=lardin;Madeleine LARDIN;firstN
 https://gw.geneanet.org/dil?lang=fr&p=francoise&n=deroy;Françoise DEROY;familyName=DEROY;DeathDate=01/01/1759
 https://gw.geneanet.org/dil?lang=fr&p=edme&n=deroy;Edme DEROY;familyName=DEROY;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=jean&n=deroy;Missing Half Sibling : https://gw.geneanet.org/dil?lang=fr&p=pierre&n=deroy;Missing Half Sibling : https://gw.geneanet.org/dil?lang=fr&p=edme&n=deroy&oc=1;Missing Half Sibling : https://gw.geneanet.org/dil?lang=fr&p=pascal&n=deroy
 https://gw.geneanet.org/dil?lang=fr&p=esme&n=deroy;Esmé DEROY;familyName=DEROY;DeathDate=09/06/1698;DeathPlace=Château-Renard;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=michel&n=deroy;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=noel&n=deroy;Marriage=Esmé DEROY;15/01/1669;Château-Renard
+https://gw.geneanet.org/dil?lang=fr&p=louise&n=chenau;Louise CHENAU;Marriage=Louise CHENAU;15/01/1669;Château-Renard;firstName=Louise;familyName=CHENAU;BirthDate=28/06/1642;BirthPlace=Château-Renard;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=olivier&n=chenau
+https://gw.geneanet.org/dil?lang=fr&z=1950338529;? DEROY;Missing Father
+https://gw.geneanet.org/dil?lang=fr&z=1885402345;? ?;Missing Mother
+https://gw.geneanet.org/dil?lang=fr&p=michel&n=hardy;Michel HARDY;Marriage=Michel HARDY;25/02/1666;Saint-Maurice-sur-Aveyron
+https://gw.geneanet.org/dil?lang=fr&p=louis&n=chenau;Louis CHENAU;Missing Father
+https://gw.geneanet.org/dil?lang=fr&p=martine&n=larousse;Martine LAROUSSE;Missing Mother
 https://gw.geneanet.org/dil?lang=fr&p=marie+madeleine&n=panier;Marie, "Madeleine" PANIER;Marriage=Marie, "Madeleine" PANIER;null;Château-Renard;firstName=Marie, "Madeleine";BirthDate=05/07/1663;Marriage=Marie, "Madeleine" PANIER;31/01/1684;Château-Renard
+https://gw.geneanet.org/dil?lang=fr&p=jean&n=bergeron&oc=1;Jean BERGERON;DeathDate=24/04/1669;DeathPlace=Château-Renard
+https://gw.geneanet.org/dil?lang=fr&p=jean&n=bergeron&oc=2;Jean BERGERON;DeathPlace=Château-Renard
+https://gw.geneanet.org/dil?lang=fr&p=francoise&n=lucas&oc=1;Françoise LUCAS;Marriage=Françoise LUCAS;22/11/1689;Château-Renard
 https://gw.geneanet.org/dil?lang=fr&p=etienne&n=bergeron;Etienne BERGERON;Marriage=Etienne BERGERON;null;Château-Renard
 https://gw.geneanet.org/dil?lang=fr&p=marie&n=panier;Marie PANIER;DeathPlace=Château-Renard
 https://gw.geneanet.org/dil?lang=fr&p=guillaume&n=panier;Guillaume PANIER;DeathPlace=Château-Renard
@@ -173,16 +256,20 @@ https://gw.geneanet.org/dil?lang=fr&p=claude&n=vincent;Claude VINCENT;DeathDate=
 https://gw.geneanet.org/dil?lang=fr&p=madeleine&n=delingand;Madeleine DELINGAND;Marriage=Madeleine DELINGAND;12/03/1687;Villefranche
 https://gw.geneanet.org/dil?lang=fr&p=etienne&n=vincent;Etienne VINCENT;Missing Father
 https://gw.geneanet.org/dil?lang=fr&p=jeanne&n=droin;Jeanne DROIN;Missing Mother
+https://gw.geneanet.org/dil?lang=fr&p=madeleine&n=jusseaume;Madeleine JUSSEAUME;firstName=Madeleine;familyName=JUSSEAUME;Marriage=Madeleine JUSSEAUME;09/11/1720;Villefranche
 https://gw.geneanet.org/dil?lang=fr&p=jacques&n=bableau;Jacques BABLEAU;Marriage=Jacques BABLEAU;09/11/1720;Villefranche;DeathPlace=Prunoy
+https://gw.geneanet.org/dil?lang=fr&p=claude&n=jusseaume;Claude JUSSEAUME;familyName=JUSSEAUME
 https://gw.geneanet.org/dil?lang=fr&p=laurence&n=croize;Laurence CROIZÉ;familyName=CROIZÉ
 https://gw.geneanet.org/dil?lang=fr&p=charles&n=jusseaume;Charles JUSSEAUME;familyName=JUSSEAUME;DeathPlace=Cudot
 https://gw.geneanet.org/dil?lang=fr&p=paul&n=jusseaume;Paul JUSSEAUME;familyName=JUSSEAUME;DeathPlace=Cudot
 https://gw.geneanet.org/dil?lang=fr&p=claude&n=jusseaume&oc=1;Claude JUSSEAUME;familyName=JUSSEAUME;DeathPlace=Cudot
 https://gw.geneanet.org/dil?lang=fr&p=jean&n=renoncia;Jean RENONCIA;DeathPlace=Cudot
 https://gw.geneanet.org/dil?lang=fr&p=marie&n=rigault;Marie RIGAULT;DeathPlace=La Châpelle sur Aveyron
-https://gw.geneanet.org/dil?lang=fr&p=madeleine&n=jusseaume;Madeleine JUSSEAUME;firstName=Madeleine;familyName=JUSSEAUME;Marriage=Madeleine JUSSEAUME;09/11/1720;Villefranche
-https://gw.geneanet.org/dil?lang=fr&p=claude&n=jusseaume;Claude JUSSEAUME;familyName=JUSSEAUME
 https://gw.geneanet.org/dil?lang=fr&p=louise&n=nourry;Louise NOURRY;familyName=NOURRY
+https://gw.geneanet.org/dil?lang=fr&p=marguerite&n=rigault;Marguerite RIGAULT;BirthPlace=Villefranche;DeathDate=18/05/1762;DeathPlace=Château-Renard;Marriage=Marguerite RIGAULT;25/02/1725;Villefranche
+https://gw.geneanet.org/dil?lang=fr&p=pierre&n=lajoye;Pierre LAJOYE;Marriage=Pierre LAJOYE;25/02/1725;Villefranche
+https://gw.geneanet.org/dil?lang=fr&p=jean&n=jusseaume;Jean JUSSEAUME;Marriage=Jean JUSSEAUME;28/04/1750;Villefranche
+https://gw.geneanet.org/dil?lang=fr&p=pierre&n=garnier&oc=6;Pierre GARNIER;DeathPlace=Villefranche
 https://gw.geneanet.org/dil?lang=fr&p=michel&n=rigault&oc=1;Michel RIGAULT;BirthDate=11/03/1703;BirthPlace=Prunoy;DeathPlace=Villefranche
 https://gw.geneanet.org/dil?lang=fr&p=marie+madeleine&n=lajoye;Marie Madeleine LAJOYE;firstName=Marie Madeleine;familyName=LAJOYE
 https://gw.geneanet.org/dil?lang=fr&p=laurent&n=rigault;Laurent RIGAULT;BirthPlace=Villefranche;DeathDate=26/08/1765;DeathPlace=Villefranche
@@ -196,8 +283,13 @@ https://gw.geneanet.org/dil?lang=fr&p=marie&n=collet&oc=1;Marie COLLET;BirthDate
 https://gw.geneanet.org/dil?lang=fr&p=henri&n=larousse&oc=1;Henri LAROUSSE;firstName=Henri
 https://gw.geneanet.org/dil?lang=fr&p=marie&n=petit&oc=5;Marie PETIT;DeathDate=27/09/1710
 https://gw.geneanet.org/dil?lang=fr&p=francoise&n=mommault;Françoise MOMMAULT;Marriage=Françoise MOMMAULT;1682;Adon;DeathDate=27/09/1701;DeathPlace=Nogent-sur-Vernisson
+https://gw.geneanet.org/dil?lang=fr&p=francois&n=fiette;François FIETTE;Marriage=François FIETTE;27/05/1701;Nogent-sur-Vernisson
+https://gw.geneanet.org/dil?lang=fr&p=francois&n=boger;François BOGER;Marriage=François BOGER;1682;Adon
 https://gw.geneanet.org/dil?lang=fr&p=charles&n=mommault;Charles MOMMAULT;Missing Father
 https://gw.geneanet.org/dil?lang=fr&p=jacquette&n=louzeau;Jacquette LOUZEAU;Missing Mother
+https://gw.geneanet.org/dil?lang=fr&p=etienne&n=boger;Etienne BOGER;familyName=BOGER
+https://gw.geneanet.org/dil?lang=fr&p=genevieve&n=boger;Geneviève BOGER;familyName=BOGER
+https://gw.geneanet.org/dil?lang=fr&p=francois&n=boger&oc=1;François BOGER;familyName=BOGER
 https://gw.geneanet.org/dil?lang=fr&p=jean+nicolas&n=aulnay;Jean, Nicolas AULNAY;Marriage=Jean, Nicolas AULNAY;04/07/1741;La Chapelle-sur-Aveyron
 https://gw.geneanet.org/dil?lang=fr&p=pierre+2&n=collet;Pierre 2 COLLET;DeathPlace=La Chapelle-sur-Aveyron
 https://gw.geneanet.org/dil?lang=fr&p=denis&n=lecerf;Denis LECERF;DeathPlace=La Châpelle sur Aveyron
@@ -213,9 +305,8 @@ https://gw.geneanet.org/dil?lang=fr&p=anne+marguerite&n=vincent;Anne, Marguerite
 https://gw.geneanet.org/dil?lang=fr&p=louis&n=lacroix;Louis LACROIX;Marriage=Louis LACROIX;26/04/1813;La Chapelle-sur-Aveyron
 https://gw.geneanet.org/dil?lang=fr&p=antoine&n=giblin;Antoine GIBLIN;Marriage=Antoine GIBLIN;25/06/1795;La Châpelle sur Aveyron
 https://gw.geneanet.org/dil?lang=fr&p=nicolas&n=fromont&oc=1;Nicolas FROMONT;DeathPlace=La Châpelle sur Aveyron
-https://gw.geneanet.org/dil?lang=fr&p=vrain+firmin&n=martignon;Vrain, Firmin MARTIGNON;firstName=Vrain, Firmin;Marriage=Vrain, Firmin MARTIGNON;30/10/1821;Adon
-https://gw.geneanet.org/dil?lang=fr&p=anne+josephine+jeanne&n=roy;Anne-Joséphine, Jeanne ROY;Marriage=Anne-Joséphine, Jeanne ROY;30/10/1821;Adon;firstName=Anne-Joséphine, Jeanne;Marriage=Anne-Joséphine, Jeanne ROY;20/02/1816;Adon
 https://gw.geneanet.org/dil?lang=fr&p=vrain+firmin&n=martignon;Vrain, Firmin MARTIGNON;firstName=Vrain, Firmin;Marriage=Vrain, Firmin MARTIGNON;18/05/1813;Montbouy;Marriage=Vrain, Firmin MARTIGNON;30/10/1821;Adon
+https://gw.geneanet.org/dil?lang=fr&p=anne+josephine+jeanne&n=roy;Anne-Joséphine, Jeanne ROY;Marriage=Anne-Joséphine, Jeanne ROY;30/10/1821;Adon;firstName=Anne-Joséphine, Jeanne;Marriage=Anne-Joséphine, Jeanne ROY;20/02/1816;Adon;Marriage=Anne-Joséphine, Jeanne ROY;30/10/1832;Montbouy
 https://gw.geneanet.org/dil?lang=fr&p=nicolas&n=martignon;Nicolas MARTIGNON;BirthPlace=Alligny-Cosne;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=madeleine&n=martignon
 https://gw.geneanet.org/dil?lang=fr&p=maritte&n=martignon;Maritte MARTIGNON;firstName=Maritte;BirthPlace=Alligny-Cosne;DeathDate=08/12/1750;DeathPlace=Alligny-Cosne
 https://gw.geneanet.org/dil?lang=fr&p=francois&n=martignon;François MARTIGNON;DeathDate=23/03/1688;DeathPlace=Alligny-Cosne;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=denise&n=martignon;Marriage=François MARTIGNON;18/02/1664;Alligny-Cosne
@@ -227,6 +318,7 @@ https://gw.geneanet.org/dil?lang=fr&p=anne&n=billot;Anne BILLOT;Marriage=Anne BI
 https://gw.geneanet.org/dil?lang=fr&p=louis&n=nault;Louis NAULT;Missing Father
 https://gw.geneanet.org/dil?lang=fr&p=catherine&n=dupre;Catherine DUPRÉ;Missing Mother
 https://gw.geneanet.org/dil?lang=fr&p=louis&n=billot;Louis BILLOT;Missing Father
+https://gw.geneanet.org/dil?lang=fr&z=-1962733990;? ?;Missing Mother
 https://gw.geneanet.org/dil?lang=fr&p=maritte&n=grenon;Maritte GRENON;Marriage=Maritte GRENON;30/06/1711;Alligny-Cosne;firstName=Maritte;DeathDate=10/12/1730;DeathPlace=Alligny-Cosne;Marriage=Maritte GRENON;22/11/1694;Alligny-Cosne
 https://gw.geneanet.org/dil?lang=fr&p=jeanne&n=grenon;Jeanne GRENON;DeathDate=19/01/1762
 https://gw.geneanet.org/dil?lang=fr&p=marie&n=veneau;Marie VENEAU;Marriage=Marie VENEAU;22/11/1694;Alligny-Cosne;DeathPlace=Alligny-Cosne
@@ -236,6 +328,9 @@ https://gw.geneanet.org/dil?lang=fr&p=claude&n=veneau;Claude VENEAU;Missing Fath
 https://gw.geneanet.org/dil?lang=fr&p=toussine&n=guimard;Toussine GUIMARD;Missing Mother
 https://gw.geneanet.org/dil?lang=fr&p=jean&n=henry;Jean HENRY;DeathDate=03/09/1707
 https://gw.geneanet.org/dil?lang=fr&p=catherine&n=bonneau;Catherine BONNEAU;DeathDate=22/12/1712;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=etienne&n=bonneau;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=edmee&n=bonneau;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=francois&n=bonneau
+https://gw.geneanet.org/dil?lang=fr&p=pierre&n=bonneau;Pierre BONNEAU;Missing Father
+https://gw.geneanet.org/dil?lang=fr&p=edmee&n=roy&oc=2;Edmée ROY;Missing Mother
+https://gw.geneanet.org/dil?lang=fr&p=jacques&n=gaufillier;Jacques GAUFILLIER;familyName=GAUFILLIER
 https://gw.geneanet.org/dil?lang=fr&p=louis&n=henry;Louis HENRY;DeathPlace=Gien
 https://gw.geneanet.org/dil?lang=fr&p=jeanne&n=geole;Jeanne GEOLE;DeathPlace=Gien
 https://gw.geneanet.org/dil?lang=fr&p=anne&n=leroy&oc=1;Anne LEROY;familyName=LEROY
@@ -245,16 +340,20 @@ https://gw.geneanet.org/dil?lang=fr&p=francoise&n=benard;Françoise BENARD;Death
 https://gw.geneanet.org/dil?lang=fr&p=jeanne&n=galocher;Jeanne GALOCHER;firstName=Jeanne;BirthPlace=Gien;DeathPlace=Gien
 https://gw.geneanet.org/dil?lang=fr&p=jean&n=galocher;Jean GALOCHER;firstName=Jean;DeathPlace=Saint-Louis
 https://gw.geneanet.org/dil?lang=fr&p=aimee&n=algret;Aimée ALGRET;DeathPlace=Saint-Louis
-https://gw.geneanet.org/dil?lang=fr&p=etiennette&n=rigault;Etiennette RIGAULT;DeathPlace=Gien
+https://gw.geneanet.org/dil?lang=fr&p=jean&n=galocher&oc=1;Jean GALOCHER;firstName=Jean;DeathPlace=Gien
+https://gw.geneanet.org/dil?lang=fr&z=1068282599;? LAHAYE;Missing Father
+https://gw.geneanet.org/dil?lang=fr&z=-1169771824;? ?;Missing Mother
+https://gw.geneanet.org/dil?lang=fr&p=jacques&n=lahaye;Jacques LAHAYE;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=verin&n=lahaye
+https://gw.geneanet.org/dil?lang=fr&p=etiennette&n=rigault;Etiennette RIGAULT;firstName=Etiennette;DeathPlace=Gien
+https://gw.geneanet.org/dil?lang=fr&p=nicolas&n=bardin;Nicolas BARDIN;DeathPlace=Gien
 https://gw.geneanet.org/dil?lang=fr&p=catherine&n=martignon;Catherine MARTIGNON;BirthDate=09/11/1770;Marriage=Catherine MARTIGNON;06/07/1787;Les Choux
 https://gw.geneanet.org/dil?lang=fr&p=pierre&n=roy;Pierre ROY;Marriage=Pierre ROY;06/07/1787;Les Choux
 https://gw.geneanet.org/dil?lang=fr&p=marie&n=martignon;Marie MARTIGNON;DeathPlace=La Bussière
 https://gw.geneanet.org/dil?lang=fr&p=anne&n=martignon;Anne MARTIGNON;BirthDate=31/08/1778;BirthPlace=Les Choux;DeathPlace=Noyers
 https://gw.geneanet.org/dil?lang=fr&p=jeanne&n=martignon;Jeanne MARTIGNON;DeathPlace=Noyers
 https://gw.geneanet.org/dil?lang=fr&p=laurent&n=guillard;Laurent GUILLARD;Marriage=Laurent GUILLARD;07/03/1791;Les Choux
-https://gw.geneanet.org/dil?lang=fr&p=anne+josephine+jeanne&n=roy;Anne-Joséphine, Jeanne ROY;Marriage=Anne-Joséphine, Jeanne ROY;30/10/1821;Adon;firstName=Anne-Joséphine, Jeanne;Marriage=Anne-Joséphine, Jeanne ROY;20/02/1816;Adon;Marriage=Anne-Joséphine, Jeanne ROY;30/10/1832;Montbouy
 https://gw.geneanet.org/dil?lang=fr&p=louis+francois+jean+hippolyte&n=roy;Louis, François, Jean, Hippolyte ROY;DeathPlace=le bourg;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=louis+frederic&n=roy
-https://gw.geneanet.org/dil?lang=fr&p=louis&n=roy;Louis ROY;BirthDate=27/08/1743
+https://gw.geneanet.org/dil?lang=fr&p=louis&n=roy;Louis ROY;BirthDate=27/08/1743;DeathDate=05/01/1827
 https://gw.geneanet.org/dil?lang=fr&p=agnes+marguerite+jeanne&n=desilliers;Agnès, Marguerite, Jeanne DESILLIERS;Marriage=Agnès, Marguerite, Jeanne DESILLIERS;10/02/1768;Bussy-en-Othe;firstName=Agnès, Marguerite, Jeanne;BirthDate=02/06/1749
 https://gw.geneanet.org/dil?lang=fr&p=mames&n=roy;Mamés ROY;BirthDate=20/02/1714;DeathDate=09/06/1747
 https://gw.geneanet.org/dil?lang=fr&p=pierre&n=roy&oc=2;Pierre ROY;firstName=Pierre;DeathPlace=Turny
@@ -267,16 +366,24 @@ https://gw.geneanet.org/dil?lang=fr&p=jean&n=roy&oc=1;Jean ROY;BirthDate=15/07/1
 https://gw.geneanet.org/dil?lang=fr&p=etienne&n=roy;Etienne ROY;firstName=Etienne;BirthDate=17/12/1718
 https://gw.geneanet.org/dil?lang=fr&p=jean&n=serre;Jean SERRÉ;BirthDate=06/02/1667;BirthPlace=Bussy-en-Othe;DeathDate=14/04/1739;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=edme&n=serre
 https://gw.geneanet.org/dil?lang=fr&p=etienne&n=serre;Etienne SERRÉ;firstName=Etienne;DeathDate=30/04/1669;DeathPlace=Bussy-en-Othe;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=jean&n=serre&oc=1;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=denis&n=serre;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=nicolas&n=serre
+https://gw.geneanet.org/dil?lang=fr&z=1184812064;? SERRÉ;Missing Father
+https://gw.geneanet.org/dil?lang=fr&z=1106022860;? ?;Missing Mother
 https://gw.geneanet.org/dil?lang=fr&p=michele&n=vallee;Michèle VALLEE;Missing Mother
 https://gw.geneanet.org/dil?lang=fr&p=marie&n=vallee;Marie VALLEE;DeathDate=22/11/1688
+https://gw.geneanet.org/dil?lang=fr&z=-1313236633;? ?;firstName=?;familyName=?
 https://gw.geneanet.org/dil?lang=fr&p=francoise&n=blangis;Françoise BLANGIS;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=edmee+aymee&n=blangis
 https://gw.geneanet.org/dil?lang=fr&p=edme&n=larrivee;Edme LARRIVÉE;familyName=LARRIVÉE;BirthPlace=Bussy-en-Othe
 https://gw.geneanet.org/dil?lang=fr&p=jean&n=roy&oc=2;Jean ROY;BirthDate=15/10/1734;DeathPlace=Bussy-en-Othe
 https://gw.geneanet.org/dil?lang=fr&p=marie+jeanne&n=poncet;Marie-Jeanne PONCET;Marriage=Marie-Jeanne PONCET;16/02/1762;Bussy-en-Othe
 https://gw.geneanet.org/dil?lang=fr&p=jacques&n=roy&oc=1;Jacques ROY;DeathPlace=Bussy-en-Othe
 https://gw.geneanet.org/dil?lang=fr&p=francoise&n=roy&oc=1;Françoise ROY;BirthDate=27/09/1740
+https://gw.geneanet.org/dil?lang=fr&p=jean+baptiste&n=desilliers+de+la+prevote;Jean-Baptiste DESILLIERS de la Prêvoté;familyName=DESILLIERS de la Prêvoté;BirthDate=25/07/1717
 https://gw.geneanet.org/dil?lang=fr&p=jean&n=de+silliers;Jean de SILLIERS;DeathDate=17/02/1735;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=charlotte+catherine&n=de+silliers
+https://gw.geneanet.org/dil?lang=fr&p=jacques&n=de+silliers;Jacques de SILLIERS;DeathPlace=Saint-Hilaire;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=charles&n=de+silliers
+https://gw.geneanet.org/dil?lang=fr&p=jacques&n=de+silliers&oc=1;Jacques de SILLIERS;DeathPlace=Les Sièges;Marriage=Jacques de SILLIERS;1644;null
 https://gw.geneanet.org/dil?lang=fr&p=francoise&n=de+chicault;Françoise de CHICAULT;Marriage=Françoise de CHICAULT;1644;null;familyName=de CHICAULT;DeathDate=25/05/1673;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=bonnaventure&n=de+chicault
+https://gw.geneanet.org/dil?lang=fr&z=1534385074;? de CHICAULT;Missing Father
+https://gw.geneanet.org/dil?lang=fr&z=-1215865317;? ?;Missing Mother
 https://gw.geneanet.org/dil?lang=fr&p=madeleine&n=de+pollangis;Madeleine de POLLANGIS;firstName=Madeleine;familyName=de POLLANGIS;DeathPlace=Les Sièges;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=marie+madeleine&n=de+pollangis;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=come&n=de+pollangis;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=robert&n=de+pollangis
 https://gw.geneanet.org/dil?lang=fr&p=bon&n=de+pollangis;Bon de POLLANGIS;familyName=de POLLANGIS
 https://gw.geneanet.org/dil?lang=fr&p=bon&n=de+pollangis&oc=1;Bon de POLLANGIS;Missing Father
@@ -284,6 +391,8 @@ https://gw.geneanet.org/dil?lang=fr&p=jeanne&n=balthazard;Jeanne BALTHAZARD;Miss
 https://gw.geneanet.org/dil?lang=fr&p=madeleine&n=moreau&oc=1;Madeleine MOREAU;Missing Mother
 https://gw.geneanet.org/dil?lang=fr&p=jacques&n=de+silliers&oc=2;Jacques de SILLIERS;BirthDate=01/01/1673
 https://gw.geneanet.org/dil?lang=fr&p=charles&n=de+silliers&oc=1;Charles de SILLIERS;BirthDate=14/11/1673
+https://gw.geneanet.org/dil?lang=fr&p=pierre&n=morlin+de+biencourt;Pierre MORLIN de Biencourt;familyName=MORLIN de Biencourt
+https://gw.geneanet.org/dil?lang=fr&p=agnes&n=moreau;Agnès MOREAU;BirthDate=10/05/1699
 https://gw.geneanet.org/dil?lang=fr&p=augustin&n=moreau;Augustin MOREAU;BirthPlace=Bussy-en-Othe
 https://gw.geneanet.org/dil?lang=fr&p=jeanne&n=blampin;Jeanne BLAMPIN;familyName=BLAMPIN
 https://gw.geneanet.org/dil?lang=fr&p=jean&n=moreau&oc=2;Jean MOREAU;firstName=Jean;DeathDate=18/05/1715;DeathPlace=Bussy-en-Othe
@@ -305,9 +414,28 @@ https://gw.geneanet.org/dil?lang=fr&p=marie+francoise&n=vallee;Marie-Françoise 
 https://gw.geneanet.org/dil?lang=fr&p=reine+madeleine&n=couturat;Reine, Madeleine COUTURAT;firstName=Reine, Madeleine;BirthPlace=Avrolles;DeathPlace=Le bourg;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=edme+olivier&n=couturat;Missing Half Sibling : https://gw.geneanet.org/dil?lang=fr&p=anne+louise&n=couturat;Missing Half Sibling : https://gw.geneanet.org/dil?lang=fr&p=joseph+timothee+marie&n=couturat;Missing Half Sibling : https://gw.geneanet.org/dil?lang=fr&p=marie&n=couturat
 https://gw.geneanet.org/dil?lang=fr&p=edme&n=couturat&oc=1;Edme COUTURAT;BirthDate=16/01/1694;BirthPlace=Mont-Saint-Sulpice;DeathPlace=Avrolles;Marriage=Edme COUTURAT;null;Avrolles - Saint-Florentin
 https://gw.geneanet.org/dil?lang=fr&p=marie+anne&n=bergere;Marie-Anne BERGÈRE;Marriage=Marie-Anne BERGÈRE;null;Avrolles - Saint-Florentin;BirthDate=26/05/1688;BirthPlace=Chemilly-sur-Yonne
+https://gw.geneanet.org/dil?lang=fr&p=francois&n=couturat;François COUTURAT;Missing Father
+https://gw.geneanet.org/dil?lang=fr&p=claudine&n=foulon;Claudine FOULON;Missing Mother
+https://gw.geneanet.org/dil?lang=fr&p=jeanne&n=moussey;Jeanne MOUSSEY;Marriage=Jeanne MOUSSEY;19/03/1647;Brienon-sur-Armançon;DeathPlace=Brienon-sur-Armançon
+https://gw.geneanet.org/dil?lang=fr&p=edmond&n=bergere;Edmond BERGÈRE;Missing Father
+https://gw.geneanet.org/dil?lang=fr&z=322945955;? ?;Missing Mother
+https://gw.geneanet.org/dil?lang=fr&p=leonard&n=bergere;Léonard BERGÈRE;Marriage=Léonard BERGÈRE;19/03/1647;Brienon-sur-Armançon
+https://gw.geneanet.org/dil?lang=fr&p=pierre&n=moussey;Pierre MOUSSEY;Missing Father
+https://gw.geneanet.org/dil?lang=fr&z=-167763520;? ?;Missing Mother
+https://gw.geneanet.org/dil?lang=fr&p=louis&n=bergere&oc=2;Louis BERGÈRE;DeathPlace=Chemilly-sur-Yonne
+https://gw.geneanet.org/dil?lang=fr&p=jean&n=bergere;Jean BERGÈRE;DeathPlace=Chemilly-sur-Yonne
+https://gw.geneanet.org/dil?lang=fr&p=edme&n=bergere&oc=2;Edmé BERGÈRE;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=anne&n=bergere
+https://gw.geneanet.org/dil?lang=fr&p=anne&n=lechat;Anne LECHAT;DeathDate=29/01/1692;DeathPlace=Brienon-sur-Armançon
+https://gw.geneanet.org/dil?lang=fr&p=olivier&n=lechat;Olivier LECHAT;DeathPlace=Brienon-sur-Armançon;Marriage=Olivier LECHAT;null;Brienon-sur-Armançon
+https://gw.geneanet.org/dil?lang=fr&p=francoise&n=preaudeau;Françoise PREAUDEAU;Marriage=Françoise PREAUDEAU;null;Brienon-sur-Armançon;DeathPlace=Brienon-sur-Armançon
+https://gw.geneanet.org/dil?lang=fr&p=louis&n=bergere&oc=1;Louis BERGÈRE;DeathPlace=Chemilly-sur-Yonne
+https://gw.geneanet.org/dil?lang=fr&p=edme&n=bergere;Edmé BERGÈRE;DeathPlace=Avrolles
 https://gw.geneanet.org/dil?lang=fr&p=edme&n=couturat;Edme COUTURAT;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=pierre&n=couturat
-https://gw.geneanet.org/dil?lang=fr&p=prudence&n=chauvin;Prudence CHAUVIN;familyName=CHAUVIN;BirthDate=11/06/1744
+https://gw.geneanet.org/dil?lang=fr&p=nicolas&n=glaive;Nicolas GLAIVE;DeathPlace=Ormoy
+https://gw.geneanet.org/dil?lang=fr&p=louis&n=bergere;Louis BERGÈRE;familyName=BERGÈRE
+https://gw.geneanet.org/dil?lang=fr&p=marie+madeleine&n=bergere;Marie-Madeleine BERGÈRE;firstName=Marie-Madeleine
 https://gw.geneanet.org/dil?lang=fr&p=reine&n=lavenue;Reine LAVENUE;DeathDate=29/11/1763
+https://gw.geneanet.org/dil?lang=fr&p=prudence&n=chauvin;Prudence CHAUVIN;familyName=CHAUVIN;BirthDate=11/06/1744
 https://gw.geneanet.org/dil?lang=fr&p=pierre&n=lavenue&oc=1;Pierre LAVENUE;BirthPlace=Sens;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=marie&n=lavenue&oc=1;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=claude&n=lavenue;Marriage=Pierre LAVENUE;03/02/1660;Saint-Pregts - Sens
 https://gw.geneanet.org/dil?lang=fr&p=marie&n=pleiard;Marie PLEIARD;Marriage=Marie PLEIARD;03/02/1660;Saint-Pregts - Sens;DeathPlace=Saint-Pregts
 https://gw.geneanet.org/dil?lang=fr&p=edme&n=lavenue;Edmé LAVENUE;Missing Father
@@ -317,8 +445,8 @@ https://gw.geneanet.org/dil?lang=fr&p=marie&n=bardet;Marie BARDET;DeathDate=19/1
 https://gw.geneanet.org/dil?lang=fr&p=pierre&n=bourgeois&oc=1;Pierre BOURGEOIS;DeathPlace=Sens
 https://gw.geneanet.org/dil?lang=fr&p=jacques&n=lavenue;Jacques LAVENUE;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=jacqueline&n=lavenue
 https://gw.geneanet.org/dil?lang=fr&p=marguerite&n=jacquet&oc=1;Marguerite JACQUET;Marriage=Marguerite JACQUET;null;Bussy-en-Othe;Marriage=Marguerite JACQUET;25/11/1680;Bussy-en-Othe
-https://gw.geneanet.org/dil?lang=fr&p=pierre&n=lehup;Pierre LEHUP;Marriage=Pierre LEHUP;25/11/1680;Bussy-en-Othe;DeathPlace=Bussy-en-Othe
 https://gw.geneanet.org/dil?lang=fr&p=girard&n=brusque;Girard BRUSQUE;Marriage=Girard BRUSQUE;null;Bussy-en-Othe
+https://gw.geneanet.org/dil?lang=fr&p=pierre&n=lehup;Pierre LEHUP;Marriage=Pierre LEHUP;25/11/1680;Bussy-en-Othe;DeathPlace=Bussy-en-Othe
 https://gw.geneanet.org/dil?lang=fr&p=aymee&n=brusque;Aymée BRUSQUE;firstName=Aymée;BirthDate=24/04/1665;Marriage=Aymée BRUSQUE;23/02/1685;Bussy-en-Othe
 https://gw.geneanet.org/dil?lang=fr&p=jean&n=charlot;Jean CHARLOT;Marriage=Jean CHARLOT;23/02/1685;Bussy-en-Othe;BirthPlace=Bussy-en-Othe
 https://gw.geneanet.org/dil?lang=fr&p=remi&n=bauge;Rémi BAUGÉ;firstName=Rémi;familyName=BAUGÉ
@@ -329,10 +457,10 @@ https://gw.geneanet.org/dil?lang=fr&p=jean+baptiste&n=byot;Jean-Baptiste BYOT;De
 https://gw.geneanet.org/dil?lang=fr&p=etienne&n=lavenue;Etienne LAVENUE;DeathDate=08/04/1747
 https://gw.geneanet.org/dil?lang=fr&p=colombe&n=nagent;Colombe NAGENT;Marriage=Colombe NAGENT;20/09/1732;Bussy-en-Othe
 https://gw.geneanet.org/dil?lang=fr&p=francoise&n=bauge;Françoise BAUGÉ;familyName=BAUGÉ
+https://gw.geneanet.org/dil?lang=fr&p=jeanne&n=mocquot;Jeanne MOCQUOT;familyName=MOCQUOT;BirthDate=22/04/1703;DeathPlace=Laroche-Saint-Cydroine
 https://gw.geneanet.org/dil?lang=fr&p=olivier&n=mocquot;Olivier MOCQUOT;DeathDate=20/12/1754
 https://gw.geneanet.org/dil?lang=fr&p=edme&n=potherat;Edme POTHERAT;DeathDate=02/03/1688
 https://gw.geneanet.org/dil?lang=fr&p=louise&n=filley;Louise FILLEY;familyName=FILLEY
-https://gw.geneanet.org/dil?lang=fr&p=jeanne&n=mocquot;Jeanne MOCQUOT;familyName=MOCQUOT;BirthDate=22/04/1703;DeathPlace=Laroche-Saint-Cydroine
 https://gw.geneanet.org/dil?lang=fr&p=jean&n=guibert;Jean GUIBERT;Marriage=Jean GUIBERT;20/01/1693;Rouvray
 https://gw.geneanet.org/dil?lang=fr&p=anne&n=mocquot&oc=1;Anne MOCQUOT;Marriage=Anne MOCQUOT;20/01/1693;Rouvray
 https://gw.geneanet.org/dil?lang=fr&p=edme&n=guibert;Edme GUIBERT;DeathDate=23/11/1696
@@ -345,12 +473,14 @@ https://gw.geneanet.org/dil?lang=fr&p=pierre&n=lavenue;Pierre LAVENUE;DeathPlace
 https://gw.geneanet.org/dil?lang=fr&p=pierre&n=granvilliers;Pierre GRANVILLIERS;BirthPlace=Bussy-en-Othe
 https://gw.geneanet.org/dil?lang=fr&p=hubert+hilaire&n=couturat;Hubert, Hilaire COUTURAT;BirthDate=14/01/1770
 https://gw.geneanet.org/dil?lang=fr&p=marie+constance&n=paquelin;Marie-Constance PAQUELIN;familyName=PAQUELIN
+https://gw.geneanet.org/dil?lang=fr&p=catherine&n=arnauld;Catherine ARNAULD;familyName=ARNAULD
 https://gw.geneanet.org/dil?lang=fr&p=elisabeth+colombe&n=jacob;Elisabeth, Colombe JACOB;firstName=Elisabeth, Colombe
 https://gw.geneanet.org/dil?lang=fr&p=angelique+suzanne&n=roy;Angélique, Suzanne ROY;firstName=Angélique, Suzanne;DeathDate=08/08/1833
 https://gw.geneanet.org/dil?lang=fr&p=angelique+virginie&n=martignon;Angélique, "Virginie" MARTIGNON;firstName=Angélique, "Virginie"
 https://gw.geneanet.org/dil?lang=fr&p=louis+arsene&n=berland;Louis Arsène BERLAND;firstName=Louis Arsène
 https://gw.geneanet.org/dil?lang=fr&p=emilie+adelaide&n=martignon;Emilie, Adélaïde MARTIGNON;BirthDate=1824;DeathDate=23/03/1908;DeathPlace=les Bas-Salins
 https://gw.geneanet.org/dil?lang=fr&p=rose+cedulie&n=martignon;Rose, Cédulie MARTIGNON;BirthDate=1827;DeathDate=27/09/1829
+https://gw.geneanet.org/dil?lang=fr&p=augustine+euphrasie&n=martignon;Augustine, Euphrasie MARTIGNON;DeathPlace=Saint-Maurice-sur-Aveyron
 https://gw.geneanet.org/dil?lang=fr&p=francois&n=girardot;François GIRARDOT;BirthDate=1826
 https://gw.geneanet.org/dil?lang=fr&p=genevieve+adele&n=brabant;Geneviève Adèle BRABANT;BirthPlace=Châtillon-Coligny
 https://gw.geneanet.org/dil?lang=fr&p=francois+pierre&n=ragu;François, Pierre RAGU;BirthDate=22/02/1819
@@ -364,151 +494,7 @@ https://gw.geneanet.org/dil?lang=fr&p=josephine+marie&n=berton;Joséphine, "Mari
 https://gw.geneanet.org/dil?lang=fr&p=charles&n=offman;Charles OFFMAN;BirthDate=26/08/1856
 https://gw.geneanet.org/dil?lang=fr&p=euphrasie&n=berton;Euphrasie BERTON;DeathPlace=La Châpelle sur Aveyron
 https://gw.geneanet.org/dil?lang=fr&p=cyrille&n=bolle;Cyrille BOLLE;DeathPlace=La Chapelle-sur-Aveyron
+https://gw.geneanet.org/dil?lang=fr&p=aubin+gustave&n=ledroit;Aubin, "Gustave" LEDROIT;firstName=Aubin, "Gustave";DeathDate=1933
+https://gw.geneanet.org/dil?lang=fr&p=leontine+victorine&n=archambault;Léontine, Victorine ARCHAMBAULT;Marriage=Léontine, Victorine ARCHAMBAULT;27/01/1912;Saint-Maurice-sur-Aveyron
 https://gw.geneanet.org/dil?lang=fr&p=eugene+jules&n=berton;Eugène, Jules BERTON;DeathDate=08/02/1923;DeathPlace=La Châpelle sur Aveyron
 https://gw.geneanet.org/dil?lang=fr&p=lucie+euphemie&n=pretre;Lucie, Euphémie PRETRE;BirthDate=20/11/1889;BirthPlace=Saint-Maurice-sur-Aveyron
-https://gw.geneanet.org/dil?lang=fr&p=marguerite+elisabeth&n=berton;Marguerite, Elisabeth BERTON;BirthDate=29/01/1784
-https://gw.geneanet.org/dil?lang=fr&p=louis&n=depond&oc=1;Louis DEPOND;familyName=DEPOND;DeathDate=12/08/1747
-https://gw.geneanet.org/dil?lang=fr&p=guillaume&n=depond;Guillaume DEPOND;familyName=DEPOND
-https://gw.geneanet.org/dil?lang=fr&p=etiennette&n=beaubois;Etiennette BEAUBOIS;DeathPlace=Saint-Firmin-sur-Loire
-https://gw.geneanet.org/dil?lang=fr&p=edme&n=depond;Edme DEPOND;familyName=DEPOND;DeathPlace=Saint-Firmin-sur-Loire
-https://gw.geneanet.org/dil?lang=fr&p=andre&n=meneau;André MENEAU;DeathPlace=Saint-Firmin-sur-Loire
-https://gw.geneanet.org/dil?lang=fr&p=francoise&n=penot;Françoise PENOT;DeathPlace=Saint-Firmin-sur-Loire;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=francois&n=penot
-https://gw.geneanet.org/dil?lang=fr&p=jacques&n=depond;Jacques DEPOND;familyName=DEPOND
-https://gw.geneanet.org/dil?lang=fr&p=etiennette&n=champion;Etiennette CHAMPION;DeathPlace=Saint-Firmin-sur-Loire
-https://gw.geneanet.org/dil?lang=fr&p=annet&n=peigne;Annet PEIGNÉ;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=marie&n=peigne&oc=1
-https://gw.geneanet.org/dil?lang=fr&p=germine&n=laurent;Germine LAURENT;firstName=Germine
-https://gw.geneanet.org/dil?lang=fr&p=pierre&n=brule&oc=1;Pierre BRULÉ;familyName=BRULÉ;DeathPlace=Saint-Jean-de-la-Ruelle
-https://gw.geneanet.org/dil?lang=fr&p=etiennette&n=dreux;Etiennette DREUX;DeathPlace=Saint-Jean-de-la-Ruelle
-https://gw.geneanet.org/dil?lang=fr&p=marie&n=brule;Marie BRULÉ;familyName=BRULÉ
-https://gw.geneanet.org/dil?lang=fr&p=gilles&n=moreau;Gilles MOREAU;firstName=Gilles;BirthDate=20/04/1616;BirthPlace=Saint-Jean-de-la-Ruelle;DeathPlace=Orléans;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=michel&n=moreau&oc=2
-https://gw.geneanet.org/dil?lang=fr&p=gilles&n=moreau&oc=1;Gilles MOREAU;firstName=Gilles;BirthPlace=Saint-Jean-de-la-Ruelle
-https://gw.geneanet.org/dil?lang=fr&p=jacquette&n=roulleau;Jacquette ROULLEAU;Missing Mother
-https://gw.geneanet.org/dil?lang=fr&p=tanneguy&n=haton;Tanneguy HATON;firstName=Tanneguy;BirthPlace=Saint-Jean-de-la-Ruelle;DeathPlace=Saint-Jean-de-la-Ruelle
-https://gw.geneanet.org/dil?lang=fr&p=pierre&n=haton;Pierre HATON;BirthPlace=Saint-Jean-de-la-Ruelle
-https://gw.geneanet.org/dil?lang=fr&p=thomasse&n=rocheboy;Thomasse ROCHEBOY;BirthPlace=Saint-Jean-de-la-Ruelle
-https://gw.geneanet.org/dil?lang=fr&p=louise&n=chesy;Louise CHESY;BirthPlace=Saint-Jean-de-la-Ruelle;DeathPlace=Saint-Jean-de-la-Ruelle
-https://gw.geneanet.org/dil?lang=fr&p=louis&n=chesy;Louis CHESY;BirthPlace=Saint-Jean-de-la-Ruelle
-https://gw.geneanet.org/dil?lang=fr&p=madeleine&n=brosse;Madeleine BROSSE;firstName=Madeleine
-https://gw.geneanet.org/dil?lang=fr&p=gabriel&n=blondeau;Gabriel BLONDEAU;BirthDate=08/03/1656;BirthPlace=Saint-Laurent;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=simon&n=blondeau;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=jacques&n=blondeau;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=etienne&n=blondeau;Missing Half Sibling : https://gw.geneanet.org/dil?lang=fr&p=louis&n=blondeau
-https://gw.geneanet.org/dil?lang=fr&p=denis&n=blondeau;Denis BLONDEAU;Missing Father
-https://gw.geneanet.org/dil?lang=fr&p=jacquette&n=lesson+janson;Jacquette LESSON (JANSON);Missing Mother
-https://gw.geneanet.org/dil?lang=fr&p=jeanne&n=gauthier&oc=1;Jeanne GAUTHIER;DeathPlace=Saint-Louis
-https://gw.geneanet.org/dil?lang=fr&p=anne&n=depond;Anne DEPOND;familyName=DEPOND;BirthDate=1766
-https://gw.geneanet.org/dil?lang=fr&p=philibert&n=quaizant;Philibert QUAIZANT;Missing Father
-https://gw.geneanet.org/dil?lang=fr&p=jeanne&n=balsac;Jeanne BALSAC;Missing Mother
-https://gw.geneanet.org/dil?lang=fr&p=louis&n=foucher;Louis FOUCHER;Missing Father
-https://gw.geneanet.org/dil?lang=fr&p=potentienne&n=dechambre;Potentienne DECHAMBRE;Missing Mother
-https://gw.geneanet.org/dil?lang=fr&p=denis&n=divers;Denis DIVERS;Missing Father
-https://gw.geneanet.org/dil?lang=fr&p=catherine&n=colmier;Catherine COLMIER;Missing Mother
-https://gw.geneanet.org/dil?lang=fr&p=pierre&n=fraineau;Pierre FRAINEAU;familyName=FRAINEAU;BirthPlace=Dammarie-sur-Loing;DeathDate=18/08/1685;DeathPlace=Briquemault
-https://gw.geneanet.org/dil?lang=fr&p=marguerite&n=seguin;Marguerite SEGUIN;familyName=SEGUIN
-https://gw.geneanet.org/dil?lang=fr&p=pierre&n=hure;Pierre HURÉ;DeathDate=09/02/1694;DeathPlace=Feins-en-Gâtinais
-https://gw.geneanet.org/dil?lang=fr&p=pierre&n=hure&oc=1;Pierre HURÉ;DeathPlace=Sainte-Geneviève-des-Bois
-https://gw.geneanet.org/dil?lang=fr&p=jean&n=hure&oc=2;Jean HURÉ;DeathPlace=Sainte-Geneviève-des-Bois
-https://gw.geneanet.org/dil?lang=fr&p=marin&n=thierry&oc=2;Marin THIERRY;firstName=Marin;DeathPlace=Saint-Maurice-sur-Fessard;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=marguerite&n=thierry&oc=2
-https://gw.geneanet.org/dil?lang=fr&p=marie&n=peron&oc=4;Marie PERON;firstName=Marie;familyName=PERON;DeathPlace=Saint-Maurice-sur-Fessard;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=denis&n=peron
-https://gw.geneanet.org/dil?lang=fr&p=jacques&n=thierry;Jacques THIERRY;BirthDate=28/03/1671;BirthPlace=Saint-Maurice-sur-Fessard
-https://gw.geneanet.org/dil?lang=fr&p=etienne&n=deslandes;Etienne DESLANDES;DeathPlace=Beauchamps-sur-Huillard
-https://gw.geneanet.org/dil?lang=fr&p=marthe&n=plessis;Marthe PLESSIS;familyName=PLESSIS;DeathPlace=Beauchamps-sur-Huillard
-https://gw.geneanet.org/dil?lang=fr&p=etienne&n=dodinet&oc=1;Etienne DODINET;firstName=Etienne
-https://gw.geneanet.org/dil?lang=fr&p=marie&n=meunier&oc=4;Marie MEUNIER;familyName=MEUNIER;BirthPlace=Château-Renard
-https://gw.geneanet.org/dil?lang=fr&p=edme&n=roze;Edmé ROZÉ;familyName=ROZÉ
-https://gw.geneanet.org/dil?lang=fr&p=louise&n=chenau;Louise CHENAU;Marriage=Louise CHENAU;15/01/1669;Château-Renard;firstName=Louise;familyName=CHENAU;BirthDate=28/06/1642;BirthPlace=Château-Renard;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=olivier&n=chenau
-https://gw.geneanet.org/dil?lang=fr&p=michel&n=hardy;Michel HARDY;Marriage=Michel HARDY;25/02/1666;Saint-Maurice-sur-Aveyron
-https://gw.geneanet.org/dil?lang=fr&p=louis&n=chenau;Louis CHENAU;Missing Father
-https://gw.geneanet.org/dil?lang=fr&p=martine&n=larousse;Martine LAROUSSE;Missing Mother
-https://gw.geneanet.org/dil?lang=fr&p=pierre&n=bonneau;Pierre BONNEAU;Missing Father
-https://gw.geneanet.org/dil?lang=fr&p=edmee&n=roy&oc=2;Edmée ROY;Missing Mother
-https://gw.geneanet.org/dil?lang=fr&p=jacques&n=gaufillier;Jacques GAUFILLIER;familyName=GAUFILLIER
-https://gw.geneanet.org/dil?lang=fr&p=aubin+gustave&n=ledroit;Aubin, "Gustave" LEDROIT;firstName=Aubin, "Gustave";DeathDate=1933
-https://gw.geneanet.org/dil?lang=fr&p=jean&n=galocher&oc=1;Jean GALOCHER;firstName=Jean;DeathPlace=Gien
-https://gw.geneanet.org/dil?lang=fr&p=jacques&n=lahaye;Jacques LAHAYE;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=verin&n=lahaye
-https://gw.geneanet.org/dil?lang=fr&p=etiennette&n=rigault;Etiennette RIGAULT;firstName=Etiennette;DeathPlace=Gien
-https://gw.geneanet.org/dil?lang=fr&p=nicolas&n=bardin;Nicolas BARDIN;DeathPlace=Gien
-https://gw.geneanet.org/dil?lang=fr&p=leonard&n=bergere;Léonard BERGÈRE;firstName=Léonard;DeathPlace=Brienon-sur-Armançon
-https://gw.geneanet.org/dil?lang=fr&p=jeanne&n=moussey;Jeanne MOUSSEY;DeathPlace=Brienon-sur-Armançon
-https://gw.geneanet.org/dil?lang=fr&p=louis&n=bergere&oc=2;Louis BERGÈRE;DeathPlace=Chemilly-sur-Yonne
-https://gw.geneanet.org/dil?lang=fr&p=jean&n=bergere;Jean BERGÈRE;DeathPlace=Chemilly-sur-Yonne
-https://gw.geneanet.org/dil?lang=fr&p=anne&n=lechat;Anne LECHAT;DeathPlace=Chemilly-sur-Yonne
-https://gw.geneanet.org/dil?lang=fr&p=olivier&n=lechat;Olivier LECHAT;DeathPlace=Brienon-sur-Armançon;Marriage=Olivier LECHAT;null;Brienon-sur-Armançon
-https://gw.geneanet.org/dil?lang=fr&p=francoise&n=preaudeau;Françoise PREAUDEAU;Marriage=Françoise PREAUDEAU;null;Brienon-sur-Armançon;DeathPlace=Brienon-sur-Armançon
-https://gw.geneanet.org/dil?lang=fr&p=louis&n=bergere&oc=1;Louis BERGÈRE;DeathPlace=Chemilly-sur-Yonne
-https://gw.geneanet.org/dil?lang=fr&p=edme&n=bergere;Edmé BERGÈRE;DeathPlace=Avrolles
-https://gw.geneanet.org/dil?lang=fr&p=nicolas&n=glaive;Nicolas GLAIVE;DeathPlace=Ormoy
-https://gw.geneanet.org/dil?lang=fr&p=louis&n=bergere;Louis BERGÈRE;familyName=BERGÈRE
-https://gw.geneanet.org/dil?lang=fr&p=marie+madeleine&n=bergere;Marie-Madeleine BERGÈRE;firstName=Marie-Madeleine
-https://gw.geneanet.org/dil?lang=fr&p=leontine+victorine&n=archambault;Léontine, Victorine ARCHAMBAULT;Marriage=Léontine, Victorine ARCHAMBAULT;27/01/1912;Saint-Maurice-sur-Aveyron
-https://gw.geneanet.org/dil?lang=fr&p=marguerite&n=depond;Marguerite DEPOND;firstName=Marguerite;familyName=DEPOND
-https://gw.geneanet.org/dil?lang=fr&p=louis&n=roy;Louis ROY;BirthDate=27/08/1743;DeathDate=05/01/1827
-https://gw.geneanet.org/dil?lang=fr&p=agnes&n=moreau;Agnès MOREAU;BirthDate=10/05/1699
-https://gw.geneanet.org/dil?lang=fr&z=782201015;? MACE;Missing Father
-https://gw.geneanet.org/dil?lang=fr&z=779842660;? ?;Missing Mother
-https://gw.geneanet.org/dil?lang=fr&z=374962799;? HAMARD;Missing Father
-https://gw.geneanet.org/dil?lang=fr&z=-1748723757;? ?;Missing Mother
-https://gw.geneanet.org/dil?lang=fr&z=1816282872;? PENOT;Missing Father
-https://gw.geneanet.org/dil?lang=fr&z=1740268285;? ?;Missing Mother
-https://gw.geneanet.org/dil?lang=fr&z=528511081;? ?;Missing Mother
-https://gw.geneanet.org/dil?lang=fr&z=137126994;? ?;Missing Mother
-https://gw.geneanet.org/dil?lang=fr&z=46598903;? ?;Missing Mother
-https://gw.geneanet.org/dil?lang=fr&z=906843966;? THIERRY;Missing Father
-https://gw.geneanet.org/dil?lang=fr&z=1535093336;? ?;Missing Mother
-https://gw.geneanet.org/dil?lang=fr&z=-510073139;? PERON;Missing Father
-https://gw.geneanet.org/dil?lang=fr&z=-586091564;? ?;Missing Mother
-https://gw.geneanet.org/dil?lang=fr&z=2085762442;? ?;Missing Mother
-https://gw.geneanet.org/dil?lang=fr&z=1950338529;? DEROY;Missing Father
-https://gw.geneanet.org/dil?lang=fr&z=1885402345;? ?;Missing Mother
-https://gw.geneanet.org/dil?lang=fr&z=-1962733990;? ?;Missing Mother
-https://gw.geneanet.org/dil?lang=fr&z=1068282599;? LAHAYE;Missing Father
-https://gw.geneanet.org/dil?lang=fr&z=-1169771824;? ?;Missing Mother
-https://gw.geneanet.org/dil?lang=fr&z=1106022860;? ?;Missing Mother
-https://gw.geneanet.org/dil?lang=fr&z=-1313236633;? ?;firstName=?;familyName=?
-https://gw.geneanet.org/dil?lang=fr&z=1534385074;? de CHICAULT;Missing Father
-https://gw.geneanet.org/dil?lang=fr&z=-1215865317;? ?;Missing Mother
-https://gw.geneanet.org/dil?lang=fr&p=nicole&n=herve;Nicole HERVÉ;firstName=Nicole
-https://gw.geneanet.org/dil?lang=fr&z=-2087976459;? BRANGE;Missing Father
-https://gw.geneanet.org/dil?lang=fr&z=239724669;? ?;Missing Mother
-https://gw.geneanet.org/dil?lang=fr&p=jacques&n=nian;Jacques NIAN;familyName=NIAN
-https://gw.geneanet.org/dil?lang=fr&p=sebastien&n=guenard;Sébastien GUENARD;DeathPlace=Sainte-Geneviève-des-Bois
-https://gw.geneanet.org/dil?lang=fr&p=catherine&n=courty;Catherine COURTY;Missing Half Sibling : https://gw.geneanet.org/dil?lang=fr&p=genevieve&n=courty
-https://gw.geneanet.org/dil?lang=fr&p=x&n=pignault&oc=18246;x PIGNAULT;Missing Father
-https://gw.geneanet.org/dil?lang=fr&z=1693192043;? RABILLON;Missing Father
-https://gw.geneanet.org/dil?lang=fr&z=999187705;? ?;Missing Mother
-https://gw.geneanet.org/dil?lang=fr&p=jeanne&n=brossard;Jeanne BROSSARD;DeathPlace=Château-Renard
-https://gw.geneanet.org/dil?lang=fr&p=henri&n=rabillon;Henri RABILLON;DeathDate=09/04/1714;DeathPlace=Melleroy
-https://gw.geneanet.org/dil?lang=fr&p=michelle&n=fouassin;Michelle FOUASSIN;Marriage=Michelle FOUASSIN;20/06/1666;Château-Renard
-https://gw.geneanet.org/dil?lang=fr&p=edme&n=rabillon&oc=1;Edmé RABILLON;DeathPlace=Château-Renard
-https://gw.geneanet.org/dil?lang=fr&p=jeanne&n=masson&oc=2;Jeanne MASSON;Marriage=Jeanne MASSON;23/11/1683;Triguères
-https://gw.geneanet.org/dil?lang=fr&p=jean&n=bergeron&oc=1;Jean BERGERON;DeathDate=24/04/1669;DeathPlace=Château-Renard
-https://gw.geneanet.org/dil?lang=fr&p=jean&n=bergeron&oc=2;Jean BERGERON;DeathPlace=Château-Renard
-https://gw.geneanet.org/dil?lang=fr&p=francoise&n=lucas&oc=1;Françoise LUCAS;Marriage=Françoise LUCAS;22/11/1689;Château-Renard
-https://gw.geneanet.org/dil?lang=fr&p=marguerite&n=rigault;Marguerite RIGAULT;BirthPlace=Villefranche;DeathDate=18/05/1762;DeathPlace=Château-Renard;Marriage=Marguerite RIGAULT;25/02/1725;Villefranche
-https://gw.geneanet.org/dil?lang=fr&p=pierre&n=lajoye;Pierre LAJOYE;Marriage=Pierre LAJOYE;25/02/1725;Villefranche
-https://gw.geneanet.org/dil?lang=fr&p=jean&n=jusseaume;Jean JUSSEAUME;Marriage=Jean JUSSEAUME;28/04/1750;Villefranche
-https://gw.geneanet.org/dil?lang=fr&p=pierre&n=garnier&oc=6;Pierre GARNIER;DeathPlace=Villefranche
-https://gw.geneanet.org/dil?lang=fr&p=francois&n=fiette;François FIETTE;Marriage=François FIETTE;27/05/1701;Nogent-sur-Vernisson
-https://gw.geneanet.org/dil?lang=fr&p=francois&n=boger;François BOGER;Marriage=François BOGER;1682;Adon
-https://gw.geneanet.org/dil?lang=fr&p=etienne&n=boger;Etienne BOGER;familyName=BOGER
-https://gw.geneanet.org/dil?lang=fr&p=genevieve&n=boger;Geneviève BOGER;familyName=BOGER
-https://gw.geneanet.org/dil?lang=fr&p=francois&n=boger&oc=1;François BOGER;familyName=BOGER
-https://gw.geneanet.org/dil?lang=fr&z=1184812064;? SERRÉ;Missing Father
-https://gw.geneanet.org/dil?lang=fr&p=jean+baptiste&n=desilliers+de+la+prevote;Jean-Baptiste DESILLIERS de la Prêvoté;familyName=DESILLIERS de la Prêvoté;BirthDate=25/07/1717
-https://gw.geneanet.org/dil?lang=fr&p=claudine&n=foulon;Claudine FOULON;Missing Mother
-https://gw.geneanet.org/dil?lang=fr&p=jeanne&n=moussey;Jeanne MOUSSEY;Marriage=Jeanne MOUSSEY;19/03/1647;Brienon-sur-Armançon;DeathPlace=Brienon-sur-Armançon
-https://gw.geneanet.org/dil?lang=fr&p=edmond&n=bergere;Edmond BERGÈRE;Missing Father
-https://gw.geneanet.org/dil?lang=fr&z=322945955;? ?;Missing Mother
-https://gw.geneanet.org/dil?lang=fr&p=leonard&n=bergere;Léonard BERGÈRE;Marriage=Léonard BERGÈRE;19/03/1647;Brienon-sur-Armançon
-https://gw.geneanet.org/dil?lang=fr&p=pierre&n=moussey;Pierre MOUSSEY;Missing Father
-https://gw.geneanet.org/dil?lang=fr&z=-167763520;? ?;Missing Mother
-https://gw.geneanet.org/dil?lang=fr&p=edme&n=bergere&oc=2;Edmé BERGÈRE;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=anne&n=bergere
-https://gw.geneanet.org/dil?lang=fr&p=anne&n=lechat;Anne LECHAT;DeathDate=29/01/1692;DeathPlace=Brienon-sur-Armançon
-https://gw.geneanet.org/dil?lang=fr&p=catherine&n=arnauld;Catherine ARNAULD;familyName=ARNAULD
-https://gw.geneanet.org/dil?lang=fr&p=augustine+euphrasie&n=martignon;Augustine, Euphrasie MARTIGNON;DeathPlace=Saint-Maurice-sur-Aveyron
-https://gw.geneanet.org/dil?lang=fr&p=denis&n=thierry&oc=2;Denis THIERRY;BirthDate=06/08/1666;BirthPlace=Saint-Maurice-sur-Fessard;DeathPlace=Saint-Maurice-sur-Fessard
-https://gw.geneanet.org/dil?lang=fr&p=francoise&n=de+chicault;Françoise de CHICAULT;Marriage=Françoise de CHICAULT;1644;null;familyName=de CHICAULT;DeathDate=25/05/1673;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=bonnaventure&n=de+chicault
-https://gw.geneanet.org/dil?lang=fr&p=pierre&n=morlin+de+biencourt;Pierre MORLIN de Biencourt;familyName=MORLIN de Biencourt
-https://gw.geneanet.org/dil?lang=fr&p=marie&n=delaveau&oc=1;Marie DELAVEAU;Marriage=Marie DELAVEAU;01/12/1691;Saint-Maurice-sur-Fessard
-https://gw.geneanet.org/dil?lang=fr&p=francois&n=couturat;François COUTURAT;Missing Father
-https://gw.geneanet.org/dil?lang=fr&p=anne&n=ducharme;Anne DUCHARME;Marriage=Anne DUCHARME;23/02/1705;Chevillon-sur-Huillard
-https://gw.geneanet.org/dil?lang=fr&p=jacques&n=de+silliers;Jacques de SILLIERS;DeathPlace=Saint-Hilaire;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=charles&n=de+silliers
-https://gw.geneanet.org/dil?lang=fr&p=jacques&n=de+silliers&oc=1;Jacques de SILLIERS;DeathPlace=Les Sièges;Marriage=Jacques de SILLIERS;1644;null
-https://gw.geneanet.org/dil?lang=fr&p=marin&n=thierry;Marin THIERRY;BirthDate=17/02/1676;BirthPlace=Saint-Maurice-sur-Fessard;DeathDate=14/02/1746;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=marie&n=thierry&oc=5;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=hubert&n=thierry;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=marie&n=thierry&oc=4;Missing Sibling : https://gw.geneanet.org/dil?lang=fr&p=sebastienne&n=thierry;Marriage=Marin THIERRY;1693;null

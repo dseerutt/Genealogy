@@ -21,6 +21,7 @@ gabrielle;gabriel;name
 l'aine;;name
 l aine;;name
 l'aisne;;name
+luqas;lucas;name
 claudine;claude;name
 margueritte;marguerite;name
 estiennette;etiennette;name
@@ -40,6 +41,7 @@ elizabeth;elisabeth;name
 suzanne;susanne;name
 maitre;;name
 maritt maritte ou marie;maritte;name
+arnauld;arnault;name
 germine;germaine;name
 (Hurisse);;name
 benard (guenard);guenard;name
@@ -164,8 +166,11 @@ kaizant;quaizant;name
 quezant;quaizant;name
 qaisant;quaizant;name
 soimier;soymier;name
+boger;boyer;name
+de la prevote;;name
 le bargi;le bargy;name
 lebargy;le bargy;name
+de biencourt;;name
 brusle;brule;name
 nian;nyon;name
 pertuisot;perthuiseau;name
@@ -221,6 +226,7 @@ a la ferme de la bruyere.;montbouy;city
 les etisseaux;saint maurice sur aveyron;city
 la croix-lambert;saint maurice sur aveyron;city
 les plots;saint maurice sur aveyron;city
+les vieux echarlis;villefranche;city
 les guidus;saint maurice sur aveyron;city
 la tuillerie;saint maurice sur aveyron;city
 la chabassolerie;saint maurice sur aveyron;city
