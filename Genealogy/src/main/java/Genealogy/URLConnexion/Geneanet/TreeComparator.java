@@ -141,15 +141,11 @@ public class TreeComparator {
         this.log = log;
     }
 
-    public String printDifferences(boolean displayModeFull, boolean hide, boolean log) {
+    public String printDifferences(boolean hide, boolean log) {
         String result = "";
         if (!hide) {
             HashMap<GeneanetPerson, String> tmpDifferences;
-            if (displayModeFull) {
-                tmpDifferences = differences;
-            } else {
-                tmpDifferences = differencesForDisplay;
-            }
+            tmpDifferences = differencesForDisplay;
             for (Map.Entry<GeneanetPerson, String> entry : tmpDifferences.entrySet()) {
                 if (log) {
                     logger.info("\"" + entry.getKey().getUrl() + "\";" + entry.getKey().getFullName() + ";" + entry.getValue());
@@ -635,7 +631,7 @@ public class TreeComparator {
         }
     }
 
-    private void compareDifferences(HashMap<GeneanetPerson, String> differences2, boolean displayModeFull, boolean hideComparisons) throws Exception {
+    private void compareDifferences(HashMap<GeneanetPerson, String> differences2) {
         String result = "";
         int cptUnknownPeople = 0;
         String printedUrl = "";
@@ -673,12 +669,10 @@ public class TreeComparator {
             if (!differences2.containsKey(person) || differences2.containsKey(person) && !valueTxt.equals(differences2.get(person))) {
                 result += person.getFullName() + ";" + valueTxt;
                 differencesForDisplay.put(person, valueTxt);
-                if ((!displayModeFull && differencesForDisplay.size() == 10) || (hideComparisons)) {
-                    comparisonResultDisplay = result + System.lineSeparator() + person.getUrl();
-                    comparisonResultToReplace = printedUrl + ";" + person.getFullName() + ";" + differences2.get(person);
-                    comparisonResultReplacement = printedUrl + ";" + person.getFullName() + ";" + valueTxt;
-                    return;
-                }
+                comparisonResultDisplay = result + System.lineSeparator() + person.getUrl();
+                comparisonResultToReplace = printedUrl + ";" + person.getFullName() + ";" + differences2.get(person);
+                comparisonResultReplacement = printedUrl + ";" + person.getFullName() + ";" + valueTxt;
+                return;
             }
         }
 
@@ -715,16 +709,14 @@ public class TreeComparator {
             if (!differences.containsKey(person) || differences.containsKey(person) && !valueTxt.equals(newValue)) {
                 result += person.getFullName() + ";" + valueTxt;
                 differencesForDisplay.put(person, differences2.get(person));
-                if (!displayModeFull) {
-                    comparisonResultDisplay = result + System.lineSeparator() + person.getUrl();
-                    if (differences.get(person) == null) {
-                        comparisonResultReplacement = "";
-                    } else {
-                        comparisonResultReplacement = printedUrl + ";" + person.getFullName() + ";" + differences.get(person);
-                    }
-                    comparisonResultToReplace = printedUrl + ";" + person.getFullName() + ";" + valueTxt;
-                    return;
+                comparisonResultDisplay = result + System.lineSeparator() + person.getUrl();
+                if (differences.get(person) == null) {
+                    comparisonResultReplacement = "";
+                } else {
+                    comparisonResultReplacement = printedUrl + ";" + person.getFullName() + ";" + differences.get(person);
                 }
+                comparisonResultToReplace = printedUrl + ";" + person.getFullName() + ";" + valueTxt;
+                return;
             }
         }
         comparisonResultDisplay = result;
@@ -998,9 +990,9 @@ public class TreeComparator {
     }
 
 
-    public static void loopCompareTree(String testUrl, boolean search, Genealogy genealogyInput, boolean saveComparison, boolean saveGeneanet, boolean displayModeFull, boolean exceptionMode, boolean hideComparisons) throws Exception {
+    public static void loopCompareTree(String testUrl, boolean search, Genealogy genealogyInput, boolean saveComparison, boolean saveGeneanet, boolean exceptionMode) throws Exception {
         Genealogy genealogyParameter = genealogyInput;
-        TreeComparator treeComparator = compareTree(testUrl, search, genealogyParameter, saveComparison, saveGeneanet, displayModeFull, exceptionMode, hideComparisons);
+        TreeComparator treeComparator = compareTree(testUrl, search, genealogyParameter, saveComparison, saveGeneanet, exceptionMode);
         boolean error = treeComparator.isErrorComparison();
         //only saving data
         if (search && saveGeneanet && !exceptionMode) {
@@ -1015,7 +1007,7 @@ public class TreeComparator {
                     case "A":
                     case "ADD":
                         logger.info("Modification added");
-                        addDifferenceInFile(treeComparator.getTreeName(), treeComparator.printDifferences(false, false, false));
+                        addDifferenceInFile(treeComparator.getTreeName(), treeComparator.printDifferences(false, false));
                         break;
                     case "exit":
                         throw new Exception("User exited the program");
@@ -1036,12 +1028,12 @@ public class TreeComparator {
                         genealogyParameter = genealogy;
                 }
             }
-            treeComparator = compareTree(testUrl, search, genealogyParameter, saveComparison, saveGeneanet, displayModeFull, exceptionMode, hideComparisons);
+            treeComparator = compareTree(testUrl, search, genealogyParameter, saveComparison, saveGeneanet, exceptionMode);
             error = treeComparator.isErrorComparison();
         }
     }
 
-    public static TreeComparator compareTree(String testUrl, boolean search, Genealogy genealogy, boolean saveComparison, boolean saveGeneanet, boolean displayModeFull, boolean exceptionMode, boolean hideComparisons) throws Exception {
+    public static TreeComparator compareTree(String testUrl, boolean search, Genealogy genealogy, boolean saveComparison, boolean saveGeneanet, boolean exceptionMode) throws Exception {
         //Geneanet Browser
         String tree = GeneanetBrowser.findTreeName(testUrl);
         GeneanetBrowser geneanetBrowser = null;
@@ -1094,15 +1086,15 @@ public class TreeComparator {
             treeComparator.saveDifference(tree);
         }
         HashMap<GeneanetPerson, String> geneanetPersonStringHashMap = treeComparator.readDifferences(tree);
-        treeComparator.compareDifferences(geneanetPersonStringHashMap, displayModeFull, hideComparisons);
+        treeComparator.compareDifferences(geneanetPersonStringHashMap);
         String comparison = treeComparator.getComparisonResultDisplay();
         boolean logDifferences = true;
         if (comparison != null && !comparison.equals("")) {
-            treeComparator.printDifferences(displayModeFull, hideComparisons, logDifferences);
+            treeComparator.printDifferences(true, logDifferences);
             logger.info(geneanetPersonStringHashMap.size() + "/" + treeComparator.getDifferences().size() + " differences of " + tree + " tree :");
             logger.error(comparison);
             treeComparator.setErrorComparison(true);
-            if (exceptionMode && !hideComparisons) {
+            if (exceptionMode) {
                 throw new Exception("Error with comparison for tree " + tree);
             }
         } else {
@@ -1127,7 +1119,6 @@ public class TreeComparator {
     }
 
     public static void main(String[] args) throws Exception {
-
         //init gedcomfile
         gedcomFile = "C:\\Users\\Dan\\Desktop\\famille1.ged";
         setGedcomData();
@@ -1137,15 +1128,13 @@ public class TreeComparator {
         GeneanetBrowser urlBrowser = new GeneanetBrowser();
         ArrayList<GeneanetTree> geneanetTrees = urlBrowser.getGeneanetTrees();
         boolean searchOnGeneanet = false;
-        boolean saveGeneanetSearch = false;
-        boolean exceptionMode = true;
-        boolean displayModeFull = false;
-        boolean hideComparisons = true;
+        boolean saveGeneanetSearch = searchOnGeneanet;
+        boolean exceptionMode = false;
         int index = 1;
         for (GeneanetTree geneanetTree : geneanetTrees) {
             if (index >= 1) {
                 String url = geneanetTree.getUrl();
-                loopCompareTree(url, searchOnGeneanet, genealogy, saveComparisonInFile, saveGeneanetSearch, displayModeFull, exceptionMode, hideComparisons);
+                loopCompareTree(url, searchOnGeneanet, genealogy, saveComparisonInFile, saveGeneanetSearch, exceptionMode);
             }
             index++;
         }
