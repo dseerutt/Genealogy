@@ -5,18 +5,32 @@ boilleau;boyau;name
 gionnet;guionnet;name
 michele;michelle;name
 anthoine;antoine;name
+guerre;gavre;name
+laisney;laine;name
+laisne;laine;name
+fleure;fleur;name
+leonord;leonore;name
+cecille;cecile;name
+jullie;julie;name
+( fleurie );;name
+( aimee );;name
+(isabelle);;name
+villette;vilette;name
 adiren;adrien;name
+dupain;dupin;name
 margueritte;marguerite;name
 magdelaine;madeleine;name
 magdelenne;madeleine;name
+magdalene;madeleine;name
 caesar;cesar;name
+dit bordemont;;name
 dit le jeune;;name
+dit le boucher;;name
+dit belarbre;;name
 bergeon;bergeron;name
 1;;name
 2;;name
 le jeune;;name
-magdeleine;madeleine;name
-madelaine;madeleine;name
 gabrielle;gabriel;name
 l'aine;;name
 l aine;;name
@@ -25,6 +39,7 @@ luqas;lucas;name
 claudine;claude;name
 margueritte;marguerite;name
 estiennette;etiennette;name
+georrges;georges;name
 georges;george;name
 adrian;adrien;name
 henri;henry;name
@@ -34,10 +49,36 @@ chauvin;chanvin;name
 jehanne;jeanne;name
 ayme;aime;name
 aymee;aimee;name
+emee;aimee;name
 sieur;;name
+madeleinne;madeleine;name
+magdeleine;madeleine;name
+madelainne;madeleine;name
+madelaine;madeleine;name
+bisson;buisson;name
+danselle;dancelle;name
 eleonore;leonore;name
+leonore;leonor;name
+le preffe;leprefle;name
+fossay;fossey;name
+fosay;fossey;name
+francoisse;francoise;name
+françoisse;francoise;name
+soffie;sophie;name
+roze;rose;name
+bliault;bliaux;name
+dorottee;dorothee;name
+ambrouaise;ambroise;name
+corniere;cornier;name
+dit galobie;;name
+dit gallobis;;name
+dit lucas;;name
+simeon;simon;name
+denyse;denise;name
+le bredonchel;lebredonchel;name
 inconnu;...;name
 elizabeth;elisabeth;name
+elizabet;elisabeth;name
 suzanne;susanne;name
 maitre;;name
 maritt maritte ou marie;maritte;name
@@ -46,11 +87,11 @@ germine;germaine;name
 (Hurisse);;name
 benard (guenard);guenard;name
 clain;clin;name
+le barillier;lebarillier;name
 dauphin;daufin;name
 sequin;seguin;name
 de la ville;delaville;name
 guille ;guillet ;name
-guillé ;guillet ;name
 guillier;guillet ;name
 de chicault;chicaut;name
 paslot;paslat;name
@@ -63,9 +104,19 @@ de fontaines;desfontaines;name
 defontaine;desfontaines;name
 lescluse;lecluse;name
 rihouey;rihoy;name
+lesuyer;lecuyer;name
+reyne;reine;name
+colombet;columbet;name
+colombel;columbet;name
+mimmard;mimard;name
 lepeigny;le pegny;name
 le peigny;le pegny;name
+(desilliers);;name
+(mamet);;name
+l'hermite;lhermite;name
+dezilliers;dessilliers;name
 perrotte;perotte;name
+gibert;giber;name
 troiseuf;trois oeufs;name
 foiubert;foubert;name
 leroi;roy;name
@@ -76,6 +127,7 @@ thebault ou thiebot;thiebot;name
 thiebault;thiebot;name
 bareau ou baveille;barreau;name
 lecocq;le coque;name
+lecompte;leconte;name
 gencon;janson;name
 thierri;thierry;name
 les boisseaux;saint maurice sur aveyron;city
@@ -93,6 +145,7 @@ croze;croise;name
 croisere;croise;name
 blampin;blompin;name
 moniault;mommault;name
+momaut;mommault;name
 felicitee;felicite;name
 de pollangis;de polangis;name
 demoiselle;;name
@@ -101,6 +154,7 @@ bergere;bergerat;name
 lebourgeois;le bourgeois;name
 mocquo ;mocquot ;name
 bauge;bouge;name
+lechain;le chin;name
 arsenne;arsene;name
 estienne;etienne;name
 breton;berton;name
@@ -111,16 +165,32 @@ desponds;depond;name
 despons;depond;name
 despond;depond;name
 maritte;mary;name
+gascoing;gascoin;name
 durocher;rocher;name
 larcanche;archanche;name
 guerin ou guini?;guerin;name
+houvre;ouvre;name
+ouvray;ouvre;name
 ouvre ;ouvret ;name
+ribet;ribe;name
+courti;courty;name
+loup;louis;name
+fourniet;fournier;name
 collas;colas;name
 bauge;bouge;name
 bergere;berger;name
 roze;rose;name
+michelle;michel;name
+michel;miche;name
 chenau;chenot;name
+le metez;lemettais;name
 louisse;louise;name
+vaultier;vautier;name
+grand guillotte;guillotte;name
+granguillotte;guillotte;name
+grandguillotte;guillotte;name
+grandguillot;guillotte;name
+granguillot;guillotte;name
 larrivee;la rive;name
 remy;remi;name
 gilles;gille;name
@@ -148,6 +218,9 @@ villaine;vilaine;name
 pignault;peignault;name
 deroy;drouet;name
 germine;germaine;name
+hammon;hamon;name
+thereize;therese;name
+lure;laurence;name
 laurence;laurent;name
 jusseaumme;jusseaume;name
 jousseaume;jusseaume;name
@@ -158,18 +231,37 @@ angelie;angelique;name
 herue;herve;name
 galochet;galocher;name
 jacquelin;paquelin;name
+jaques;jacques;name
 tetrel;tetturel;name
 beugnon;bugnon;name
 le suin;le suain;name
 lerouilley;le rouillet;name
+le roux;leroux;name
+roze;rose;name
+michelle;michel;name
+jeanne;jean;name
 kaizant;quaizant;name
 quezant;quaizant;name
 qaisant;quaizant;name
 soimier;soymier;name
+onfray;onfroy;name
+onfrey;onfroy;name
+mathias;mathieu;name
+matthieu;mathieu;name
+guilmette;guillemette;name
 boger;boyer;name
+lucee;lucee;name
+bauchaut;pauchaut;name
+catherinne;catherine;name
 de la prevote;;name
+de la mothe;;name
 le bargi;le bargy;name
 lebargy;le bargy;name
+bertrand;bertran;name
+vercingetorix;vercigentorix;name
+le françois;lefrançois;name
+guillemette;guillemine;name
+thommelin;thomelin;name
 de biencourt;;name
 brusle;brule;name
 nian;nyon;name
@@ -216,15 +308,20 @@ saint-laurent - gien;gien;city
 saint-laurent;gien;city
 saint-louis ;gien;city
 saint-didier;sens;city
+saint pierre le rond;sens;city
 gien-le-vieil;gien;city
+saint-pierre-et-saint-louis - gien;gien;city
 les benoits;malicorne;city
 la boulasse;chatillon sur loire;city
 la charmault;montcresson;city
+barneville-carteret;barneville;city
 briere;montbouy;city
-la prevote;bussy-en-othe;city
 a la ferme de la bruyere.;montbouy;city
+les lorrains;montbouy;city
+la prevote;bussy-en-othe;city
 les etisseaux;saint maurice sur aveyron;city
 la croix-lambert;saint maurice sur aveyron;city
+la croix lambert;saint maurice sur aveyron;city
 les plots;saint maurice sur aveyron;city
 les vieux echarlis;villefranche;city
 les guidus;saint maurice sur aveyron;city
@@ -232,10 +329,15 @@ la tuillerie;saint maurice sur aveyron;city
 la chabassolerie;saint maurice sur aveyron;city
 chabassollerie;saint maurice sur aveyron;city
 la herbonniere;saint maurice sur aveyron;city
+mairie;;city
 la taupinniere;briare;city
 changy les bois;changy;city
+sauxemesnil;saussemesnil;city
+urville bocage;urville;city
 maison commune - saint-maurice-sur-aveyron;saint maurice sur aveyron;city
 saint-pierre-le-rond - sens;sens;city
+le valdecie 50....;le valdecie;city
+le valdecie 50...;le valdecie;city
 saint-pierre-le-rond;sens;city
 ferme de berthonval;mont-saint-eloi;city
 le bourg;la chapelle sur aveyron;city
@@ -243,6 +345,8 @@ les fouches;feins-en-gatinais;city
 mortumier;les choux;city
 arrabloy;gien;city
 les perichoirs;chateau renard;city
+agon-coutainville;agon;city
+la masure;le charme;city
 la petite pogne;champcevrais;city
 les morins;malicorne;city
 ferme de crecy;avrolles;city

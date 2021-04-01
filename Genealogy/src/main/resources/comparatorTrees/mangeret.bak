@@ -1,5 +1,5 @@
-https://gw.geneanet.org/mangeret?lang=fr&p=cesar&n=courty;Cesar COURTY;firstName=Cesar;Missing Sibling : https://gw.geneanet.org/mangeret?lang=fr&p=pierre&n=courty&oc=11
-https://gw.geneanet.org/mangeret?lang=fr&p=x&n=courty&oc=10;X COURTY;Missing Father
+https://gw.geneanet.org/mangeret?lang=fr&p=cesar&n=courty;Cesar COURTY;firstName=Cesar;familyName=COURTY;Missing Sibling : https://gw.geneanet.org/mangeret?lang=fr&p=pierre&n=courty&oc=11
+https://gw.geneanet.org/mangeret?lang=fr&p=x&n=courty&oc=10;X COURTY;firstName=X;familyName=COURTY
 https://gw.geneanet.org/mangeret?lang=fr&p=francois&n=courty&oc=48;François COURTY;BirthDate=11/04/1700
 https://gw.geneanet.org/mangeret?lang=fr&p=francois&n=courty&oc=45;François COURTY;DeathDate=28/09/1692;DeathPlace=Issoudun
 https://gw.geneanet.org/mangeret?lang=fr&p=pierre&n=courty&oc=17;Pierre COURTY;DeathDate=06/12/1782
@@ -11,3 +11,4 @@ https://gw.geneanet.org/mangeret?lang=fr&p=etienne&n=teyton&oc=2;Etienne TEYTON;
 https://gw.geneanet.org/mangeret?lang=fr&p=gabrielle&n=bouchard&oc=1;Gabrielle BOUCHARD;BirthDate=02/05/1628;BirthPlace=Peyrat-la-Nonière;DeathDate=06/02/1687;DeathPlace=Crouzat
 https://gw.geneanet.org/mangeret?lang=fr&p=simon&n=courty;Simon COURTY;BirthDate=1756
 https://gw.geneanet.org/mangeret?lang=fr&z=-105858284;? ?;Missing Mother
+https://gw.geneanet.org/mangeret?lang=fr&p=anne&n=ribe&oc=3;Anne RIBE;familyName=RIBE
