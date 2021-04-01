@@ -990,12 +990,12 @@ public class TreeComparator {
     }
 
 
-    public static void loopCompareTree(String testUrl, boolean search, Genealogy genealogyInput, boolean saveComparison, boolean saveGeneanet, boolean exceptionMode) throws Exception {
+    public static void loopCompareTree(String testUrl, boolean search, Genealogy genealogyInput, boolean saveComparison, boolean exceptionMode) throws Exception {
         Genealogy genealogyParameter = genealogyInput;
-        TreeComparator treeComparator = compareTree(testUrl, search, genealogyParameter, saveComparison, saveGeneanet, exceptionMode);
+        TreeComparator treeComparator = compareTree(testUrl, search, genealogyParameter, saveComparison, exceptionMode);
         boolean error = treeComparator.isErrorComparison();
         //only saving data
-        if (search && saveGeneanet && !exceptionMode) {
+        if (search && saveComparison && !exceptionMode) {
             error = false;
         }
         while (error) {
@@ -1028,12 +1028,12 @@ public class TreeComparator {
                         genealogyParameter = genealogy;
                 }
             }
-            treeComparator = compareTree(testUrl, search, genealogyParameter, saveComparison, saveGeneanet, exceptionMode);
+            treeComparator = compareTree(testUrl, search, genealogyParameter, saveComparison, exceptionMode);
             error = treeComparator.isErrorComparison();
         }
     }
 
-    public static TreeComparator compareTree(String testUrl, boolean search, Genealogy genealogy, boolean saveComparison, boolean saveGeneanet, boolean exceptionMode) throws Exception {
+    public static TreeComparator compareTree(String testUrl, boolean search, Genealogy genealogy, boolean saveComparison, boolean exceptionMode) throws Exception {
         //Geneanet Browser
         String tree = GeneanetBrowser.findTreeName(testUrl);
         GeneanetBrowser geneanetBrowser = null;
@@ -1055,7 +1055,7 @@ public class TreeComparator {
                 logger.info("Test OK for URL " + tree);
             }
             saveGeneanetBrowserIntoFile(geneanetBrowser0, tree);
-            if (saveGeneanet) {
+            if (saveComparison) {
                 geneanetBrowser0.saveSearchOutput();
             }
             geneanetBrowser = getGeneanetBrowserFromFile(tree);
@@ -1128,13 +1128,12 @@ public class TreeComparator {
         GeneanetBrowser urlBrowser = new GeneanetBrowser();
         ArrayList<GeneanetTree> geneanetTrees = urlBrowser.getGeneanetTrees();
         boolean searchOnGeneanet = false;
-        boolean saveGeneanetSearch = searchOnGeneanet;
         boolean exceptionMode = false;
         int index = 1;
         for (GeneanetTree geneanetTree : geneanetTrees) {
             if (index >= 1) {
                 String url = geneanetTree.getUrl();
-                loopCompareTree(url, searchOnGeneanet, genealogy, saveComparisonInFile, saveGeneanetSearch, exceptionMode);
+                loopCompareTree(url, searchOnGeneanet, genealogy, saveComparisonInFile, exceptionMode);
             }
             index++;
         }
