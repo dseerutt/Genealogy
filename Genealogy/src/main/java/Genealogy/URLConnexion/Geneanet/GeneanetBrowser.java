@@ -146,6 +146,7 @@ public class GeneanetBrowser implements Serializable {
             geneanetConverter.setXpathUrl(prop.getProperty("XpathUrl"));
             geneanetConverter.setXpathImage(prop.getProperty("XpathImage"));
             geneanetConverter.setXpathImage2(prop.getProperty("XpathImage2"));
+            geneanetConverter.setXpathImage3(prop.getProperty("XpathImage3"));
             if (geneanetURL == null) {
                 throw new Exception("Impossible de récupérer le fichier de propriétés");
             }
@@ -652,7 +653,7 @@ public class GeneanetBrowser implements Serializable {
     public static void main(String[] args) {
         String testUrl = "https://gw.geneanet.org/il?lang=fr&i=19978";
         String testUrl2 = "https://gw.geneanet.org/dil?lang=fr&p=marie&n=fremy";
-        String testUrl3 = "https://gw.geneanet.org/dil?lang=fr&p=jacques&n=de+silliers&oc=1";
+        String testUrl3 = "https://gw.geneanet.org/lisetoxe?lang=fr&p=claude&n=vincent";
         String xpathPattern = "/html/body/div/div/div/div[5]/div/div/div/div/div/div/div/div/div/div/div[2]/div/div/ul[2]/li[1]/table/tbody/tr/td[2]/em/text()";
         String xpathText = "Claude";
 

@@ -58,6 +58,7 @@ public class GeneanetConverter {
     private static String XpathUrl;
     private static String XpathImage;
     private static String XpathImage2;
+    private static String XpathImage3;
     private Document doc;
     private final static Character space = (char) 160;
     private static ArrayList<String> wrongCities;
@@ -65,6 +66,9 @@ public class GeneanetConverter {
     public GeneanetConverter(Document document) throws Exception {
         doc = document;
         initWrongCities();
+    }
+
+    public GeneanetConverter() throws Exception {
     }
 
     private void initWrongCities() {
@@ -147,6 +151,14 @@ public class GeneanetConverter {
 
     public static void setXpathImage2(String xpathImage2) {
         XpathImage2 = xpathImage2;
+    }
+
+    public static String getXpathImage3() {
+        return XpathImage3;
+    }
+
+    public static void setXpathImage3(String xpathImage3) {
+        XpathImage3 = xpathImage3;
     }
 
     public static void setXpathMother(String xpathMother) {
@@ -371,6 +383,9 @@ public class GeneanetConverter {
         String image = Xsoup.compile(XpathImage).evaluate(doc).get();
         if (image == null) {
             image = Xsoup.compile(XpathImage2).evaluate(doc).get();
+            if (image == null) {
+                image = Xsoup.compile(XpathImage3).evaluate(doc).get();
+            }
         }
         return image;
     }
@@ -415,7 +430,7 @@ public class GeneanetConverter {
                 if (tab != null && tab.length > 1) {
                     date = tab[0];
                     String cityTmp = tab[1];
-                    if (cityTmp.contains("Canton de") && tab.length > 2) {
+                    if (tab.length > 2 && (cityTmp.contains("Canton de") || (cityTmp.startsWith("Vue ")))) {
                         cityTmp = tab[2];
                     }
                     String[] cityTab = cityTmp.split(",");
@@ -513,8 +528,12 @@ public class GeneanetConverter {
                 String cityTmp = temptab[1];
                 String newTemptab = cityTmp.split(",")[0];
                 String[] newTab = newTemptab.split(" - ");
-                if (cityTmp.contains("Canton de") && newTab.length > 1) {
-                    newTemptab = newTab[1];
+                if (newTab.length > 1 && (cityTmp.contains("Canton de") || newTemptab.startsWith("Vue "))) {
+                    if (newTemptab.contains("acte du")) {
+                        newTemptab = newTab[2];
+                    } else {
+                        newTemptab = newTab[1];
+                    }
                 }
                 if (newTemptab.contains("(")) {
                     return removeTrailingNumbers(newTemptab.split("\\(")[0]);
@@ -567,6 +586,7 @@ public class GeneanetConverter {
         SimpleDateFormat dateFormatFullMonth = new SimpleDateFormat("dd MMMM yyyy", Locale.FRANCE);
         SimpleDateFormat dateFormatFullMonthOnly = new SimpleDateFormat("MMMM yyyy", Locale.FRANCE);
         dateFormatFullMonthOnly.setTimeZone(TimeZone.getTimeZone("UTC"));
+        dateFormatFullMonth.setTimeZone(TimeZone.getTimeZone("UTC"));
         try {
             Date date0 = dateFormatFullMonth.parse(inputDate);
             return new FullDate(date0);

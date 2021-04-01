@@ -191,9 +191,6 @@ public class TreeComparator {
         compareBirth(geneanetRoot, gedcomRoot);
         compareDeath(geneanetRoot, gedcomRoot);
         compareMarriage(geneanetRoot, gedcomRoot);
-        //compareSiblings(geneanetRoot, gedcomRoot);
-        //compareHalfSiblings(geneanetRoot, gedcomRoot);
-        //compareChildren(geneanetRoot, gedcomRoot);
 
         urlSearched.add(geneanetRoot.getUrl());
         searchFamily(geneanetRoot, gedcomRoot, true);
@@ -206,9 +203,6 @@ public class TreeComparator {
         }
         if (log) {
             logger.info("Compared " + gedcomPerson.getFullName() + "(" + geneanetPerson.getUrl() + ")");
-        }
-        if (geneanetPerson != null && geneanetPerson.getFullName().equals("Ernest, Léon BERTON")) {
-            String res = "";
         }
         compareNames(geneanetPerson, gedcomPerson);
         compareSex(geneanetPerson, gedcomPerson);
@@ -256,8 +250,7 @@ public class TreeComparator {
         compareBirth(geneanetPerson, gedcomPerson);
         compareDeath(geneanetPerson, gedcomPerson);
         compareMarriage(geneanetPerson, gedcomPerson);
-        //compareSiblings(geneanetPerson, gedcomPerson);
-        //compareHalfSiblings(geneanetPerson, gedcomPerson);
+
         if (root) {
             searchFamily(geneanetPerson, gedcomPerson, false);
         }
@@ -558,9 +551,6 @@ public class TreeComparator {
         if (string1 == null && string2 == null) {
             return true;
         } else if (string1 != null && string2 != null) {
-            if (string1.contains("Abraham BRANGE")) {
-                String res = "";
-            }
             String newString1 = StringUtils.stripAccents(string1).toLowerCase() + " ";
             String newString2 = StringUtils.stripAccents(string2).toLowerCase() + " ";
             if (!newString1.equals(newString2)) {
@@ -587,7 +577,17 @@ public class TreeComparator {
                     newString1 = newString1.replaceAll(key, value);
                     newString2 = newString2.replaceAll(key, value);
                 }
-                return newString1.trim().equals(newString2.trim());
+                String newStringTrimed1 = newString1.trim();
+                String newStringTrimed2 = newString2.trim();
+                if (newStringTrimed1.equals(newStringTrimed2)) {
+                    return true;
+                } else {
+                    char charArray1[] = newStringTrimed1.toCharArray();
+                    Arrays.sort(charArray1);
+                    char charArray2[] = newStringTrimed2.toCharArray();
+                    Arrays.sort(charArray2);
+                    return StringUtils.equals(new String(charArray1), (new String(charArray2)));
+                }
             } else {
                 return true;
             }
@@ -1002,6 +1002,10 @@ public class TreeComparator {
         Genealogy genealogyParameter = genealogyInput;
         TreeComparator treeComparator = compareTree(testUrl, search, genealogyParameter, saveComparison, saveGeneanet, displayModeFull, exceptionMode, hideComparisons);
         boolean error = treeComparator.isErrorComparison();
+        //only saving data
+        if (search && saveGeneanet && !exceptionMode) {
+            error = false;
+        }
         while (error) {
             logger.info("Add line ? (A to add, R to replace, D to delete, exit to exit, any other to refresh data)");
             Scanner in = new Scanner(System.in);
@@ -1095,8 +1099,6 @@ public class TreeComparator {
         boolean logDifferences = true;
         if (comparison != null && !comparison.equals("")) {
             treeComparator.printDifferences(displayModeFull, hideComparisons, logDifferences);
-            //logger.info("Root Geneanet person : " + geneanetBrowser.rootPerson);
-            //logger.info("Main Gedcom person : " + person);
             logger.info(geneanetPersonStringHashMap.size() + "/" + treeComparator.getDifferences().size() + " differences of " + tree + " tree :");
             logger.error(comparison);
             treeComparator.setErrorComparison(true);
@@ -1141,7 +1143,7 @@ public class TreeComparator {
         boolean hideComparisons = true;
         int index = 1;
         for (GeneanetTree geneanetTree : geneanetTrees) {
-            if (index >= 43) {
+            if (index >= 1) {
                 String url = geneanetTree.getUrl();
                 loopCompareTree(url, searchOnGeneanet, genealogy, saveComparisonInFile, saveGeneanetSearch, displayModeFull, exceptionMode, hideComparisons);
             }
