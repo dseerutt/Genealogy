@@ -990,12 +990,12 @@ public class TreeComparator {
     }
 
 
-    public static void loopCompareTree(String testUrl, boolean search, Genealogy genealogyInput, boolean saveComparison, boolean exceptionMode) throws Exception {
+    public static void loopCompareTree(String testUrl, boolean search, Genealogy genealogyInput, boolean exceptionMode) throws Exception {
         Genealogy genealogyParameter = genealogyInput;
-        TreeComparator treeComparator = compareTree(testUrl, search, genealogyParameter, saveComparison, exceptionMode);
+        TreeComparator treeComparator = compareTree(testUrl, search, genealogyParameter, exceptionMode);
         boolean error = treeComparator.isErrorComparison();
         //only saving data
-        if (search && saveComparison && !exceptionMode) {
+        if (search && !exceptionMode) {
             error = false;
         }
         while (error) {
@@ -1028,12 +1028,12 @@ public class TreeComparator {
                         genealogyParameter = genealogy;
                 }
             }
-            treeComparator = compareTree(testUrl, search, genealogyParameter, saveComparison, exceptionMode);
+            treeComparator = compareTree(testUrl, search, genealogyParameter, exceptionMode);
             error = treeComparator.isErrorComparison();
         }
     }
 
-    public static TreeComparator compareTree(String testUrl, boolean search, Genealogy genealogy, boolean saveComparison, boolean exceptionMode) throws Exception {
+    public static TreeComparator compareTree(String testUrl, boolean search, Genealogy genealogy, boolean exceptionMode) throws Exception {
         //Geneanet Browser
         String tree = GeneanetBrowser.findTreeName(testUrl);
         GeneanetBrowser geneanetBrowser = null;
@@ -1055,7 +1055,7 @@ public class TreeComparator {
                 logger.info("Test OK for URL " + tree);
             }
             saveGeneanetBrowserIntoFile(geneanetBrowser0, tree);
-            if (saveComparison) {
+            if (search) {
                 geneanetBrowser0.saveSearchOutput();
             }
             geneanetBrowser = getGeneanetBrowserFromFile(tree);
@@ -1082,7 +1082,7 @@ public class TreeComparator {
         } else {
             logger.info("Comparison KO for " + testUrl + " Expected " + nbPeopleGen + " but got " + nbPeopleComp);
         }
-        if (saveComparison) {
+        if (search) {
             treeComparator.saveDifference(tree);
         }
         HashMap<GeneanetPerson, String> geneanetPersonStringHashMap = treeComparator.readDifferences(tree);
@@ -1124,7 +1124,6 @@ public class TreeComparator {
         setGedcomData();
         //printDirectAncestorsToInvestigate();
 
-        boolean saveComparisonInFile = false;
         GeneanetBrowser urlBrowser = new GeneanetBrowser();
         ArrayList<GeneanetTree> geneanetTrees = urlBrowser.getGeneanetTrees();
         boolean searchOnGeneanet = false;
@@ -1133,7 +1132,7 @@ public class TreeComparator {
         for (GeneanetTree geneanetTree : geneanetTrees) {
             if (index >= 1) {
                 String url = geneanetTree.getUrl();
-                loopCompareTree(url, searchOnGeneanet, genealogy, saveComparisonInFile, exceptionMode);
+                loopCompareTree(url, searchOnGeneanet, genealogy, exceptionMode);
             }
             index++;
         }
