@@ -5,9 +5,18 @@ boilleau;boyau;name
 gionnet;guionnet;name
 michele;michelle;name
 anthoine;antoine;name
+anthoisne;antoine;name
+le ledier;le laidier;name
+le ledye;le laidier;name
+le joly;lejoly;name
+perrette;perette;name
 guerre;gavre;name
 laisney;laine;name
 laisne;laine;name
+bachelay;bacheley;name
+regne;rene;name
+dubost;dubosc;name
+scholastique;scolastiq;name
 fleure;fleur;name
 leonord;leonore;name
 cecille;cecile;name
@@ -23,6 +32,10 @@ magdelaine;madeleine;name
 magdelenne;madeleine;name
 magdalene;madeleine;name
 caesar;cesar;name
+thoumine;toumine;name
+tollemer;tolmer;name
+helaine;helene;name
+delacosse;delacotte;name
 dit bordemont;;name
 dit le jeune;;name
 dit le boucher;;name
@@ -72,6 +85,7 @@ ambrouaise;ambroise;name
 corniere;cornier;name
 dit galobie;;name
 dit gallobis;;name
+dit galabrie;;name
 dit lucas;;name
 simeon;simon;name
 denyse;denise;name
@@ -222,11 +236,14 @@ hammon;hamon;name
 thereize;therese;name
 lure;laurence;name
 laurence;laurent;name
+laurens;laurent;name
+leliepault;le liepard;name
 jusseaumme;jusseaume;name
 jousseaume;jusseaume;name
 lajoye;laiye;name
 desnoues;desnoux;name
 gennevieve;genevieve;name
+genevievve;genevieve;name
 angelie;angelique;name
 herue;herve;name
 galochet;galocher;name
@@ -262,6 +279,8 @@ vercingetorix;vercigentorix;name
 le françois;lefrançois;name
 guillemette;guillemine;name
 thommelin;thomelin;name
+tommelin;thomelin;name
+tomelin;thomelin;name
 de biencourt;;name
 brusle;brule;name
 nian;nyon;name

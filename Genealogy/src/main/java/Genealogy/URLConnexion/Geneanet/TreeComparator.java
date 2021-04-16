@@ -1130,7 +1130,7 @@ public class TreeComparator {
         boolean exceptionMode = false;
         int index = 1;
         for (GeneanetTree geneanetTree : geneanetTrees) {
-            if (index >= 1) {
+            if (index >= 0) {
                 String url = geneanetTree.getUrl();
                 loopCompareTree(url, searchOnGeneanet, genealogy, exceptionMode);
             }
