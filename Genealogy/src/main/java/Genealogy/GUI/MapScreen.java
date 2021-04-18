@@ -694,12 +694,15 @@ public class MapScreen extends JFrame {
         initMauritianGovernorsPictures();
     }
 
-    private void initFrenchGovernorsPictures() {
+    private void initFrenchGovernorsPictures() throws Exception {
         String path = "FrenchGovernors/";
         String extension = ".jpg";
         for (Governor governor : frenchGovernorContainer.getGovernors()) {
             String name = governor.getName();
             URL resource = getClass().getResource(path + name + extension);
+            if (resource == null) {
+                throw new Exception("Photo non trouvée : " + path + name + extension);
+            }
             ImageIcon image = new ImageIcon(resource);
             governor.addImage(image, 200, 200);
         }

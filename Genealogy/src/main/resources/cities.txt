@@ -6,18 +6,26 @@ Rivière Sèche|Flacq->32.9315755:10.4503961
 Beuvrigny|Manche->48.9689809:-1.0022623
 Venouse|Yonne->47.89521:3.68249
 Montcresson|Loiret->47.9075337:2.8049609
+Besneville|Manche->49.3678028:-1.6277869
 Brienon sur Armançon|Yonne->47.9933948:3.6159046
+La Haye d'Ectot|Manche->49.3908682:-1.7328175
+Ribemont|Aisne->49.7959192:3.4588395
 Champcevrais|Yonne->47.74508:2.9573
+Joganville|Manche->49.4698366:-1.3486817
 Ouzouer des Champs|Loiret->47.8810784:2.7054265
 Verlin|Yonne->48.01666:3.23204
 Orléans|Loiret->47.9027336:1.9086066
+Rauville la Place|Manche->49.3881626:-1.5032335
 Moon sur Elle|Manche->49.2117643:-1.0436799
 Toucy|Yonne->47.7338629:3.2939186
 Grandchamp|Yonne->47.798671600000006:3.163080087890007
+Le Valdécie|Manche->49.4230252:-1.6543613
 Hambye|Manche->48.9481147:-1.2643295
 Prunoy|Yonne->47.90295035:3.1470321414101914
 Châtillon sur Loire|Loiret->47.5904231:2.7530968
+Secqueville en Bessin|Calvados->49.2340027:-0.5189443
 Les Choux|Loiret->47.796965:2.6758426
+Crosville sur Douve|Manche->49.3876806:-1.4841807
 Mormant sur Vernisson|Loiret->47.9482078:2.737092
 Blois|Loir-et-Cher->47.5876861:1.3337639
 Oussoy en Gâtinais|Loiret->47.9068718:2.6415217
@@ -32,10 +40,15 @@ Cheviré le Rouge|Maine et Loire->47.58793765:-0.16921267272798823
 Gy les Nonains|Loiret->47.9440072:2.8456251
 Le Mesnil Garnier|Manche->48.8653372:-1.3096271
 Notre Dame de Cenilly|Manche->48.9955845:-1.2579726
+Brecey|Manche->48.7243382:-1.1662557
+Saint Jean aux Bois|Oise->49.3474799:2.904688
 Saint Florentin|Yonne->48.0017354:3.7280324
 Cheny|Yonne->47.9510093:3.5320302
+Tollevast|Manche->49.5737038:-1.6256545
+Eculleville|Manche->49.68211:-1.82222
 Saint Denis le Gast|Manche->48.9400303:-1.3290414
 Paris 11ème|Paris->32.9315755:10.4503961
+Baubigny|Manche->49.4295692:-1.8039676
 Liège|Wallonie->50.6451381:5.5734203
 Crepy en Valois|Oise->49.2358509:2.8900507
 Neuvy-sur-Barangeon|Cher->47.3146917:2.2551101
@@ -47,10 +60,12 @@ Pierres|Eure-et-Loir->48.5903443:1.5666532
 Gavray|Manche->48.90631425:-1.3322319191832732
 Barneville|Manche->49.3779892:-1.7870469
 Coullons|Loiret->47.6222754:2.4926961
+Fresville|Manche->49.4384199:-1.3556988
 Médine|Rivière Noire->-20.2602608:57.3948122
 Villeneuve les Genêts|Yonne->47.7356556:3.0926763
 Villiers Fossard|Manche->49.1567223:-1.0603049
 Montigny La Resle|Yonne->47.8650065:3.6810743
+Les Pieux|Manche->49.513753:-1.8083081
 Brévands|Manche->49.3308714:-1.1906359
 GIen|Loiret->47.6918575:2.6313889
 Villiers Saint Benoît|Yonne->47.7821588:3.2120077
@@ -59,12 +74,15 @@ Coulours|Yonne->48.1639:3.58643
 Turny|Yonne->48.0345355:3.7460532
 Colombières|Calvados->49.2958662:-0.9819517
 Hauterive|Yonne->47.9259221:3.599727
+Surtainville|Manche->49.4591638:-1.8130945
 Vimory|Loiret->47.9491186:2.6876623
 Ingré|Loiret->47.9193001:1.8224763
 Isigny sur Mer|Calvados->49.3186111:-1.1008333
 Yvetot-Bocage|Manche->49.4903168:-1.5042469
 Le Mesnil-Bonant|Manche->48.8997659:-1.3004412
+Saint Martin Le Hébert|Manche->49.5088111:-1.6141012
 L'Orbehaye|Manche->48.8958013:-1.2618258
+Fontenermont|Calvados->48.82136725:-1.0988675223689204
 Saint Martin de Cenilly|Manche->48.9823862:-1.2812325
 Semoy|Loiret->47.9337171:1.9494742
 Courcy|Manche->49.041977:-1.3930207
@@ -74,20 +92,29 @@ Melleroy|Loiret->47.890609600000005:2.9646488841129033
 Plaine des Papayes|Pamplemousses->-20.0633122:57.5809207
 Villers sur Coudun|Oise->49.484444:2.8067587
 Rivière sèche|Flacq->32.9315755:10.4503961
+Tourlaville|Manche->49.6401033:-1.5706728933964897
 Santranges|Cher->47.4981798:2.7726737
 Aulnay sous Bois|Seine-Saint-Denis->48.934231:2.499789
 La Haye Comtesse|Manche->48.92061:-1.2792836
 Grimbosq|Cavados->32.9315755:10.4503961
+La Ferté Loupière|Yonne->47.8955463:3.2347239
 Montpinchon|Manche->49.0222731:-1.3109641
 Saint Germain des Prés|Loiret->47.9550751:2.8481556
 Sebastopol Estate|Flacq->32.9315755:10.4503961
+Sottevast|Manche->49.5234364:-1.5926491
+Alleaume|Manche->48.8390693:-1.499355
 Mosles|Calvados->49.3076334:-0.8179079
 Sens|Yonne->48.1978559:3.282606
 Centre de Flacq|Flacq->-20.1948891:57.7229652
+Saint Martin le Hébert|Manche->49.5088111:-1.6141012
 Cherbourg|Manche->49.6425343:-1.6249565
+Urville|Manche->49.4508306:-1.4405052
 Gy Les Nonains|Loiret->47.9440072:2.8456251
+Tamerville|Manche->49.5330663:-1.4528687
 Courgenay|Yonne->48.2863869:3.5489709
+Fierville les Mines|Manche->49.3901345:-1.6699979
 Surrain|Calvados->49.3275417:-0.8631491
+Flamanville|Manche->49.5320334:-1.8660203
 Ouzouer sur Trézée|Loiret->47.6718144:2.8079812
 Bassou|Yonne->47.9250959:3.5144427
 Bayeux|Calvados->49.2764624:-0.7024738
@@ -97,6 +124,7 @@ Castilly|Calvados->49.273821049999995:-1.0179218743158231
 L'Haÿ Les Roses|Val de Marne->48.7790514:2.3373021
 Langesse|Loiret->47.8200818:2.6593127
 Villeneuve sur Yonne|Yonne->48.0819636:3.2943395
+Saint Sever|Calvados->48.825348500000004:-1.0403588623647062
 Rogny les sept écluses|Yonne->47.7421564:2.880949
 Escrignelles|Loiret->47.7152789:2.8216744
 Béthancourt|Oise->32.9315755:10.4503961
@@ -125,9 +153,12 @@ Carantilly|Manche->49.065507:-1.2418287
 Douchy|Loiret->47.94150260000001:3.0505253561776087
 laroche Saint Cydroine|Yonne->47.9642268:3.4843747
 Dixmont|Yonne->48.08185:3.41362
+La Trinité|Manche->48.7913715:-1.2353165
+Les Perques|Manche->49.4467663:-1.6579987
 Flottemanville|Manche->49.4737559:-1.4558489
 Centre de Flacq|Mauritius->32.9315755:10.4503961
 Sainte Marie du Mont|Manche->49.3788361:-1.2254755
+Fermanville|Manche->49.686865:-1.4416205
 Ognon|Oise->49.240039499999995:2.6422105417532853
 Quatre Bornes|Plaines Wilhems->-20.2643015:57.4800061
 Tannerre en Puisaye|Yonne->47.7352604:3.1312832
@@ -140,11 +171,15 @@ Joigny|Yonne->47.9825085:3.3991365
 Agon-Coutainville|Manche->49.0413:-1.58178
 Mont Saint Sulpice|Yonne->47.9522473:3.6255038
 Saint Firmin sur Loire|Loiret->47.6253509:2.7312788
+Sainte Pience|Manche->48.768341899999996:-1.2933244871278267
 Avrolles|Yonne->48.0035465:3.6825925
 Rivière du Rempart|Rivière du Rempart->-20.106789:57.6867219
 Septfonds|Yonne->47.702173:3.0966674
 Esnon|Yonne->47.98398:3.57506
+Digulleville|Manche->49.7003788:-1.8589732
+Saussemesnil|Manche->49.5705943:-1.4578652
 Gonfreville|Manche->49.2387683:-1.3934869
+Gréville Hague|Manche->49.6746397:-1.8008265
 Saint Germain le Gaillard|Manche->49.486919:-1.7804671
 Bonny sur Loire|Loiret->47.5606119:2.8397824
 Saint Firmin des Bois|Loiret->47.9653367:2.9133537
@@ -160,10 +195,13 @@ Béthancourt en Valois|Oise->49.2855164:2.8773053
 Laroche Saint Cydroine|Yonne->47.9642268:3.4843747
 Saint Martin de Bonfossé|Manche->49.0528081:-1.1695931
 Verberie|Oise->49.3094836:2.7288582
+Négréville|Manche->49.4914835:-1.5478233
 Octeville|Manche->49.6254784:-1.6448063
 Saint Gilles|Manche->49.1043227:-1.1752596
+Tournières|Calvados->49.2338889:-0.9286111
 Grand Bois|Savanne->-20.4188774:57.5511401
 Amiens|Somme->49.8941708:2.2956951
+Belval|Manche->49.0399397:-1.363712
 Brisée Verdière|Flacq->32.9315755:10.4503961
 Paris|Paris->48.8566969:2.3514616
 Saintines|Oise->49.3066982:2.7641135
@@ -177,12 +215,15 @@ Caen|Calvados->49.1828008:-0.3690815
 Triolet|Pamplemousses->-20.0574743:57.5521877
 Villeuve sur Yonne|Yonne->32.9315727:10.450413
 Saint Pierre du Regard|Orne->48.8425234:-0.5470719
+Cretteville|Manche->49.3426969:-1.3880533
 Le Mesnil Amey|Manche->49.1061822:-1.2084634
 Marchais-Beton|Yonne->47.8348092:3.0483671
 Compiègne|Oise->49.4179497:2.8263171
+Dieppe|Seine Maritime->49.9246182:1.0791444
 Cuvilly|Oise->49.5538704:2.6957949
 Triguères|Loiret->47.9411869:2.9855959
 La Baleine|Manche->48.9246433:-1.3169855
+Sénoville|Manche->49.4334979:-1.7808636
 Châtillon sur Loing|Loiret->32.9315755:10.4503961
 La Villotte|Yonne->47.7755995:3.2450303
 Saint Jean de la Ruelle|Loiret->47.9098024:1.8717431
@@ -191,6 +232,7 @@ Montaigu les Bois|Manche->48.8932969:-1.2780283
 Le Charme|Loiret->47.7998458:2.9958669
 Pierrefitte-Ès-Bois|Loiret->47.5073026:2.7162662
 Saint Martin sur Ouanne|Yonne->47.851004849999995:3.102718013588146
+Taillepied|Manche->49.3669363:-1.583064
 Châtillon Coligny|Loiret->47.8226411:2.8481603
 Martinvast|Manche->49.5949731:-1.6632491
 Issoudun-Létrieix|Creuse->46.06003:2.14238
@@ -200,23 +242,33 @@ Magneville|Manche->49.4470166:-1.5469716
 Charny|Yonne->47.88855045:3.0957759149640065
 Cerisiers|Yonne->48.1343098:3.4832538
 Chénérailles|Creuse->46.1119429:2.1763417
+Saint Lô d'Ourville|Manche->49.3343794:-1.6672823
 Roncey|Manche->48.9897337:-1.3331217
+Saint Martin du Mesnil|Manche->49.2391891:-1.2016021
 Conflans sur Loing|Loiret->47.9529238:2.7876606
 Folligny|Manche->48.8244308:-1.410211
 Tracy sur Mer|Calvados->49.3364012:-0.6431891
+Saint Laurent de Cuves|Manche->48.7514862:-1.1238938
+Saint Aignan de Cramesnil|Calvados->49.0815094:-0.2806809
+Saint Sauveur de Pierrepoint|Manche->32.9315727:10.450413
 Jaux|Oise->49.3881042:2.7765151
 Vacoas-Phoenix|Plaines Wilhems->-20.2988802:57.4927689
 Soulles|Manche->49.0143615:-1.1896289
 Néry|Oise->49.2835798:2.7783243
 Bon Accueil|Flacq->-20.1745003:57.670382
 Château-Renard|Loiret->47.9316325:2.9269125
+Gouberville|Manche->49.68752675:-1.318325327530672
 Saint Jean des Champs|Manche->48.8277979:-1.4647078
+Golleville|Manche->49.4362132:-1.5159186
 Coutances|Manche->49.047792:-1.4454857
 Carentan|Manche->49.29476595:-1.252311940606591
+Dol de Bretagne|Ille et Vilaine->48.5489772:-1.7521005
 Benoîtville|Manche->49.5275514:-1.780226
 Saint Sauveur le Vicomte|Manche->49.385446:-1.5318447
+Le Mesnil Aubert|Manche->48.9464678:-1.413988
 Chambeugle|Yonne->47.860233:3.04083
 La Madeleine|Nord->50.6565418:3.0678164
+Rouffigny|Manche->48.8038192:-1.2504934
 La Haye du Puits|Manche->49.2907057:-1.5444733
 Tourville sur Sienne|Manche->49.0457209:-1.5426992
 Villebaudon|Manche->48.9601814:-1.1664202
@@ -233,7 +285,9 @@ Villemoutiers|Loiret->47.9953557:2.5578404
 Saint André de l'Épine|Manche->49.1388593:-1.012778
 La Chapelle sur Aveyron|Loiret->47.8672285:2.8598356
 Thou|Loiret->47.5790082:2.9076132
+Hardinvast|Manche->49.5782439:-1.646955
 Nogent sur Vernisson|Loiret->47.8468879:2.7421711
+Canville la Rocque|Manche->49.3438736:-1.6360696
 Pontpoint|Oise->49.3023:2.65396
 Vandélicourt|Oise->49.5132772:2.7932026
 Pamplemousses|Pamplemousses->-20.1107201:57.5764944
@@ -242,8 +296,10 @@ Canchy|Calvados->49.3297585:-0.9815916
 Berthecourt|Oise->49.3504915:2.2244617
 Lacroix Saint Ouen|Oise->49.356047:2.7895045
 Saonnet|Calvados->49.2738889:-0.8780556
+Brix|Manche->49.5451274:-1.5796477
 Guéhébert|Manche->48.9698952:-1.3733768
 Le Theil|Manche->49.6042209:-1.4681291940541223
+Maisy|Calvados->49.381222:-1.0556758
 Quibou|Manche->49.0684104:-1.200194
 Corquilleroy|Loiret->48.0451539:2.6980927
 Arquian|Nievre->47.5410201:2.9885892
@@ -254,13 +310,18 @@ Saint Martin des Besaces|Calvados->49.010610299999996:-0.8348917874097153
 Mézières-en-Gâtinais|Loiret->48.034561:2.490789
 Le Rozel|Manche->49.4884424:-1.8280875
 Pressigny les Pins|Loiret->47.8809941:2.7515763
+Picauville|Manche->49.37973705:-1.3919822168758198
 Chêne-Arnoult|Yonne->47.90691205:3.0576648322724713
 Cerisy la Salle|Manche->49.0257994:-1.2837743
 Schönwald|Freibourg->32.9315755:10.4503961
+Isles sur Suippe|Marne->49.3548635:4.199203
 Ranchy|Calvados->49.2547222:-0.7552778
+Étienville|Manche->49.3771758:-1.4353309
+Chérencé le Héron|Manche->48.8013445:-1.1962714
 Lorcy|Loiret->48.0549797:2.5352555
 Saint Maurice sur Fessard|Loiret->47.9922985:2.6215518
 Cheveau|Mauritius->32.9315755:10.4503961
+Etienville|Manche->49.3771758:-1.4353309
 Saint Jacques de Néhou|Manche->49.4178885:-1.6123899
 Domjean|Manche->48.9872335:-1.031921
 Creil|Oise->49.2607914:2.4733771
@@ -268,12 +329,17 @@ Brion|Yonne->47.9955011:3.4801141
 Sourdeval les Bois|Manche->48.9102245:-1.2639506
 Sebastopol|Flacq->-20.2909197:57.6891632
 Autry Le Châtel|Loiret->47.5985716:2.6003968
+Rauville la Bigot|Manche->49.5196388:-1.68158
 Entrains sur Nohain|Nievre->47.4630257:3.2553919
 Pimprez|Oise->49.5140048:2.9503676
+Breuville|Manche->49.5369737:-1.6732627
+Pontorson|Manche->48.57362635:-1.4981210717832734
 Quettetot|Manche->49.4878937:-1.6670087
+Grosville|Manche->49.5090533:-1.7413225
 Le Mesnil Amand|Manche->48.8817759:-1.3613495
 Carcagny|Calvados->49.2398169:-0.6187072
 Saint Remy|Calvados->48.9395152:-0.502177
+Colomby|Manche->49.4563026:-1.4941505
 Saint Sauveur de Bonfossé|Manche->32.9315755:10.4503961
 Villefranche|Yonne->47.95935125:3.137415713525014
 Saint Pierre de Semilly|Manche->49.1206872:-1.0056706
@@ -282,6 +348,7 @@ Percy|Manche->48.9162031:-1.1898845
 Le Lorey|Manche->49.093535:-1.3065433
 Saint Sauveur|Oise->49.3185754:2.7818415
 Solterre|Loiret->47.9187481:2.7393823
+Le Vretot|Manche->49.4506527:-1.7094551
 Le Dézert|Manche->49.2040065:-1.1656686
 Saint Vigor le Grand|Calvados->49.2799517:-0.6906885
 Saintes|Charente Maritime->45.7420801:-0.6299329
