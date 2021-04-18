@@ -690,7 +690,7 @@ public class TreeComparator {
                 if (person == null) {
                     logger.warn("Could not find person " + entry.getKey().getUrl());
                     comparisonResultReplacement = "";
-                    comparisonResultDisplay = valueTxt;
+                    comparisonResultDisplay = "Deletion of " + valueTxt + " ?";
                     comparisonResultToReplace = printedUrl + ";" + entry.getKey().getImage() + ";" + valueTxt;
                     return;
                 }
@@ -709,7 +709,7 @@ public class TreeComparator {
             if (!differences.containsKey(person) || differences.containsKey(person) && !valueTxt.equals(newValue)) {
                 result += person.getFullName() + ";" + valueTxt;
                 differencesForDisplay.put(person, differences2.get(person));
-                comparisonResultDisplay = result + System.lineSeparator() + person.getUrl();
+                comparisonResultDisplay = "Deletion of " + result + " ?" + System.lineSeparator() + person.getUrl();
                 if (differences.get(person) == null) {
                     comparisonResultReplacement = "";
                 } else {
@@ -999,23 +999,39 @@ public class TreeComparator {
             error = false;
         }
         while (error) {
-            logger.info("Add line ? (A to add, R to replace, D to delete, exit to exit, any other to refresh data)");
+            String[] replaceSplit = treeComparator.comparisonResultToReplace.split(";");
+            String resultat = replaceSplit[2];
+            if (!StringUtils.equals(resultat, "null")) {
+                List<String> listReplace = Arrays.asList(replaceSplit);
+                List<String> listReplacement = Arrays.asList(treeComparator.comparisonResultReplacement.split(";"));
+                List<String> replaceOnlyList = new ArrayList<>(listReplace);
+                replaceOnlyList.removeAll(listReplacement);
+                List<String> removeOnlyList = new ArrayList<>(listReplacement);
+                removeOnlyList.removeAll(listReplace);
+                if (!replaceOnlyList.isEmpty()) {
+                    logger.info(replaceOnlyList + " <- will be removed");
+                }
+                if (!removeOnlyList.isEmpty()) {
+                    logger.info(removeOnlyList + " <- will be added");
+                }
+            }
+            logger.info("Add line ? (A to add or replace, D to delete, exit to exit, any other to refresh data)");
             Scanner in = new Scanner(System.in);
             String addModification = in.nextLine();
             if (addModification != null) {
                 switch (addModification) {
                     case "A":
                     case "ADD":
-                        logger.info("Modification added");
-                        addDifferenceInFile(treeComparator.getTreeName(), treeComparator.printDifferences(false, false));
+                        if (StringUtils.equals(resultat, "null")) {
+                            logger.info("Modification added");
+                            addDifferenceInFile(treeComparator.getTreeName(), treeComparator.printDifferences(false, false));
+                        } else {
+                            logger.info("Modification carried out");
+                            replaceDifferenceInFile(treeComparator, false);
+                        }
                         break;
                     case "exit":
                         throw new Exception("User exited the program");
-                    case "R":
-                    case "REPLACE":
-                        logger.info("Modification carried out");
-                        replaceDifferenceInFile(treeComparator, false);
-                        break;
                     case "D":
                     case "DELETE":
                         logger.info("Deletion carried out");
@@ -1130,7 +1146,7 @@ public class TreeComparator {
         boolean exceptionMode = false;
         int index = 1;
         for (GeneanetTree geneanetTree : geneanetTrees) {
-            if (index >= 0) {
+            if (index == 1) {
                 String url = geneanetTree.getUrl();
                 loopCompareTree(url, searchOnGeneanet, genealogy, exceptionMode);
             }
