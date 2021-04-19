@@ -46,6 +46,8 @@ public class TreeComparator {
     private static LinkedHashMap<String, String> aliasNames;
     public static final Pattern SPECIAL_REGEX_CHARS = Pattern.compile("[{}()\\[\\].+*?^$\\\\|]");
     private static HashMap<String, String> urlAlias = new HashMap<String, String>();
+    private static boolean searchOnGeneanet;
+    private static boolean exceptionMode;
 
     public TreeComparator(GeneanetPerson geneanetPerson, Person gedcomPerson, HashMap<String, GeneanetPerson> peopleUrl, String treeName) {
         urlSearched = new ArrayList<String>();
@@ -1047,36 +1049,39 @@ public class TreeComparator {
         return genealogyParam;
     }
 
-    public static void loopCompareTree(String testUrl, boolean search, Genealogy genealogyInput, boolean exceptionMode) throws Exception {
-        Genealogy genealogyParameter = genealogyInput;
-        TreeComparator treeComparator = compareTree(testUrl, search, genealogyParameter, exceptionMode);
+    public static String consoleScan() {
+        logger.info("Add line ? (A to add or replace, D to delete, exit to exit, any other to refresh data)");
+        Scanner in = new Scanner(System.in);
+        return in.nextLine();
+    }
+
+    public static void loopCompareTree(String testUrl) throws Exception {
+        Genealogy genealogyParameter = genealogy;
+        TreeComparator treeComparator = compareTree(testUrl, genealogyParameter);
         boolean error = treeComparator.isErrorComparison();
-        //only saving data
-        if (search && !exceptionMode) {
+        if (searchOnGeneanet && !exceptionMode) {
             error = false;
         }
         while (error) {
             treeComparator.analyseTree();
-            logger.info("Add line ? (A to add or replace, D to delete, exit to exit, any other to refresh data)");
-            Scanner in = new Scanner(System.in);
-            String addModification = in.nextLine();
+            String addModification = consoleScan();
             if (addModification != null) {
                 genealogyParameter = treeComparator.makeModification(addModification, genealogyParameter);
             }
-            treeComparator = compareTree(testUrl, search, genealogyParameter, exceptionMode);
+            treeComparator = compareTree(testUrl, genealogyParameter);
             error = treeComparator.isErrorComparison();
         }
     }
 
-    public static TreeComparator compareTree(String testUrl, boolean search, Genealogy genealogy, boolean exceptionMode) throws Exception {
+    public static TreeComparator compareTree(String testUrl, Genealogy genealogy) throws Exception {
         //Geneanet Browser
         String tree = GeneanetBrowser.findTreeName(testUrl);
         GeneanetBrowser geneanetBrowser = null;
-        if (!search) {
+        if (!searchOnGeneanet) {
             geneanetBrowser = getGeneanetBrowserFromFile(tree);
         }
 
-        if (search || geneanetBrowser == null) {
+        if (searchOnGeneanet || geneanetBrowser == null) {
             GeneanetBrowser geneanetBrowser0 = mainSearchFullTree(testUrl);
 
             int people = geneanetBrowser0.getNbPeople();
@@ -1090,7 +1095,7 @@ public class TreeComparator {
                 logger.info("Test OK for URL " + tree);
             }
             saveGeneanetBrowserIntoFile(geneanetBrowser0, tree);
-            if (search) {
+            if (searchOnGeneanet) {
                 geneanetBrowser0.saveSearchOutput();
             }
             geneanetBrowser = getGeneanetBrowserFromFile(tree);
@@ -1117,7 +1122,7 @@ public class TreeComparator {
         } else {
             logger.info("Comparison KO for " + testUrl + " Expected " + nbPeopleGen + " but got " + nbPeopleComp);
         }
-        if (search) {
+        if (searchOnGeneanet) {
             treeComparator.saveDifference(tree);
         }
         HashMap<GeneanetPerson, String> geneanetPersonStringHashMap = treeComparator.readDifferences(tree);
@@ -1161,13 +1166,12 @@ public class TreeComparator {
 
         GeneanetBrowser urlBrowser = new GeneanetBrowser();
         ArrayList<GeneanetTree> geneanetTrees = urlBrowser.getGeneanetTrees();
-        boolean searchOnGeneanet = false;
-        boolean exceptionMode = false;
+        searchOnGeneanet = false;
+        exceptionMode = false;
         int index = 1;
         for (GeneanetTree geneanetTree : geneanetTrees) {
             if (index == 1) {
-                String url = geneanetTree.getUrl();
-                loopCompareTree(url, searchOnGeneanet, genealogy, exceptionMode);
+                loopCompareTree(geneanetTree.getUrl());
             }
             index++;
         }
