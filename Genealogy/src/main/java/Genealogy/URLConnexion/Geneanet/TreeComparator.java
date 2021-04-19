@@ -770,7 +770,9 @@ public class TreeComparator {
         }
     }
 
-    public static void addDifferenceInFile(String treeName, String difference) {
+    public void addDifferenceInFile() {
+        String difference = printDifferences(false, false);
+        String treeName = getTreeName();
         String path = Serializer.getPath();
         if (path == null) {
             path = Serializer.getInstance().getPath();
@@ -788,10 +790,18 @@ public class TreeComparator {
         }
     }
 
-    public static void replaceDifferenceInFile(TreeComparator treeComparator, boolean delete) {
-        String treeName = treeComparator.getTreeName();
-        String find = treeComparator.getComparisonResultToReplace();
-        String difference = treeComparator.getComparisonResultReplacement();
+    public void replaceDifferenceInFile() {
+        changeDifferenceInFile(false);
+    }
+
+    public void deleteDifferenceInFile() {
+        changeDifferenceInFile(true);
+    }
+
+    public void changeDifferenceInFile(boolean delete) {
+        String treeName = getTreeName();
+        String find = getComparisonResultToReplace();
+        String difference = getComparisonResultReplacement();
         if (!delete && difference.equals("")) {
             logger.error("Can only remove field");
             return;
@@ -989,6 +999,53 @@ public class TreeComparator {
         return SPECIAL_REGEX_CHARS.matcher(str).replaceAll("\\\\$0");
     }
 
+    public void analyseTree() {
+        String[] replaceSplit = comparisonResultToReplace.split(";");
+        String resultat = replaceSplit[2];
+        if (!StringUtils.equals(resultat, "null")) {
+            List<String> listReplace = Arrays.asList(replaceSplit);
+            List<String> listReplacement = Arrays.asList(comparisonResultReplacement.split(";"));
+            List<String> replaceOnlyList = new ArrayList<>(listReplace);
+            replaceOnlyList.removeAll(listReplacement);
+            List<String> removeOnlyList = new ArrayList<>(listReplacement);
+            removeOnlyList.removeAll(listReplace);
+            if (!replaceOnlyList.isEmpty()) {
+                logger.info(replaceOnlyList + " <- will be removed");
+            }
+            if (!removeOnlyList.isEmpty()) {
+                logger.info(removeOnlyList + " <- will be added");
+            }
+        }
+    }
+
+    public Genealogy makeModification(String addModification, Genealogy genealogyParam) throws Exception {
+        switch (addModification) {
+            case "A":
+            case "ADD":
+                String[] replaceSplit = comparisonResultToReplace.split(";");
+                if (StringUtils.equals(replaceSplit[2], "null")) {
+                    logger.info("Modification added");
+                    addDifferenceInFile();
+                } else {
+                    logger.info("Modification carried out");
+                    replaceDifferenceInFile();
+                }
+                break;
+            case "exit":
+                throw new Exception("User exited the program");
+            case "D":
+            case "DELETE":
+                logger.info("Deletion carried out");
+                deleteDifferenceInFile();
+                break;
+            default:
+                logger.info("Rerun needed");
+                setGedcomData();
+                initAlias(true);
+                return genealogy;
+        }
+        return genealogyParam;
+    }
 
     public static void loopCompareTree(String testUrl, boolean search, Genealogy genealogyInput, boolean exceptionMode) throws Exception {
         Genealogy genealogyParameter = genealogyInput;
@@ -999,50 +1056,12 @@ public class TreeComparator {
             error = false;
         }
         while (error) {
-            String[] replaceSplit = treeComparator.comparisonResultToReplace.split(";");
-            String resultat = replaceSplit[2];
-            if (!StringUtils.equals(resultat, "null")) {
-                List<String> listReplace = Arrays.asList(replaceSplit);
-                List<String> listReplacement = Arrays.asList(treeComparator.comparisonResultReplacement.split(";"));
-                List<String> replaceOnlyList = new ArrayList<>(listReplace);
-                replaceOnlyList.removeAll(listReplacement);
-                List<String> removeOnlyList = new ArrayList<>(listReplacement);
-                removeOnlyList.removeAll(listReplace);
-                if (!replaceOnlyList.isEmpty()) {
-                    logger.info(replaceOnlyList + " <- will be removed");
-                }
-                if (!removeOnlyList.isEmpty()) {
-                    logger.info(removeOnlyList + " <- will be added");
-                }
-            }
+            treeComparator.analyseTree();
             logger.info("Add line ? (A to add or replace, D to delete, exit to exit, any other to refresh data)");
             Scanner in = new Scanner(System.in);
             String addModification = in.nextLine();
             if (addModification != null) {
-                switch (addModification) {
-                    case "A":
-                    case "ADD":
-                        if (StringUtils.equals(resultat, "null")) {
-                            logger.info("Modification added");
-                            addDifferenceInFile(treeComparator.getTreeName(), treeComparator.printDifferences(false, false));
-                        } else {
-                            logger.info("Modification carried out");
-                            replaceDifferenceInFile(treeComparator, false);
-                        }
-                        break;
-                    case "exit":
-                        throw new Exception("User exited the program");
-                    case "D":
-                    case "DELETE":
-                        logger.info("Deletion carried out");
-                        replaceDifferenceInFile(treeComparator, true);
-                        break;
-                    default:
-                        logger.info("Rerun needed");
-                        setGedcomData();
-                        treeComparator.initAlias(true);
-                        genealogyParameter = genealogy;
-                }
+                genealogyParameter = treeComparator.makeModification(addModification, genealogyParameter);
             }
             treeComparator = compareTree(testUrl, search, genealogyParameter, exceptionMode);
             error = treeComparator.isErrorComparison();
