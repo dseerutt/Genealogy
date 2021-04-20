@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="2" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="10" bottom="10" right="10"/>
     <constraints>
-      <xy x="20" y="20" width="650" height="472"/>
+      <xy x="20" y="20" width="650" height="513"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -614,6 +614,162 @@
                               </grid>
                             </children>
                           </grid>
+                        </children>
+                      </grid>
+                    </children>
+                  </grid>
+                </children>
+              </grid>
+            </children>
+          </grid>
+          <grid id="76f" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="true" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <tabbedpane title="Comparaison d'arbres"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <grid id="56f30" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="10" left="10" bottom="10" right="10"/>
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="2" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="c4906" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font size="16" style="1"/>
+                      <text value="Comparaison d'arbres Geneanet"/>
+                    </properties>
+                  </component>
+                  <grid id="662a3" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="10" left="10" bottom="10" right="10"/>
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <grid id="40139" layout-manager="GridLayoutManager" row-count="8" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <hspacer id="2d1ab">
+                            <constraints>
+                              <grid row="1" column="0" row-span="7" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                          </hspacer>
+                          <grid id="5107f" layout-manager="GridLayoutManager" row-count="6" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                            <margin top="0" left="0" bottom="0" right="0"/>
+                            <constraints>
+                              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties/>
+                            <border type="none"/>
+                            <children>
+                              <component id="befe9" class="javax.swing.JLabel">
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <font size="14"/>
+                                  <text value="Arbre"/>
+                                </properties>
+                              </component>
+                              <component id="d06f8" class="javax.swing.JComboBox" binding="arbre">
+                                <constraints>
+                                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties/>
+                              </component>
+                              <component id="c68dd" class="javax.swing.JButton" binding="comparerArbreButton">
+                                <constraints>
+                                  <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <text value="Comparer l'arbre"/>
+                                </properties>
+                              </component>
+                              <component id="6ebed" class="javax.swing.JButton" binding="comparerTousLesArbresButton" default-binding="true">
+                                <constraints>
+                                  <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <text value="Comparer tous les arbres"/>
+                                </properties>
+                              </component>
+                              <component id="ba53" class="javax.swing.JButton" binding="ajouterUnArbreButton" default-binding="true">
+                                <constraints>
+                                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <text value="Ajouter un arbre"/>
+                                </properties>
+                              </component>
+                              <vspacer id="58daf">
+                                <constraints>
+                                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                              </vspacer>
+                              <vspacer id="c5b26">
+                                <constraints>
+                                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                              </vspacer>
+                              <grid id="5e8d3" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                                <margin top="0" left="0" bottom="0" right="0"/>
+                                <constraints>
+                                  <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties/>
+                                <border type="none"/>
+                                <children>
+                                  <component id="55f36" class="javax.swing.JCheckBox" binding="rechercheGeneanetCheckBox" default-binding="true">
+                                    <constraints>
+                                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                    </constraints>
+                                    <properties>
+                                      <text value="Recherche Geneanet"/>
+                                    </properties>
+                                  </component>
+                                </children>
+                              </grid>
+                              <hspacer id="8d275">
+                                <constraints>
+                                  <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                              </hspacer>
+                              <hspacer id="44129">
+                                <constraints>
+                                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                              </hspacer>
+                            </children>
+                          </grid>
+                          <hspacer id="727dc">
+                            <constraints>
+                              <grid row="1" column="2" row-span="2" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                          </hspacer>
+                          <vspacer id="2cfdb">
+                            <constraints>
+                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                          </vspacer>
+                          <vspacer id="89d4">
+                            <constraints>
+                              <grid row="2" column="1" row-span="6" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                          </vspacer>
                         </children>
                       </grid>
                     </children>

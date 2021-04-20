@@ -13,6 +13,8 @@ import Genealogy.Model.Exception.URLException;
 import Genealogy.Model.Gedcom.Genealogy;
 import Genealogy.Model.Gedcom.Person;
 import Genealogy.Model.Gedcom.Town;
+import Genealogy.URLConnexion.Geneanet.GeneanetTree;
+import Genealogy.URLConnexion.Geneanet.TreeComparatorManager;
 import Genealogy.URLConnexion.MyHttpUrlConnection;
 import Genealogy.URLConnexion.Serializer;
 import org.apache.commons.lang3.tuple.Pair;
@@ -31,6 +33,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+
+import static Genealogy.URLConnexion.Geneanet.TreeComparatorManager.getInstance;
 
 /**
  * Created by Dan on 10/04/2016.
@@ -66,6 +70,11 @@ public class MainScreen extends JFrame {
     private JComboBox ActePDF;
     private JButton ajouterPDFButton;
     private JButton verifierLesPDFButton;
+    private JButton comparerArbreButton;
+    private JCheckBox rechercheGeneanetCheckBox;
+    private JButton ajouterUnArbreButton;
+    private JComboBox arbre;
+    private JButton comparerTousLesArbresButton;
     private JXMapKit jXMapKit;
     private ArrayList<MapPoint> mapPoints;
     private MapFrame mapFrame;
@@ -357,6 +366,53 @@ public class MainScreen extends JFrame {
                 }
                 for (String s : deathList) {
                     deces.setText(deces.getText() + s);
+                }
+            }
+        });
+
+        try {
+            int index = 1;
+            for (GeneanetTree geneanetTree : TreeComparatorManager.getInstance().getGeneanetBrowser().getGeneanetTrees()) {
+                if (index >= 1) {
+                    arbre.addItem(geneanetTree.getName());
+                }
+                index++;
+            }
+        } catch (Exception ex) {
+            logger.error("Impossible d'initialiser la liste des arbres", ex);
+        }
+
+        comparerArbreButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    String tree = arbre.getSelectedItem().toString();
+                    TreeComparatorManager treeComparatorManager = getInstance();
+                    treeComparatorManager.refreshGedcomData();
+                    treeComparatorManager.searchOnGeneanet = rechercheGeneanetCheckBox.isSelected();
+                    treeComparatorManager.compareTreeFromName(tree);
+                } catch (Exception e1) {
+                    logger.error("Failed to initialize carteButton actions", e1);
+                    JOptionPane.showMessageDialog(mainPanel, e1.getMessage(),
+                            "Erreur",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        comparerTousLesArbresButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    TreeComparatorManager treeComparatorManager = getInstance();
+                    treeComparatorManager.refreshGedcomData();
+                    treeComparatorManager.searchOnGeneanet = rechercheGeneanetCheckBox.isSelected();
+                    treeComparatorManager.compareTrees();
+                } catch (Exception e1) {
+                    logger.error("Failed to initialize carteButton actions", e1);
+                    JOptionPane.showMessageDialog(mainPanel, e1.getMessage(),
+                            "Erreur",
+                            JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

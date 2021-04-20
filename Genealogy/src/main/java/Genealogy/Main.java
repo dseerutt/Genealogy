@@ -5,9 +5,12 @@ import Genealogy.GUI.WelcomeScreen;
 import Genealogy.Model.Gedcom.Genealogy;
 import Genealogy.Model.Gedcom.Town;
 import Genealogy.Parsing.MyGedcomReader;
+import Genealogy.URLConnexion.Geneanet.TreeComparatorManager;
 import Genealogy.URLConnexion.Serializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import static Genealogy.URLConnexion.Geneanet.TreeComparatorManager.getInstance;
 
 /**
  * Main class : launch Genealogy project
@@ -44,12 +47,15 @@ public class Main {
      */
     public static void initQuickMainScreen() throws Exception {
         MyGedcomReader myGedcomReader = new MyGedcomReader();
-        Genealogy.genealogy = myGedcomReader.read("src\\main\\resources\\famille1.ged");
+        String path = "src\\main\\resources\\famille1.ged";
+        Genealogy.genealogy = myGedcomReader.read(path);
         Genealogy.genealogy.parseContents();
         Genealogy.genealogy.sortPersons();
         Town.setAllCoordinates();
         Serializer.getInstance().saveSerializedTownList();
         Genealogy.genealogy.initPersonsLifeSpans();
+        TreeComparatorManager treeComparatorManager = getInstance();
+        treeComparatorManager.gedcomFile = path;
         new MainScreen("Ma Généalogie");
     }
 }

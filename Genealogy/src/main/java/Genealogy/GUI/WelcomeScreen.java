@@ -3,6 +3,7 @@ package Genealogy.GUI;
 import Genealogy.Model.Gedcom.Genealogy;
 import Genealogy.Model.Gedcom.Town;
 import Genealogy.Parsing.MyGedcomReader;
+import Genealogy.URLConnexion.Geneanet.TreeComparatorManager;
 import Genealogy.URLConnexion.Serializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 
 import static Genealogy.GUI.MainScreen.myFolder;
 import static Genealogy.GUI.MainScreen.myJarFolder;
+import static Genealogy.URLConnexion.Geneanet.TreeComparatorManager.getInstance;
 
 /**
  * Created by Dan on 10/04/2016.
@@ -132,6 +134,8 @@ public class WelcomeScreen extends JFrame {
             logger.warn("Villes avec Coordonnées nulles : " + myEmptyTowns);
         }
         Genealogy.genealogy.initPersonsLifeSpans();
+        TreeComparatorManager treeComparatorManager = getInstance();
+        treeComparatorManager.gedcomFile = path;
         setVisible(false);
         MainScreen mainScreen = new MainScreen("Ma Généalogie");
     }

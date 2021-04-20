@@ -3,9 +3,9 @@ package Genealogy.URLConnexion.Geneanet;
 import Genealogy.Model.Exception.ParsingException;
 import Genealogy.Model.Gedcom.Genealogy;
 import Genealogy.Parsing.MyGedcomReader;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import static Genealogy.Model.Gedcom.Genealogy.genealogy;
@@ -14,8 +14,9 @@ import static Genealogy.URLConnexion.Geneanet.GeneanetBrowser.logger;
 public class TreeComparatorManager {
     public static String gedcomFile;
     public static boolean searchOnGeneanet;
-    public static boolean exceptionMode;
+    public static boolean exceptionMode = false;
     private static TreeComparatorManager instance;
+    public static GeneanetBrowser geneanetBrowser;
 
     public static TreeComparatorManager getInstance() {
         if (instance == null) {
@@ -42,6 +43,15 @@ public class TreeComparatorManager {
         return in.nextLine();
     }
 
+    public void compareTreeFromName(String name) throws Exception {
+        for (GeneanetTree geneanetTree : getGeneanetBrowser().getGeneanetTrees()) {
+            if (StringUtils.equals(name, geneanetTree.getName())) {
+                compareTree(geneanetTree.getUrl());
+                return;
+            }
+        }
+    }
+
     public void compareTree(String testUrl) throws Exception {
         Genealogy genealogyParameter = genealogy;
         TreeComparator treeComparator = new TreeComparator();
@@ -61,24 +71,29 @@ public class TreeComparatorManager {
         }
     }
 
-    public static void main(String[] args) throws Exception {
-        //init gedcomfile
-        gedcomFile = "C:\\Users\\Dan\\Desktop\\famille1.ged";
-        refreshGedcomData();
-        //printDirectAncestorsToInvestigate();
+    public GeneanetBrowser getGeneanetBrowser() throws Exception {
+        if (geneanetBrowser == null) {
+            geneanetBrowser = new GeneanetBrowser();
 
-        TreeComparatorManager treeComparatorManager = getInstance();
+        }
+        return geneanetBrowser;
+    }
 
-        GeneanetBrowser urlBrowser = new GeneanetBrowser();
-        ArrayList<GeneanetTree> geneanetTrees = urlBrowser.getGeneanetTrees();
-        searchOnGeneanet = false;
-        exceptionMode = false;
+    public void compareTrees() throws Exception {
         int index = 1;
-        for (GeneanetTree geneanetTree : geneanetTrees) {
-            if (index == 1) {
-                treeComparatorManager.compareTree(geneanetTree.getUrl());
+        for (GeneanetTree geneanetTree : getGeneanetBrowser().getGeneanetTrees()) {
+            if (index >= 1) {
+                compareTree(geneanetTree.getUrl());
             }
             index++;
         }
+    }
+
+    public static void main(String[] args) throws Exception {
+        gedcomFile = "C:\\Users\\Dan\\Desktop\\famille1.ged";
+        refreshGedcomData();
+        searchOnGeneanet = false;
+        TreeComparatorManager treeComparatorManager = getInstance();
+        treeComparatorManager.compareTrees();
     }
 }
