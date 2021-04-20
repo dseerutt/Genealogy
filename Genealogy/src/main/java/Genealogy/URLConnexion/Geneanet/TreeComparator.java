@@ -4,12 +4,10 @@ import Genealogy.Model.Act.Birth;
 import Genealogy.Model.Act.Death;
 import Genealogy.Model.Act.Union;
 import Genealogy.Model.Date.MyDate;
-import Genealogy.Model.Exception.ParsingException;
 import Genealogy.Model.Gedcom.Genealogy;
 import Genealogy.Model.Gedcom.Person;
 import Genealogy.Model.Gedcom.Sex;
 import Genealogy.Model.Gedcom.Town;
-import Genealogy.Parsing.MyGedcomReader;
 import Genealogy.URLConnexion.Serializer;
 import org.apache.commons.lang3.StringUtils;
 
@@ -21,6 +19,8 @@ import java.util.regex.Pattern;
 import static Genealogy.Model.Gedcom.Genealogy.genealogy;
 import static Genealogy.URLConnexion.Geneanet.GeneanetBrowser.*;
 import static Genealogy.URLConnexion.Geneanet.GeneanetPerson.printListofGeneanetPerson;
+import static Genealogy.URLConnexion.Geneanet.TreeComparatorManager.exceptionMode;
+import static Genealogy.URLConnexion.Geneanet.TreeComparatorManager.searchOnGeneanet;
 
 /**
  * Created by Dan on 02/12/2018.
@@ -34,7 +34,6 @@ public class TreeComparator {
     public HashMap<String, GeneanetPerson> peopleUrl = new HashMap<String, GeneanetPerson>();
     public static ArrayList<String> urlSearched = new ArrayList<String>();
     public static ArrayList<String> urlPartnersSearched = new ArrayList<String>();
-    public static String gedcomFile;
     private boolean log = true;
     private boolean errorComparison = false;
     private String treeName;
@@ -46,10 +45,9 @@ public class TreeComparator {
     private static LinkedHashMap<String, String> aliasNames;
     public static final Pattern SPECIAL_REGEX_CHARS = Pattern.compile("[{}()\\[\\].+*?^$\\\\|]");
     private static HashMap<String, String> urlAlias = new HashMap<String, String>();
-    private static boolean searchOnGeneanet;
-    private static boolean exceptionMode;
 
-    public TreeComparator(GeneanetPerson geneanetPerson, Person gedcomPerson, HashMap<String, GeneanetPerson> peopleUrl, String treeName) {
+    public void initTreeComparator(GeneanetPerson geneanetPerson, Person gedcomPerson, HashMap<String, GeneanetPerson> peopleUrl, String treeName) {
+        errorComparison = false;
         urlSearched = new ArrayList<String>();
         urlPartnersSearched = new ArrayList<String>();
         this.geneanetRoot = geneanetPerson;
@@ -57,6 +55,10 @@ public class TreeComparator {
         this.peopleUrl = peopleUrl;
         this.treeName = treeName;
         initAlias(false);
+    }
+
+    public TreeComparator() {
+
     }
 
     public int getPeopleSize() {
@@ -1042,38 +1044,14 @@ public class TreeComparator {
                 break;
             default:
                 logger.info("Rerun needed");
-                setGedcomData();
+                TreeComparatorManager.getInstance().refreshGedcomData();
                 initAlias(true);
                 return genealogy;
         }
         return genealogyParam;
     }
 
-    public static String consoleScan() {
-        logger.info("Add line ? (A to add or replace, D to delete, exit to exit, any other to refresh data)");
-        Scanner in = new Scanner(System.in);
-        return in.nextLine();
-    }
-
-    public static void loopCompareTree(String testUrl) throws Exception {
-        Genealogy genealogyParameter = genealogy;
-        TreeComparator treeComparator = compareTree(testUrl, genealogyParameter);
-        boolean error = treeComparator.isErrorComparison();
-        if (searchOnGeneanet && !exceptionMode) {
-            error = false;
-        }
-        while (error) {
-            treeComparator.analyseTree();
-            String addModification = consoleScan();
-            if (addModification != null) {
-                genealogyParameter = treeComparator.makeModification(addModification, genealogyParameter);
-            }
-            treeComparator = compareTree(testUrl, genealogyParameter);
-            error = treeComparator.isErrorComparison();
-        }
-    }
-
-    public static TreeComparator compareTree(String testUrl, Genealogy genealogy) throws Exception {
+    public void compareTree(String testUrl, Genealogy genealogy) throws Exception {
         //Geneanet Browser
         String tree = GeneanetBrowser.findTreeName(testUrl);
         GeneanetBrowser geneanetBrowser = null;
@@ -1112,10 +1090,10 @@ public class TreeComparator {
         Person person = genealogy.findPersonById(personId);
 
         //Comparing
-        TreeComparator treeComparator = new TreeComparator(rootPerson, person, geneanetBrowser.allPeopleUrl, tree);
-        treeComparator.setLog(false);
-        treeComparator.compareRoot();
-        int nbPeopleComp = treeComparator.getPeopleSize();
+        initTreeComparator(rootPerson, person, geneanetBrowser.allPeopleUrl, tree);
+        setLog(false);
+        compareRoot();
+        int nbPeopleComp = getPeopleSize();
         int nbPeopleGen = geneanetBrowser.getNbPeople();
         if (nbPeopleGen == nbPeopleComp) {
             //logger.info("Comparison OK for " + testUrl);
@@ -1123,31 +1101,23 @@ public class TreeComparator {
             logger.info("Comparison KO for " + testUrl + " Expected " + nbPeopleGen + " but got " + nbPeopleComp);
         }
         if (searchOnGeneanet) {
-            treeComparator.saveDifference(tree);
+            saveDifference(tree);
         }
-        HashMap<GeneanetPerson, String> geneanetPersonStringHashMap = treeComparator.readDifferences(tree);
-        treeComparator.compareDifferences(geneanetPersonStringHashMap);
-        String comparison = treeComparator.getComparisonResultDisplay();
+        HashMap<GeneanetPerson, String> geneanetPersonStringHashMap = readDifferences(tree);
+        compareDifferences(geneanetPersonStringHashMap);
+        String comparison = getComparisonResultDisplay();
         boolean logDifferences = true;
         if (comparison != null && !comparison.equals("")) {
-            treeComparator.printDifferences(true, logDifferences);
-            logger.info(geneanetPersonStringHashMap.size() + "/" + treeComparator.getDifferences().size() + " differences of " + tree + " tree :");
+            printDifferences(true, logDifferences);
+            logger.info(geneanetPersonStringHashMap.size() + "/" + getDifferences().size() + " differences of " + tree + " tree :");
             logger.error(comparison);
-            treeComparator.setErrorComparison(true);
+            setErrorComparison(true);
             if (exceptionMode) {
                 throw new Exception("Error with comparison for tree " + tree);
             }
         } else {
             logger.info("Tree " + tree + " OK");
         }
-        return treeComparator;
-    }
-
-    public static void setGedcomData() throws IOException, ParsingException {
-        MyGedcomReader myGedcomReader = new MyGedcomReader();
-        genealogy = myGedcomReader.read(gedcomFile);
-        genealogy.parseContents();
-        genealogy.sortPersons();
     }
 
     private static void printDirectAncestorsToInvestigate() {
@@ -1155,25 +1125,6 @@ public class TreeComparator {
             if (person.isDirectAncestor()) {
                 person.printNecessaryResearch();
             }
-        }
-    }
-
-    public static void main(String[] args) throws Exception {
-        //init gedcomfile
-        gedcomFile = "C:\\Users\\Dan\\Desktop\\famille1.ged";
-        setGedcomData();
-        //printDirectAncestorsToInvestigate();
-
-        GeneanetBrowser urlBrowser = new GeneanetBrowser();
-        ArrayList<GeneanetTree> geneanetTrees = urlBrowser.getGeneanetTrees();
-        searchOnGeneanet = false;
-        exceptionMode = false;
-        int index = 1;
-        for (GeneanetTree geneanetTree : geneanetTrees) {
-            if (index == 1) {
-                loopCompareTree(geneanetTree.getUrl());
-            }
-            index++;
         }
     }
 }
