@@ -1016,7 +1016,7 @@ public class TreeComparator {
             if (!replaceOnlyList.isEmpty()) {
                 logger.info(replaceOnlyList + " <- will be removed");
             }
-            if (!removeOnlyList.isEmpty()) {
+            if (!removeOnlyList.isEmpty() && (removeOnlyList.size() != 1 || !StringUtils.isBlank(removeOnlyList.get(0)))) {
                 logger.info(removeOnlyList + " <- will be added");
             }
         }
@@ -1026,22 +1026,22 @@ public class TreeComparator {
         switch (addModification) {
             case "A":
             case "ADD":
-                String[] replaceSplit = comparisonResultToReplace.split(";");
-                if (StringUtils.equals(replaceSplit[2], "null")) {
-                    logger.info("Modification added");
-                    addDifferenceInFile();
+                if (StringUtils.isEmpty(comparisonResultReplacement)) {
+                    logger.info("Deletion carried out");
+                    deleteDifferenceInFile();
                 } else {
-                    logger.info("Modification carried out");
-                    replaceDifferenceInFile();
+                    String[] replaceSplit = comparisonResultToReplace.split(";");
+                    if (StringUtils.equals(replaceSplit[2], "null")) {
+                        logger.info("Modification added");
+                        addDifferenceInFile();
+                    } else {
+                        logger.info("Modification carried out");
+                        replaceDifferenceInFile();
+                    }
                 }
                 break;
             case "exit":
                 throw new Exception("User exited the program");
-            case "D":
-            case "DELETE":
-                logger.info("Deletion carried out");
-                deleteDifferenceInFile();
-                break;
             default:
                 logger.info("Rerun needed");
                 TreeComparatorManager.getInstance().refreshGedcomData();

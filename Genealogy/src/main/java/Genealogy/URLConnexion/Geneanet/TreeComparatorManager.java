@@ -37,7 +37,7 @@ public class TreeComparatorManager {
 
 
     public String consoleScan() {
-        logger.info("Add line ? (A to add or replace, D to delete, exit to exit, any other to refresh data)");
+        logger.info("Add line ? (A to add/replace/delete, exit to exit, any other to refresh data)");
         Scanner in = new Scanner(System.in);
         return in.nextLine();
     }
