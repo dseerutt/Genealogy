@@ -94,7 +94,7 @@ public abstract class MyDate implements Serializable {
 
 
     public static int getDay(LocalDate date) {
-        return date.getYear();
+        return date.getDayOfMonth();
     }
 
     /**
