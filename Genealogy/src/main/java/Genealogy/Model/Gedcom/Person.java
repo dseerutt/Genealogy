@@ -978,6 +978,18 @@ public class Person {
         return res + "}";
     }
 
+    public String printPersonWithDates() {
+        String text = getFullNameInverted() + " [";
+        if (birth != null && birth.getDate() != null) {
+            text += birth.getDate().getYear();
+        }
+        text += ",";
+        if (death != null && death.getDate() != null) {
+            text += death.getDate().getYear();
+        }
+        return text + "]";
+    }
+
     /**
      * Function printPerson : return a string containing the French description of the person
      *

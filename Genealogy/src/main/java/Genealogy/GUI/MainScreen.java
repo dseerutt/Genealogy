@@ -382,6 +382,20 @@ public class MainScreen extends JFrame {
             logger.error("Impossible d'initialiser la liste des arbres", ex);
         }
 
+        ajouterUnArbreButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    NewTreeScreen newTreeScreen = new NewTreeScreen();
+                } catch (Exception e1) {
+                    logger.error("Failed to add a tree", e1);
+                    JOptionPane.showMessageDialog(mainPanel, e1.getMessage(),
+                            "Erreur",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
         comparerArbreButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -392,7 +406,7 @@ public class MainScreen extends JFrame {
                     treeComparatorManager.searchOnGeneanet = rechercheGeneanetCheckBox.isSelected();
                     treeComparatorManager.compareTreeFromName(tree);
                 } catch (Exception e1) {
-                    logger.error("Failed to initialize carteButton actions", e1);
+                    logger.error("Failed to compare trees", e1);
                     JOptionPane.showMessageDialog(mainPanel, e1.getMessage(),
                             "Erreur",
                             JOptionPane.ERROR_MESSAGE);
@@ -409,7 +423,7 @@ public class MainScreen extends JFrame {
                     treeComparatorManager.searchOnGeneanet = rechercheGeneanetCheckBox.isSelected();
                     treeComparatorManager.compareTrees();
                 } catch (Exception e1) {
-                    logger.error("Failed to initialize carteButton actions", e1);
+                    logger.error("Failed to compare all trees", e1);
                     JOptionPane.showMessageDialog(mainPanel, e1.getMessage(),
                             "Erreur",
                             JOptionPane.ERROR_MESSAGE);
