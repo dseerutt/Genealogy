@@ -404,7 +404,11 @@ public class MainScreen extends JFrame {
                     TreeComparatorManager treeComparatorManager = getInstance();
                     treeComparatorManager.refreshGedcomData();
                     treeComparatorManager.searchOnGeneanet = rechercheGeneanetCheckBox.isSelected();
-                    treeComparatorManager.compareTreeFromName(tree);
+                    if (treeComparatorManager.compareTreeFromName(tree)) {
+                        JOptionPane.showMessageDialog(mainPanel, "Comparaison arbre " + tree + " OK",
+                                "Information",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
                 } catch (Exception e1) {
                     logger.error("Failed to compare trees", e1);
                     JOptionPane.showMessageDialog(mainPanel, e1.getMessage(),
@@ -420,8 +424,13 @@ public class MainScreen extends JFrame {
                 try {
                     TreeComparatorManager treeComparatorManager = getInstance();
                     treeComparatorManager.refreshGedcomData();
+                    treeComparatorManager.indexTree = 1;
                     treeComparatorManager.searchOnGeneanet = rechercheGeneanetCheckBox.isSelected();
-                    treeComparatorManager.compareTrees();
+                    if (treeComparatorManager.compareTreesWithScreen()) {
+                        JOptionPane.showMessageDialog(mainPanel, "Comparaison de tous les arbres OK",
+                                "Information",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
                 } catch (Exception e1) {
                     logger.error("Failed to compare all trees", e1);
                     JOptionPane.showMessageDialog(mainPanel, e1.getMessage(),

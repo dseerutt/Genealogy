@@ -18,7 +18,7 @@ public class NewTreeScreen extends JFrame {
         super("Nouvel Arbre");
 
         for (Person person : Genealogy.genealogy.getPersons()) {
-            personneGedcom.addItem(person.printPersonWithDates());
+            personneGedcom.addItem(new ComboItem(person.printPersonWithDates(), person.getId()));
         }
 
         setPreferredSize(new Dimension(500, 200));

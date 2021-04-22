@@ -1,5 +1,6 @@
 package Genealogy.URLConnexion.Geneanet;
 
+import Genealogy.GUI.TreeModificationScreen;
 import Genealogy.Model.Exception.ParsingException;
 import Genealogy.Model.Gedcom.Genealogy;
 import Genealogy.Parsing.MyGedcomReader;
@@ -9,7 +10,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import static Genealogy.Model.Gedcom.Genealogy.genealogy;
-import static Genealogy.URLConnexion.Geneanet.GeneanetBrowser.logger;
+import static Genealogy.Model.Gedcom.Genealogy.logger;
 
 public class TreeComparatorManager {
     public static String gedcomFile;
@@ -17,6 +18,7 @@ public class TreeComparatorManager {
     public static boolean exceptionMode = false;
     private static TreeComparatorManager instance;
     public static GeneanetBrowser geneanetBrowser;
+    public int indexTree;
 
     public static TreeComparatorManager getInstance() {
         if (instance == null) {
@@ -26,7 +28,7 @@ public class TreeComparatorManager {
     }
 
     private TreeComparatorManager() {
-
+        indexTree = 1;
     }
 
     public static void refreshGedcomData() throws IOException, ParsingException {
@@ -36,39 +38,53 @@ public class TreeComparatorManager {
         genealogy.sortPersons();
     }
 
-
-    public String consoleScan() {
-        logger.info("Add line ? (A to add/replace/delete, exit to exit, any other to refresh data)");
+    public String askUser() {
         Scanner in = new Scanner(System.in);
         return in.nextLine();
     }
 
-    public void compareTreeFromName(String name) throws Exception {
+    public boolean compareTreeFromName(String name) throws Exception {
         for (GeneanetTree geneanetTree : getGeneanetBrowser().getGeneanetTrees()) {
             if (StringUtils.equals(name, geneanetTree.getName())) {
-                compareTree(geneanetTree.getUrl());
-                return;
+                return compareTreeOnce(geneanetTree.getUrl());
             }
+        }
+        return false;
+    }
+
+    public boolean compareTreeOnce(String url) throws Exception {
+        Genealogy genealogyParameter = genealogy;
+        TreeComparator treeComparator = new TreeComparator();
+        String info = treeComparator.compareTree(url, genealogyParameter);
+        if (treeComparator.isErrorComparison()) {
+            TreeModificationScreen treeModificationScreen = TreeModificationScreen.getInstance();
+            treeModificationScreen.getComparaisonText().setText(info);
+            treeModificationScreen.treeComparator = treeComparator;
+            return false;
+        } else {
+            logger.info(url + " OK");
+            return true;
         }
     }
 
     public void compareTree(String testUrl) throws Exception {
         Genealogy genealogyParameter = genealogy;
         TreeComparator treeComparator = new TreeComparator();
-        treeComparator.compareTree(testUrl, genealogyParameter);
+        String info = treeComparator.compareTree(testUrl, genealogyParameter) + System.lineSeparator();
         boolean error = treeComparator.isErrorComparison();
         if (searchOnGeneanet && !exceptionMode) {
             error = false;
         }
         while (error) {
-            treeComparator.analyseTree();
-            String addModification = consoleScan();
+            info += treeComparator.analyseTree() + System.lineSeparator();
+            String addModification = askUser();
             if (addModification != null) {
                 genealogyParameter = treeComparator.makeModification(addModification, genealogyParameter);
             }
-            treeComparator.compareTree(testUrl, genealogyParameter);
+            info = treeComparator.compareTree(testUrl, genealogyParameter) + System.lineSeparator();
             error = treeComparator.isErrorComparison();
         }
+        logger.info(System.lineSeparator() + info);
     }
 
     public GeneanetBrowser getGeneanetBrowser() throws Exception {
@@ -77,6 +93,22 @@ public class TreeComparatorManager {
 
         }
         return geneanetBrowser;
+    }
+
+    public boolean compareTreesWithScreen() throws Exception {
+        int index = 1;
+        boolean runOK = true;
+        for (GeneanetTree geneanetTree : getGeneanetBrowser().getGeneanetTrees()) {
+            if (index >= indexTree) {
+                if (!compareTreeOnce(geneanetTree.getUrl())) {
+                    indexTree = index;
+                    runOK = false;
+                    break;
+                }
+            }
+            index++;
+        }
+        return runOK;
     }
 
     public void compareTrees() throws Exception {
