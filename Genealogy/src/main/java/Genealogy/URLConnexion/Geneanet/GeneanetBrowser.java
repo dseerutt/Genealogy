@@ -72,8 +72,7 @@ public class GeneanetBrowser implements Serializable {
         try {
             String path = Serializer.getPath();
             if (path == null) {
-                path = Serializer.getInstance().getPath()
-                ;
+                path = Serializer.getInstance().getPath();
             }
             File f = new File(path + "geneanetTrees.properties");
             BufferedReader b = new BufferedReader(new FileReader(f));

@@ -1,5 +1,6 @@
 package Genealogy.URLConnexion.Geneanet;
 
+import Genealogy.GUI.MainScreen;
 import Genealogy.GUI.TreeModificationScreen;
 import Genealogy.Model.Exception.ParsingException;
 import Genealogy.Model.Gedcom.Genealogy;
@@ -57,12 +58,16 @@ public class TreeComparatorManager {
         TreeComparator treeComparator = new TreeComparator();
         String info = treeComparator.compareTree(url, genealogyParameter);
         if (treeComparator.isErrorComparison()) {
+            treeComparator.analyseTree();
             TreeModificationScreen treeModificationScreen = TreeModificationScreen.getInstance();
-            treeModificationScreen.getComparaisonText().setText(info);
+            treeModificationScreen.getAddReplacementText().setText(treeComparator.getAddReplacement());
+            treeModificationScreen.getRemoveReplacementText().setText(treeComparator.getRemoveReplacement());
+            treeModificationScreen.getComparedPerson().setText("Comparaison sur " + treeComparator.getPeopleFullNameError() + " :");
             treeModificationScreen.treeComparator = treeComparator;
+            treeModificationScreen.setVisible(true);
             return false;
         } else {
-            logger.info(url + " OK");
+            logger.info(info);
             return true;
         }
     }
@@ -70,21 +75,21 @@ public class TreeComparatorManager {
     public void compareTree(String testUrl) throws Exception {
         Genealogy genealogyParameter = genealogy;
         TreeComparator treeComparator = new TreeComparator();
-        String info = treeComparator.compareTree(testUrl, genealogyParameter) + System.lineSeparator();
+        String info = treeComparator.compareTree(testUrl, genealogyParameter);
         boolean error = treeComparator.isErrorComparison();
         if (searchOnGeneanet && !exceptionMode) {
             error = false;
         }
         while (error) {
-            info += treeComparator.analyseTree() + System.lineSeparator();
+            treeComparator.analyseTree();
             String addModification = askUser();
             if (addModification != null) {
                 genealogyParameter = treeComparator.makeModification(addModification, genealogyParameter);
             }
-            info = treeComparator.compareTree(testUrl, genealogyParameter) + System.lineSeparator();
+            info = System.lineSeparator() + treeComparator.compareTree(testUrl, genealogyParameter);
             error = treeComparator.isErrorComparison();
         }
-        logger.info(System.lineSeparator() + info);
+        logger.info(info);
     }
 
     public GeneanetBrowser getGeneanetBrowser() throws Exception {
@@ -99,6 +104,7 @@ public class TreeComparatorManager {
         int index = 1;
         boolean runOK = true;
         for (GeneanetTree geneanetTree : getGeneanetBrowser().getGeneanetTrees()) {
+            MainScreen.getINSTANCE().getArbre().setSelectedItem(geneanetTree.getName());
             if (index >= indexTree) {
                 if (!compareTreeOnce(geneanetTree.getUrl())) {
                     indexTree = index;

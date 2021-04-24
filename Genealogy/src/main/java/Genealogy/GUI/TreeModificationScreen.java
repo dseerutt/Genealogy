@@ -9,23 +9,25 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URI;
 
 public class TreeModificationScreen extends JFrame {
     private JPanel panel1;
-    private JTextArea comparaisonText;
     private JButton rafraichirFichierGedcomButton;
     private JButton ajouterModificationButton;
-    private JButton retourButton;
     private JPanel panel2;
+    private JButton lienGeneanetButton;
+    private JTextArea addReplacementText;
+    private JTextArea removeReplacementText;
+    private JTextField comparedPerson;
     private static TreeModificationScreen instance;
     public TreeComparator treeComparator;
     final static Logger logger = LogManager.getLogger(TreeModificationScreen.class);
 
 
     public TreeModificationScreen() {
-        super("Comparaison d'arbre");
+        super("Comparaison d'arbre Geneanet");
 
-        comparaisonText.setEditable(false);
         initButtons();
 
         setPreferredSize(new Dimension(700, 300));
@@ -42,11 +44,37 @@ public class TreeModificationScreen extends JFrame {
         return instance;
     }
 
+    public JTextField getComparedPerson() {
+        return comparedPerson;
+    }
+
+    public JTextArea getAddReplacementText() {
+        return addReplacementText;
+    }
+
+    public JTextArea getRemoveReplacementText() {
+        return removeReplacementText;
+    }
+
     public void initButtons() {
-        retourButton.addActionListener(new ActionListener() {
+        lienGeneanetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setVisible(false);
+                if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                    try {
+                        Desktop.getDesktop().browse(new URI(treeComparator.getPeopleUrlError()));
+                    } catch (Exception ex) {
+                        logger.error("Failed to open Geneanet link ", ex);
+                        JOptionPane.showMessageDialog(panel1, ex.getMessage(),
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    logger.error("Failed to open Geneanet link ");
+                    JOptionPane.showMessageDialog(panel1, "Erreur d'ouverture du lien " + treeComparator.getPeopleUrlError(),
+                            "Information",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         rafraichirFichierGedcomButton.addActionListener(new ActionListener() {
@@ -87,7 +115,4 @@ public class TreeModificationScreen extends JFrame {
         });
     }
 
-    public JTextArea getComparaisonText() {
-        return comparaisonText;
-    }
 }

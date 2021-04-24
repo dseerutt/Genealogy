@@ -86,6 +86,10 @@ public class MainScreen extends JFrame {
         return INSTANCE;
     }
 
+    public JComboBox getArbre() {
+        return arbre;
+    }
+
     public MainScreen(String title) throws IOException {
         super(title);
 
@@ -386,7 +390,8 @@ public class MainScreen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    NewTreeScreen newTreeScreen = new NewTreeScreen();
+                    NewTreeScreen newTreeScreen = NewTreeScreen.getInstance();
+                    newTreeScreen.setVisible(true);
                 } catch (Exception e1) {
                     logger.error("Failed to add a tree", e1);
                     JOptionPane.showMessageDialog(mainPanel, e1.getMessage(),
