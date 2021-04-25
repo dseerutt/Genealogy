@@ -432,7 +432,7 @@ public class MainScreen extends JFrame {
                 try {
                     TreeComparatorManager treeComparatorManager = getInstance();
                     treeComparatorManager.refreshGedcomData();
-                    treeComparatorManager.indexTree = 1;
+                    treeComparatorManager.indexTree = arbre.getSelectedIndex() + 1;
                     treeComparatorManager.searchOnGeneanet = rechercheGeneanetCheckBox.isSelected();
                     if (treeComparatorManager.compareTreesWithScreen()) {
                         JOptionPane.showMessageDialog(mainPanel, "Comparaison de tous les arbres OK",
