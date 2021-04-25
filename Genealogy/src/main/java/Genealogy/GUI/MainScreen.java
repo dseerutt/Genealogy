@@ -376,7 +376,7 @@ public class MainScreen extends JFrame {
 
         try {
             int index = 1;
-            for (GeneanetTree geneanetTree : TreeComparatorManager.getInstance().getGeneanetBrowser().getGeneanetTrees()) {
+            for (GeneanetTree geneanetTree : TreeComparatorManager.getInstance().getGeneanetBrowser().getGeneanetTreeManager().getGeneanetTrees()) {
                 if (index >= 1) {
                     arbre.addItem(geneanetTree.getName());
                 }
@@ -392,6 +392,7 @@ public class MainScreen extends JFrame {
                 try {
                     NewTreeScreen newTreeScreen = NewTreeScreen.getInstance();
                     newTreeScreen.setVisible(true);
+                    setVisible(false);
                 } catch (Exception e1) {
                     logger.error("Failed to add a tree", e1);
                     JOptionPane.showMessageDialog(mainPanel, e1.getMessage(),
@@ -413,6 +414,8 @@ public class MainScreen extends JFrame {
                         JOptionPane.showMessageDialog(mainPanel, "Comparaison arbre " + tree + " OK",
                                 "Information",
                                 JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        setVisible(false);
                     }
                 } catch (Exception e1) {
                     logger.error("Failed to compare trees", e1);

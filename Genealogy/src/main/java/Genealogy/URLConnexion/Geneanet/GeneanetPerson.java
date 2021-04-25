@@ -1,6 +1,7 @@
 package Genealogy.URLConnexion.Geneanet;
 
 import Genealogy.Model.Date.MyDate;
+import org.apache.commons.lang3.text.WordUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -315,7 +316,7 @@ public class GeneanetPerson implements Serializable {
     }
 
     public String getFullName() {
-        return firstName + " " + familyName;
+        return WordUtils.capitalize(firstName) + " " + familyName;
     }
 
     @Override

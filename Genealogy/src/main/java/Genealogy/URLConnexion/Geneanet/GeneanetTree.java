@@ -65,4 +65,9 @@ public class GeneanetTree implements Serializable {
                 ", gedcomId=" + gedcomId +
                 '}';
     }
+
+    public String print() {
+        String separator = ";";
+        return name + separator + url + separator + peopleNumber + separator + "@" + gedcomId + "@";
+    }
 }

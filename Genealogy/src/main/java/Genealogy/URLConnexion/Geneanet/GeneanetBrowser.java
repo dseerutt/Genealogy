@@ -36,7 +36,7 @@ public class GeneanetBrowser implements Serializable {
     public HashSet<String> peopleUrl = new HashSet<String>();
     public HashMap<String, GeneanetPerson> allPeopleUrl = new HashMap<String, GeneanetPerson>();
     final static Logger logger = LogManager.getLogger(GeneanetBrowser.class);
-    private static transient ArrayList<GeneanetTree> geneanetTrees = new ArrayList<>();
+    private transient GeneanetTreeManager geneanetTreeManager;
 
     public GeneanetBrowser() throws Exception {
         init();
@@ -49,9 +49,12 @@ public class GeneanetBrowser implements Serializable {
 
     public void init() throws Exception {
         initProperties();
-        if (url != null) {
+        if (url != null && geneanetConverter != null) {
             Document doc = initConnexion();
             geneanetConverter = new GeneanetConverter(doc);
+        }
+        if (geneanetTreeManager != null) {
+            geneanetTreeManager = new GeneanetTreeManager();
         }
     }
 
@@ -61,44 +64,8 @@ public class GeneanetBrowser implements Serializable {
      */
     public void initProperties() throws Exception {
         initGeneanetPathProperties();
-        initGeneanetTrees();
+        geneanetTreeManager = new GeneanetTreeManager();
     }
-
-    public void initGeneanetTrees() throws Exception {
-        if (!geneanetTrees.isEmpty()) {
-            return;
-        }
-        InputStream input = null;
-        try {
-            String path = Serializer.getPath();
-            if (path == null) {
-                path = Serializer.getInstance().getPath();
-            }
-            File f = new File(path + "geneanetTrees.properties");
-            BufferedReader b = new BufferedReader(new FileReader(f));
-            String line = "";
-            while ((line = b.readLine()) != null) {
-                String[] tmpTab = line.split(";");
-                if (tmpTab.length == 4) {
-                    geneanetTrees.add(new GeneanetTree(tmpTab[0], tmpTab[1], tmpTab[2], tmpTab[3]));
-                } else {
-                    logger.error("Could not read GeneanetTrees line : " + line);
-                }
-            }
-        } catch (Exception ex) {
-            logger.error("Failed to read geneanetTrees.properties file", ex);
-            throw new Exception("Impossible de lire le fichier de propriétés");
-        } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException e) {
-                    logger.error("Failed to close inputStream", e);
-                }
-            }
-        }
-    }
-
 
     public void initGeneanetPathProperties() throws Exception {
         Properties prop = new Properties();
@@ -163,16 +130,12 @@ public class GeneanetBrowser implements Serializable {
         }
     }
 
-    public ArrayList<GeneanetTree> getGeneanetTrees() {
-        return geneanetTrees;
-    }
-
-    public void setGeneanetTrees(ArrayList<GeneanetTree> geneanetTrees) {
-        this.geneanetTrees = geneanetTrees;
+    public GeneanetTreeManager getGeneanetTreeManager() {
+        return geneanetTreeManager;
     }
 
     public String getGedcomIdFromGeneanetTrees() {
-        for (GeneanetTree geneanetTree : geneanetTrees) {
+        for (GeneanetTree geneanetTree : geneanetTreeManager.getGeneanetTrees()) {
             if (removeGeneanetSuffix(geneanetTree.getUrl()).equals(removeGeneanetSuffix(url))) {
                 return geneanetTree.getGedcomId();
             }
@@ -181,7 +144,7 @@ public class GeneanetBrowser implements Serializable {
     }
 
     public int getPeopleNumberFromGeneanetTrees() {
-        for (GeneanetTree geneanetTree : geneanetTrees) {
+        for (GeneanetTree geneanetTree : geneanetTreeManager.getGeneanetTrees()) {
             if (removeGeneanetSuffix(geneanetTree.getUrl()).equals(removeGeneanetSuffix(url))) {
                 return geneanetTree.getPeopleNumber();
             }
@@ -589,7 +552,7 @@ public class GeneanetBrowser implements Serializable {
         try {
             GeneanetBrowser browser = new GeneanetBrowser();
             int cpt = 1;
-            ArrayList<GeneanetTree> localGeneanetTrees = browser.geneanetTrees;
+            ArrayList<GeneanetTree> localGeneanetTrees = browser.geneanetTreeManager.getGeneanetTrees();
             for (GeneanetTree tree : localGeneanetTrees) {
                 if (cpt >= 0) {
                     logger.info("Searching " + tree.getUrl());

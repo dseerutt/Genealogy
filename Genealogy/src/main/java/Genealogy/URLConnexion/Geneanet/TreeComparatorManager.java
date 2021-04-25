@@ -45,7 +45,7 @@ public class TreeComparatorManager {
     }
 
     public boolean compareTreeFromName(String name) throws Exception {
-        for (GeneanetTree geneanetTree : getGeneanetBrowser().getGeneanetTrees()) {
+        for (GeneanetTree geneanetTree : getGeneanetBrowser().getGeneanetTreeManager().getGeneanetTrees()) {
             if (StringUtils.equals(name, geneanetTree.getName())) {
                 return compareTreeOnce(geneanetTree.getUrl());
             }
@@ -103,7 +103,7 @@ public class TreeComparatorManager {
     public boolean compareTreesWithScreen() throws Exception {
         int index = 1;
         boolean runOK = true;
-        for (GeneanetTree geneanetTree : getGeneanetBrowser().getGeneanetTrees()) {
+        for (GeneanetTree geneanetTree : getGeneanetBrowser().getGeneanetTreeManager().getGeneanetTrees()) {
             MainScreen.getINSTANCE().getArbre().setSelectedItem(geneanetTree.getName());
             if (index >= indexTree) {
                 if (!compareTreeOnce(geneanetTree.getUrl())) {
@@ -119,7 +119,7 @@ public class TreeComparatorManager {
 
     public void compareTrees() throws Exception {
         int index = 1;
-        for (GeneanetTree geneanetTree : getGeneanetBrowser().getGeneanetTrees()) {
+        for (GeneanetTree geneanetTree : getGeneanetBrowser().getGeneanetTreeManager().getGeneanetTrees()) {
             if (index >= 1) {
                 compareTree(geneanetTree.getUrl());
             }

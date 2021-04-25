@@ -1005,6 +1005,7 @@ public class TreeComparator {
             ois = new ObjectInputStream(new FileInputStream(fichier));
             // désérialization de l'objet
             geneanetBrowser = (GeneanetBrowser) ois.readObject();
+            geneanetBrowser.init();
         } catch (Exception e) {
             logger.error("Failed to read Serialized tree from url " + url, e);
             return null;
