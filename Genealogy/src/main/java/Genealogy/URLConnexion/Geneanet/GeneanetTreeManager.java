@@ -22,7 +22,7 @@ public class GeneanetTreeManager implements Serializable {
     }
 
     public void addNewTree(String name, String url, String idGedcom) throws Exception {
-        GeneanetTree geneanetTree = new GeneanetTree(name, url, "0", idGedcom);
+        GeneanetTree geneanetTree = new GeneanetTree(name, url, "0", "@" + idGedcom + "@");
         geneanetTrees.add(geneanetTree);
         saveTrees();
     }
