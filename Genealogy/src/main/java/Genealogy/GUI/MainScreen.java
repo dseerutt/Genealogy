@@ -90,10 +90,13 @@ public class MainScreen extends JFrame {
         return arbre;
     }
 
+    public static Logger getLogger() {
+        return logger;
+    }
+
     public MainScreen(String title) throws IOException {
         super(title);
 
-        //initForm();
         initButtons();
         initComboBox();
         initTab1();
@@ -410,6 +413,11 @@ public class MainScreen extends JFrame {
                     TreeComparatorManager treeComparatorManager = getInstance();
                     treeComparatorManager.refreshGedcomData();
                     treeComparatorManager.searchOnGeneanet = rechercheGeneanetCheckBox.isSelected();
+                    if (rechercheGeneanetCheckBox.isSelected()) {
+                        ConsoleScreen consoleScreen = ConsoleScreen.getInstance();
+                        consoleScreen.setVisible(true);
+                        setVisible(false);
+                    }
                     if (treeComparatorManager.compareTreeFromName(tree)) {
                         JOptionPane.showMessageDialog(mainPanel, "Comparaison arbre " + tree + " OK",
                                 "Information",
@@ -434,6 +442,11 @@ public class MainScreen extends JFrame {
                     treeComparatorManager.refreshGedcomData();
                     treeComparatorManager.indexTree = arbre.getSelectedIndex() + 1;
                     treeComparatorManager.searchOnGeneanet = rechercheGeneanetCheckBox.isSelected();
+                    if (rechercheGeneanetCheckBox.isSelected()) {
+                        ConsoleScreen consoleScreen = ConsoleScreen.getInstance();
+                        consoleScreen.setVisible(true);
+                        setVisible(false);
+                    }
                     if (treeComparatorManager.compareTreesWithScreen()) {
                         JOptionPane.showMessageDialog(mainPanel, "Comparaison de tous les arbres OK",
                                 "Information",
