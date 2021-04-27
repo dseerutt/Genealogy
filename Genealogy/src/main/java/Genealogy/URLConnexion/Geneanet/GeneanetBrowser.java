@@ -49,7 +49,7 @@ public class GeneanetBrowser implements Serializable {
 
     public void init() throws Exception {
         initProperties();
-        if (url != null && geneanetConverter != null) {
+        if (url != null) {
             Document doc = initConnexion();
             geneanetConverter = new GeneanetConverter(doc);
         }
