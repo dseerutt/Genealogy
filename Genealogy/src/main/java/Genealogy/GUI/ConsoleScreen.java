@@ -1,6 +1,7 @@
 package Genealogy.GUI;
 
 import javax.swing.*;
+import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -45,12 +46,19 @@ public class ConsoleScreen extends JFrame {
         instance = this;
     }
 
+    public JTextArea getTextLog() {
+        return textLog;
+    }
+
     private void initButtons() {
         retourButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
                 MainScreen.getINSTANCE().setVisible(true);
+                System.setOut(System.out);
+                System.setErr(System.err);
+
             }
         });
     }
@@ -60,6 +68,8 @@ public class ConsoleScreen extends JFrame {
                 JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        DefaultCaret caret = (DefaultCaret) textLog.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
     }
 
     public static ConsoleScreen getInstance() {

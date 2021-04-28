@@ -11,17 +11,23 @@ import java.io.OutputStream;
  */
 public class CustomOutputStream extends OutputStream {
     private JTextArea textArea;
+    private StringBuilder buffer;
 
     public CustomOutputStream(JTextArea textArea) {
         this.textArea = textArea;
+        buffer = new StringBuilder(128);
     }
 
     @Override
     public void write(int b) throws IOException {
-        // redirects data to the text area
-        textArea.append(String.valueOf((char) b));
-        // scrolls the text area to the end of data
-        textArea.setCaretPosition(textArea.getDocument().getLength());
-        textArea.update(textArea.getGraphics());
+        char c = (char) b;
+        String value = Character.toString(c);
+        buffer.append(value);
+        if (value.equals("\n")) {
+            textArea.append(buffer.toString());
+            buffer.delete(0, buffer.length());
+            // scrolls the text area to the end of data
+            textArea.update(textArea.getGraphics());
+        }
     }
 }
