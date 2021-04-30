@@ -1,5 +1,7 @@
 package Genealogy.GUI;
 
+import Genealogy.URLConnexion.Geneanet.GeneanetBrowser;
+
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
@@ -8,6 +10,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.PrintStream;
+
+import static Genealogy.GUI.MainScreen.logger;
 
 public class ConsoleScreen extends JFrame {
     private JPanel panel1;
@@ -54,8 +58,18 @@ public class ConsoleScreen extends JFrame {
         retourButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Thread thread = MainScreen.getINSTANCE().getThread();
+                if (thread != null) {
+                    thread.interrupt();
+                }
                 setVisible(false);
                 MainScreen.getINSTANCE().setVisible(true);
+                textLog.setText("");
+                try {
+                    GeneanetBrowser.setKill(true);
+                } catch (Exception exception) {
+                    logger.error("Failed to kill thread ", exception);
+                }
                 System.setOut(System.out);
                 System.setErr(System.err);
 
@@ -64,12 +78,13 @@ public class ConsoleScreen extends JFrame {
     }
 
     private void initScrollPane() {
-        scrollPane.setHorizontalScrollBarPolicy(
-                JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        scrollPane.setVerticalScrollBarPolicy(
-                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         DefaultCaret caret = (DefaultCaret) textLog.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+    }
+
+    public void reset() {
+        textLog.setText("");
+        GeneanetBrowser.setKill(false);
     }
 
     public static ConsoleScreen getInstance() {

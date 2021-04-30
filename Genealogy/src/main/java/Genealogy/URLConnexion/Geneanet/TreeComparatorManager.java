@@ -1,5 +1,6 @@
 package Genealogy.URLConnexion.Geneanet;
 
+import Genealogy.GUI.ConsoleScreen;
 import Genealogy.GUI.MainScreen;
 import Genealogy.GUI.TreeModificationScreen;
 import Genealogy.Model.Exception.ParsingException;
@@ -7,19 +8,22 @@ import Genealogy.Model.Gedcom.Genealogy;
 import Genealogy.Parsing.MyGedcomReader;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.Scanner;
 
 import static Genealogy.Model.Gedcom.Genealogy.genealogy;
 import static Genealogy.Model.Gedcom.Genealogy.logger;
 
-public class TreeComparatorManager {
+public class TreeComparatorManager implements Runnable {
     public static String gedcomFile;
     public static boolean searchOnGeneanet;
     public static boolean exceptionMode = false;
     private static TreeComparatorManager instance;
     public static GeneanetBrowser geneanetBrowser;
     public int indexTree;
+    public boolean runOK = false;
+    public String treeName;
 
     public static TreeComparatorManager getInstance() {
         if (instance == null) {
@@ -30,6 +34,31 @@ public class TreeComparatorManager {
 
     private TreeComparatorManager() {
         indexTree = 1;
+    }
+
+    @Override
+    public void run() {
+        try {
+            runOK = false;
+            if (StringUtils.isEmpty(treeName)) {
+                compareTreesWithScreen();
+            } else {
+                compareTreeFromName(treeName);
+            }
+            if (GeneanetBrowser.isKill()) {
+                GeneanetBrowser.setKill(false);
+                JOptionPane.showMessageDialog(ConsoleScreen.getInstance(), "Arrêt OK",
+                        "Information",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(ConsoleScreen.getInstance(), "Comparaison OK",
+                        "Information",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+            runOK = true;
+        } catch (Exception e) {
+            logger.error("Erreur de comparaison", e);
+        }
     }
 
     public static void refreshGedcomData() throws IOException, ParsingException {
@@ -57,6 +86,9 @@ public class TreeComparatorManager {
         Genealogy genealogyParameter = genealogy;
         TreeComparator treeComparator = new TreeComparator();
         String info = treeComparator.compareTree(url, genealogyParameter);
+        if (StringUtils.equals(info, "killed")) {
+            return false;
+        }
         if (treeComparator.isErrorComparison()) {
             treeComparator.analyseTree();
             TreeModificationScreen treeModificationScreen = TreeModificationScreen.getInstance();

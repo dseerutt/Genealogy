@@ -28,6 +28,9 @@ public class CustomOutputStream extends OutputStream {
             buffer.delete(0, buffer.length());
             // scrolls the text area to the end of data
             textArea.update(textArea.getGraphics());
+            textArea.invalidate();
+            textArea.validate();
+            textArea.repaint();
         }
     }
 }

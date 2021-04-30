@@ -17,6 +17,7 @@ import Genealogy.URLConnexion.Geneanet.GeneanetTree;
 import Genealogy.URLConnexion.Geneanet.TreeComparatorManager;
 import Genealogy.URLConnexion.MyHttpUrlConnection;
 import Genealogy.URLConnexion.Serializer;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -81,6 +82,7 @@ public class MainScreen extends JFrame {
     private static MainScreen INSTANCE;
     final static Logger logger = LogManager.getLogger(MainScreen.class);
     private MyHttpUrlConnection HTTPConnexion;
+    private Thread thread;
 
     public static MainScreen getINSTANCE() {
         return INSTANCE;
@@ -92,6 +94,10 @@ public class MainScreen extends JFrame {
 
     public static Logger getLogger() {
         return logger;
+    }
+
+    public Thread getThread() {
+        return thread;
     }
 
     public MainScreen(String title) throws IOException {
@@ -413,18 +419,15 @@ public class MainScreen extends JFrame {
                     TreeComparatorManager treeComparatorManager = getInstance();
                     treeComparatorManager.refreshGedcomData();
                     treeComparatorManager.searchOnGeneanet = rechercheGeneanetCheckBox.isSelected();
+                    treeComparatorManager.treeName = tree;
                     if (rechercheGeneanetCheckBox.isSelected()) {
                         ConsoleScreen consoleScreen = ConsoleScreen.getInstance();
+                        consoleScreen.reset();
                         consoleScreen.setVisible(true);
                         setVisible(false);
                     }
-                    if (treeComparatorManager.compareTreeFromName(tree)) {
-                        JOptionPane.showMessageDialog(mainPanel, "Comparaison arbre " + tree + " OK",
-                                "Information",
-                                JOptionPane.INFORMATION_MESSAGE);
-                    } else {
-                        setVisible(false);
-                    }
+                    thread = new Thread(treeComparatorManager);
+                    thread.start();
                 } catch (Exception e1) {
                     logger.error("Failed to compare trees", e1);
                     JOptionPane.showMessageDialog(mainPanel, e1.getMessage(),
@@ -442,16 +445,15 @@ public class MainScreen extends JFrame {
                     treeComparatorManager.refreshGedcomData();
                     treeComparatorManager.indexTree = arbre.getSelectedIndex() + 1;
                     treeComparatorManager.searchOnGeneanet = rechercheGeneanetCheckBox.isSelected();
+                    treeComparatorManager.treeName = StringUtils.EMPTY;
                     if (rechercheGeneanetCheckBox.isSelected()) {
                         ConsoleScreen consoleScreen = ConsoleScreen.getInstance();
+                        consoleScreen.reset();
                         consoleScreen.setVisible(true);
                         setVisible(false);
                     }
-                    if (treeComparatorManager.compareTreesWithScreen()) {
-                        JOptionPane.showMessageDialog(mainPanel, "Comparaison de tous les arbres OK",
-                                "Information",
-                                JOptionPane.INFORMATION_MESSAGE);
-                    }
+                    thread = new Thread(treeComparatorManager);
+                    thread.start();
                 } catch (Exception e1) {
                     logger.error("Failed to compare all trees", e1);
                     JOptionPane.showMessageDialog(mainPanel, e1.getMessage(),

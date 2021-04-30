@@ -1094,6 +1094,9 @@ public class TreeComparator {
 
         if (searchOnGeneanet || geneanetBrowser == null) {
             GeneanetBrowser geneanetBrowser0 = mainSearchFullTree(testUrl);
+            if (geneanetBrowser0.isKill()) {
+                return "killed";
+            }
 
             int people = geneanetBrowser0.getNbPeople();
             int expectedPeople = geneanetBrowser0.getPeopleNumberFromGeneanetTrees();
