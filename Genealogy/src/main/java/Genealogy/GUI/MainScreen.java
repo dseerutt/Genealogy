@@ -33,6 +33,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.*;
 
 import static Genealogy.URLConnexion.Geneanet.TreeComparatorManager.getInstance;
@@ -421,8 +422,10 @@ public class MainScreen extends JFrame {
                     treeComparatorManager.searchOnGeneanet = rechercheGeneanetCheckBox.isSelected();
                     treeComparatorManager.treeName = tree;
                     if (rechercheGeneanetCheckBox.isSelected()) {
+                        PrintStream printStreamOut = System.out;
+                        PrintStream printStreamErr = System.err;
                         ConsoleScreen consoleScreen = ConsoleScreen.getInstance();
-                        consoleScreen.reset();
+                        consoleScreen.reset(printStreamOut, printStreamErr);
                         consoleScreen.setVisible(true);
                         setVisible(false);
                     }
@@ -447,8 +450,10 @@ public class MainScreen extends JFrame {
                     treeComparatorManager.searchOnGeneanet = rechercheGeneanetCheckBox.isSelected();
                     treeComparatorManager.treeName = StringUtils.EMPTY;
                     if (rechercheGeneanetCheckBox.isSelected()) {
+                        PrintStream printStreamOut = System.out;
+                        PrintStream printStreamErr = System.err;
                         ConsoleScreen consoleScreen = ConsoleScreen.getInstance();
-                        consoleScreen.reset();
+                        consoleScreen.reset(printStreamOut, printStreamErr);
                         consoleScreen.setVisible(true);
                         setVisible(false);
                     }

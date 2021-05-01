@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.OutputStream;
 import java.io.PrintStream;
 
 import static Genealogy.GUI.MainScreen.logger;
@@ -19,6 +20,8 @@ public class ConsoleScreen extends JFrame {
     private JScrollPane scrollPane;
     private JButton retourButton;
     private static ConsoleScreen instance;
+    private PrintStream systemOutputStreamOut;
+    private PrintStream systemOutputStreamErr;
 
     public ConsoleScreen(String title) {
         super(title);
@@ -26,6 +29,7 @@ public class ConsoleScreen extends JFrame {
         initButtons();
         initScrollPane();
 
+        logger.info("Start JTextArea logs");
         PrintStream printStream = new PrintStream(new CustomOutputStream(textLog));
         System.setOut(printStream);
         System.setErr(printStream);
@@ -50,6 +54,22 @@ public class ConsoleScreen extends JFrame {
         instance = this;
     }
 
+    public OutputStream getSystemOutputStreamOut() {
+        return systemOutputStreamOut;
+    }
+
+    public void setSystemOutputStreamOut(PrintStream systemOutputStreamOut) {
+        this.systemOutputStreamOut = systemOutputStreamOut;
+    }
+
+    public PrintStream getSystemOutputStreamErr() {
+        return systemOutputStreamErr;
+    }
+
+    public void setSystemOutputStreamErr(PrintStream systemOutputStreamErr) {
+        this.systemOutputStreamErr = systemOutputStreamErr;
+    }
+
     public JTextArea getTextLog() {
         return textLog;
     }
@@ -64,14 +84,17 @@ public class ConsoleScreen extends JFrame {
                 }
                 setVisible(false);
                 MainScreen.getINSTANCE().setVisible(true);
-                textLog.setText("");
                 try {
                     GeneanetBrowser.setKill(true);
                 } catch (Exception exception) {
                     logger.error("Failed to kill thread ", exception);
                 }
-                System.setOut(System.out);
-                System.setErr(System.err);
+                System.setOut(systemOutputStreamOut);
+                System.setErr(systemOutputStreamErr);
+                logger.info("Back to normal logs");
+                logger.info("Contenu du jTextArea");
+                logger.info(textLog.getText());
+                textLog.setText("");
 
             }
         });
@@ -82,9 +105,11 @@ public class ConsoleScreen extends JFrame {
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
     }
 
-    public void reset() {
-        textLog.setText("");
+    public void reset(PrintStream outputStreamOut, PrintStream outputStreamErr) {
         GeneanetBrowser.setKill(false);
+        systemOutputStreamOut = outputStreamOut;
+        systemOutputStreamErr = outputStreamErr;
+        textLog.setText("");
     }
 
     public static ConsoleScreen getInstance() {
