@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import javax.swing.*;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.Objects;
 
 /**
@@ -15,10 +16,28 @@ import java.util.Objects;
 public class CustomOutputStream extends OutputStream {
     private JTextArea textArea;
     private StringBuilder buffer;
+    private PrintStream systemOutputStreamOut;
+    private PrintStream systemOutputStreamErr;
 
     public CustomOutputStream(JTextArea textArea) {
         this.textArea = textArea;
         buffer = new StringBuilder(128);
+    }
+
+    public PrintStream getSystemOutputStreamOut() {
+        return systemOutputStreamOut;
+    }
+
+    public void setSystemOutputStreamOut(PrintStream systemOutputStreamOut) {
+        this.systemOutputStreamOut = systemOutputStreamOut;
+    }
+
+    public PrintStream getSystemOutputStreamErr() {
+        return systemOutputStreamErr;
+    }
+
+    public void setSystemOutputStreamErr(PrintStream systemOutputStreamErr) {
+        this.systemOutputStreamErr = systemOutputStreamErr;
     }
 
     @Override
@@ -27,7 +46,9 @@ public class CustomOutputStream extends OutputStream {
         String value = Character.toString(c);
         buffer.append(value);
         if (value.equals("\n")) {
-            textArea.append(StringUtils.trim(buffer.toString()) + value);
+            String line = StringUtils.trim(buffer.toString()) + value;
+            systemOutputStreamOut.print(line);
+            textArea.append(line);
             buffer.delete(0, buffer.length());
             // scrolls the text area to the end of data
             textArea.update(textArea.getGraphics());
