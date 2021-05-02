@@ -20,6 +20,7 @@ public class ConsoleScreen extends JFrame {
     private JButton retourButton;
     private static ConsoleScreen instance;
     private CustomOutputStream customOutputStream;
+    private PrintStream printStream;
 
     public ConsoleScreen(String title) {
         super(title);
@@ -29,7 +30,7 @@ public class ConsoleScreen extends JFrame {
 
         logger.info("Start JTextArea logs");
         customOutputStream = new CustomOutputStream(textLog);
-        PrintStream printStream = new PrintStream(customOutputStream);
+        printStream = new PrintStream(customOutputStream);
         System.setOut(printStream);
         System.setErr(printStream);
 
@@ -90,6 +91,8 @@ public class ConsoleScreen extends JFrame {
         GeneanetBrowser.setKill(false);
         customOutputStream.setSystemOutputStreamOut(outputStreamOut);
         customOutputStream.setSystemOutputStreamErr(outputStreamErr);
+        System.setOut(printStream);
+        System.setErr(printStream);
         textLog.setText("");
     }
 

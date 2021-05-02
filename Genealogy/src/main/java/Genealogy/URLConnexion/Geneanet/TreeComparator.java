@@ -1090,6 +1090,9 @@ public class TreeComparator {
         GeneanetBrowser geneanetBrowser = null;
         if (!searchOnGeneanet) {
             geneanetBrowser = getGeneanetBrowserFromFile(tree);
+            if (geneanetBrowser == null) {
+                TreeComparatorManager.getInstance().serializationProblem(tree);
+            }
         }
 
         if (searchOnGeneanet || geneanetBrowser == null) {

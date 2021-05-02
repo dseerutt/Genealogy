@@ -77,6 +77,7 @@ public class MainScreen extends JFrame {
     private JButton ajouterUnArbreButton;
     private JComboBox arbre;
     private JButton comparerTousLesArbresButton;
+    private JPanel comparaisonArbre;
     private JXMapKit jXMapKit;
     private ArrayList<MapPoint> mapPoints;
     private MapFrame mapFrame;
@@ -108,6 +109,7 @@ public class MainScreen extends JFrame {
         initComboBox();
         initTab1();
         initMissingCitiesTab();
+        tabbedPane1.setSelectedComponent(comparaisonArbre);
         HTTPConnexion = MyHttpUrlConnection.getInstance();
 
         setPreferredSize(new Dimension(700, 500));
@@ -422,12 +424,7 @@ public class MainScreen extends JFrame {
                     treeComparatorManager.searchOnGeneanet = rechercheGeneanetCheckBox.isSelected();
                     treeComparatorManager.treeName = tree;
                     if (rechercheGeneanetCheckBox.isSelected()) {
-                        PrintStream printStreamOut = System.out;
-                        PrintStream printStreamErr = System.err;
-                        ConsoleScreen consoleScreen = ConsoleScreen.getInstance();
-                        consoleScreen.reset(printStreamOut, printStreamErr);
-                        consoleScreen.setVisible(true);
-                        setVisible(false);
+                        initConsoleScreen();
                     }
                     thread = new Thread(treeComparatorManager);
                     thread.start();
@@ -450,12 +447,7 @@ public class MainScreen extends JFrame {
                     treeComparatorManager.searchOnGeneanet = rechercheGeneanetCheckBox.isSelected();
                     treeComparatorManager.treeName = StringUtils.EMPTY;
                     if (rechercheGeneanetCheckBox.isSelected()) {
-                        PrintStream printStreamOut = System.out;
-                        PrintStream printStreamErr = System.err;
-                        ConsoleScreen consoleScreen = ConsoleScreen.getInstance();
-                        consoleScreen.reset(printStreamOut, printStreamErr);
-                        consoleScreen.setVisible(true);
-                        setVisible(false);
+                        initConsoleScreen();
                     }
                     thread = new Thread(treeComparatorManager);
                     thread.start();
@@ -467,6 +459,15 @@ public class MainScreen extends JFrame {
                 }
             }
         });
+    }
+
+    public void initConsoleScreen() {
+        PrintStream printStreamOut = System.out;
+        PrintStream printStreamErr = System.err;
+        ConsoleScreen consoleScreen = ConsoleScreen.getInstance();
+        consoleScreen.reset(printStreamOut, printStreamErr);
+        consoleScreen.setVisible(true);
+        setVisible(false);
     }
 
     public BufferedImage createImage(JPanel panel) {

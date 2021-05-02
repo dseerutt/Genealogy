@@ -24,6 +24,7 @@ public class TreeComparatorManager implements Runnable {
     public int indexTree;
     public boolean runOK = false;
     public String treeName;
+    public boolean screen = false;
 
     public static TreeComparatorManager getInstance() {
         if (instance == null) {
@@ -39,25 +40,35 @@ public class TreeComparatorManager implements Runnable {
     @Override
     public void run() {
         try {
+            boolean result = false;
             runOK = false;
             if (StringUtils.isEmpty(treeName)) {
-                compareTreesWithScreen();
+                result = compareTreesWithScreen();
             } else {
-                compareTreeFromName(treeName);
+                result = compareTreeFromName(treeName);
             }
             if (GeneanetBrowser.isKill()) {
                 GeneanetBrowser.setKill(false);
                 JOptionPane.showMessageDialog(ConsoleScreen.getInstance(), "Arrêt OK",
                         "Information",
                         JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(ConsoleScreen.getInstance(), "Comparaison OK",
+            } else if (result) {
+                JOptionPane.showMessageDialog(MainScreen.getINSTANCE(), "Comparaison OK",
                         "Information",
                         JOptionPane.INFORMATION_MESSAGE);
             }
             runOK = true;
         } catch (Exception e) {
             logger.error("Erreur de comparaison", e);
+        }
+    }
+
+    public void serializationProblem(String tree) {
+        //Only if GUI is active
+        if (!searchOnGeneanet && MainScreen.getINSTANCE() != null) {
+            MainScreen.getINSTANCE().initConsoleScreen();
+            logger.info("Error with deserialization of tree " + tree);
+            logger.info("Start search in Geneanet");
         }
     }
 

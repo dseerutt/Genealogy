@@ -622,7 +622,7 @@
               </grid>
             </children>
           </grid>
-          <grid id="76f" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="true" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="76f" binding="comparaisonArbre" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="true" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <tabbedpane title="Comparaison d'arbres"/>
