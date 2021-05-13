@@ -419,6 +419,7 @@ public class MainScreen extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 try {
                     String tree = arbre.getSelectedItem().toString();
+                    logger.info("Start " + tree + " tree comparison");
                     TreeComparatorManager treeComparatorManager = getInstance();
                     treeComparatorManager.refreshGedcomData();
                     treeComparatorManager.searchOnGeneanet = rechercheGeneanetCheckBox.isSelected();
@@ -441,6 +442,7 @@ public class MainScreen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    logger.info("Start all trees comparison");
                     TreeComparatorManager treeComparatorManager = getInstance();
                     treeComparatorManager.refreshGedcomData();
                     treeComparatorManager.indexTree = arbre.getSelectedIndex() + 1;
@@ -462,10 +464,10 @@ public class MainScreen extends JFrame {
     }
 
     public void initConsoleScreen() {
+        logger.info("Init Console Screen");
         PrintStream printStreamOut = System.out;
-        PrintStream printStreamErr = System.err;
         ConsoleScreen consoleScreen = ConsoleScreen.getInstance();
-        consoleScreen.reset(printStreamOut, printStreamErr);
+        consoleScreen.initLogs(printStreamOut);
         consoleScreen.setVisible(true);
         setVisible(false);
     }

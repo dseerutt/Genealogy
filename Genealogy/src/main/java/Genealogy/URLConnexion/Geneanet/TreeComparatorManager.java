@@ -173,7 +173,7 @@ public class TreeComparatorManager implements Runnable {
     public static void main(String[] args) throws Exception {
         gedcomFile = "C:\\Users\\Dan\\Desktop\\famille1.ged";
         refreshGedcomData();
-        searchOnGeneanet = false;
+        searchOnGeneanet = true;
         TreeComparatorManager treeComparatorManager = getInstance();
         treeComparatorManager.compareTrees();
     }

@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.FileDescriptor;
+import java.io.FileOutputStream;
 import java.io.PrintStream;
 
 import static Genealogy.GUI.MainScreen.logger;
@@ -19,20 +21,13 @@ public class ConsoleScreen extends JFrame {
     private JScrollPane scrollPane;
     private JButton retourButton;
     private static ConsoleScreen instance;
-    private CustomOutputStream customOutputStream;
+    private ConsoleScreenOutputStream customOutputStream;
     private PrintStream printStream;
 
     public ConsoleScreen(String title) {
         super(title);
-
         initButtons();
         initScrollPane();
-
-        logger.info("Start JTextArea logs");
-        customOutputStream = new CustomOutputStream(textLog);
-        printStream = new PrintStream(customOutputStream);
-        System.setOut(printStream);
-        System.setErr(printStream);
 
         setPreferredSize(new Dimension(700, 500));
         pack();
@@ -73,13 +68,16 @@ public class ConsoleScreen extends JFrame {
                 } catch (Exception exception) {
                     logger.error("Failed to kill thread ", exception);
                 }
-                System.setOut(customOutputStream.getSystemOutputStreamOut());
-                System.setErr(customOutputStream.getSystemOutputStreamErr());
-                logger.info("Back to normal logs");
-                textLog.setText("");
-
+                restoreLogs();
             }
         });
+    }
+
+    public void restoreLogs() {
+        System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
+        System.setErr(new PrintStream(new FileOutputStream(FileDescriptor.err)));
+        logger.info("Back to normal logs");
+        textLog.setText("");
     }
 
     private void initScrollPane() {
@@ -87,10 +85,16 @@ public class ConsoleScreen extends JFrame {
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
     }
 
-    public void reset(PrintStream outputStreamOut, PrintStream outputStreamErr) {
+    public void initLogs(PrintStream outputStreamOut) {
+        logger.info("Start JTextArea logs");
+        try {
+            customOutputStream = new ConsoleScreenOutputStream(textLog);
+            printStream = new PrintStream(customOutputStream, true, "UTF-8");
+        } catch (Exception e) {
+            logger.error("Failed to create PrintStream", e);
+        }
         GeneanetBrowser.setKill(false);
         customOutputStream.setSystemOutputStreamOut(outputStreamOut);
-        customOutputStream.setSystemOutputStreamErr(outputStreamErr);
         System.setOut(printStream);
         System.setErr(printStream);
         textLog.setText("");
