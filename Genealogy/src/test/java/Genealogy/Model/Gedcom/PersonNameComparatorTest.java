@@ -1,6 +1,7 @@
 package Genealogy.Model.Gedcom;
 
 import Genealogy.Model.Exception.ParsingException;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
@@ -24,9 +25,9 @@ public class PersonNameComparatorTest {
     @Test
     public void compareTest() throws ParsingException, NoSuchFieldException, IllegalAccessException {
         //Init
-        Person person1 = new Person( null);
-        Person person2 = new Person( null);
-        Person person3 = new Person( null);
+        Person person1 = new Person(null);
+        Person person2 = new Person(null);
+        Person person3 = new Person(null);
         ArrayList<Person> persons = new ArrayList<>();
         persons.add(person1);
         persons.add(person2);
@@ -50,7 +51,7 @@ public class PersonNameComparatorTest {
         Collections.sort(persons, new PersonNameComparator());
 
         //Verification
-        String result = "";
+        String result = StringUtils.EMPTY;
         for (Person person : persons) {
             result += "" + person.getFullName() + " ";
         }

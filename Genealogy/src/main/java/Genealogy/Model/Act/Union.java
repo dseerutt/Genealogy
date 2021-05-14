@@ -71,7 +71,7 @@ public class Union extends Act {
                 return null;
             }
         }
-        if (date != null) {
+        if (date != null && date.getDate() != null) {
             res += " on " + date;
         }
         if (town != null && !StringUtils.isBlank(town.getFullName())) {

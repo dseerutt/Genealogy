@@ -502,7 +502,7 @@ public class Genealogy {
                 return parsingStructure.getFieldValue();
             }
         }
-        return "";
+        return StringUtils.EMPTY;
     }
 
     /**
