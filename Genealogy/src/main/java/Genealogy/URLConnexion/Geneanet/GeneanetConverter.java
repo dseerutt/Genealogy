@@ -28,6 +28,7 @@ import static Genealogy.URLConnexion.Geneanet.GeneanetConverter.ActType.*;
  */
 public class GeneanetConverter {
 
+    private static final String REGEX_TRAILING_NUMBERS = "(.*) [0-9]+";
     private static String XpathGender;
     private static String XpathGender2;
     private static String XpathGender3;
@@ -60,6 +61,9 @@ public class GeneanetConverter {
     private static String XpathImage3;
     private Document doc;
     private final static Character space = (char) 160;
+    private final String REGEX_PERSON_DATES = "(.*?)$|,.*";
+    private final SimpleDateFormat dateFormatFullMonth = new SimpleDateFormat("dd MMMM yyyy", Locale.FRANCE);
+    private final SimpleDateFormat dateFormatFullMonthOnly = new SimpleDateFormat("MMMM yyyy", Locale.FRANCE);
 
     public GeneanetConverter(Document document) throws Exception {
         doc = document;
@@ -397,7 +401,6 @@ public class GeneanetConverter {
     }
 
     public int setPersonDates(GeneanetPerson person, int index, ActType act) {
-        String regex = "(.*?)$|,.*";
         String birth = Xsoup.compile(XpathFamily.replace("XXX", StringUtils.EMPTY + 1) + XpathBirthAndDeath.replace("XXX", StringUtils.EMPTY + index)).evaluate(doc).get();
         if (birth == null || StringUtils.isEmpty(birth.replace(" ", StringUtils.EMPTY)) || (birth.contains("Marié") && birth.contains("avec"))) {
             birth = Xsoup.compile(XpathFamily2 + XpathBirthAndDeath.replace("XXX", StringUtils.EMPTY + index)).evaluate(doc).get();
@@ -410,7 +413,7 @@ public class GeneanetConverter {
                 }
             }
         }
-        Pattern pattern = Pattern.compile(regex);
+        Pattern pattern = Pattern.compile(REGEX_PERSON_DATES);
         Matcher matcher = pattern.matcher(birth);
         if (matcher != null && matcher.find()) {
             String dateAndCity = matcher.group(1);
@@ -504,7 +507,7 @@ public class GeneanetConverter {
      * @return le string sans ces nombres
      */
     public String removeTrailingNumbers(String inputString) {
-        Pattern pattern = Pattern.compile("(.*) [0-9]+");
+        Pattern pattern = Pattern.compile(REGEX_TRAILING_NUMBERS);
         Matcher matcher = pattern.matcher(inputString);
         if (matcher.matches()) {
             return matcher.group(1);
@@ -574,8 +577,6 @@ public class GeneanetConverter {
     }
 
     private MyDate parseDate(String inputDate) throws RepublicanDateOutOfRangeException {
-        SimpleDateFormat dateFormatFullMonth = new SimpleDateFormat("dd MMMM yyyy", Locale.FRANCE);
-        SimpleDateFormat dateFormatFullMonthOnly = new SimpleDateFormat("MMMM yyyy", Locale.FRANCE);
         dateFormatFullMonthOnly.setTimeZone(TimeZone.getTimeZone("UTC"));
         dateFormatFullMonth.setTimeZone(TimeZone.getTimeZone("UTC"));
         try {
@@ -665,8 +666,8 @@ public class GeneanetConverter {
         int siblingNumber = 1;
         int siblingBranch = 1;
         int parentNumber = 1;
-        boolean exitLoop1 = false;
-        boolean exitLoop2 = false;
+        boolean exitLoop1;
+        boolean exitLoop2;
         String personString;
         do {
             exitLoop1 = false;
