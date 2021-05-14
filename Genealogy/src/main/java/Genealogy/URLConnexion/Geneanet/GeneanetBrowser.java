@@ -30,7 +30,7 @@ public class GeneanetBrowser implements Serializable {
     public String url;
     public String searchOutput = "";
     public Map<String, String> cookie;
-    private transient GeneanetConverter geneanetConverter;
+    private static transient GeneanetConverter geneanetConverter;
     public GeneanetPerson rootPerson;
     public int expectedNbPeople = 0;
     public HashSet<String> peopleUrl = new HashSet<String>();
@@ -51,8 +51,10 @@ public class GeneanetBrowser implements Serializable {
     public void init() throws Exception {
         initProperties();
         if (url != null) {
-            Document doc = initConnexion();
-            geneanetConverter = new GeneanetConverter(doc);
+            if (geneanetConverter == null) {
+                Document doc = initConnexion();
+                geneanetConverter = new GeneanetConverter(doc);
+            }
         }
         if (geneanetTreeManager != null) {
             geneanetTreeManager = new GeneanetTreeManager();
