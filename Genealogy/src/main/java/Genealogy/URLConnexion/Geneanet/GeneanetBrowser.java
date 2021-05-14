@@ -2,6 +2,7 @@ package Genealogy.URLConnexion.Geneanet;
 
 import Genealogy.Model.Date.MyDate;
 import Genealogy.URLConnexion.Serializer;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.Connection;
@@ -28,7 +29,7 @@ public class GeneanetBrowser implements Serializable {
     public static String password;
     public static String formRegex;
     public String url;
-    public String searchOutput = "";
+    public String searchOutput = StringUtils.EMPTY;
     public Map<String, String> cookie;
     private static transient GeneanetConverter geneanetConverter;
     public GeneanetPerson rootPerson;
@@ -143,7 +144,7 @@ public class GeneanetBrowser implements Serializable {
                 return geneanetTree.getGedcomId();
             }
         }
-        return "";
+        return StringUtils.EMPTY;
     }
 
     public int getPeopleNumberFromGeneanetTrees() {
@@ -170,7 +171,7 @@ public class GeneanetBrowser implements Serializable {
 
     public static String removeDoubleGeneanetSuffix(String input) {
         if (input != null) {
-            return input.replace("&ocz=0", "").replaceAll("&iz=.*?&", "&").replaceAll("&pz=.*?&", "&").replaceAll("&nz=.*?&", "&");
+            return input.replace("&ocz=0", StringUtils.EMPTY).replaceAll("&iz=.*?&", "&").replaceAll("&pz=.*?&", "&").replaceAll("&nz=.*?&", "&");
         } else {
             return null;
         }
@@ -178,7 +179,7 @@ public class GeneanetBrowser implements Serializable {
 
     public static String removeGeneanetSuffix(String input) {
         if (input != null) {
-            return input.replace("&ocz=0", "").replaceAll("&pz=.*?&", "&").replaceAll("&nz=.*?&", "&");
+            return input.replace("&ocz=0", StringUtils.EMPTY).replaceAll("&pz=.*?&", "&").replaceAll("&nz=.*?&", "&");
         } else {
             return null;
         }
@@ -191,7 +192,7 @@ public class GeneanetBrowser implements Serializable {
      * @throws Exception
      */
     public Document initConnexion() throws Exception {
-        String csrfValue = "";
+        String csrfValue = StringUtils.EMPTY;
         Connection.Response loginForm = null;
         int cptConnexion = 1;
         boolean exit = false;
@@ -226,7 +227,7 @@ public class GeneanetBrowser implements Serializable {
                 .data("_username", username)
                 .data("_password", password)
                 .data("_remember_me", "1")
-                .data("_submit", "")
+                .data("_submit", StringUtils.EMPTY)
                 .data("_csrf_token", csrfValue)
                 .cookies(loginForm.cookies())
                 .method(Connection.Method.POST)
@@ -269,11 +270,11 @@ public class GeneanetBrowser implements Serializable {
             result = findXPath2(node, text);
             if (result != null && (node instanceof Element)) {
                 Element e = (Element) node;
-                String tag = e.tag() + "";
+                String tag = e.tag() + StringUtils.EMPTY;
                 return "/" + tag + "/" + result;
             }
         }
-        return "";
+        return StringUtils.EMPTY;
     }
 
     /**
@@ -292,18 +293,18 @@ public class GeneanetBrowser implements Serializable {
                     if (node instanceof Element) {
                         Element e = (Element) node;
                         String value = findXPath2(node, text);
-                        String tag = e.tag() + "";
+                        String tag = e.tag() + StringUtils.EMPTY;
                         if (tagList.containsKey(tag)) {
                             tagList.put(tag, tagList.get(tag) + 1);
                         } else {
                             tagList.put(tag, 1);
                         }
                         String separator = "/";
-                        if (value != null && value.equals("")) {
-                            separator = "";
+                        if (value != null && value.equals(StringUtils.EMPTY)) {
+                            separator = StringUtils.EMPTY;
                         }
                         if (value != null) {
-                            if ((tagList.containsKey(e.tag() + "")) && (tagList.get(tag) != 1)) {
+                            if ((tagList.containsKey(e.tag() + StringUtils.EMPTY)) && (tagList.get(tag) != 1)) {
                                 return e.tag() + "[" + tagList.get(tag) + "]" + separator + value;
                             } else {
                                 return e.tag() + separator + value;
@@ -311,7 +312,7 @@ public class GeneanetBrowser implements Serializable {
                         }
                     } else if (node instanceof TextNode) {
                         if (node.toString().equals(text)) {
-                            return "";
+                            return StringUtils.EMPTY;
                         }
                     }
                 }
@@ -387,7 +388,7 @@ public class GeneanetBrowser implements Serializable {
     public void searchFather(GeneanetPerson person) {
         if (!kill) {
             GeneanetPerson father = person.getFather();
-            if (father != null && !father.getUrl().equals("") && !father.isSearched()) {
+            if (father != null && StringUtils.isNotEmpty(father.getUrl()) && !father.isSearched()) {
                 searchTree(father);
                 person.setFather(father);
             }
@@ -397,7 +398,7 @@ public class GeneanetBrowser implements Serializable {
     public void searchMother(GeneanetPerson person) {
         if (!kill) {
             GeneanetPerson mother = person.getMother();
-            if (mother != null && !mother.getUrl().equals("") && !mother.isSearched()) {
+            if (mother != null && StringUtils.isNotEmpty(mother.getUrl()) && !mother.isSearched()) {
                 searchTree(mother);
                 person.setMother(mother);
             }
@@ -411,7 +412,7 @@ public class GeneanetBrowser implements Serializable {
             HashMap<GeneanetPerson, HashMap<MyDate, String>> newMarriage = new HashMap<GeneanetPerson, HashMap<MyDate, String>>();
             for (Map.Entry<GeneanetPerson, HashMap<MyDate, String>> entry : marriage.entrySet()) {
                 GeneanetPerson partner = entry.getKey();
-                if (!partner.getUrl().equals("") && !partner.isSearched()) {
+                if (StringUtils.isNotEmpty(partner.getUrl()) && !partner.isSearched()) {
                     if (!found) {
                         logger.info(type + " (" + marriage.size() + ") research for " + person.getFirstName() + " " + person.getFamilyName());
                         found = true;
@@ -437,7 +438,7 @@ public class GeneanetBrowser implements Serializable {
                 HashMap<GeneanetPerson, HashMap<MyDate, String>> newMarriage = new HashMap<GeneanetPerson, HashMap<MyDate, String>>();
                 for (Map.Entry<GeneanetPerson, HashMap<MyDate, String>> entry : marriage.entrySet()) {
                     GeneanetPerson partner = entry.getKey();
-                    if (!partner.getUrl().equals("") && !partner.isSearched()) {
+                    if (StringUtils.isNotEmpty(partner.getUrl()) && !partner.isSearched()) {
                         searchPerson(partner, true);
                         newMarriage.put(partner, entry.getValue());
                     }
@@ -501,7 +502,7 @@ public class GeneanetBrowser implements Serializable {
         if (!kill) {
             if (!peopleUrl.contains(person.getUrl()) && (!partialSearch || !allPeopleUrl.containsKey(person.getUrl()))) {
                 int tries = 1;
-                String inputTxt = "";
+                String inputTxt = StringUtils.EMPTY;
                 do {
                     try {
                         String url = person.getUrl();

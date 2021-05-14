@@ -65,7 +65,7 @@ public class MyGedcomReader {
         //Reading all the lines
         while ((sCurrentLine = br.readLine()) != null) {
             String[] temp = sCurrentLine.split(" ");
-            String fieldValue = "";
+            String fieldValue = StringUtils.EMPTY;
             //assign temp[2+] in fieldValue
             if (temp.length > 3) {
                 fieldValue = temp[2];
@@ -83,7 +83,7 @@ public class MyGedcomReader {
                     //add new element
                     contents.put(idObject, parsingStructureList);
                     //init new element and get id
-                    idObject = fieldName.replace("@", "");
+                    idObject = fieldName.replace("@", StringUtils.EMPTY);
                     parsingStructureList = new ArrayList<>();
                 }
                 parsingStructureList.add(new ParsingStructure(number, fieldName, fieldValue));

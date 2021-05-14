@@ -269,7 +269,7 @@ public class MainScreen extends JFrame {
                     if (naissanceRadioButton.isSelected()) {
                         person.addProof(ActType.BIRTH, file);
                     } else if (mariageRadioButton.isSelected()) {
-                        person.addProof(ActType.UNION, "", person.getProofUnionSize());
+                        person.addProof(ActType.UNION, StringUtils.EMPTY, person.getProofUnionSize());
                         //TODO
                     } else if (deathRadioButton.isSelected()) {
                         person.addProof(ActType.DEATH, file);
@@ -287,7 +287,7 @@ public class MainScreen extends JFrame {
                     if (naissanceRadioButton.isSelected()) {
                         String file = person.getBirth().getProofs().get(0);
                     } else if (mariageRadioButton.isSelected()) {
-                        person.addProof(ActType.UNION, "", person.getProofUnionSize());
+                        person.addProof(ActType.UNION, StringUtils.EMPTY, person.getProofUnionSize());
                         //TODO
                     } else if (deathRadioButton.isSelected()) {
                         String file = person.getDeath().getProofs().get(0);
@@ -361,9 +361,9 @@ public class MainScreen extends JFrame {
         towns.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                naissances.setText("");
-                unions.setText("");
-                deces.setText("");
+                naissances.setText(StringUtils.EMPTY);
+                unions.setText(StringUtils.EMPTY);
+                deces.setText(StringUtils.EMPTY);
                 int index = towns.getSelectedIndex();
                 Town thisTown = Town.getTowns().get(index);
                 ArrayList<Act> list = Town.getMapTownAct().get(thisTown);
@@ -610,7 +610,7 @@ public class MainScreen extends JFrame {
 
     private void remplaceVille() {
         String search = searchField.getText();
-        if (search != null && (!search.equals("") && (search.contains(" ")))) {
+        if (search != null && (!search.equals(StringUtils.EMPTY) && (search.contains(" ")))) {
             try {
                 Pair<String, String> searchPair = Town.readTown(search);
                 String city = searchPair.getKey();

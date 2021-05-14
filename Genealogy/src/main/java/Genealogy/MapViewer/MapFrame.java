@@ -8,6 +8,7 @@ import Genealogy.MapViewer.Structures.FancyWaypointRenderer;
 import Genealogy.MapViewer.Structures.MapPoint;
 import Genealogy.MapViewer.Structures.MyCoordinate;
 import Genealogy.MapViewer.Structures.MyWaypoint;
+import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.JXMapKit;
 import org.jdesktop.swingx.JXMapViewer;
 import org.jdesktop.swingx.OSMTileFactoryInfo;
@@ -53,7 +54,7 @@ public class MapFrame {
         for (int i = 0; i < list2.size(); i++) {
             MapPoint mapPoint = list2.get(i);
             MyCoordinate coo = mapPoint.getMyCoordinate();
-            waypoints.add(new MyWaypoint("" + mapPoint.getNbPeople(), mapPoint.getColor(),
+            waypoints.add(new MyWaypoint(StringUtils.EMPTY + mapPoint.getNbPeople(), mapPoint.getColor(),
                     new GeoPosition(coo.getLatitude(), coo.getLongitude())));
             addTooltip(mapPoint.getTooltip(), new GeoPosition(coo.getLatitude(), coo.getLongitude()));
         }

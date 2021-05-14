@@ -1,5 +1,6 @@
 package Genealogy.Parsing;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,7 +11,7 @@ public class PDFStructureTest {
     public void parsePDFStructureTest() {
         //launch
         PDFStructure pdfStructureNull = new PDFStructure(null);
-        PDFStructure pdfStructureEmpty = new PDFStructure("");
+        PDFStructure pdfStructureEmpty = new PDFStructure(StringUtils.EMPTY);
         PDFStructure pdfStructureKO = new PDFStructure("KO");
         PDFStructure pdfStructureClassic = new PDFStructure("¤PDF¤{birth=[proofBirth], unions=[proofUnion], death=[proofDeath]}¤PDF¤");
         PDFStructure pdfStructureClassicMultipleUnions = new PDFStructure("¤PDF¤{birth=[proofBirth], unions=[proofUnion1,proofUnion2,proofUnion3], death=[proofDeath]}¤PDF¤");

@@ -10,6 +10,7 @@ import Genealogy.Model.GUI.GovernorContainer;
 import Genealogy.Model.Gedcom.Genealogy;
 import Genealogy.Model.Gedcom.Person;
 import Genealogy.Model.Gedcom.Town;
+import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.JXMapKit;
 import org.jdesktop.swingx.JXMapViewer;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
@@ -670,14 +671,14 @@ public class MapScreen extends JFrame {
         // TODO: place custom component creation code here
         initMap();
         initCaptions();
-        labelImage = new JLabel("", image2, JLabel.CENTER);
+        labelImage = new JLabel(StringUtils.EMPTY, image2, JLabel.CENTER);
         captionPanel = new JPanel(new BorderLayout());
         captionPanel.add(labelImage, BorderLayout.CENTER);
 
-        labelImageFrenchGovernors = new JLabel("", frenchGovernorPicture, JLabel.CENTER);
+        labelImageFrenchGovernors = new JLabel(StringUtils.EMPTY, frenchGovernorPicture, JLabel.CENTER);
         FrenchHistoryPanel = new JPanel(new BorderLayout());
         FrenchHistoryPanel.add(labelImageFrenchGovernors, BorderLayout.CENTER);
-        labelImageMauritianGovernors = new JLabel("", mauritianGovernorPicture, JLabel.CENTER);
+        labelImageMauritianGovernors = new JLabel(StringUtils.EMPTY, mauritianGovernorPicture, JLabel.CENTER);
         MauritianHistoryPanel = new JPanel(new BorderLayout());
         MauritianHistoryPanel.add(labelImageMauritianGovernors, BorderLayout.CENTER);
     }

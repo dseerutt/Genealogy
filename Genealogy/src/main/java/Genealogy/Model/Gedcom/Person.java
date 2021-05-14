@@ -113,9 +113,9 @@ public class Person {
         if (parsingStructurelist != null) {
             String newId = parsingStructurelist.get(0).getFieldName();
             if (newId.contains("@I")) {
-                id = newId.replace("@", "");
+                id = newId.replace("@", StringUtils.EMPTY);
             } else {
-                id = "";
+                id = StringUtils.EMPTY;
             }
             name = findFieldInContents("SURN", parsingStructurelist);
             surname = findFieldInContents("GIVN", parsingStructurelist);
@@ -125,7 +125,7 @@ public class Person {
             sex = parseSex(findFieldInContents("SEX", parsingStructurelist));
             profession = findFieldInContents("OCCU", parsingStructurelist);
             String note = findFieldInContents("NOTE", parsingStructurelist);
-            String remarks = "";
+            String remarks = StringUtils.EMPTY;
             if (!note.contains("¤PDF¤")) {
                 remarks = note;
             }
@@ -528,7 +528,7 @@ public class Person {
      * @return
      */
     public String getComparatorName() {
-        String txt = "";
+        String txt = StringUtils.EMPTY;
         if (("...".equals(name)) || ("...".equals(surname))) {
             txt = "z";
         }
@@ -820,7 +820,7 @@ public class Person {
      * @return
      */
     private String printNecessaryResearchBirth() {
-        String result = "";
+        String result = StringUtils.EMPTY;
         if (birth != null) {
             String birthTxt = birth.getNecessaryResearch();
             if (birthTxt != null) {
@@ -838,10 +838,10 @@ public class Person {
      * @return
      */
     private String printNecessaryResearchUnions() {
-        String result = "";
+        String result = StringUtils.EMPTY;
         ArrayList<Union> unions = getUnions();
         if (unions != null || unions.isEmpty() && children != null && !children.isEmpty()) {
-            String unionTxt = "";
+            String unionTxt = StringUtils.EMPTY;
             if (children != null) {
                 //Missing unions
                 Set<Person> parents = new HashSet<>();
@@ -864,7 +864,7 @@ public class Person {
                     unionTxt += " " + inputUnion;
                 }
             }
-            if (!unionTxt.equals("")) {
+            if (StringUtils.isNotEmpty(unionTxt)) {
                 result += ", Union=[" + unionTxt + "]";
             }
         } else {
@@ -879,7 +879,7 @@ public class Person {
      * @return
      */
     private String printNecessaryResearchDeath() {
-        String result = "";
+        String result = StringUtils.EMPTY;
         if (death != null) {
             String deathTxt = death.getNecessaryResearch();
             if (deathTxt != null) {
@@ -903,7 +903,7 @@ public class Person {
                 return result.substring(2);
             }
         }
-        return "";
+        return StringUtils.EMPTY;
     }
 
     /**
@@ -998,12 +998,12 @@ public class Person {
      * @return
      */
     public String printPerson() {
-        String text = "";
+        String text = StringUtils.EMPTY;
         if (surname.equals("...") || name.equals("...")) {
-            return "";
+            return StringUtils.EMPTY;
         }
         String pronoun = "Il";
-        String agreement = "";
+        String agreement = StringUtils.EMPTY;
         String childFull = "le fils";
         String child = "fils";
         boolean foundText = false;
@@ -1021,7 +1021,7 @@ public class Person {
                         + birth.getTown().getName() + " (" + birth.getTown().getCounty() + ")";
             } else if (birth.getDate() != null) {
                 foundText = true;
-                text += " est né" + agreement + " " + birth.getDate().descriptionDate() + "";
+                text += " est né" + agreement + " " + birth.getDate().descriptionDate();
             } else if ((birth.getTown() != null) && (birth.getTown().getName() != null)) {
                 foundText = true;
                 text += " est né" + agreement + " à " + birth.getTown().getName() + " (" + birth.getTown().getCounty() + ")";
@@ -1059,7 +1059,7 @@ public class Person {
             pluralForm = "étaient";
         }
         //Profession
-        if ((profession == null) || (!profession.equals(""))) {
+        if (profession == null || StringUtils.isNotEmpty(profession)) {
             foundText = true;
             String prof = getProfession();
             if (prof.indexOf(',') == -1) {
@@ -1097,7 +1097,7 @@ public class Person {
                 text += married + " avec " +
                         partner.getFullName();
             }
-            if ((partner.getProfession() != null) && (!partner.getProfession().equals(""))) {
+            if (partner.getProfession() != null && StringUtils.isNotEmpty(partner.getProfession())) {
                 text += ", " + partner.getProfession();
             }
             if (union.getDate() != null) {
@@ -1164,7 +1164,7 @@ public class Person {
             }
         }
         if (text.equals(surname + " " + name)) {
-            text = "";
+            text = StringUtils.EMPTY;
         } else {
             text += ".";
         }

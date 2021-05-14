@@ -2,6 +2,7 @@ package Genealogy.URLConnexion;
 
 import Genealogy.Model.Act.Proof;
 import Genealogy.Model.Gedcom.Town;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -381,7 +382,7 @@ public class Serializer {
      * @param townAssociation
      */
     public void saveTownAssociation(HashMap<String, String> townAssociation) {
-        String content = "";
+        String content = StringUtils.EMPTY;
         for (Map.Entry<String, String> entry : townAssociation.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
@@ -473,7 +474,7 @@ public class Serializer {
      * @return
      */
     public String printTownCoordinatesMap() {
-        String contents = "";
+        String contents = StringUtils.EMPTY;
         for (Map.Entry<String, String> entry : townCoordinatesMap.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();

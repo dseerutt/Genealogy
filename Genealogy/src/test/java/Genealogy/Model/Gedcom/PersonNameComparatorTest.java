@@ -53,7 +53,7 @@ public class PersonNameComparatorTest {
         //Verification
         String result = StringUtils.EMPTY;
         for (Person person : persons) {
-            result += "" + person.getFullName() + " ";
+            result += person.getFullName() + " ";
         }
         assertEquals("Georgette Marie Jean Pierre Arnaud Ventura ", result);
     }

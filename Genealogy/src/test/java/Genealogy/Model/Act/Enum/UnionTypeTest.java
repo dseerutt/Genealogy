@@ -1,5 +1,6 @@
 package Genealogy.Model.Act.Enum;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,7 +16,7 @@ public class UnionTypeTest {
     @Test
     public void parseUnionTypeTest() {
         //init
-        UnionType unionTypeHetero = UnionType.parseUnionType("");
+        UnionType unionTypeHetero = UnionType.parseUnionType(StringUtils.EMPTY);
         UnionType unionTypeHomo = UnionType.parseUnionType("F");
         UnionType unionTypeCohab = UnionType.parseUnionType("NOT MARRIED");
         UnionType unionTypeDivorce = UnionType.parseUnionType("D");

@@ -1,6 +1,7 @@
 package Genealogy.GUI;
 
 import Genealogy.URLConnexion.Geneanet.GeneanetBrowser;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
@@ -77,7 +78,7 @@ public class ConsoleScreen extends JFrame {
         System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
         System.setErr(new PrintStream(new FileOutputStream(FileDescriptor.err)));
         logger.info("Back to normal logs");
-        textLog.setText("");
+        textLog.setText(StringUtils.EMPTY);
     }
 
     private void initScrollPane() {
@@ -97,7 +98,7 @@ public class ConsoleScreen extends JFrame {
         customOutputStream.setSystemOutputStreamOut(outputStreamOut);
         System.setOut(printStream);
         System.setErr(printStream);
-        textLog.setText("");
+        textLog.setText(StringUtils.EMPTY);
     }
 
     public static ConsoleScreen getInstance() {

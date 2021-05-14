@@ -1,6 +1,7 @@
 package Genealogy.URLConnexion.Geneanet;
 
 import Genealogy.Model.Date.MyDate;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.io.Serializable;
@@ -244,28 +245,28 @@ public class GeneanetPerson implements Serializable {
     public String toString() {
         if (firstName != null) {
             String result = "GeneanetPerson{";
-            result += (url != null) ? "url='" + url + '\'' : "";
-            result += (geneanetUrl != null) ? ", geneanetURL='" + geneanetUrl + '\'' : "";
-            result += (firstName != null) ? ", firstName='" + firstName + '\'' : "";
-            result += (familyName != null) ? ", familyName='" + familyName + '\'' : "";
-            result += (gender != null) ? ", gender='" + gender + '\'' : "";
-            result += (birthDate != null) ? ", birthDate='" + birthDate + '\'' : "";
-            result += (placeOfBirth != null) ? ", placeOfBirth='" + placeOfBirth + '\'' : "";
-            result += (christeningDate != null) ? ", christeningDate='" + christeningDate + '\'' : "";
-            result += (placeOfChristening != null) ? ", placeOfChristening='" + placeOfChristening + '\'' : "";
-            result += (deathDate != null) ? ", deathDate='" + deathDate + '\'' : "";
-            result += (placeOfDeath != null) ? ", placeOfDeath='" + placeOfDeath + '\'' : "";
-            result += (burialDate != null) ? ", burialDate='" + burialDate + '\'' : "";
-            result += (placeOfBurial != null) ? ", placeOfBurial='" + placeOfBurial + '\'' : "";
-            result += (father != null) ? ", father='" + father.getUrl() + '\'' : "";
-            result += (mother != null) ? ", mother='" + mother.getUrl() + '\'' : "";
-            result += (siblings != null && !siblings.isEmpty()) ? ", siblings='" + printListofGeneanetPerson(siblings) + '\'' : "";
-            result += (halfSiblings != null && !halfSiblings.isEmpty()) ? ", halfSiblings='" + printListofGeneanetPerson(halfSiblings) + '\'' : "";
-            result += (children != null && !children.isEmpty()) ? ", children='" + printListofGeneanetPerson(children) + '\'' : "";
-            result += (marriage != null && !marriage.isEmpty()) ? ", marriage='" + printHashMapofGeneanetPerson(marriage) + '\'' : "";
-            result += (image != null) ? ", image='" + image + '\'' : "";
+            result += (url != null) ? "url='" + url + '\'' : StringUtils.EMPTY;
+            result += (geneanetUrl != null) ? ", geneanetURL='" + geneanetUrl + '\'' : StringUtils.EMPTY;
+            result += (firstName != null) ? ", firstName='" + firstName + '\'' : StringUtils.EMPTY;
+            result += (familyName != null) ? ", familyName='" + familyName + '\'' : StringUtils.EMPTY;
+            result += (gender != null) ? ", gender='" + gender + '\'' : StringUtils.EMPTY;
+            result += (birthDate != null) ? ", birthDate='" + birthDate + '\'' : StringUtils.EMPTY;
+            result += (placeOfBirth != null) ? ", placeOfBirth='" + placeOfBirth + '\'' : StringUtils.EMPTY;
+            result += (christeningDate != null) ? ", christeningDate='" + christeningDate + '\'' : StringUtils.EMPTY;
+            result += (placeOfChristening != null) ? ", placeOfChristening='" + placeOfChristening + '\'' : StringUtils.EMPTY;
+            result += (deathDate != null) ? ", deathDate='" + deathDate + '\'' : StringUtils.EMPTY;
+            result += (placeOfDeath != null) ? ", placeOfDeath='" + placeOfDeath + '\'' : StringUtils.EMPTY;
+            result += (burialDate != null) ? ", burialDate='" + burialDate + '\'' : StringUtils.EMPTY;
+            result += (placeOfBurial != null) ? ", placeOfBurial='" + placeOfBurial + '\'' : StringUtils.EMPTY;
+            result += (father != null) ? ", father='" + father.getUrl() + '\'' : StringUtils.EMPTY;
+            result += (mother != null) ? ", mother='" + mother.getUrl() + '\'' : StringUtils.EMPTY;
+            result += (siblings != null && !siblings.isEmpty()) ? ", siblings='" + printListofGeneanetPerson(siblings) + '\'' : StringUtils.EMPTY;
+            result += (halfSiblings != null && !halfSiblings.isEmpty()) ? ", halfSiblings='" + printListofGeneanetPerson(halfSiblings) + '\'' : StringUtils.EMPTY;
+            result += (children != null && !children.isEmpty()) ? ", children='" + printListofGeneanetPerson(children) + '\'' : StringUtils.EMPTY;
+            result += (marriage != null && !marriage.isEmpty()) ? ", marriage='" + printHashMapofGeneanetPerson(marriage) + '\'' : StringUtils.EMPTY;
+            result += (image != null) ? ", image='" + image + '\'' : StringUtils.EMPTY;
             result += ", searched='" + searched + '\'';
-            result += (rootperson) ? ", rootperson='" + rootperson + '\'' : "";
+            result += (rootperson) ? ", rootperson='" + rootperson + '\'' : StringUtils.EMPTY;
             return result;
         } else {
             return "url='" + url;
@@ -273,7 +274,7 @@ public class GeneanetPerson implements Serializable {
     }
 
     public static String printListofGeneanetPerson(ArrayList<GeneanetPerson> list) {
-        String result = "";
+        String result = StringUtils.EMPTY;
         Boolean first = true;
         for (GeneanetPerson person : list) {
             if (!first) {
@@ -287,7 +288,7 @@ public class GeneanetPerson implements Serializable {
     }
 
     public static String printHashMapofGeneanetPerson(HashMap<GeneanetPerson, HashMap<MyDate, String>> hashmap) {
-        String result = "";
+        String result = StringUtils.EMPTY;
         for (Map.Entry<GeneanetPerson, HashMap<MyDate, String>> entry : hashmap.entrySet()) {
             result += entry.getKey().getUrl() + ";" + entry.getValue();
 

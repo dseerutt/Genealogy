@@ -1,5 +1,6 @@
 package Genealogy.Model.Date;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -98,7 +99,7 @@ public class MonthDate extends MyDate implements Serializable {
      * @return
      */
     public String getPaddedMonth() {
-        String monthPadded = "" + month;
+        String monthPadded = StringUtils.EMPTY + month;
         if (monthPadded.length() == 1) {
             return "0" + monthPadded;
         } else {

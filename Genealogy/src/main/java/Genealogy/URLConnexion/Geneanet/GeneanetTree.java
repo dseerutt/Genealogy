@@ -1,5 +1,7 @@
 package Genealogy.URLConnexion.Geneanet;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 
 /**
@@ -9,7 +11,7 @@ public class GeneanetTree implements Serializable {
     private String name;
     private String url;
     private int peopleNumber;
-    private String gedcomId = "";
+    private String gedcomId = StringUtils.EMPTY;
 
     public GeneanetTree(String name, String url, String peopleNumber) {
         this.name = name;

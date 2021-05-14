@@ -84,7 +84,7 @@ public class Town implements Serializable {
                     if (m.groupCount() > 1) {
                         county = StringUtils.trim(m.group(2));
                     } else {
-                        county = "";
+                        county = StringUtils.EMPTY;
                     }
                     break;
                 }
@@ -102,8 +102,8 @@ public class Town implements Serializable {
      * @return
      */
     public static Pair<String, String> readTown(String fullName) {
-        String name = "";
-        String county = "";
+        String name = StringUtils.EMPTY;
+        String county = StringUtils.EMPTY;
         if (StringUtils.isNotBlank(fullName)) {
             for (String regex : Serializer.getTownRegex()) {
                 Pattern p = Pattern.compile(regex);
@@ -113,7 +113,7 @@ public class Town implements Serializable {
                     if (m.groupCount() > 1) {
                         county = StringUtils.trim(m.group(2));
                     } else {
-                        county = "";
+                        county = StringUtils.EMPTY;
                     }
                     break;
                 }
@@ -121,7 +121,7 @@ public class Town implements Serializable {
             if (StringUtils.isNotBlank(name) && StringUtils.isNotBlank(county)) {
                 return new MutablePair(name, county);
             } else if (StringUtils.isNotBlank(name)) {
-                return new MutablePair(name, "");
+                return new MutablePair(name, StringUtils.EMPTY);
             }
         }
         return null;
@@ -198,7 +198,7 @@ public class Town implements Serializable {
      */
     public static void addLostTowns(String town, String county) {
         lostTowns.add(town + " (" + county + ")");
-        Serializer.getTownAssociationMap().put(town + " (" + county + ")", "");
+        Serializer.getTownAssociationMap().put(town + " (" + county + ")", StringUtils.EMPTY);
     }
 
     /**
@@ -207,7 +207,7 @@ public class Town implements Serializable {
      * @return
      */
     public String getFullName() {
-        return StringUtils.trim(Objects.toString(name, "") + " " + Objects.toString(county, ""));
+        return StringUtils.trim(Objects.toString(name, StringUtils.EMPTY) + " " + Objects.toString(county, StringUtils.EMPTY));
     }
 
     /**
@@ -431,7 +431,7 @@ public class Town implements Serializable {
      * @param longitude
      */
     private static void saveCoordinateIntoFile(String city, String county, double latitude, double longitude) {
-        boolean addedTown = Serializer.getInstance().addTownToCoordinateMap(city + "|" + county, "" + latitude, "" + longitude);
+        boolean addedTown = Serializer.getInstance().addTownToCoordinateMap(city + "|" + county, StringUtils.EMPTY + latitude, StringUtils.EMPTY + longitude);
         if (addedTown) {
             Serializer.getInstance().writeCoordinatesMap();
         }
@@ -468,7 +468,7 @@ public class Town implements Serializable {
         if (coordinates != null) {
             return "(" + coordinates.getLatitude() + "," + coordinates.getLongitude() + ")";
         } else {
-            return "";
+            return StringUtils.EMPTY;
         }
 
     }

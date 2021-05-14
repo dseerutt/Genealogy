@@ -79,7 +79,7 @@ public class Genealogy {
      * @throws IOException
      */
     public void writeFile(String path) throws IOException {
-        StringBuilder text = new StringBuilder("");
+        StringBuilder text = new StringBuilder(StringUtils.EMPTY);
         for (ArrayList<ParsingStructure> parsingStructureList : contents.values()) {
             for (ParsingStructure parsingStructure : parsingStructureList) {
                 text = text.append(parsingStructure.toString()).append(System.lineSeparator());
@@ -96,7 +96,7 @@ public class Genealogy {
      * @throws IOException
      */
     public void writeFile() throws IOException {
-        StringBuilder text = new StringBuilder("");
+        StringBuilder text = new StringBuilder(StringUtils.EMPTY);
         for (ArrayList<ParsingStructure> parsingStructureList : contents.values()) {
             for (ParsingStructure parsingStructure : parsingStructureList) {
                 text = text.append(parsingStructure.toString()).append(System.lineSeparator());
@@ -117,7 +117,7 @@ public class Genealogy {
         Person person = findPersonById(idPerson);
         person.setComments(comments);
         //Update contents
-        ParsingStructure noteStructure = new ParsingStructure(1, "NOTE", "");
+        ParsingStructure noteStructure = new ParsingStructure(1, "NOTE", StringUtils.EMPTY);
         ArrayList<ParsingStructure> contLines = new ArrayList<>();
         String[] tmpArray = comments.split(System.lineSeparator());
         if (tmpArray != null && tmpArray.length > 0) {
@@ -149,7 +149,7 @@ public class Genealogy {
      */
     public Person findPersonById(String id) {
         for (Person person : persons) {
-            if (id.replace("@", "").equals(person.getId())) {
+            if (id.replace("@", StringUtils.EMPTY).equals(person.getId())) {
                 return person;
             }
         }
@@ -268,7 +268,7 @@ public class Genealogy {
         parseAuthor();
         //Do not treat header or author or end of file
         Pattern pattern = Pattern.compile("HEAD|SUBM|TRLR");
-        Matcher matcher = pattern.matcher("");
+        Matcher matcher = pattern.matcher(StringUtils.EMPTY);
         for (Map.Entry<String, ArrayList<ParsingStructure>> entry : contents.entrySet()) {
             String id = entry.getKey();
             matcher = matcher.reset(id);
@@ -525,7 +525,7 @@ public class Genealogy {
                 return parsingStructure.getFieldValue();
             }
         }
-        return "";
+        return StringUtils.EMPTY;
     }
 
     /**

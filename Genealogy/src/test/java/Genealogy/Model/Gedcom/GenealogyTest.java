@@ -203,8 +203,6 @@ public class GenealogyTest {
             File file = new File(fileInput);
             MyGedcomReader myGedcomReader = MyGedcomReader.getInstance();
             Serializer serializer = Serializer.getInstance();
-            String inputmd5 = "";
-            String resultmd5 = "";
 
             //launch
             Genealogy.genealogy = myGedcomReader.read(file.getAbsolutePath());

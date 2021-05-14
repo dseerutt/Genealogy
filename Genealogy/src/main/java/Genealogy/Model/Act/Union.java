@@ -140,7 +140,7 @@ public class Union extends Act {
      */
     @Override
     public String getNecessaryResearch() {
-        String result = "";
+        String result = StringUtils.EMPTY;
         if (date == null || !date.isFullDate()) {
             result += " date";
         }
@@ -156,7 +156,7 @@ public class Union extends Act {
         if (unionType == null) {
             result += " unionType";
         }
-        if (!result.equals("")) {
+        if (!result.equals(StringUtils.EMPTY)) {
             return result.substring(1);
         } else {
             return null;

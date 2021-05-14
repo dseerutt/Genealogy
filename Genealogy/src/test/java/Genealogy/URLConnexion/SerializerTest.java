@@ -3,6 +3,7 @@ package Genealogy.URLConnexion;
 import Genealogy.MapViewer.Structures.MyCoordinate;
 import Genealogy.Model.Act.Proof;
 import Genealogy.Model.Gedcom.Town;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -209,7 +210,7 @@ public class SerializerTest {
             String fileResultContents = readFile(fileResult);
             assertEquals(fileResultContents, fileInputContents);
         } finally {
-            File file = new File(fileInput + "");
+            File file = new File(fileInput + StringUtils.EMPTY);
             System.out.println(fileInput + " " + file.exists());
             file.delete();
         }
@@ -223,7 +224,7 @@ public class SerializerTest {
      * @throws IOException
      */
     public static String readFile(String path) throws IOException {
-        String result = "";
+        String result = StringUtils.EMPTY;
         File f = new File(path);
         if (f.exists()) {
             String sCurrentLine;
@@ -313,7 +314,7 @@ public class SerializerTest {
         townCoordinatesMapField.set(serializer, townCoordinatesMap);
 
         //verification empty map
-        assertEquals("", serializer.printTownCoordinatesMap());
+        assertEquals(StringUtils.EMPTY, serializer.printTownCoordinatesMap());
 
         //init data to map
         townCoordinatesMap.put("Bonnard|Yonne", "47.9315391:3.5257298");

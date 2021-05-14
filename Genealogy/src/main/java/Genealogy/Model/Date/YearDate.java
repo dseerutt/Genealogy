@@ -1,5 +1,6 @@
 package Genealogy.Model.Date;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -44,7 +45,7 @@ public class YearDate extends MyDate implements Serializable {
      */
     @Override
     public String toString() {
-        return "" + year;
+        return StringUtils.EMPTY + year;
     }
 
     /**

@@ -38,8 +38,8 @@ public class TreeComparator {
     private boolean errorComparison = false;
     private String treeName;
     private String comparisonResultDisplay;
-    private String peopleUrlError = "";
-    private String peopleFullNameError = "";
+    private String peopleUrlError = StringUtils.EMPTY;
+    private String peopleFullNameError = StringUtils.EMPTY;
     private String comparisonResultToReplace;
     private String comparisonResultReplacement;
     private static LinkedHashMap<String, String> aliasCities;
@@ -167,7 +167,7 @@ public class TreeComparator {
     }
 
     public String printDifferences(boolean hide, boolean log) {
-        String result = "";
+        String result = StringUtils.EMPTY;
         if (!hide) {
             HashMap<GeneanetPerson, String> tmpDifferences;
             tmpDifferences = differencesForDisplay;
@@ -188,7 +188,7 @@ public class TreeComparator {
     }
 
     public String getDifferencesWithinString() {
-        String result = "";
+        String result = StringUtils.EMPTY;
         for (Map.Entry<GeneanetPerson, String> entry : differences.entrySet()) {
             result += entry.getKey().getUrl() + ";" + entry.getKey().getFullName() + ";" + entry.getValue() + System.lineSeparator();
         }
@@ -196,7 +196,7 @@ public class TreeComparator {
     }
 
     public static String getDifferencesWithinString(HashMap<GeneanetPerson, String> differences) {
-        String result = "";
+        String result = StringUtils.EMPTY;
         for (Map.Entry<GeneanetPerson, String> entry : differences.entrySet()) {
             result += entry.getKey().getUrl() + ";" + entry.getValue() + System.lineSeparator();
         }
@@ -538,9 +538,6 @@ public class TreeComparator {
         if (string1 == null && string2 == null) {
             return true;
         } else if (string1 != null && string2 != null) {
-            if (string1.contains("Abraham BRANGE")) {
-                String res = "";
-            }
             String newString1 = StringUtils.stripAccents(string1).toLowerCase() + " ";
             String newString2 = StringUtils.stripAccents(string2).toLowerCase() + " ";
             if (!newString1.equals(newString2)) {
@@ -631,7 +628,7 @@ public class TreeComparator {
                 File f = new File(path + "ComparatorAlias.txt");
 
                 BufferedReader b = new BufferedReader(new FileReader(f));
-                String readLine = "";
+                String readLine = StringUtils.EMPTY;
 
                 while ((readLine = b.readLine()) != null) {
                     String[] inputTab = readLine.split(";");
@@ -658,9 +655,9 @@ public class TreeComparator {
     }
 
     private void compareDifferences(HashMap<GeneanetPerson, String> differences2) {
-        String result = "";
+        String result = StringUtils.EMPTY;
         int cptUnknownPeople = 0;
-        String printedUrl = "";
+        String printedUrl = StringUtils.EMPTY;
         //Differences missing in file
         for (Map.Entry<GeneanetPerson, String> entry : differences.entrySet()) {
             GeneanetPerson person = entry.getKey();
@@ -717,7 +714,7 @@ public class TreeComparator {
                 person = peopleUrl.get(person.getUrl());
                 if (person == null) {
                     logger.warn("Could not find person " + entry.getKey().getUrl());
-                    comparisonResultReplacement = "";
+                    comparisonResultReplacement = StringUtils.EMPTY;
                     comparisonResultDisplay = "Deletion of " + valueTxt + " ?";
                     comparisonResultToReplace = printedUrl + ";" + entry.getKey().getImage() + ";" + valueTxt;
                     return;
@@ -739,7 +736,7 @@ public class TreeComparator {
                 differencesForDisplay.put(person, differences2.get(person));
                 comparisonResultDisplay = "Deletion of " + result + " ?" + System.lineSeparator() + person.getUrl();
                 if (differences.get(person) == null) {
-                    comparisonResultReplacement = "";
+                    comparisonResultReplacement = StringUtils.EMPTY;
                 } else {
                     comparisonResultReplacement = printedUrl + ";" + person.getFullName() + ";" + differences.get(person);
                 }
@@ -830,14 +827,14 @@ public class TreeComparator {
         String treeName = getTreeName();
         String find = getComparisonResultToReplace();
         String difference = getComparisonResultReplacement();
-        if (!delete && difference.equals("")) {
+        if (!delete && StringUtils.isEmpty(difference)) {
             logger.error("Can only remove field");
             return;
         }
-        if (difference.equals("")) {
+        if (StringUtils.isEmpty(difference)) {
             find += System.lineSeparator();
         }
-        String resultToPrint = "";
+        String resultToPrint = StringUtils.EMPTY;
         int lineNumber = 1;
 
         //read data
@@ -897,7 +894,7 @@ public class TreeComparator {
                 if (tmpLine != null && tmpLine.length > 1) {
                     GeneanetPerson person = new GeneanetPerson(removeDoubleGeneanetSuffix(tmpLine[0]));
                     person.setImage(tmpLine[1]);
-                    String txt = "";
+                    String txt = StringUtils.EMPTY;
                     for (int i = 2; i < tmpLine.length; i++) {
                         if (i != 2) {
                             txt += ";" + tmpLine[i];
@@ -1014,7 +1011,7 @@ public class TreeComparator {
     }
 
     public static String findTinyUrl(String inputUrl) {
-        String result = "";
+        String result = StringUtils.EMPTY;
         if (inputUrl != null) {
             String[] urlTab = inputUrl.split("&p=");
             if (urlTab != null && urlTab.length > 0) {
@@ -1039,11 +1036,11 @@ public class TreeComparator {
             List<String> removeOnlyList = new ArrayList<>(listReplacement);
             removeOnlyList.removeAll(listReplace);
             if (!replaceOnlyList.isEmpty()) {
-                removeReplacement = "" + replaceOnlyList;
+                removeReplacement = StringUtils.EMPTY + replaceOnlyList;
                 logger.info(removeReplacement + " <- will be removed");
             }
             if (!removeOnlyList.isEmpty() && (removeOnlyList.size() != 1 || !StringUtils.isBlank(removeOnlyList.get(0)))) {
-                addReplacement = "" + removeOnlyList;
+                addReplacement = StringUtils.EMPTY + removeOnlyList;
                 logger.info(addReplacement + " <- will be added");
             }
         }
@@ -1122,7 +1119,7 @@ public class TreeComparator {
 
         //Gedcom file
         String personId = geneanetBrowser.getGedcomIdFromGeneanetTrees();
-        if (personId.equals("")) {
+        if (StringUtils.isEmpty(personId)) {
             logger.error("Problem getting rootPerson id for " + tree);
             throw new Exception("Could not find id");
         }
@@ -1148,9 +1145,9 @@ public class TreeComparator {
     }
 
     private String printData(String tree, HashMap<GeneanetPerson, String> geneanetPersonStringHashMap) throws Exception {
-        String result = "";
+        String result = StringUtils.EMPTY;
         String comparison = getComparisonResultDisplay();
-        if (comparison != null && !comparison.equals("")) {
+        if (comparison != null && StringUtils.isNotEmpty(comparison)) {
             printDifferences(true, true);
             String difference = geneanetPersonStringHashMap.size() + "/" + getDifferences().size() + " differences of " + tree + " tree :";
             logger.info(difference);

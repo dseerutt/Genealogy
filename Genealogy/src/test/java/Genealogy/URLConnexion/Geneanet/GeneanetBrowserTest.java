@@ -1,5 +1,6 @@
 package Genealogy.URLConnexion.Geneanet;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.Test;
@@ -15,17 +16,17 @@ public class GeneanetBrowserTest {
     }
 
     public String readPersonFromFile(GeneanetConverter converter, String fileName) throws Exception {
-        GeneanetPerson person = new GeneanetPerson("");
+        GeneanetPerson person = new GeneanetPerson(StringUtils.EMPTY);
         String fileName2 = "integrationTest/" + fileName;
         File input = new File(getClass().getClassLoader().getResource(fileName2).getFile());
-        Document document = Jsoup.parse(input, "UTF-8", "");
+        Document document = Jsoup.parse(input, "UTF-8", StringUtils.EMPTY);
         converter.parseDocument(document, person);
         return person.toString();
     }
 
     @Test
     public void integrationTest() throws Exception {
-        GeneanetBrowser browser = new GeneanetBrowser("");
+        GeneanetBrowser browser = new GeneanetBrowser(StringUtils.EMPTY);
         GeneanetConverter converter = browser.getGeneanetConverter();
         //https://gw.geneanet.org/dil?lang=fr&p=jacques&n=de+silliers
         assertEquals(readPersonFromFile(converter, "jacquesDeSilliers.html"), "GeneanetPerson{url='', geneanetURL='https://gw.geneanet.org/dil?lang=fr&iz=0&m=RL&i1=10175&i2=0&b1=1&b2=6120', firstName='Jacques', familyName='de SILLIERS', gender='M', placeOfBirth='Les Sièges', placeOfDeath='Saint-Hilaire', father='https://gw.geneanet.org/dil?lang=fr&p=jacques&n=de+silliers&oc=1', mother='https://gw.geneanet.org/dil?lang=fr&p=francoise&n=de+chicault', siblings='https://gw.geneanet.org/dil?lang=fr&p=charles&n=de+silliers', children='https://gw.geneanet.org/dil?lang=fr&p=suzanne+jeanne&n=de+silliers;https://gw.geneanet.org/dil?lang=fr&p=jacques&n=de+silliers&oc=2;https://gw.geneanet.org/dil?lang=fr&p=charles&n=de+silliers&oc=1;https://gw.geneanet.org/dil?lang=fr&p=charlotte+catherine&n=de+silliers;https://gw.geneanet.org/dil?lang=fr&p=jeanne+claude&n=de+silliers;https://gw.geneanet.org/dil?lang=fr&p=jean&n=de+silliers', marriage='https://gw.geneanet.org/dil?lang=fr&p=marguerite&n=charpentier;{null=null}https://gw.geneanet.org/dil?lang=fr&p=madeleine&n=de+pollangis;{09/02/1672=Saint-Hilaire - Sens}', searched='true'");

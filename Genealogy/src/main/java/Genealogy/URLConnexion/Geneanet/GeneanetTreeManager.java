@@ -1,6 +1,7 @@
 package Genealogy.URLConnexion.Geneanet;
 
 import Genealogy.URLConnexion.Serializer;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -63,7 +64,7 @@ public class GeneanetTreeManager implements Serializable {
             }
             File f = new File(path + "geneanetTrees.properties");
             BufferedReader b = new BufferedReader(new FileReader(f));
-            String line = "";
+            String line = StringUtils.EMPTY;
             while ((line = b.readLine()) != null) {
                 String[] tmpTab = line.split(";");
                 if (tmpTab.length == 4) {

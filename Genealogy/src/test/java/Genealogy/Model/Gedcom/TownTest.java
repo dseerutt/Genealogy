@@ -7,6 +7,7 @@ import Genealogy.Model.Date.YearDate;
 import Genealogy.Model.Exception.ParsingException;
 import Genealogy.URLConnexion.MyHttpUrlConnection;
 import Genealogy.URLConnexion.Serializer;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -96,7 +97,7 @@ public class TownTest {
         assertEquals(1, Town.getLostTowns().size());
         assertEquals("Ville (Département)", Town.getLostTowns().get(0));
         assertEquals(1, Serializer.getTownAssociationMap().size());
-        assertEquals("", Serializer.getTownAssociationMap().get("Ville (Département)"));
+        assertEquals(StringUtils.EMPTY, Serializer.getTownAssociationMap().get("Ville (Département)"));
     }
 
     /**
@@ -106,8 +107,8 @@ public class TownTest {
     public void getFullNameTest() {
         //launch
         Town townClassic = new Town("Ville 1", "Département");
-        Town townEmptyName = new Town("", "Département");
-        Town townEmptyCounty = new Town("Ville 1", "");
+        Town townEmptyName = new Town(StringUtils.EMPTY, "Département");
+        Town townEmptyCounty = new Town("Ville 1", StringUtils.EMPTY);
 
         //verification
         assertEquals("Ville 1 Département", townClassic.getFullName());
@@ -122,8 +123,8 @@ public class TownTest {
     public void getFullNameWithParenthesisTest() {
         //launch
         Town townClassic = new Town("Ville 1", "Département");
-        Town townEmptyName = new Town("", "Département");
-        Town townEmptyCounty = new Town("Ville 1", "");
+        Town townEmptyName = new Town(StringUtils.EMPTY, "Département");
+        Town townEmptyCounty = new Town("Ville 1", StringUtils.EMPTY);
 
         //verification
         assertEquals("Ville 1 (Département)", townClassic.getFullNameWithParenthesis());
@@ -442,7 +443,7 @@ public class TownTest {
         townReims.setCoordinates(new MyCoordinate(10, 15));
 
         //verification
-        assertEquals("", townRennes.getCoordinatesPrettyPrint());
+        assertEquals(StringUtils.EMPTY, townRennes.getCoordinatesPrettyPrint());
         assertEquals("(10.0,15.0)", townReims.getCoordinatesPrettyPrint());
     }
 
@@ -453,7 +454,7 @@ public class TownTest {
     public void isEmptyTest() {
         //init
         Town townNull = new Town(null, null);
-        Town townEmpty = new Town("", "");
+        Town townEmpty = new Town(StringUtils.EMPTY, StringUtils.EMPTY);
         Town townBlank = new Town(" ", " ");
         Town townNameOnly = new Town("Town", null);
         Town townCountyOnly = new Town(null, "Dept");
@@ -474,7 +475,7 @@ public class TownTest {
     @Test
     public void toStringPrettyStringTest() {
         assertEquals("Reims (Marne)", new Town("Reims", "Marne").toStringPrettyString());
-        assertEquals("Reims", new Town("Reims", "").toStringPrettyString());
+        assertEquals("Reims", new Town("Reims", StringUtils.EMPTY).toStringPrettyString());
         assertEquals("Reims", new Town("Reims", null).toStringPrettyString());
     }
 

@@ -13,6 +13,7 @@ import Genealogy.Model.Exception.ParsingException;
 import Genealogy.Parsing.MyGedcomReader;
 import Genealogy.Parsing.PDFStructure;
 import Genealogy.URLConnexion.Serializer;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
@@ -58,7 +59,7 @@ public class PersonTest {
         surnameField.set(personClassic, "Jean-Marie");
         nameField.set(personEmptySurname, "Pierre");
         nameField.set(personNullSurname, "Pierrot");
-        surnameField.set(personEmptySurname, "");
+        surnameField.set(personEmptySurname, StringUtils.EMPTY);
 
         //launch and verification
         assertEquals("Jean-Marie Pierre du village", personClassic.getFullName());
@@ -89,7 +90,7 @@ public class PersonTest {
         nameField.set(personClassic, "Georges du marché");
         surnameField.set(personEmptyName, "Pierre");
         surnameField.set(personNullName, "Pierrot");
-        nameField.set(personEmptyName, "");
+        nameField.set(personEmptyName, StringUtils.EMPTY);
 
         //launch and verification
         assertEquals("Georges du marché Pierre", personClassic.getFullNameInverted());
@@ -305,7 +306,7 @@ public class PersonTest {
     public void addProofTest() throws Exception {
         //init all
         Person person = new Person(null);
-        person.setPdfStructure(new PDFStructure(""));
+        person.setPdfStructure(new PDFStructure(StringUtils.EMPTY));
         Union union1 = new Union(person, person, new MonthDate("DEC 2005"), new Town("Saintes", "Charente-Maritime"), UnionType.HETERO_MAR);
         Union union2 = new Union(person, person, new YearDate("2006"), new Town("Saintes", "Charente-Maritime"), UnionType.HETERO_MAR);
         person.addUnion(union1);

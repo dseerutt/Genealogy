@@ -3,6 +3,7 @@ package Genealogy.Model.Act;
 import Genealogy.Model.Date.MyDate;
 import Genealogy.Model.Gedcom.Person;
 import Genealogy.Model.Gedcom.Town;
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public abstract class Act {
      * @return
      */
     public String getNecessaryResearch() {
-        String result = "";
+        String result = StringUtils.EMPTY;
         if (person == null) {
             result += " person";
         }
@@ -72,7 +73,7 @@ public abstract class Act {
         if (town == null || town.isEmpty()) {
             result += " town";
         }
-        if (!result.equals("")) {
+        if (!result.equals(StringUtils.EMPTY)) {
             return result.substring(1);
         } else {
             return null;
