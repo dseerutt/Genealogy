@@ -14,7 +14,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -61,20 +60,12 @@ public class GeneanetConverter {
     private static String XpathImage3;
     private Document doc;
     private final static Character space = (char) 160;
-    private static ArrayList<String> wrongCities;
 
     public GeneanetConverter(Document document) throws Exception {
         doc = document;
-        initWrongCities();
     }
 
     public GeneanetConverter() throws Exception {
-    }
-
-    private void initWrongCities() {
-        wrongCities = new ArrayList<>();
-        wrongCities.add("le bourg");
-        wrongCities.add("la Croix-Lambert");
     }
 
     public static String getXpathNames() {
