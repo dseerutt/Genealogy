@@ -1,5 +1,7 @@
 package Genealogy.Model.Date;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
@@ -28,7 +30,11 @@ public abstract class MyDate implements Serializable {
      * @return
      */
     public static String getStringDate(LocalDate date) {
-        return date.format(DATE_FORMATTER_CLASSIC);
+        if (date != null) {
+            return date.format(DATE_FORMATTER_CLASSIC);
+        } else {
+            return StringUtils.EMPTY;
+        }
     }
 
     /**

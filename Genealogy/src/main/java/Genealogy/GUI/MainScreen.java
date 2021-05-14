@@ -83,7 +83,7 @@ public class MainScreen extends JFrame {
     private ArrayList<MapPoint> mapPoints;
     private MapFrame mapFrame;
     private static MainScreen INSTANCE;
-    final static Logger logger = LogManager.getLogger(MainScreen.class);
+    public final static Logger logger = LogManager.getLogger(MainScreen.class);
     private MyHttpUrlConnection HTTPConnexion;
     private Thread thread;
 

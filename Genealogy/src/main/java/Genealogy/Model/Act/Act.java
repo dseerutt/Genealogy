@@ -45,7 +45,7 @@ public abstract class Act {
         this.person = person;
         this.date = date;
         this.town = town;
-        if (date != null) {
+        if (date != null && date.getDate() != null) {
             int yearDate = MyDate.getYear(date.getDate());
             if (yearDate < minimumYear) {
                 minimumYear = yearDate;

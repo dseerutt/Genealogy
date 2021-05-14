@@ -270,7 +270,7 @@ public class Person {
     private void calculateAge() {
         if ((birth == null) || (death == null)) {
             age = -1;
-            if ((death == null) && (birth != null) && (birth.getDate() != null) && (MyDate.getYear(birth.getDate().getDate()) > 1916)) {
+            if (death == null && birth != null && birth.getDate() != null && birth.getDate().getDate() != null && MyDate.getYear(birth.getDate().getDate()) > 1916) {
                 stillAlive = true;
             }
         } else if ((birth.getDate() == null) || (death.getDate() == null)) {
@@ -278,8 +278,10 @@ public class Person {
         } else {
             LocalDate birthDate = birth.getDate().getDate();
             LocalDate deathDate = death.getDate().getDate();
-            Period period = Period.between(birthDate, deathDate);
-            age = period.getYears();
+            if (birthDate != null && deathDate != null) {
+                Period period = Period.between(birthDate, deathDate);
+                age = period.getYears();
+            }
         }
     }
 

@@ -226,6 +226,7 @@ public class Genealogy {
      * Function sortPersons : sort persons list with PersonNameComparator
      */
     public void sortPersons() {
+        logger.debug("Sort persons");
         Collections.sort(persons, new PersonNameComparator());
     }
 
@@ -262,6 +263,7 @@ public class Genealogy {
      * @throws ParsingException
      */
     public void parseContents() throws ParsingException {
+        logger.debug("Start parsing");
         header = new Header(this);
         parseAuthor();
         //Do not treat header or author or end of file

@@ -3,6 +3,8 @@ package Genealogy.Parsing;
 import Genealogy.Model.Exception.ParsingException;
 import Genealogy.Model.Gedcom.Genealogy;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -20,6 +22,10 @@ public class MyGedcomReader {
      * Singleton instance
      */
     private static MyGedcomReader instance;
+    /**
+     * class logger
+     */
+    public final static Logger logger = LogManager.getLogger(MyGedcomReader.class);
 
     /**
      * Singleton getter
@@ -48,6 +54,7 @@ public class MyGedcomReader {
      * @throws ParsingException
      */
     public Genealogy read(String path) throws IOException, ParsingException {
+        logger.debug("Start reading file " + path);
         Genealogy genealogy = new Genealogy(path);
         HashMap<String, ArrayList<ParsingStructure>> contents = new LinkedHashMap<>();
         ArrayList<ParsingStructure> parsingStructureList = new ArrayList<>();

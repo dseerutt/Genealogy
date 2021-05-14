@@ -1,5 +1,6 @@
 package Genealogy.Model.Date;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,7 +28,11 @@ public class FullDate extends MyDate implements Serializable {
      * @param input
      */
     public FullDate(String input) {
-        date = LocalDate.parse(input, DATE_FORMATTER_BIG_MONTHS);
+        if (StringUtils.isNotBlank(input)) {
+            date = LocalDate.parse(input, DATE_FORMATTER_BIG_MONTHS);
+        } else {
+            date = null;
+        }
     }
 
     /**
