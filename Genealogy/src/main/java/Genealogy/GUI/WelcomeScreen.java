@@ -113,7 +113,7 @@ public class WelcomeScreen extends JFrame {
     }
 
     public void loadFile(String path) throws Exception {
-        MyGedcomReader myGedcomReader = new MyGedcomReader();
+        MyGedcomReader myGedcomReader = MyGedcomReader.getInstance();
         Genealogy.genealogy = myGedcomReader.read(path);
         Genealogy.genealogy.parseContents();
         Genealogy.genealogy.sortPersons();

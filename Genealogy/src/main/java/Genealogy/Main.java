@@ -46,7 +46,7 @@ public class Main {
      * @throws Exception
      */
     public static void initQuickMainScreen() throws Exception {
-        MyGedcomReader myGedcomReader = new MyGedcomReader();
+        MyGedcomReader myGedcomReader = MyGedcomReader.getInstance();
         String path = "src\\main\\resources\\famille1.ged";
         Genealogy.genealogy = myGedcomReader.read(path);
         Genealogy.genealogy.parseContents();

@@ -31,13 +31,12 @@ public class MyGedcomReaderTest {
         //init
         String path = "src/test/resources/read.gedTest";
         File file = new File(path);
-        MyGedcomReader myGedcomReader = new MyGedcomReader();
+        MyGedcomReader myGedcomReader = MyGedcomReader.getInstance();
         Serializer serializer = Serializer.getInstance();
 
         //launch
         Genealogy.genealogy = myGedcomReader.read(file.getAbsolutePath());
-        MyGedcomReader reader = new MyGedcomReader();
-        Genealogy genealogy = reader.read(file.getAbsolutePath());
+        Genealogy genealogy = myGedcomReader.read(file.getAbsolutePath());
 
         //verification
         HashMap<String, ArrayList<ParsingStructure>> contents = genealogy.getContents();

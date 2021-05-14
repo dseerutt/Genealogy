@@ -73,7 +73,7 @@ public class TreeComparatorManager implements Runnable {
     }
 
     public static void refreshGedcomData() throws IOException, ParsingException {
-        MyGedcomReader myGedcomReader = new MyGedcomReader();
+        MyGedcomReader myGedcomReader = MyGedcomReader.getInstance();
         genealogy = myGedcomReader.read(gedcomFile);
         genealogy.parseContents();
         genealogy.sortPersons();
@@ -176,7 +176,6 @@ public class TreeComparatorManager implements Runnable {
         refreshGedcomData();
         searchOnGeneanet = false;
         TreeComparatorManager treeComparatorManager = getInstance();
-        treeComparatorManager.compareTreeFromName("roalda");
-        //treeComparatorManager.compareTrees();
+        treeComparatorManager.compareTrees();
     }
 }

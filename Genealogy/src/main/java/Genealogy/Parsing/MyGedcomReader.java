@@ -16,6 +16,28 @@ import java.util.LinkedHashMap;
  * MyGedcomReader class : read a Gedcom file
  */
 public class MyGedcomReader {
+    /**
+     * Singleton instance
+     */
+    private static MyGedcomReader instance;
+
+    /**
+     * Singleton getter
+     *
+     * @return
+     */
+    public static MyGedcomReader getInstance() {
+        if (instance == null) {
+            instance = new MyGedcomReader();
+        }
+        return instance;
+    }
+
+    /**
+     * Private default constructor
+     */
+    private MyGedcomReader() {
+    }
 
     /**
      * Function read : read a gedcom file from a String path and return a Genealogy object with a ParsingStructure list

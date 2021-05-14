@@ -248,7 +248,7 @@ public class PersonTest {
         String path = "src/test/resources/savePDFCommentAndFile.gedTest";
         String pathNewFile = "src/test/resources/savePDFCommentAndFileTest.gedTest";
         File file = new File(path);
-        MyGedcomReader myGedcomReader = new MyGedcomReader();
+        MyGedcomReader myGedcomReader = MyGedcomReader.getInstance();
         Serializer serializer = Serializer.getInstance();
 
         //init
