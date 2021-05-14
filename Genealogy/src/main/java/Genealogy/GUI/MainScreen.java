@@ -94,6 +94,14 @@ public class MainScreen extends JFrame {
         return arbre;
     }
 
+    public JCheckBox getRechercheGeneanetCheckBox() {
+        return rechercheGeneanetCheckBox;
+    }
+
+    public boolean isEnabledRechercheGeneanetCheckbox() {
+        return rechercheGeneanetCheckBox.isSelected();
+    }
+
     public static Logger getLogger() {
         return logger;
     }

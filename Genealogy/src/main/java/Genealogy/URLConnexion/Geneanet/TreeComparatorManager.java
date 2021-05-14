@@ -87,20 +87,20 @@ public class TreeComparatorManager implements Runnable {
     public boolean compareTreeFromName(String name) throws Exception {
         for (GeneanetTree geneanetTree : getGeneanetBrowser().getGeneanetTreeManager().getGeneanetTrees()) {
             if (StringUtils.equals(name, geneanetTree.getName())) {
-                return compareTreeOnce(geneanetTree.getUrl());
+                return compareTreeOnce(geneanetTree.getUrl(), true);
             }
         }
         return false;
     }
 
-    public boolean compareTreeOnce(String url) throws Exception {
+    public boolean compareTreeOnce(String url, boolean enableModificationScreen) throws Exception {
         Genealogy genealogyParameter = genealogy;
         TreeComparator treeComparator = new TreeComparator();
         String info = treeComparator.compareTree(url, genealogyParameter);
         if (StringUtils.equals(info, "killed")) {
             return false;
         }
-        if (treeComparator.isErrorComparison()) {
+        if (enableModificationScreen && treeComparator.isErrorComparison()) {
             treeComparator.analyseTree();
             TreeModificationScreen treeModificationScreen = TreeModificationScreen.getInstance();
             treeModificationScreen.getAddReplacementText().setText(treeComparator.getAddReplacement());
@@ -145,11 +145,12 @@ public class TreeComparatorManager implements Runnable {
 
     public boolean compareTreesWithScreen() throws Exception {
         int index = 1;
+        MainScreen mainScreen = MainScreen.getINSTANCE();
         boolean runOK = true;
         for (GeneanetTree geneanetTree : getGeneanetBrowser().getGeneanetTreeManager().getGeneanetTrees()) {
-            MainScreen.getINSTANCE().getArbre().setSelectedItem(geneanetTree.getName());
+            mainScreen.getArbre().setSelectedItem(geneanetTree.getName());
             if (index >= indexTree) {
-                if (!compareTreeOnce(geneanetTree.getUrl())) {
+                if (!compareTreeOnce(geneanetTree.getUrl(), !mainScreen.isEnabledRechercheGeneanetCheckbox())) {
                     indexTree = index;
                     runOK = false;
                     break;

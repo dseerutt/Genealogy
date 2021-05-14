@@ -81,7 +81,7 @@ public class TreeModificationScreen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if (TreeComparatorManager.getInstance().compareTreeOnce(treeComparator.url)) {
+                    if (TreeComparatorManager.getInstance().compareTreeOnce(treeComparator.url,true)) {
                         JOptionPane.showMessageDialog(panel1, "Comparaison arbre " + treeComparator.getTreeName() + " OK",
                                 "Erreur",
                                 JOptionPane.INFORMATION_MESSAGE);
@@ -99,7 +99,7 @@ public class TreeModificationScreen extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 try {
                     treeComparator.writeModification();
-                    if (TreeComparatorManager.getInstance().compareTreeOnce(treeComparator.url)) {
+                    if (TreeComparatorManager.getInstance().compareTreeOnce(treeComparator.url, true)) {
                         JOptionPane.showMessageDialog(panel1, "Comparaison arbre " + treeComparator.getTreeName() + " OK",
                                 "Erreur",
                                 JOptionPane.INFORMATION_MESSAGE);
