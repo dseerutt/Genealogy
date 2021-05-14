@@ -78,6 +78,7 @@ public class MainScreen extends JFrame {
     private JComboBox arbre;
     private JButton comparerTousLesArbresButton;
     private JPanel comparaisonArbre;
+    private JButton scrollToTop;
     private JXMapKit jXMapKit;
     private ArrayList<MapPoint> mapPoints;
     private MapFrame mapFrame;
@@ -467,6 +468,13 @@ public class MainScreen extends JFrame {
                             "Erreur",
                             JOptionPane.ERROR_MESSAGE);
                 }
+            }
+        });
+
+        scrollToTop.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                arbre.setSelectedIndex(0);
             }
         });
     }
