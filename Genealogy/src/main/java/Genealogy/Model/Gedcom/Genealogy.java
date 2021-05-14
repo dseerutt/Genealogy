@@ -375,7 +375,7 @@ public class Genealogy {
             partner1.addUnion(union);
             partner2.addUnion(union);
         } else {
-            logger.debug("Failed to find the people linked to the marriage " + listInput.toString());
+            logger.debug("Failed to find one of the wedding partner " + listInput.toString());
         }
     }
 
