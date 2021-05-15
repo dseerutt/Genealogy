@@ -28,207 +28,235 @@ import static Genealogy.URLConnexion.Geneanet.GeneanetConverter.ActType.*;
  */
 public class GeneanetConverter {
 
+    private static GeneanetConverter instance;
     private static final String REGEX_TRAILING_NUMBERS = "(.*) [0-9]+";
-    private static String XpathGender;
-    private static String XpathGender2;
-    private static String XpathGender3;
-    private static String XpathNames;
-    private static String XpathNames2;
-    private static String XpathNames3;
-    private static String XpathNames4;
-    private static String XpathNames5;
-    private static String XpathBirthAndDeath;
-    private static String XpathFather;
-    private static String XpathMother;
-    private static String XpathParents2;
-    private static String XpathFamily;
-    private static String XpathFamily2;
-    private static String XpathFamily3;
-    private static String XpathSection;
-    private static String XpathSection2;
-    private static String geneanetSearchURL;
-    private static String XpathMarriageDate;
-    private static String XpathMarriageDate2;
-    private static String XpathMarriagePartner;
-    private static String XpathMarriagePartner2;
-    private static String XpathBrother;
-    private static String XpathBrother2;
-    private static String XpathHalfBrother;
-    private static String XpathChildren;
-    private static String XpathUrl;
-    private static String XpathImage;
-    private static String XpathImage2;
-    private static String XpathImage3;
+    private String XpathGender;
+    private String XpathGender2;
+    private String XpathGender3;
+    private String XpathNames;
+    private String XpathNames2;
+    private String XpathNames3;
+    private String XpathNames4;
+    private String XpathNames5;
+    private String XpathBirthAndDeath;
+    private String XpathFather;
+    private String XpathMother;
+    private String XpathParents2;
+    private String XpathFamily;
+    private String XpathFamily2;
+    private String XpathFamily3;
+    private String XpathSection;
+    private String XpathSection2;
+    private String geneanetSearchURL;
+    private String XpathMarriageDate;
+    private String XpathMarriageDate2;
+    private String XpathMarriagePartner;
+    private String XpathMarriagePartner2;
+    private String XpathBrother;
+    private String XpathBrother2;
+    private String XpathHalfBrother;
+    private String XpathChildren;
+    private String XpathUrl;
+    private String XpathImage;
+    private String XpathImage2;
+    private String XpathImage3;
     private Document doc;
     private final static Character space = (char) 160;
     private final String REGEX_PERSON_DATES = "(.*?)$|,.*";
     private final SimpleDateFormat dateFormatFullMonth = new SimpleDateFormat("dd MMMM yyyy", Locale.FRANCE);
     private final SimpleDateFormat dateFormatFullMonthOnly = new SimpleDateFormat("MMMM yyyy", Locale.FRANCE);
+    //FirstName Xpath
+    public String XpathFirstName1;
+    public String XpathFirstName2;
+    public String XpathFirstName3;
+    public String XpathFirstName4;
+    public String XpathFirstName5;
+    public String XpathFirstName6;
 
-    public GeneanetConverter(Document document) throws Exception {
+    public GeneanetConverter(Document document) {
         doc = document;
     }
 
-    public GeneanetConverter() throws Exception {
+    public GeneanetConverter() {
     }
 
-    public static String getXpathNames() {
+    public static GeneanetConverter getInstance() {
+        if (instance == null) {
+            instance = new GeneanetConverter();
+        }
+        return instance;
+    }
+
+    public void initDynamicXpath() {
+        initFirstNameDynamicXpath();
+    }
+
+    public void initFirstNameDynamicXpath() {
+        XpathFirstName1 = XpathNames.replace("XXX", StringUtils.EMPTY + 1);
+        XpathFirstName2 = XpathNames2.replace("XXX", StringUtils.EMPTY + 1).replace("YYY", StringUtils.EMPTY + 1);
+        XpathFirstName3 = XpathNames2.replace("XXX", StringUtils.EMPTY + 1).replace("YYY", StringUtils.EMPTY + 2);
+        XpathFirstName4 = XpathNames3.replace("XXX", StringUtils.EMPTY + 1);
+        XpathFirstName5 = XpathNames4.replace("XXX", StringUtils.EMPTY + 1);
+        XpathFirstName6 = XpathNames5.replace("XXX", StringUtils.EMPTY + 1);
+    }
+
+    public String getXpathNames() {
         return XpathNames;
     }
 
-    public static void setXpathNames(String xpathNames) {
+    public void setXpathNames(String xpathNames) {
         XpathNames = xpathNames;
     }
 
-    public static String getXpathNames2() {
+    public String getXpathNames2() {
         return XpathNames2;
     }
 
-    public static void setXpathNames2(String xpathNames2) {
+    public void setXpathNames2(String xpathNames2) {
         XpathNames2 = xpathNames2;
     }
 
-    public static String getXpathGender2() {
+    public String getXpathGender2() {
         return XpathGender2;
     }
 
-    public static void setXpathGender2(String xpathGender2) {
+    public void setXpathGender2(String xpathGender2) {
         XpathGender2 = xpathGender2;
     }
 
-    public static String getXpathGender3() {
+    public String getXpathGender3() {
         return XpathGender3;
     }
 
-    public static void setXpathGender3(String xpathGender3) {
+    public void setXpathGender3(String xpathGender3) {
         XpathGender3 = xpathGender3;
     }
 
-    public static String getXpathBirthAndDeath() {
+    public String getXpathBirthAndDeath() {
         return XpathBirthAndDeath;
     }
 
-    public static void setXpathBirthAndDeath(String xpathBirthAndDeath) {
+    public void setXpathBirthAndDeath(String xpathBirthAndDeath) {
         XpathBirthAndDeath = xpathBirthAndDeath;
     }
 
-    public static String getXpathFather() {
+    public String getXpathFather() {
         return XpathFather;
     }
 
-    public static void setXpathFather(String xpathFather) {
+    public void setXpathFather(String xpathFather) {
         XpathFather = xpathFather;
     }
 
-    public static String getXpathMother() {
+    public String getXpathMother() {
         return XpathMother;
     }
 
-    public static String getXpathParents2() {
+    public String getXpathParents2() {
         return XpathParents2;
     }
 
-    public static void setXpathParents2(String xpathParents2) {
+    public void setXpathParents2(String xpathParents2) {
         XpathParents2 = xpathParents2;
     }
 
-    public static String getXpathImage() {
+    public String getXpathImage() {
         return XpathImage;
     }
 
-    public static void setXpathImage(String xpathImage) {
+    public void setXpathImage(String xpathImage) {
         XpathImage = xpathImage;
     }
 
-    public static String getXpathImage2() {
+    public String getXpathImage2() {
         return XpathImage2;
     }
 
-    public static void setXpathImage2(String xpathImage2) {
+    public void setXpathImage2(String xpathImage2) {
         XpathImage2 = xpathImage2;
     }
 
-    public static String getXpathImage3() {
+    public String getXpathImage3() {
         return XpathImage3;
     }
 
-    public static void setXpathImage3(String xpathImage3) {
+    public void setXpathImage3(String xpathImage3) {
         XpathImage3 = xpathImage3;
     }
 
-    public static void setXpathMother(String xpathMother) {
+    public void setXpathMother(String xpathMother) {
         XpathMother = xpathMother;
     }
 
-    public static String getXpathFamily() {
+    public String getXpathFamily() {
         return XpathFamily;
     }
 
-    public static void setXpathFamily(String xpathFamily) {
+    public void setXpathFamily(String xpathFamily) {
         XpathFamily = xpathFamily;
     }
 
-    public static String getXpathUrl() {
+    public String getXpathUrl() {
         return XpathUrl;
     }
 
-    public static void setXpathUrl(String xpathUrl) {
+    public void setXpathUrl(String xpathUrl) {
         XpathUrl = xpathUrl;
     }
 
-    public static void setXpathGender(String xpathGender) {
+    public void setXpathGender(String xpathGender) {
         XpathGender = xpathGender;
     }
 
-    public static String getXpathGender() {
+    public String getXpathGender() {
         return XpathGender;
     }
 
-    public static String getXpathFamily2() {
+    public String getXpathFamily2() {
         return XpathFamily2;
     }
 
-    public static void setXpathFamily2(String xpathFamily2) {
+    public void setXpathFamily2(String xpathFamily2) {
         XpathFamily2 = xpathFamily2;
     }
 
-    public static String getXpathFamily3() {
+    public String getXpathFamily3() {
         return XpathFamily3;
     }
 
-    public static void setXpathFamily3(String xpathFamily3) {
+    public void setXpathFamily3(String xpathFamily3) {
         XpathFamily3 = xpathFamily3;
     }
 
-    public static String getGeneanetSearchURL() {
+    public String getGeneanetSearchURL() {
         return geneanetSearchURL;
     }
 
-    public static void setGeneanetSearchURL(String GeneanetSearchURL) {
+    public void setGeneanetSearchURL(String GeneanetSearchURL) {
         geneanetSearchURL = GeneanetSearchURL;
     }
 
-    public static String getXpathNames3() {
+    public String getXpathNames3() {
         return XpathNames3;
     }
 
-    public static void setXpathNames3(String xpathNames3) {
+    public void setXpathNames3(String xpathNames3) {
         XpathNames3 = xpathNames3;
     }
 
-    public static String getXpathNames4() {
+    public String getXpathNames4() {
         return XpathNames4;
     }
 
-    public static void setXpathNames4(String xpathNames4) {
+    public void setXpathNames4(String xpathNames4) {
         XpathNames4 = xpathNames4;
     }
 
-    public static String getXpathNames5() {
+    public String getXpathNames5() {
         return XpathNames5;
     }
 
-    public static void setXpathNames5(String xpathNames5) {
+    public void setXpathNames5(String xpathNames5) {
         XpathNames5 = xpathNames5;
     }
 
@@ -240,110 +268,110 @@ public class GeneanetConverter {
         this.doc = doc;
     }
 
-    public static String getXpathMarriageDate() {
+    public String getXpathMarriageDate() {
         return XpathMarriageDate;
     }
 
-    public static void setXpathMarriageDate(String xpathMarriageDate) {
+    public void setXpathMarriageDate(String xpathMarriageDate) {
         XpathMarriageDate = xpathMarriageDate;
     }
 
-    public static String getXpathMarriagePartner() {
+    public String getXpathMarriagePartner() {
         return XpathMarriagePartner;
     }
 
-    public static void setXpathMarriagePartner(String xpathMarriagePartner) {
+    public void setXpathMarriagePartner(String xpathMarriagePartner) {
         XpathMarriagePartner = xpathMarriagePartner;
     }
 
-    public static String getXpathMarriageDate2() {
+    public String getXpathMarriageDate2() {
         return XpathMarriageDate2;
     }
 
-    public static void setXpathMarriageDate2(String xpathMarriageDate2) {
+    public void setXpathMarriageDate2(String xpathMarriageDate2) {
         XpathMarriageDate2 = xpathMarriageDate2;
     }
 
-    public static String getXpathMarriagePartner2() {
+    public String getXpathMarriagePartner2() {
         return XpathMarriagePartner2;
     }
 
-    public static void setXpathMarriagePartner2(String xpathMarriagePartner2) {
+    public void setXpathMarriagePartner2(String xpathMarriagePartner2) {
         XpathMarriagePartner2 = xpathMarriagePartner2;
     }
 
-    public static String getXpathBrother() {
+    public String getXpathBrother() {
         return XpathBrother;
     }
 
-    public static void setXpathBrother(String xpathBrother) {
+    public void setXpathBrother(String xpathBrother) {
         XpathBrother = xpathBrother;
     }
 
-    public static String getXpathChildren() {
+    public String getXpathChildren() {
         return XpathChildren;
     }
 
-    public static void setXpathChildren(String xpathChildren) {
+    public void setXpathChildren(String xpathChildren) {
         XpathChildren = xpathChildren;
     }
 
-    public static String getXpathHalfBrother() {
+    public String getXpathHalfBrother() {
         return XpathHalfBrother;
     }
 
-    public static void setXpathHalfBrother(String xpathHalfBrother) {
+    public void setXpathHalfBrother(String xpathHalfBrother) {
         XpathHalfBrother = xpathHalfBrother;
     }
 
-    public static String getXpathSection() {
+    public String getXpathSection() {
         return XpathSection;
     }
 
-    public static void setXpathSection(String xpathSection) {
+    public void setXpathSection(String xpathSection) {
         XpathSection = xpathSection;
     }
 
-    public static String getXpathSection2() {
+    public String getXpathSection2() {
         return XpathSection2;
     }
 
-    public static void setXpathSection2(String xpathSection2) {
+    public void setXpathSection2(String xpathSection2) {
         XpathSection2 = xpathSection2;
     }
 
-    public static String getXpathBrother2() {
+    public String getXpathBrother2() {
         return XpathBrother2;
     }
 
-    public static void setXpathBrother2(String xpathBrother2) {
+    public void setXpathBrother2(String xpathBrother2) {
         XpathBrother2 = xpathBrother2;
     }
 
     public String getFirstName(Document doc) {
-        String firstName = Xsoup.compile(XpathNames.replace("XXX", StringUtils.EMPTY + 1)).evaluate(doc).get();
+        String firstName = Xsoup.compile(XpathFirstName1).evaluate(doc).get();
         if (StringUtils.isBlank(firstName)) {
-            firstName = Xsoup.compile(XpathNames2.replace("XXX", StringUtils.EMPTY + 1).replace("YYY", StringUtils.EMPTY + 1)).evaluate(doc).get();
+            firstName = Xsoup.compile(XpathFirstName2).evaluate(doc).get();
             if (firstName != null) {
                 //Integer case
                 try {
                     Integer.parseInt(firstName.replace(" ", StringUtils.EMPTY));
-                    firstName = Xsoup.compile(XpathNames2.replace("XXX", StringUtils.EMPTY + 1).replace("YYY", StringUtils.EMPTY + 2)).evaluate(doc).get();
+                    firstName = Xsoup.compile(XpathFirstName3).evaluate(doc).get();
                 } catch (NumberFormatException e) {
                     //do nothing
                 }
             } else {
-                firstName = Xsoup.compile(XpathNames2.replace("XXX", StringUtils.EMPTY + 1).replace("YYY", StringUtils.EMPTY + 2)).evaluate(doc).get();
+                firstName = Xsoup.compile(XpathFirstName3).evaluate(doc).get();
             }
         }
         if (StringUtils.isBlank(firstName)) {
-            firstName = Xsoup.compile(XpathNames3.replace("XXX", StringUtils.EMPTY + 1)).evaluate(doc).get();
+            firstName = Xsoup.compile(XpathFirstName4).evaluate(doc).get();
         }
         if (StringUtils.isBlank(firstName)) {
-            firstName = Xsoup.compile(XpathNames4.replace("XXX", StringUtils.EMPTY + 1)).evaluate(doc).get();
+            firstName = Xsoup.compile(XpathFirstName5).evaluate(doc).get();
         }
         if (StringUtils.isBlank(firstName)) {
-            firstName = Xsoup.compile(XpathNames5.replace("XXX", StringUtils.EMPTY + 1)).evaluate(doc).get();
+            firstName = Xsoup.compile(XpathFirstName6).evaluate(doc).get();
         }
         if (!StringUtils.isBlank(firstName)) {
             return firstName;

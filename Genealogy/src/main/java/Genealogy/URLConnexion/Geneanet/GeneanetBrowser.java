@@ -87,6 +87,7 @@ public class GeneanetBrowser implements Serializable {
             username = prop.getProperty("u2");
             password = prop.getProperty("p2");
             formRegex = prop.getProperty("formRegex");
+            GeneanetConverter geneanetConverter = GeneanetConverter.getInstance();
             geneanetConverter.setXpathGender(prop.getProperty("XpathGender"));
             geneanetConverter.setXpathGender2(prop.getProperty("XpathGender2"));
             geneanetConverter.setXpathGender3(prop.getProperty("XpathGender3"));
@@ -117,6 +118,7 @@ public class GeneanetBrowser implements Serializable {
             geneanetConverter.setXpathImage(prop.getProperty("XpathImage"));
             geneanetConverter.setXpathImage2(prop.getProperty("XpathImage2"));
             geneanetConverter.setXpathImage3(prop.getProperty("XpathImage3"));
+            geneanetConverter.initDynamicXpath();
             if (geneanetURL == null) {
                 throw new Exception("Impossible de récupérer le fichier de propriétés");
             }
