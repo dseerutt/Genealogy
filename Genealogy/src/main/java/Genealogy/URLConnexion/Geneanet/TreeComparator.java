@@ -434,13 +434,12 @@ public class TreeComparator {
                 throw new Exception("Person " + person.getUrl() + " not found");
             }
             HashMap<MyDate, String> value = entry.getValue();
-            for (Map.Entry<MyDate, String> entry2 : value.entrySet()) {
-                MyDate date = entry2.getKey();
-                String town = entry2.getValue();
-                if ((date != null || town != null) && !supercontains(marriageGed, fullGeneanetPerson, date, town)) {
-                    addDifference(fullGeneanetPerson, "Marriage=" + fullGeneanetPerson.getFullName() + ";" + date + ";" + town);
-                }
-            }
+            value.entrySet().stream()
+                    .filter(entry2 -> entry2.getKey() != null)
+                    .filter(entry2 -> entry2.getValue() != null)
+                    .filter(entry2 -> (!supercontains(marriageGed, fullGeneanetPerson, entry2.getKey(), entry2.getValue())))
+                    .forEach(entry2 -> addDifference(fullGeneanetPerson, "Marriage=" +
+                            fullGeneanetPerson.getFullName() + ";" + entry2.getKey() + ";" + entry2.getValue()));
         }
     }
 
@@ -1165,10 +1164,6 @@ public class TreeComparator {
     }
 
     private static void printDirectAncestorsToInvestigate() {
-        for (Person person : genealogy.getPersons()) {
-            if (person.isDirectAncestor()) {
-                person.printNecessaryResearch();
-            }
-        }
+        genealogy.getPersons().stream().filter(Person::isDirectAncestor).map(Person::printNecessaryResearch);
     }
 }
