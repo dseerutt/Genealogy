@@ -112,12 +112,11 @@ public class GeneanetBrowser implements Serializable {
     }
 
     public String getGedcomIdFromGeneanetTrees() {
-        for (GeneanetTree geneanetTree : geneanetTreeManager.getGeneanetTrees()) {
-            if (removeGeneanetSuffix(geneanetTree.getUrl()).equals(removeGeneanetSuffix(url))) {
-                return geneanetTree.getGedcomId();
-            }
-        }
-        return StringUtils.EMPTY;
+        return geneanetTreeManager.getGeneanetTrees().stream()
+                .filter(geneanetTree ->
+                        removeGeneanetSuffix(geneanetTree.getUrl()).equals(removeGeneanetSuffix(url)))
+                .map(g -> g.getGedcomId())
+                .findFirst().orElse(StringUtils.EMPTY);
     }
 
     public int getPeopleNumberFromGeneanetTrees() {
@@ -312,24 +311,24 @@ public class GeneanetBrowser implements Serializable {
 
     private void searchSiblings(GeneanetPerson person) {
         if (!kill) {
-            ArrayList<GeneanetPerson> newSiblings = new ArrayList<GeneanetPerson>();
-            for (GeneanetPerson sibling : person.getSiblings()) {
+            ArrayList<GeneanetPerson> newSiblings = new ArrayList<>();
+            person.getSiblings().stream().forEach(sibling -> {
                 searchPerson(sibling, true);
                 searchSiblingPartner(sibling, "Sibling Partner");
                 newSiblings.add(sibling);
-            }
+            });
             person.setSiblings(newSiblings);
         }
     }
 
     private void searchHalfSiblings(GeneanetPerson person) {
         if (!kill) {
-            ArrayList<GeneanetPerson> newHalfSiblings = new ArrayList<GeneanetPerson>();
-            for (GeneanetPerson halfSibling : person.getHalfSiblings()) {
+            ArrayList<GeneanetPerson> newHalfSiblings = new ArrayList<>();
+            person.getHalfSiblings().stream().forEach(halfSibling -> {
                 searchPerson(halfSibling, true);
                 searchSiblingPartner(halfSibling, "Half Sibling Partner");
                 newHalfSiblings.add(halfSibling);
-            }
+            });
             person.setHalfSiblings(newHalfSiblings);
         }
     }
@@ -349,11 +348,11 @@ public class GeneanetBrowser implements Serializable {
 
     private void searchChildren(GeneanetPerson rootPerson) {
         if (!kill) {
-            ArrayList<GeneanetPerson> newChildren = new ArrayList<GeneanetPerson>();
-            for (GeneanetPerson child : rootPerson.getChildren()) {
+            ArrayList<GeneanetPerson> newChildren = new ArrayList<>();
+            rootPerson.getChildren().stream().forEach(child -> {
                 searchPerson(child);
                 newChildren.add(child);
-            }
+            });
             rootPerson.setChildren(newChildren);
         }
     }
@@ -408,14 +407,14 @@ public class GeneanetBrowser implements Serializable {
             if (person != null && person.getMarriage().size() > 1) {
                 logger.info("Recursive (" + type + ") partner research (" + person.getMarriage().size() + ") for " + person.getFirstName() + " " + person.getFamilyName());
                 HashMap<GeneanetPerson, HashMap<MyDate, String>> marriage = person.getMarriage();
-                HashMap<GeneanetPerson, HashMap<MyDate, String>> newMarriage = new HashMap<GeneanetPerson, HashMap<MyDate, String>>();
-                for (Map.Entry<GeneanetPerson, HashMap<MyDate, String>> entry : marriage.entrySet()) {
+                HashMap<GeneanetPerson, HashMap<MyDate, String>> newMarriage = new HashMap<>();
+                marriage.entrySet().forEach(entry -> {
                     GeneanetPerson partner = entry.getKey();
                     if (StringUtils.isNotEmpty(partner.getUrl()) && !partner.isSearched()) {
                         searchPerson(partner, true);
                         newMarriage.put(partner, entry.getValue());
                     }
-                }
+                });
                 person.setMarriage(newMarriage);
             }
         }
