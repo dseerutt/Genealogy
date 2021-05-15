@@ -30,7 +30,7 @@ public class GeneanetBrowser implements Serializable {
     public static String formRegex;
     public String url;
     public String searchOutput = StringUtils.EMPTY;
-    public Map<String, String> cookie;
+    public static Map<String, String> cookie;
     private static transient GeneanetConverter geneanetConverter;
     public GeneanetPerson rootPerson;
     public int expectedNbPeople = 0;
