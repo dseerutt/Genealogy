@@ -62,7 +62,7 @@ public class GeneanetConverter {
     private String XpathImage2;
     private String XpathImage3;
     private Document doc;
-    private final static Character space = (char) 160;
+    private final static Character SPACE = (char) 160;
     private final String REGEX_PERSON_DATES = "(.*?)$|,.*";
     private final SimpleDateFormat dateFormatFullMonth = new SimpleDateFormat("dd MMMM yyyy", Locale.FRANCE);
     private final SimpleDateFormat dateFormatFullMonthOnly = new SimpleDateFormat("MMMM yyyy", Locale.FRANCE);
@@ -87,11 +87,13 @@ public class GeneanetConverter {
     //Family Xpath
     public String xPathFamilyBlock1;
     public String XpathFamilyBlock2;
-
-
-    private GeneanetConverter(Document document) {
-        doc = document;
-    }
+    //Siblings
+    public String XPathSibling1;
+    public String XPathSibling2;
+    public String XPathSibling3;
+    //HalfSiblings
+    public String XPathHalfSibling1;
+    public String XPathHalfSibling2;
 
     private GeneanetConverter() {
     }
@@ -157,6 +159,18 @@ public class GeneanetConverter {
         XpathFamilyName4 = XpathNames3.replace("XXX", StringUtils.EMPTY + 2);
         XpathFamilyName5 = XpathNames4.replace("XXX", StringUtils.EMPTY + 2);
         XpathFamilyName6 = XpathNames5.replace("XXX", StringUtils.EMPTY + 2);
+    }
+
+    public void initXpathSibling(int index, int siblingNumber) {
+        XPathSibling1 = XpathFamily.replace("XXX", StringUtils.EMPTY + index) + XpathBrother.replace("XXX", StringUtils.EMPTY + siblingNumber).replace("YYY", StringUtils.EMPTY + 1);
+        XPathSibling2 = XpathFamily.replace("XXX", StringUtils.EMPTY + index) + XpathBrother.replace("XXX", StringUtils.EMPTY + siblingNumber).replace("YYY", StringUtils.EMPTY + 2);
+        XPathSibling3 = XpathFamily.replace("XXX", StringUtils.EMPTY + index) + XpathBrother2.replace("XXX", StringUtils.EMPTY + siblingNumber);
+    }
+
+    public void initXpathHalfSibling(int siblingBranch, int siblingNumber, int parentNumber) {
+        XPathHalfSibling1 = XpathHalfBrother.replace("XXX", StringUtils.EMPTY + siblingBranch).replace("YYY", StringUtils.EMPTY + siblingNumber).replace("ZZZ", StringUtils.EMPTY + parentNumber).replace("WWW", StringUtils.EMPTY + 1);
+        XPathHalfSibling2 = XpathHalfBrother.replace("XXX", StringUtils.EMPTY + siblingBranch).replace("YYY", StringUtils.EMPTY + siblingNumber).replace("ZZZ", StringUtils.EMPTY + parentNumber).replace("WWW", StringUtils.EMPTY + 2);
+
     }
 
     private void initFirstNameXpath() {
@@ -655,13 +669,13 @@ public class GeneanetConverter {
         resultDate = resultDate.replace("1er", "1");
 
         //gestion des espaces
-        resultDate = resultDate.replace(space, ' ');
+        resultDate = resultDate.replace(SPACE, ' ');
 
         //gestion des en
         resultDate = resultDate.replace("en ", "le ");
 
         //remove Né le
-        regex = regex.replace(space, ' ');
+        regex = regex.replace(SPACE, ' ');
         String[] dateTab = resultDate.split(regex);
         if (dateTab.length != 1) {
             resultDate = dateTab[1];
@@ -736,25 +750,26 @@ public class GeneanetConverter {
                     setMarriageAndChildren(index, person);
                     index++;
                 } else if ((category.equals("Fratrie") || category.equals("Frèresetsœurs"))) {
-                    setBrotherhood(index, person);
+                    setSibling(index, person);
                     index++;
                 } else if (category.equals("Demi-frèresetdemi-sœurs")) {
-                    setHalfBrotherhood(person);
+                    setHalfSiblings(person);
                     index++;
                 }
             }
         } while (category != null);
     }
 
-    private void setBrotherhood(int index, GeneanetPerson person) {
+    private void setSibling(int index, GeneanetPerson person) {
         int siblingNumber = 1;
         String personString;
         do {
-            personString = Xsoup.compile(XpathFamily.replace("XXX", StringUtils.EMPTY + index) + XpathBrother.replace("XXX", StringUtils.EMPTY + siblingNumber).replace("YYY", StringUtils.EMPTY + 1)).evaluate(doc).get();
+            initXpathSibling(index, siblingNumber);
+            personString = Xsoup.compile(XPathSibling1).evaluate(doc).get();
             if (personString != null && !(geneanetSearchURL + personString).equals(person.getGeneanetUrl()) && personString.contains("i1=")) {
-                personString = Xsoup.compile(XpathFamily.replace("XXX", StringUtils.EMPTY + index) + XpathBrother.replace("XXX", StringUtils.EMPTY + siblingNumber).replace("YYY", StringUtils.EMPTY + 2)).evaluate(doc).get();
+                personString = Xsoup.compile(XPathSibling2).evaluate(doc).get();
             }
-            String isThisMe = Xsoup.compile(XpathFamily.replace("XXX", StringUtils.EMPTY + index) + XpathBrother2.replace("XXX", StringUtils.EMPTY + siblingNumber)).evaluate(doc).get();
+            String isThisMe = Xsoup.compile(XPathSibling3).evaluate(doc).get();
             if (personString == null) {
                 personString = isThisMe;
             } else if (personString != null && !(geneanetSearchURL + personString).equals(person.getGeneanetUrl()) && !personString.contains("i1=") && !(person.getFullName()).equals(isThisMe)) {
@@ -765,7 +780,7 @@ public class GeneanetConverter {
         } while (personString != null);
     }
 
-    private void setHalfBrotherhood(GeneanetPerson person) {
+    private void setHalfSiblings(GeneanetPerson person) {
         int siblingNumber = 1;
         int siblingBranch = 1;
         int parentNumber = 1;
@@ -777,9 +792,10 @@ public class GeneanetConverter {
             exitLoop2 = false;
             do {
                 do {
-                    personString = Xsoup.compile(XpathHalfBrother.replace("XXX", StringUtils.EMPTY + siblingBranch).replace("YYY", StringUtils.EMPTY + siblingNumber).replace("ZZZ", StringUtils.EMPTY + parentNumber).replace("WWW", StringUtils.EMPTY + 1)).evaluate(doc).get();
+                    initXpathHalfSibling(siblingBranch, siblingNumber, parentNumber);
+                    personString = Xsoup.compile(XPathHalfSibling1).evaluate(doc).get();
                     if (personString != null && personString.contains("&i1=")) {
-                        personString = Xsoup.compile(XpathHalfBrother.replace("XXX", StringUtils.EMPTY + siblingBranch).replace("YYY", StringUtils.EMPTY + siblingNumber).replace("ZZZ", StringUtils.EMPTY + parentNumber).replace("WWW", StringUtils.EMPTY + 2)).evaluate(doc).get();
+                        personString = Xsoup.compile(XPathHalfSibling2).evaluate(doc).get();
                     }
 
                     if (personString != null && !(geneanetSearchURL + personString).equals(person.getGeneanetUrl())) {
