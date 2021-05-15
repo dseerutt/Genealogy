@@ -584,14 +584,18 @@ public class GeneanetConverter {
         BURIAL;
     }
 
+    public static String removeSpace(String input) {
+        return StringUtils.replace(input, " ", StringUtils.EMPTY);
+    }
+
     public int setPersonDates(GeneanetPerson person, int index, ActType act) {
         initDynamicDateXpath(index);
         String birth = Xsoup.compile(XpathDates1).evaluate(doc).get();
-        if (birth == null || StringUtils.isEmpty(birth.replace(" ", StringUtils.EMPTY)) || (birth.contains("Marié") && birth.contains("avec"))) {
+        if (StringUtils.isBlank(birth) || (birth.matches(".*Marié.*avec.*"))) {
             birth = Xsoup.compile(XpathDates2).evaluate(doc).get();
-            if (birth == null || StringUtils.isEmpty(birth.replace(" ", StringUtils.EMPTY)) || (birth.contains("Marié") && birth.contains("avec"))) {
+            if (StringUtils.isBlank(birth) || (birth.matches(".*Marié.*|.*avec.*"))) {
                 birth = Xsoup.compile(XpathDates3).evaluate(doc).get();
-                if (birth == null || StringUtils.isEmpty(birth.replace(" ", StringUtils.EMPTY))) {
+                if (StringUtils.isBlank(birth)) {
                     return index;
                 } else {
                     person.setUsingDateTable(true);
@@ -602,14 +606,14 @@ public class GeneanetConverter {
         Matcher matcher = pattern.matcher(birth);
         if (matcher != null && matcher.find()) {
             String dateAndCity = matcher.group(1);
-            if (dateAndCity.contains("Né") || dateAndCity.contains("Baptisé") || dateAndCity.contains("Décédé") || dateAndCity.contains("Inhumé")) {
+            if (dateAndCity.matches(".*Né.*|.*Baptisé.*|.*Décédé.*|.*Inhumé.*")) {
                 String[] tab = dateAndCity.split(" - ");
                 String date = null;
                 String city = null;
                 if (tab != null && tab.length > 1) {
                     date = tab[0];
                     String cityTmp = tab[1];
-                    if (tab.length > 2 && (cityTmp.contains("Canton de") || (cityTmp.startsWith("Vue ")))) {
+                    if (tab.length > 2 && (cityTmp.matches(".*Canton de.*|^Vue .*"))) {
                         cityTmp = tab[2];
                     }
                     String[] cityTab = cityTmp.split(",");
@@ -707,7 +711,7 @@ public class GeneanetConverter {
                 String cityTmp = temptab[1];
                 String newTemptab = cityTmp.split(",")[0];
                 String[] newTab = newTemptab.split(" - ");
-                if (newTab.length > 1 && (cityTmp.contains("Canton de") || newTemptab.startsWith("Vue "))) {
+                if (newTab.length > 1 && (cityTmp.matches(".*Canton de.*|") || newTemptab.startsWith("Vue "))) {
                     if (newTemptab.contains("acte du")) {
                         newTemptab = newTab[2];
                     } else {
@@ -814,14 +818,14 @@ public class GeneanetConverter {
                 category = Xsoup.compile(XpathFamilyBlock2).evaluate(doc).get();
             }
             if (category != null) {
-                category = category.replaceAll(" ", StringUtils.EMPTY);
+                category = removeSpace(category);
                 if (category.contains("Union(s)")) {
                     setMarriageAndChildren(index, person);
                     index++;
-                } else if ((category.equals("Fratrie") || category.equals("Frèresetsœurs"))) {
+                } else if (category.matches("Fratrie|Frèresetsœurs")) {
                     setSibling(index, person);
                     index++;
-                } else if (category.equals("Demi-frèresetdemi-sœurs")) {
+                } else if (StringUtils.equals(category, "Demi-frèresetdemi-sœurs")) {
                     setHalfSiblings(person);
                     index++;
                 }
@@ -910,14 +914,14 @@ public class GeneanetConverter {
         }
 
         while (dateAndCity != null || personString != null) {
-            if (personString != null && !personString.contains("&p=") && !personString.contains("&i=")) {
+            if (personString != null && !personString.matches(".*&p=.*|.*&i=.*")) {
                 aNumber++;
                 initDynamicMarriageXpath(index, partnerNumber, aNumber, tmpXpathMarriagePartner, tmpXpathMarriageDate, children);
                 personString = Xsoup.compile(XPathMarriagePerson3).evaluate(doc).get();
                 aNumber = 1;
             }
             //unknown date case
-            if (dateAndCity != null && !dateAndCity.contains("avant") && !dateAndCity.contains("après")) {
+            if (dateAndCity != null && !dateAndCity.matches(".*avant.*|.*après.*")) {
                 date = parseMarriageDate(dateAndCity, person.getGender());
             } else {
                 date = null;
@@ -1053,7 +1057,7 @@ public class GeneanetConverter {
                 initDynamicMotherXPath(index, nbmother);
                 motherURL = Xsoup.compile(XPathMother6).evaluate(doc).get();
             }
-            if (motherURL == null || motherURL.contains("#note-wed-1") || motherURL.contains("&t=")) {
+            if (motherURL == null || motherURL.matches(".*#note-wed-1.*|.*&t=.*")) {
                 index--;
                 nbmother--;
                 initDynamicMotherXPath(index, nbmother);
@@ -1097,7 +1101,7 @@ public class GeneanetConverter {
                 initDynamicFatherXPath(index, nbfather);
                 fatherURL = Xsoup.compile(XPathFather6).evaluate(doc).get();
             }
-            if (fatherURL == null || fatherURL.contains("#note-wed-1") || fatherURL.contains("&t=")) {
+            if (fatherURL == null || fatherURL.matches(".*#note-wed-1.*|.*&t=.*")) {
                 index--;
                 nbfather--;
                 initDynamicFatherXPath(index, nbfather);
