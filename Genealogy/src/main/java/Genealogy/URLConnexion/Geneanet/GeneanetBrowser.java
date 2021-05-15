@@ -53,8 +53,8 @@ public class GeneanetBrowser implements Serializable {
         initProperties();
         if (url != null) {
             if (geneanetConverter == null) {
-                Document doc = initConnexion();
-                geneanetConverter = new GeneanetConverter(doc);
+                geneanetConverter = GeneanetConverter.getInstance();
+                geneanetConverter.setDoc(initConnexion());
             }
         }
         if (geneanetTreeManager != null) {
@@ -72,65 +72,36 @@ public class GeneanetBrowser implements Serializable {
     }
 
     public void initGeneanetPathProperties() throws Exception {
-        Properties prop = new Properties();
-        InputStream input = null;
-        try {
-            String path = Serializer.getPath();
-            if (path == null) {
-                path = Serializer.getInstance().getPath()
-                ;
-            }
-            input = new FileInputStream(Serializer.getPath() + "geneanet.properties");
-            prop.load(input);
-            geneanetURL = prop.getProperty("geneanetConnexionURL");
-            geneanetURLpart2 = prop.getProperty("geneanetConnexionURLpart2");
-            username = prop.getProperty("u2");
-            password = prop.getProperty("p2");
-            formRegex = prop.getProperty("formRegex");
-            GeneanetConverter geneanetConverter = GeneanetConverter.getInstance();
-            geneanetConverter.setXpathGender(prop.getProperty("XpathGender"));
-            geneanetConverter.setXpathGender2(prop.getProperty("XpathGender2"));
-            geneanetConverter.setXpathGender3(prop.getProperty("XpathGender3"));
-            geneanetConverter.setXpathNames(prop.getProperty("XpathNames"));
-            geneanetConverter.setXpathNames2(prop.getProperty("XpathNames2"));
-            geneanetConverter.setXpathNames3(prop.getProperty("XpathNames3"));
-            geneanetConverter.setXpathNames4(prop.getProperty("XpathNames4"));
-            geneanetConverter.setXpathNames5(prop.getProperty("XpathNames5"));
-            geneanetConverter.setXpathBirthAndDeath(prop.getProperty("XpathBirthAndDeath"));
-            geneanetConverter.setXpathFather(prop.getProperty("XpathFather"));
-            geneanetConverter.setXpathMother(prop.getProperty("XpathMother"));
-            geneanetConverter.setXpathFamily(prop.getProperty("XpathFamily"));
-            geneanetConverter.setXpathFamily2(prop.getProperty("XpathFamily2"));
-            geneanetConverter.setXpathFamily3(prop.getProperty("XpathFamily3"));
-            geneanetConverter.setXpathParents2(prop.getProperty("XpathParents2"));
-            geneanetConverter.setGeneanetSearchURL(prop.getProperty("geneanetSearchURL"));
-            geneanetConverter.setXpathSection(prop.getProperty("XpathSection"));
-            geneanetConverter.setXpathSection2(prop.getProperty("XpathSection2"));
-            geneanetConverter.setXpathMarriageDate(prop.getProperty("XpathMarriageDate"));
-            geneanetConverter.setXpathMarriageDate2(prop.getProperty("XpathMarriageDate2"));
-            geneanetConverter.setXpathMarriagePartner(prop.getProperty("XpathMarriagePartner"));
-            geneanetConverter.setXpathMarriagePartner2(prop.getProperty("XpathMarriagePartner2"));
-            geneanetConverter.setXpathBrother(prop.getProperty("XpathBrother"));
-            geneanetConverter.setXpathBrother2(prop.getProperty("XpathBrother2"));
-            geneanetConverter.setXpathHalfBrother(prop.getProperty("XpathHalfBrother"));
-            geneanetConverter.setXpathChildren(prop.getProperty("XpathChildren"));
-            geneanetConverter.setXpathUrl(prop.getProperty("XpathUrl"));
-            geneanetConverter.setXpathImage(prop.getProperty("XpathImage"));
-            geneanetConverter.setXpathImage2(prop.getProperty("XpathImage2"));
-            geneanetConverter.setXpathImage3(prop.getProperty("XpathImage3"));
-            geneanetConverter.initDynamicXpath();
-            if (geneanetURL == null) {
-                throw new Exception("Impossible de récupérer le fichier de propriétés");
-            }
-        } catch (IOException ex) {
-            logger.error("Failed to read Geneanet Regex properties", ex);
-            throw new Exception("Impossible de lire le fichier de propriétés");
-        } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException e) {
-                    logger.error("Failed to close inputStream", e);
+        if (geneanetURL == null) {
+            Properties prop = new Properties();
+            InputStream input = null;
+            try {
+                String path = Serializer.getPath();
+                if (path == null) {
+                    path = Serializer.getInstance().getPath();
+                }
+                input = new FileInputStream(Serializer.getPath() + "geneanet.properties");
+                prop.load(input);
+                geneanetURL = prop.getProperty("geneanetConnexionURL");
+                geneanetURLpart2 = prop.getProperty("geneanetConnexionURLpart2");
+                username = prop.getProperty("u2");
+                password = prop.getProperty("p2");
+                formRegex = prop.getProperty("formRegex");
+                GeneanetConverter geneanetConverter = GeneanetConverter.getInstance();
+                geneanetConverter.initDynamicXpath(prop);
+                if (geneanetURL == null) {
+                    throw new Exception("Impossible de récupérer le fichier de propriétés");
+                }
+            } catch (IOException ex) {
+                logger.error("Failed to read Geneanet Regex properties", ex);
+                throw new Exception("Impossible de lire le fichier de propriétés");
+            } finally {
+                if (input != null) {
+                    try {
+                        input.close();
+                    } catch (IOException e) {
+                        logger.error("Failed to close inputStream", e);
+                    }
                 }
             }
         }

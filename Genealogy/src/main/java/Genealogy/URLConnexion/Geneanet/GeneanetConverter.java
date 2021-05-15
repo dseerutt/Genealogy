@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -68,16 +69,31 @@ public class GeneanetConverter {
     //FirstName Xpath
     public String XpathFirstName1;
     public String XpathFirstName2;
-    public String XpathFirstName3;
     public String XpathFirstName4;
+    public String XpathFirstName3;
     public String XpathFirstName5;
     public String XpathFirstName6;
+    //FamilyName Xpath
+    public String XpathFamilyName1;
+    public String XpathFamilyName2;
+    public String XpathFamilyName3;
+    public String XpathFamilyName4;
+    public String XpathFamilyName5;
+    public String XpathFamilyName6;
+    //Dates Xpath
+    public String XpathDates1;
+    public String XpathDates2;
+    public String XpathDates3;
+    //Family Xpath
+    public String xPathFamilyBlock1;
+    public String XpathFamilyBlock2;
 
-    public GeneanetConverter(Document document) {
+
+    private GeneanetConverter(Document document) {
         doc = document;
     }
 
-    public GeneanetConverter() {
+    private GeneanetConverter() {
     }
 
     public static GeneanetConverter getInstance() {
@@ -87,17 +103,74 @@ public class GeneanetConverter {
         return instance;
     }
 
-    public void initDynamicXpath() {
-        initFirstNameDynamicXpath();
+    public void initDynamicXpath(Properties prop) {
+        if (StringUtils.isEmpty(XpathGender)) {
+            initXpathFromProperties(prop);
+            initFirstNameXpath();
+            initFamilyNameXpath();
+        }
     }
 
-    public void initFirstNameDynamicXpath() {
+    private void initXpathFromProperties(Properties prop) {
+        XpathGender = prop.getProperty("XpathGender");
+        XpathGender2 = prop.getProperty("XpathGender2");
+        XpathGender3 = prop.getProperty("XpathGender3");
+        XpathNames = prop.getProperty("XpathNames");
+        XpathNames2 = prop.getProperty("XpathNames2");
+        XpathNames3 = prop.getProperty("XpathNames3");
+        XpathNames4 = prop.getProperty("XpathNames4");
+        XpathNames5 = prop.getProperty("XpathNames5");
+        XpathBirthAndDeath = prop.getProperty("XpathBirthAndDeath");
+        XpathFather = prop.getProperty("XpathFather");
+        XpathMother = prop.getProperty("XpathMother");
+        XpathFamily = prop.getProperty("XpathFamily");
+        XpathFamily2 = prop.getProperty("XpathFamily2");
+        XpathFamily3 = prop.getProperty("XpathFamily3");
+        XpathParents2 = prop.getProperty("XpathParents2");
+        geneanetSearchURL = prop.getProperty("geneanetSearchURL");
+        XpathSection = prop.getProperty("XpathSection");
+        XpathSection2 = prop.getProperty("XpathSection2");
+        XpathMarriageDate = prop.getProperty("XpathMarriageDate");
+        XpathMarriageDate2 = prop.getProperty("XpathMarriageDate2");
+        XpathMarriagePartner = prop.getProperty("XpathMarriagePartner");
+        XpathMarriagePartner2 = prop.getProperty("XpathMarriagePartner2");
+        XpathBrother = prop.getProperty("XpathBrother");
+        XpathBrother2 = prop.getProperty("XpathBrother2");
+        XpathHalfBrother = prop.getProperty("XpathHalfBrother");
+        XpathChildren = prop.getProperty("XpathChildren");
+        XpathUrl = prop.getProperty("XpathUrl");
+        XpathImage = prop.getProperty("XpathImage");
+        XpathImage2 = prop.getProperty("XpathImage2");
+        XpathImage3 = prop.getProperty("XpathImage3");
+    }
+
+    public void initDateXpath(int index) {
+        XpathDates1 = XpathFamily.replace("XXX", StringUtils.EMPTY + 1) + XpathBirthAndDeath.replace("XXX", StringUtils.EMPTY + index);
+        XpathDates2 = XpathFamily2 + XpathBirthAndDeath.replace("XXX", StringUtils.EMPTY + index);
+        XpathDates3 = XpathFamily3 + XpathBirthAndDeath.replace("XXX", StringUtils.EMPTY + index);
+    }
+
+    private void initFamilyNameXpath() {
+        XpathFamilyName1 = XpathNames.replace("XXX", StringUtils.EMPTY + 2);
+        XpathFamilyName2 = XpathNames2.replace("XXX", StringUtils.EMPTY + 2).replace("YYY", StringUtils.EMPTY + 2);
+        XpathFamilyName3 = XpathNames2.replace("XXX", StringUtils.EMPTY + 2).replace("YYY", StringUtils.EMPTY + 1);
+        XpathFamilyName4 = XpathNames3.replace("XXX", StringUtils.EMPTY + 2);
+        XpathFamilyName5 = XpathNames4.replace("XXX", StringUtils.EMPTY + 2);
+        XpathFamilyName6 = XpathNames5.replace("XXX", StringUtils.EMPTY + 2);
+    }
+
+    private void initFirstNameXpath() {
         XpathFirstName1 = XpathNames.replace("XXX", StringUtils.EMPTY + 1);
         XpathFirstName2 = XpathNames2.replace("XXX", StringUtils.EMPTY + 1).replace("YYY", StringUtils.EMPTY + 1);
         XpathFirstName3 = XpathNames2.replace("XXX", StringUtils.EMPTY + 1).replace("YYY", StringUtils.EMPTY + 2);
         XpathFirstName4 = XpathNames3.replace("XXX", StringUtils.EMPTY + 1);
         XpathFirstName5 = XpathNames4.replace("XXX", StringUtils.EMPTY + 1);
         XpathFirstName6 = XpathNames5.replace("XXX", StringUtils.EMPTY + 1);
+    }
+
+    private void initFamilyXpath(int sectionIndex) {
+        xPathFamilyBlock1 = XpathSection.replace("XXX", StringUtils.EMPTY + sectionIndex);
+        XpathFamilyBlock2 = XpathSection2.replace("XXX", StringUtils.EMPTY + sectionIndex);
     }
 
     public String getXpathNames() {
@@ -380,21 +453,21 @@ public class GeneanetConverter {
     }
 
     public String getName(Document doc) {
-        String name = Xsoup.compile(XpathNames.replace("XXX", StringUtils.EMPTY + 2)).evaluate(doc).get();
+        String name = Xsoup.compile(XpathFamilyName1).evaluate(doc).get();
         if (StringUtils.isBlank(name)) {
-            name = Xsoup.compile(XpathNames2.replace("XXX", StringUtils.EMPTY + 2).replace("YYY", StringUtils.EMPTY + 2)).evaluate(doc).get();
+            name = Xsoup.compile(XpathFamilyName2).evaluate(doc).get();
             if (StringUtils.isBlank(name)) {
-                name = Xsoup.compile(XpathNames2.replace("XXX", StringUtils.EMPTY + 2).replace("YYY", StringUtils.EMPTY + 1)).evaluate(doc).get();
+                name = Xsoup.compile(XpathFamilyName3).evaluate(doc).get();
             }
         }
         if (StringUtils.isBlank(name)) {
-            name = Xsoup.compile(XpathNames3.replace("XXX", StringUtils.EMPTY + 2)).evaluate(doc).get();
+            name = Xsoup.compile(XpathFamilyName4).evaluate(doc).get();
         }
         if (StringUtils.isBlank(name)) {
-            name = Xsoup.compile(XpathNames4.replace("XXX", StringUtils.EMPTY + 2)).evaluate(doc).get();
+            name = Xsoup.compile(XpathFamilyName5).evaluate(doc).get();
         }
         if (StringUtils.isBlank(name)) {
-            name = Xsoup.compile(XpathNames5.replace("XXX", StringUtils.EMPTY + 2)).evaluate(doc).get();
+            name = Xsoup.compile(XpathFamilyName6).evaluate(doc).get();
         }
         if (!StringUtils.isBlank(name)) {
             return name;
@@ -429,11 +502,12 @@ public class GeneanetConverter {
     }
 
     public int setPersonDates(GeneanetPerson person, int index, ActType act) {
-        String birth = Xsoup.compile(XpathFamily.replace("XXX", StringUtils.EMPTY + 1) + XpathBirthAndDeath.replace("XXX", StringUtils.EMPTY + index)).evaluate(doc).get();
+        initDateXpath(index);
+        String birth = Xsoup.compile(XpathDates1).evaluate(doc).get();
         if (birth == null || StringUtils.isEmpty(birth.replace(" ", StringUtils.EMPTY)) || (birth.contains("Marié") && birth.contains("avec"))) {
-            birth = Xsoup.compile(XpathFamily2 + XpathBirthAndDeath.replace("XXX", StringUtils.EMPTY + index)).evaluate(doc).get();
+            birth = Xsoup.compile(XpathDates2).evaluate(doc).get();
             if (birth == null || StringUtils.isEmpty(birth.replace(" ", StringUtils.EMPTY)) || (birth.contains("Marié") && birth.contains("avec"))) {
-                birth = Xsoup.compile(XpathFamily3 + XpathBirthAndDeath.replace("XXX", StringUtils.EMPTY + index)).evaluate(doc).get();
+                birth = Xsoup.compile(XpathDates3).evaluate(doc).get();
                 if (birth == null || StringUtils.isEmpty(birth.replace(" ", StringUtils.EMPTY))) {
                     return index;
                 } else {
@@ -651,9 +725,10 @@ public class GeneanetConverter {
         String category;
         do {
             sectionIndex++;
-            category = Xsoup.compile(XpathSection.replace("XXX", StringUtils.EMPTY + sectionIndex)).evaluate(doc).get();
+            initFamilyXpath(sectionIndex);
+            category = Xsoup.compile(xPathFamilyBlock1).evaluate(doc).get();
             if (category == null) {
-                category = Xsoup.compile(XpathSection2.replace("XXX", StringUtils.EMPTY + sectionIndex)).evaluate(doc).get();
+                category = Xsoup.compile(XpathFamilyBlock2).evaluate(doc).get();
             }
             if (category != null) {
                 category = category.replaceAll(" ", StringUtils.EMPTY);

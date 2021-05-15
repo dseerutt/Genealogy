@@ -19,7 +19,7 @@ public class GeneanetConverterTest {
     @Test
     public void parseRepublicanDateTest() throws Exception {
         //init
-        GeneanetConverter converter = new GeneanetConverter(null);
+        GeneanetConverter converter = GeneanetConverter.getInstance();
 
         //verifications
         assertEquals("22/09/1792", converter.parseRepublicanDate("1 vendémiaire an I").toString());
