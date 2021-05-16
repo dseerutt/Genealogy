@@ -551,26 +551,27 @@ public class Person {
     public ArrayList<Pair<MyDate, Town>> initLifespanPairs() {
         ArrayList<Pair<MyDate, Town>> lifespanPairs = new ArrayList<>();
         //Birth
-        if ((birth != null) && (birth.getTown() != null) && (birth.getTown().getName() != null) && (birth.getDate() != null)) {
+        if (birth != null && birth.getTown() != null && birth.getTown().getName() != null && birth.getDate() != null && birth.getDate().getDate() != null) {
             lifespanPairs.add(new MutablePair<>(birth.getDate(), birth.getTown()));
         }
         //Unions
         for (int i = 0; i < unions.size(); i++) {
-            if ((unions.get(i).getDate() != null) && (unions.get(i).getTown() != null) && (unions.get(i).getTown().getName() != null)) {
+            if (unions.get(i).getDate() != null && unions.get(i).getDate().getDate() != null && unions.get(i).getTown() != null && unions.get(i).getTown().getName() != null) {
                 lifespanPairs.add(new MutablePair<>(unions.get(i).getDate(), unions.get(i).getTown()));
             }
         }
         //Children
         for (int i = 0; i < children.size(); i++) {
-            if ((children.get(i).getBirth() != null) &&
-                    (children.get(i).getBirth().getDate() != null) &&
-                    (children.get(i).getBirth().getTown() != null) &&
-                    (children.get(i).getBirth().getTown().getName() != null)) {
+            if (children.get(i).getBirth() != null &&
+                    children.get(i).getBirth().getDate() != null &&
+                    children.get(i).getBirth().getDate().getDate() != null &&
+                    children.get(i).getBirth().getTown() != null &&
+                    children.get(i).getBirth().getTown().getName() != null) {
                 lifespanPairs.add(new MutablePair<>(children.get(i).getBirth().getDate(), children.get(i).getBirth().getTown()));
             }
         }
         //Death
-        if ((death != null) && (death.getTown() != null) && (death.getTown().getName() != null) && (death.getDate() != null)) {
+        if (death != null && death.getTown() != null && death.getTown().getName() != null && death.getDate() != null && death.getDate().getDate() != null) {
             lifespanPairs.add(new MutablePair<>(death.getDate(), death.getTown()));
             Collections.sort(lifespanPairs, Comparator.comparing(o -> o.getKey().getDate()));
             //Case of the children born after the death
@@ -578,7 +579,7 @@ public class Person {
                 lifespanPairs.remove(lifespanPairs.size() - 1);
             }
         } else {
-            Collections.sort(lifespanPairs, Comparator.comparing(o -> o.getKey().getDate()));
+            Collections.sort(lifespanPairs, Comparator.comparing(o -> o.getKey().getDate(), Comparator.nullsFirst(Comparator.naturalOrder())));
             if ((stillAlive) && (!lifespanPairs.isEmpty())) {
                 lifespanPairs.add(new MutablePair<>(new FullDate(), lifespanPairs.get(lifespanPairs.size() - 1).getValue()));
             }
@@ -671,7 +672,7 @@ public class Person {
      * @return
      */
     public int getAgeWithoutMonths(LocalDate localDateInput, int yearsToAdd) {
-        if ((birth != null) && (birth.getDate() != null)) {
+        if (birth != null && birth.getDate() != null && birth.getDate().getDate() != null) {
             LocalDate localDateBirth = birth.getDate().getDate();
             int age = localDateInput.getYear() - localDateBirth.getYear();
             if (age >= 0) {
@@ -690,7 +691,7 @@ public class Person {
      * @return
      */
     public int getAgeWithMonths(LocalDate localDateInput, int yearsToAdd) {
-        if ((birth != null) && (birth.getDate() != null)) {
+        if (birth != null && birth.getDate() != null && birth.getDate().getDate() != null) {
             LocalDate localDateBirth = birth.getDate().getDate();
             Period period = Period.between(localDateBirth, localDateInput);
             if (!period.isNegative()) {
