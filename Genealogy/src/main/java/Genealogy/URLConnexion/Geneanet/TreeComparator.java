@@ -515,24 +515,6 @@ public class TreeComparator {
         }
     }
 
-    private static boolean superContains(ArrayList<String> list, String input) {
-        for (String string : list) {
-            if (superEquals(string, input)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static boolean superEquals(ArrayList<String> children1, ArrayList<Person> children2) {
-        for (Person person : children2) {
-            if (!superContains(children1, person.getFullName())) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     private static boolean superEquals(String string1, String string2) {
         if (string1 == null && string2 == null) {
             return true;
