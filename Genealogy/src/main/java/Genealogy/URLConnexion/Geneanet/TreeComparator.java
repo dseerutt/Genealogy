@@ -671,13 +671,13 @@ public class TreeComparator {
                 }
             }
             if (!differences2.containsKey(person) || differences2.containsKey(person) && !valueTxt.equals(differences2.get(person))) {
-                result += person.getFullName() + ";" + valueTxt;
+                result += valueTxt;
                 differencesForDisplay.put(person, valueTxt);
                 comparisonResultDisplay = result;
                 peopleUrlError = person.getUrl();
                 peopleFullNameError = person.getFullName();
-                comparisonResultToReplace = printedUrl + ";" + person.getFullName() + ";" + differences2.get(person);
-                comparisonResultReplacement = printedUrl + ";" + person.getFullName() + ";" + valueTxt;
+                comparisonResultToReplace = printedUrl + ";" + differences2.get(person);
+                comparisonResultReplacement = printedUrl + ";" + valueTxt;
                 return;
             }
         }
@@ -719,9 +719,9 @@ public class TreeComparator {
                 if (differences.get(person) == null) {
                     comparisonResultReplacement = StringUtils.EMPTY;
                 } else {
-                    comparisonResultReplacement = printedUrl + ";" + person.getFullName() + ";" + differences.get(person);
+                    comparisonResultReplacement = printedUrl + ";" + differences.get(person);
                 }
-                comparisonResultToReplace = printedUrl + ";" + person.getFullName() + ";" + valueTxt;
+                comparisonResultToReplace = printedUrl + ";" + valueTxt;
                 return;
             }
         }
@@ -750,7 +750,7 @@ public class TreeComparator {
                 differences.put(geneanetPerson, oldTxt + ";" + txt);
             }
         } else {
-            differences.put(geneanetPerson, txt);
+            differences.put(geneanetPerson, geneanetPerson.getFullName() + ";" + txt);
         }
     }
 
@@ -876,8 +876,8 @@ public class TreeComparator {
                     GeneanetPerson person = new GeneanetPerson(removeDoubleGeneanetSuffix(tmpLine[0]));
                     person.setImage(tmpLine[1]);
                     String txt = StringUtils.EMPTY;
-                    for (int i = 2; i < tmpLine.length; i++) {
-                        if (i != 2) {
+                    for (int i = 1; i < tmpLine.length; i++) {
+                        if (i != 1) {
                             txt += ";" + tmpLine[i];
                         } else {
                             txt += tmpLine[i];
