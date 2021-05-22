@@ -1008,22 +1008,20 @@ public class TreeComparator {
 
     public void analyseTree() {
         String[] replaceSplit = comparisonResultToReplace.split(";");
-        String resultat = replaceSplit[2];
-        if (!StringUtils.equals(resultat, "null")) {
-            List<String> listReplace = Arrays.asList(replaceSplit);
-            List<String> listReplacement = Arrays.asList(comparisonResultReplacement.split(";"));
-            List<String> replaceOnlyList = new ArrayList<>(listReplace);
-            replaceOnlyList.removeAll(listReplacement);
-            List<String> removeOnlyList = new ArrayList<>(listReplacement);
-            removeOnlyList.removeAll(listReplace);
-            if (!replaceOnlyList.isEmpty()) {
-                removeReplacement = StringUtils.EMPTY + replaceOnlyList;
-                logger.info(removeReplacement + " <- will be removed");
-            }
-            if (!removeOnlyList.isEmpty() && (removeOnlyList.size() != 1 || !StringUtils.isBlank(removeOnlyList.get(0)))) {
-                addReplacement = StringUtils.EMPTY + removeOnlyList;
-                logger.info(addReplacement + " <- will be added");
-            }
+        String resultat = replaceSplit[1];
+        List<String> listReplace = Arrays.asList(replaceSplit);
+        List<String> listReplacement = Arrays.asList(comparisonResultReplacement.split(";"));
+        List<String> replaceOnlyList = new ArrayList<>(listReplace);
+        replaceOnlyList.removeAll(listReplacement);
+        List<String> removeOnlyList = new ArrayList<>(listReplacement);
+        removeOnlyList.removeAll(listReplace);
+        if (!replaceOnlyList.isEmpty() && !StringUtils.equals(replaceOnlyList.get(0), "null")) {
+            removeReplacement = StringUtils.EMPTY + replaceOnlyList;
+            logger.info(removeReplacement + " <- will be removed");
+        }
+        if (!removeOnlyList.isEmpty() && (removeOnlyList.size() != 1 || !StringUtils.isBlank(removeOnlyList.get(0)))) {
+            addReplacement = StringUtils.EMPTY + removeOnlyList;
+            logger.info(addReplacement + " <- will be added");
         }
         logger.info("Add line ? (A to add/replace/delete, exit to exit, any other to refresh data)");
     }
@@ -1034,7 +1032,7 @@ public class TreeComparator {
             deleteDifferenceInFile();
         } else {
             String[] replaceSplit = comparisonResultToReplace.split(";");
-            if (StringUtils.equals(replaceSplit[2], "null")) {
+            if (StringUtils.equals(replaceSplit[1], "null")) {
                 logger.info("Modification added");
                 addDifferenceInFile();
             } else {

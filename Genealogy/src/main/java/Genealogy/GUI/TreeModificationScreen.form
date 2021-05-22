@@ -88,7 +88,9 @@
             <children>
               <component id="97cf1" class="javax.swing.JTextArea" binding="addReplacementText">
                 <constraints/>
-                <properties/>
+                <properties>
+                  <lineWrap value="true"/>
+                </properties>
               </component>
             </children>
           </scrollpane>
@@ -101,7 +103,9 @@
             <children>
               <component id="3d68d" class="javax.swing.JTextArea" binding="removeReplacementText">
                 <constraints/>
-                <properties/>
+                <properties>
+                  <lineWrap value="true"/>
+                </properties>
               </component>
             </children>
           </scrollpane>

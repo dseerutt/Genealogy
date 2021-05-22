@@ -103,8 +103,20 @@ public class TreeComparatorManager implements Runnable {
         if (enableModificationScreen && treeComparator.isErrorComparison()) {
             treeComparator.analyseTree();
             TreeModificationScreen treeModificationScreen = TreeModificationScreen.getInstance();
-            treeModificationScreen.getAddReplacementText().setText(treeComparator.getAddReplacement());
-            treeModificationScreen.getRemoveReplacementText().setText(treeComparator.getRemoveReplacement());
+            //add replacement
+            String addReplacement = treeComparator.getAddReplacement();
+            treeModificationScreen.getAddReplacementText().setText(addReplacement);
+            if (StringUtils.isBlank(addReplacement)) {
+                treeModificationScreen.getAddReplacementText().setOpaque(false);
+                treeModificationScreen.getAddReplacementText().setEditable(false);
+            }
+            //remove replacement
+            String removeReplacement = treeComparator.getRemoveReplacement();
+            treeModificationScreen.getRemoveReplacementText().setText(removeReplacement);
+            if (StringUtils.isBlank(removeReplacement)) {
+                treeModificationScreen.getRemoveReplacementText().setOpaque(false);
+                treeModificationScreen.getRemoveReplacementText().setEditable(false);
+            }
             treeModificationScreen.getComparedPerson().setText("Comparaison sur " + treeComparator.getPeopleFullNameError() + " :");
             treeModificationScreen.treeComparator = treeComparator;
             treeModificationScreen.setVisible(true);
@@ -174,7 +186,7 @@ public class TreeComparatorManager implements Runnable {
     public static void main(String[] args) throws Exception {
         gedcomFile = "C:\\Users\\Dan\\Desktop\\famille1.ged";
         refreshGedcomData();
-        searchOnGeneanet = false;
+        searchOnGeneanet = true;
         TreeComparatorManager treeComparatorManager = getInstance();
         //treeComparatorManager.compareTreeFromName("roalda");
         treeComparatorManager.compareTrees();
