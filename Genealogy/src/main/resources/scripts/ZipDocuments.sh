@@ -1,4 +1,4 @@
-zipfile(){
+zipFile(){
   echo "Start zipping documents - $(date +%H:%M:%S)"
   export PATH=$PATH:"C:\Program Files\7-Zip"
   FOLDER_TO_ZIP="D:\Genealogie\Data\*"
@@ -6,12 +6,84 @@ zipfile(){
   ZIP_NAME="\genealogyData_$DATE.7z"
   ZIP_FILE="D:\Genealogie\Data$ZIP_NAME"
   rm -f -- $ZIP_FILE
-  PWD=$(cat "D:\Genealogie\Data\zip_pwd")
-  7z a $ZIP_FILE $FOLDER_TO_ZIP -p$PWD -bsp1
+  7z a $ZIP_FILE $FOLDER_TO_ZIP -p$ZIP_PWD -bsp1 -x!*\Preuves\
+  
+  RETURN_CODE=$?
+    if [ "$RETURN_CODE" -eq 0 ]; then
+      echo "Zip OK"
+    else
+      echo "Zip KO"
+      exit $RETURN_CODE
+    fi
+}
+
+getFileToRemove(){
+  echo "Get Dropbox file to remove"
+  HTTP_CODE=$(curl -X POST -sL https://api.dropboxapi.com/2/files/list_folder \
+      --header "Authorization: Bearer $DROPBOX_TOKEN" \
+      --header "Content-Type: application/json" \
+      --data "{\"path\": \"$DROPBOX_DIR/\"}")
+  DROPBOX_FILE=$(echo "$HTTP_CODE" | jq '.entries[0].path_display' | sed 's|"||g')
+  echo "File to remove : $DROPBOX_FILE"
+}
+
+uploadFile(){
+  FILE_UPLOAD="$1"
+  FILE_NAME=$(echo "$2" | sed 's/\\/\//g')
+  echo "Upload $FILE_UPLOAD - $FILE_NAME"
+    # upload file to dropbox
+    HTTP_CODE=$(curl -X POST https://content.dropboxapi.com/2/files/upload -w "%{http_code}" -o /dev/null \
+      --header "Authorization: Bearer $DROPBOX_TOKEN" \
+      --header "Dropbox-API-Arg: {\"path\": \"/Genealogy$FILE_NAME\",\"mode\": \"add\",\"autorename\": true,\"mute\": false,\"strict_conflict\": false,\"strict_conflict\": false}" \
+      --header "Content-Type: application/octet-stream" \
+      --data-binary @$FILE_UPLOAD)
+    if [ "$HTTP_CODE" == "200" ]; then
+      echo "Upload OK"
+    else
+      echo "Upload KO"
+      exit 100
+    fi
+}
+
+removeFileNotEmpty(){
+  FILE="$1"
+    if [[ ! -z $FILE && "$FILE" != "null" ]]; then
+      echo "Will remove file"
+      removeFile "$FILE"
+    else
+      echo "No file to remove"
+      exit 50
+    fi
+}
+
+removeFile(){
+  FILE="$1"
+  BASENAME=$(basename $FILE)
+  echo "Remove file $FILE"
+    # delete file from dropbox
+    HTTP_CODE=$(curl -X POST -sL -w "%{http_code}" https://api.dropboxapi.com/2/files/delete_v2 -w "%{http_code}" -o /dev/null\
+        --header "Authorization: Bearer $DROPBOX_TOKEN" \
+        --header "Content-Type: application/json" \
+        --data "{\"path\": \"$DROPBOX_DIR/$BASENAME\"}")
+    if [ "$HTTP_CODE" == "200" ]; then
+      echo "Deletion OK"
+    else
+      echo "Deletion KO"
+      exit 110
+    fi
 }
 
 main(){
-  zipfile
+  ZIP_PWD=$(cat "D:\Genealogie\zip_pwd")
+  DROPBOX_TOKEN=$(cat "D:\Genealogie\dropbox_pwd")
+  DROPBOX_DIR="/Genealogy"
+  zipFile
+  getFileToRemove
+  uploadFile "$ZIP_FILE" "$ZIP_NAME"
+  removeFileNotEmpty "$DROPBOX_FILE"
+  rm "$ZIP_FILE"
+  read -rsp $'End of treatment - '$(date +%H:%M:%S)
+  exit 0
 }
 
 main
