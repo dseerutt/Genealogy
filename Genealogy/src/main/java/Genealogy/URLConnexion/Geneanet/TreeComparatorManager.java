@@ -103,6 +103,7 @@ public class TreeComparatorManager implements Runnable {
         if (enableModificationScreen && treeComparator.isErrorComparison()) {
             treeComparator.analyseTree();
             TreeModificationScreen treeModificationScreen = TreeModificationScreen.getInstance();
+            treeModificationScreen.initTreeLabel(treeComparator.getTreeName());
             //add replacement
             String addReplacement = treeComparator.getAddReplacement();
             treeModificationScreen.getAddReplacementText().setText(addReplacement);

@@ -20,9 +20,11 @@ public class TreeModificationScreen extends JFrame {
     private JTextArea addReplacementText;
     private JTextArea removeReplacementText;
     private JTextField comparedPerson;
+    private JLabel treeLabel;
     private static TreeModificationScreen instance;
     public TreeComparator treeComparator;
     final static Logger logger = LogManager.getLogger(TreeModificationScreen.class);
+    private final String GESTION_DES_DIFFERENCES = "Gestion des différences entre l'arbre %ARBRE% et le fichier Gedcom";
 
 
     public TreeModificationScreen() {
@@ -35,6 +37,11 @@ public class TreeModificationScreen extends JFrame {
         setLocationRelativeTo(null);
         setContentPane(panel1);
         setVisible(true);
+    }
+
+    public void initTreeLabel(String tree) {
+        treeLabel.setText(GESTION_DES_DIFFERENCES.replace("%ARBRE%", tree));
+        super.update(this.getGraphics());
     }
 
     public static TreeModificationScreen getInstance() {
@@ -81,7 +88,7 @@ public class TreeModificationScreen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if (TreeComparatorManager.getInstance().compareTreeOnce(treeComparator.url,true)) {
+                    if (TreeComparatorManager.getInstance().compareTreeOnce(treeComparator.url, true)) {
                         JOptionPane.showMessageDialog(panel1, "Comparaison arbre " + treeComparator.getTreeName() + " OK",
                                 "Erreur",
                                 JOptionPane.INFORMATION_MESSAGE);
