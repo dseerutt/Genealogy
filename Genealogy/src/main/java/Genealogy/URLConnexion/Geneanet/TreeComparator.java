@@ -50,6 +50,7 @@ public class TreeComparator {
     public String url;
     private String addReplacement;
     private String removeReplacement;
+    private String stats;
 
     public void initTreeComparator(GeneanetPerson geneanetPerson, Person gedcomPerson, HashMap<String, GeneanetPerson> peopleUrl, String treeName) {
         errorComparison = false;
@@ -64,6 +65,10 @@ public class TreeComparator {
 
     public TreeComparator() {
 
+    }
+
+    public String getStats() {
+        return stats;
     }
 
     public String getPeopleFullNameError() {
@@ -1129,6 +1134,7 @@ public class TreeComparator {
         if (comparison != null && StringUtils.isNotEmpty(comparison)) {
             printDifferences(true, true);
             String difference = geneanetPersonStringHashMap.size() + "/" + getDifferences().size() + " differences of " + tree + " tree :";
+            stats = geneanetPersonStringHashMap.size() + "/" + getDifferences().size();
             logger.info(difference);
             result += difference + System.lineSeparator();
             logger.error(comparison + System.lineSeparator() + peopleUrlError);

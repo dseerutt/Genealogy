@@ -24,7 +24,7 @@ public class TreeModificationScreen extends JFrame {
     private static TreeModificationScreen instance;
     public TreeComparator treeComparator;
     final static Logger logger = LogManager.getLogger(TreeModificationScreen.class);
-    private final String GESTION_DES_DIFFERENCES = "Gestion des différences entre l'arbre %ARBRE% et le fichier Gedcom";
+    private final String GESTION_DES_DIFFERENCES = "Gestion des différences entre l'arbre %ARBRE% et le fichier Gedcom - %STATS%";
 
 
     public TreeModificationScreen() {
@@ -39,8 +39,8 @@ public class TreeModificationScreen extends JFrame {
         setVisible(true);
     }
 
-    public void initTreeLabel(String tree) {
-        treeLabel.setText(GESTION_DES_DIFFERENCES.replace("%ARBRE%", tree));
+    public void initTreeLabel(String tree, String stats) {
+        treeLabel.setText(GESTION_DES_DIFFERENCES.replace("%ARBRE%", tree).replace("%STATS%", stats));
         super.update(this.getGraphics());
     }
 
