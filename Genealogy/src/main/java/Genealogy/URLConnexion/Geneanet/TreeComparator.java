@@ -888,6 +888,9 @@ public class TreeComparator {
                             txt += tmpLine[i];
                         }
                     }
+                    if (line.endsWith(";")) {
+                        txt += ";";
+                    }
                     result.put(person, txt);
                 }
             }
