@@ -173,9 +173,9 @@ public class TreeComparator {
             tmpDifferences = differencesForDisplay;
             for (Map.Entry<GeneanetPerson, String> entry : tmpDifferences.entrySet()) {
                 if (log) {
-                    logger.info("\"" + entry.getKey().getUrl() + "\";" + entry.getKey().getFullName() + ";" + entry.getValue());
+                    logger.info("\"" + entry.getKey().getUrl() + "\";" + entry.getValue());
                 } else {
-                    result += System.lineSeparator() + entry.getKey().getUrl() + ";" + entry.getKey().getFullName() + ";" + entry.getValue();
+                    result += System.lineSeparator() + entry.getKey().getUrl() + ";" + entry.getValue();
                 }
             }
         }
