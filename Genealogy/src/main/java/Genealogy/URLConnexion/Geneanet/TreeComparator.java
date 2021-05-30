@@ -697,7 +697,7 @@ public class TreeComparator {
                     logger.warn("Could not find person " + entry.getKey().getUrl());
                     comparisonResultReplacement = StringUtils.EMPTY;
                     comparisonResultDisplay = "Deletion of " + valueTxt + " ?";
-                    comparisonResultToReplace = printedUrl + ";" + entry.getKey().getImage() + ";" + valueTxt;
+                    comparisonResultToReplace = printedUrl + ";" + valueTxt;
                     return;
                 }
             }
