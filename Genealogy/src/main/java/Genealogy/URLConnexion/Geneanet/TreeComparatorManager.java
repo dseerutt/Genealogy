@@ -118,7 +118,11 @@ public class TreeComparatorManager implements Runnable {
                 treeModificationScreen.getRemoveReplacementText().setOpaque(false);
                 treeModificationScreen.getRemoveReplacementText().setEditable(false);
             }
-            treeModificationScreen.getComparedPerson().setText("Comparaison sur " + treeComparator.getPeopleFullNameError() + " :");
+            String textPerson = treeComparator.getPeopleFullNameError();
+            if (StringUtils.isEmpty(textPerson)) {
+                textPerson = "personne supprimée";
+            }
+            treeModificationScreen.getComparedPerson().setText("Comparaison sur " + textPerson + " :");
             treeModificationScreen.treeComparator = treeComparator;
             treeModificationScreen.setVisible(true);
             return false;
