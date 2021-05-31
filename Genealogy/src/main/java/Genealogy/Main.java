@@ -47,7 +47,7 @@ public class Main {
      */
     public static void initQuickMainScreen() throws Exception {
         MyGedcomReader myGedcomReader = MyGedcomReader.getInstance();
-        String path = "src\\main\\resources\\famille1.ged";
+        String path = "C:\\Users\\Dan\\Desktop\\famille1.ged";
         Genealogy.genealogy = myGedcomReader.read(path);
         Genealogy.genealogy.parseContents();
         Genealogy.genealogy.sortPersons();
