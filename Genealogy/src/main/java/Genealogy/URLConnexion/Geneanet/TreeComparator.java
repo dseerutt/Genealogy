@@ -1016,7 +1016,10 @@ public class TreeComparator {
 
     public void analyseTree() {
         String[] replaceSplit = comparisonResultToReplace.split(";");
-        String resultat = replaceSplit[1];
+        if (comparisonResultToReplace.endsWith(";")) {
+            int lastIndex = replaceSplit.length - 1;
+            replaceSplit[lastIndex] += ";";
+        }
         List<String> listReplace = Arrays.asList(replaceSplit);
         List<String> listReplacement = Arrays.asList(comparisonResultReplacement.split(";"));
         List<String> replaceOnlyList = new ArrayList<>(listReplace);
