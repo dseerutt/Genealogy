@@ -32,8 +32,7 @@ https://gw.geneanet.org/lisetoxe?lang=fr&p=elisabeth&n=vilaine;Elisabeth VILAINE
 https://gw.geneanet.org/lisetoxe?lang=fr&p=francoise&n=bergeron;Françoise BERGERON;DeathDate=1731
 https://gw.geneanet.org/lisetoxe?lang=fr&p=edme&n=derouet+ou+deroy;Edmé DEROUET OU DEROY;familyName=DEROUET OU DEROY
 https://gw.geneanet.org/lisetoxe?lang=fr&p=marie&n=courillon;Marie COURILLON;DeathDate=23/08/1741
-https://gw.geneanet.org/lisetoxe?lang=fr&p=pierre&n=meunier;Pierre MEUNIER;familyName=MEUNIER;Marriage=Pierre MEUNIER;null;CHÂTEAU-RENARD
-https://gw.geneanet.org/lisetoxe?lang=fr&p=louise&n=bigot;Louise BIGOT;Marriage=Louise BIGOT;null;CHÂTEAU-RENARD
+https://gw.geneanet.org/lisetoxe?lang=fr&p=pierre&n=meunier;Pierre MEUNIER;familyName=MEUNIER
 https://gw.geneanet.org/lisetoxe?lang=fr&p=esme&n=derouet+ou+deroy;Esmé DEROUET OU DEROY;familyName=DEROUET OU DEROY;DeathPlace=CHÂTEAU-RENARD
 https://gw.geneanet.org/lisetoxe?lang=fr&p=jean&n=renard;Jean RENARD;Marriage=Jean RENARD;11/02/1716;CHÂTEAU-RENARD
 https://gw.geneanet.org/lisetoxe?lang=fr&p=etienne&n=bergeron;Etienne BERGERON;Marriage=Etienne BERGERON;07/07/1693;TRIGUÈRES
@@ -65,8 +64,8 @@ https://gw.geneanet.org/lisetoxe?lang=fr&p=marie+madeleine&n=lajoye;Marie Madele
 https://gw.geneanet.org/lisetoxe?lang=fr&p=laurent&n=rigault;Laurent RIGAULT;BirthPlace=VILLEFRANCHE;DeathDate=26/08/1765;DeathPlace=VILLEFRANCHE
 https://gw.geneanet.org/lisetoxe?lang=fr&p=louis+paul&n=vincent;Louis Paul VINCENT;BirthDate=15/08/1754
 https://gw.geneanet.org/lisetoxe?lang=fr&p=anne&n=collet;Anne COLLET;DeathPlace=La CHAPELLE sur AVEYRON;Missing Sibling : https://gw.geneanet.org/lisetoxe?lang=fr&p=madeleine&n=collet
-https://gw.geneanet.org/lisetoxe?lang=fr&p=jean&n=collet;Jean COLLET;DeathDate=29/11/1779;Missing Half Sibling : https://gw.geneanet.org/lisetoxe?lang=fr&p=pierre+2&n=collet;Marriage=Jean COLLET;null;La CHAPELLE sur AVEYRON
-https://gw.geneanet.org/lisetoxe?lang=fr&p=anne&n=meunier;Anne MEUNIER;Marriage=Anne MEUNIER;null;La CHAPELLE sur AVEYRON;DeathDate=1776
+https://gw.geneanet.org/lisetoxe?lang=fr&p=jean&n=collet;Jean COLLET;DeathDate=29/11/1779;Missing Half Sibling : https://gw.geneanet.org/lisetoxe?lang=fr&p=pierre+2&n=collet
+https://gw.geneanet.org/lisetoxe?lang=fr&p=anne&n=meunier;Anne MEUNIER;DeathDate=1776
 https://gw.geneanet.org/lisetoxe?lang=fr&p=pierre&n=collet;Pierre COLLET;DeathDate=15/10/1759
 https://gw.geneanet.org/lisetoxe?lang=fr&p=marie&n=petit&oc=3;Marie PETIT;DeathDate=27/12/1710
 https://gw.geneanet.org/lisetoxe?lang=fr&p=francoise&n=moniault;Françoise MONIAULT;familyName=MONIAULT
@@ -121,17 +120,16 @@ https://gw.geneanet.org/lisetoxe?lang=fr&p=x&n=x&oc=3;X X;firstName=X;familyName
 https://gw.geneanet.org/lisetoxe?lang=fr&p=edme&n=larrivee;Edmé LARRIVEE;familyName=LARRIVEE
 https://gw.geneanet.org/lisetoxe?lang=fr&p=jean&n=roy&oc=2;Jean ROY;BirthDate=15/10/1734
 https://gw.geneanet.org/lisetoxe?lang=fr&p=francoise&n=roy&oc=1;Francoise ROY;BirthDate=27/09/1740
-https://gw.geneanet.org/lisetoxe?lang=fr&p=jean+baptiste+sieur+de+la+prevote&n=desilliers;Jean Baptiste Sieur de la Prêvoté DESILLIERS;firstName=Jean Baptiste Sieur de la Prêvoté;BirthDate=25/07/1717
+https://gw.geneanet.org/lisetoxe?lang=fr&p=jean+baptiste+sieur+de+la+prevote&n=desilliers;Jean Baptiste Sieur De La Prêvoté DESILLIERS;firstName=Jean Baptiste Sieur de la Prêvoté;BirthDate=25/07/1717
 https://gw.geneanet.org/lisetoxe?lang=fr&p=francoise&n=blangis;Françoise BLANGIS;Missing Sibling : https://gw.geneanet.org/lisetoxe?lang=fr&p=edmee&n=blangis
 https://gw.geneanet.org/lisetoxe?lang=fr&p=marie+marguerite+dame&n=lefebvre;Marie Marguerite Dame LEFEBVRE;Marriage=Marie Marguerite Dame LEFEBVRE;28/07/1746;CHAMPLAY;firstName=Marie Marguerite Dame;DeathDate=08/10/1787
-https://gw.geneanet.org/lisetoxe?lang=fr&p=jean+seigneur+du+fay+chauderon+et+de+la+prevoste&n=de+silliers;Jean Seigneur du Fay Chauderon Et de la Prévosté DE SILLIERS;firstName=Jean Seigneur du Fay Chauderon Et de la Prévosté;DeathDate=17/02/1735;Marriage=Jean Seigneur du Fay Chauderon Et de la Prévosté DE SILLIERS;09/07/1715;BUSSY-en-OTHE
-https://gw.geneanet.org/lisetoxe?lang=fr&p=jacques+ecuyer+seigneur+du+fay+chauderon&n=de+silliers;Jacques Ecuyer Seigneur du Fay Chauderon DE SILLIERS;firstName=Jacques Ecuyer Seigneur du Fay Chauderon;DeathPlace=SENS;Missing Half Sibling : https://gw.geneanet.org/lisetoxe?lang=fr&p=charles&n=de+silliers;Marriage=Jacques Ecuyer Seigneur du Fay Chauderon DE SILLIERS;1672;null;Marriage=Jacques Ecuyer Seigneur du Fay Chauderon DE SILLIERS;09/02/1672;SENS
-https://gw.geneanet.org/lisetoxe?lang=fr&p=marguerite&n=charpentier;Marguerite CHARPENTIER;Marriage=Marguerite CHARPENTIER;1672;null
+https://gw.geneanet.org/lisetoxe?lang=fr&p=jean+seigneur+du+fay+chauderon+et+de+la+prevoste&n=de+silliers;Jean Seigneur Du Fay Chauderon Et De La Prévosté DE SILLIERS;firstName=Jean Seigneur du Fay Chauderon Et de la Prévosté;DeathDate=17/02/1735;Marriage=Jean Seigneur Du Fay Chauderon Et De La Prévosté DE SILLIERS;09/07/1715;BUSSY-en-OTHE
+https://gw.geneanet.org/lisetoxe?lang=fr&p=jacques+ecuyer+seigneur+du+fay+chauderon&n=de+silliers;Jacques Ecuyer Seigneur Du Fay Chauderon DE SILLIERS;firstName=Jacques Ecuyer Seigneur du Fay Chauderon;DeathPlace=SENS;Missing Half Sibling : https://gw.geneanet.org/lisetoxe?lang=fr&p=charles&n=de+silliers;Marriage=Jacques Ecuyer Seigneur Du Fay Chauderon DE SILLIERS;09/02/1672;SENS
 https://gw.geneanet.org/lisetoxe?lang=fr&p=madeleine&n=de+pollangis;Madeleine DE POLLANGIS;firstName=Madeleine;familyName=DE POLLANGIS;DeathPlace=SENS
-https://gw.geneanet.org/lisetoxe?lang=fr&p=francoise&n=de+chicault;Françoise DE CHICAULT;Marriage=Françoise DE CHICAULT;1644;null;familyName=DE CHICAULT
+https://gw.geneanet.org/lisetoxe?lang=fr&p=francoise&n=de+chicault;Françoise DE CHICAULT;familyName=DE CHICAULT
 https://gw.geneanet.org/lisetoxe?lang=fr&p=x&n=xx&oc=2;X XX;firstName=X;familyName=XX
 https://gw.geneanet.org/lisetoxe?lang=fr&p=bon&n=de+pollangis;Bon DE POLLANGIS;familyName=DE POLLANGIS
-https://gw.geneanet.org/lisetoxe?lang=fr&p=madeleine&n=moreau&oc=1;Madeleine MOREAU;Marriage=Madeleine MOREAU;1657;null;Missing Mother
+https://gw.geneanet.org/lisetoxe?lang=fr&p=madeleine&n=moreau&oc=1;Madeleine MOREAU;Missing Mother
 https://gw.geneanet.org/lisetoxe?lang=fr&p=bon&n=de+pollangis+seigneur+d+etigny+et+des+epenards;Bon DE POLLANGIS SEIGNEUR D'ETIGNY ET DES EPENARDS;Missing Father
 https://gw.geneanet.org/lisetoxe?lang=fr&p=jeanne&n=balthazard;Jeanne BALTHAZARD;Missing Mother
 https://gw.geneanet.org/lisetoxe?lang=fr&p=andre&n=archat;André ARCHAT;Marriage=André ARCHAT;02/08/1701;COULOURS
@@ -149,8 +147,8 @@ https://gw.geneanet.org/lisetoxe?lang=fr&p=pierre&n=moreau;Pierre MOREAU;DeathPl
 https://gw.geneanet.org/lisetoxe?lang=fr&p=marguerite+jeanne&n=deforceville;Marguerite Jeanne DEFORCEVILLE;Marriage=Marguerite Jeanne DEFORCEVILLE;15/04/1717;SAINT-JULIEN-du-SAULT;firstName=Marguerite Jeanne
 https://gw.geneanet.org/lisetoxe?lang=fr&p=olivier+maitre&n=lefebvre;Olivier Maitre LEFEBVRE;firstName=Olivier Maitre
 https://gw.geneanet.org/lisetoxe?lang=fr&p=catherine&n=collet;Catherine COLLET;BirthPlace=SAINT-JULIEN-du-SAULT
-https://gw.geneanet.org/lisetoxe?lang=fr&p=jacques&n=collet&oc=1;Jacques COLLET;BirthDate=02/11/1636;Marriage=Jacques COLLET;null;SAINT-JULIEN-du-SAULT
-https://gw.geneanet.org/lisetoxe?lang=fr&p=francoise&n=gallois;Françoise GALLOIS;Marriage=Françoise GALLOIS;null;SAINT-JULIEN-du-SAULT;BirthDate=30/10/1639;BirthPlace=SAINT-JULIEN-du-SAULT;Missing Sibling : https://gw.geneanet.org/lisetoxe?lang=fr&p=julien&n=gallois;Missing Sibling : https://gw.geneanet.org/lisetoxe?lang=fr&p=georges&n=gallois;Missing Sibling : https://gw.geneanet.org/lisetoxe?lang=fr&p=louis&n=gallois
+https://gw.geneanet.org/lisetoxe?lang=fr&p=jacques&n=collet&oc=1;Jacques COLLET;BirthDate=02/11/1636
+https://gw.geneanet.org/lisetoxe?lang=fr&p=francoise&n=gallois;Françoise GALLOIS;BirthDate=30/10/1639;BirthPlace=SAINT-JULIEN-du-SAULT;Missing Sibling : https://gw.geneanet.org/lisetoxe?lang=fr&p=julien&n=gallois;Missing Sibling : https://gw.geneanet.org/lisetoxe?lang=fr&p=georges&n=gallois;Missing Sibling : https://gw.geneanet.org/lisetoxe?lang=fr&p=louis&n=gallois
 https://gw.geneanet.org/lisetoxe?lang=fr&p=marguerite&n=collet+demoiselle;Marguerite COLLET DEMOISELLE;familyName=COLLET DEMOISELLE
 https://gw.geneanet.org/lisetoxe?lang=fr&p=charlotte&n=naudot;Charlotte NAUDOT;DeathPlace=SAINT-JULIEN-du-SAULT
 https://gw.geneanet.org/lisetoxe?lang=fr&p=jean&n=gallois;Jean GALLOIS;Missing Father
@@ -159,7 +157,6 @@ https://gw.geneanet.org/lisetoxe?lang=fr&p=pierre+jean+marie&n=desilliers;Pierre
 https://gw.geneanet.org/lisetoxe?lang=fr&p=louis+etienne&n=roy;Louis Etienne ROY;BirthDate=20/04/1768;DeathDate=17/07/1768
 https://gw.geneanet.org/lisetoxe?lang=fr&p=marie+france&n=vallee;Marie France VALLEE;Marriage=Marie France VALLEE;18/04/1809;BUSSY-en-OTHE
 https://gw.geneanet.org/lisetoxe?lang=fr&p=marie+therese+victoire&n=roy;Marie Therese Victoire ROY;BirthDate=25/12/1788;DeathDate=03/09/1876
-https://gw.geneanet.org/lisetoxe?lang=fr&p=felix+jean+baptiste&n=pescheux;Felix Jean Baptiste PESCHEUX;Marriage=Felix Jean Baptiste PESCHEUX;27/11/1821;null
 https://gw.geneanet.org/lisetoxe?lang=fr&p=reine+madelaine&n=lavenue;Reine Madelaine LAVENUE;Marriage=Reine Madelaine LAVENUE;11/07/1758;LAROCHE-ST-CYDROINE;firstName=Reine Madelaine;BirthDate=1731;DeathDate=1763
 https://gw.geneanet.org/lisetoxe?lang=fr&p=edme&n=couturat&oc=1;Edmé COUTURAT;BirthDate=1694
 https://gw.geneanet.org/lisetoxe?lang=fr&p=prudence&n=chanvin;Prudence CHANVIN;DeathPlace=CRÉCY
@@ -171,8 +168,8 @@ https://gw.geneanet.org/lisetoxe?lang=fr&p=jean+baptiste&n=pouy;Jean Baptiste PO
 https://gw.geneanet.org/lisetoxe?lang=fr&p=sophie+adelaide&n=martignon;Sophie Adélaïde MARTIGNON;Missing Sibling : https://gw.geneanet.org/lisetoxe?lang=fr&p=angelique&n=martignon;Missing Sibling : https://gw.geneanet.org/lisetoxe?lang=fr&p=augustine+euphorasie&n=martignon;Missing Half Sibling : https://gw.geneanet.org/lisetoxe?lang=fr&p=louise&n=martignon
 https://gw.geneanet.org/lisetoxe?lang=fr&p=emilie+adelaide&n=martignon;Émilie Adélaïde MARTIGNON;BirthDate=1824
 https://gw.geneanet.org/lisetoxe?lang=fr&p=rose+cedulie&n=martignon;Rose Cedulie MARTIGNON;BirthDate=1827;DeathDate=1829
-https://gw.geneanet.org/lisetoxe?lang=fr&p=genevieve+adele&n=brabant;Geneviève Adèle BRABANT;Marriage=Geneviève Adèle BRABANT;20/02/1838;null;BirthDate=11/08/1819;BirthPlace=CHATILLON COLIGNY
-https://gw.geneanet.org/lisetoxe?lang=fr&p=eugene+anicet&n=martignon;Eugene Anicet MARTIGNON;DeathDate=1838;Marriage=Eugene Anicet MARTIGNON;20/02/1838;null
+https://gw.geneanet.org/lisetoxe?lang=fr&p=genevieve+adele&n=brabant;Geneviève Adèle BRABANT;BirthDate=11/08/1819;BirthPlace=CHATILLON COLIGNY
+https://gw.geneanet.org/lisetoxe?lang=fr&p=eugene+anicet&n=martignon;Eugene Anicet MARTIGNON;DeathDate=1838
 https://gw.geneanet.org/lisetoxe?lang=fr&p=sophie+leonie&n=thierry;Sophie Léonie THIERRY;BirthDate=1845
 https://gw.geneanet.org/lisetoxe?lang=fr&p=louise+josephine&n=thierry;Louise Josephine THIERRY;DeathDate=1909;Missing Sibling : https://gw.geneanet.org/lisetoxe?lang=fr&p=marie+josephine&n=thierry;Missing Sibling : https://gw.geneanet.org/lisetoxe?lang=fr&p=horthense+mathilde&n=thierry;Missing Sibling : https://gw.geneanet.org/lisetoxe?lang=fr&p=eugene&n=thierry
 https://gw.geneanet.org/lisetoxe?lang=fr&p=louis+desire+celestin&n=thierry;Louis Désiré Célestin THIERRY;BirthDate=1850
@@ -183,7 +180,6 @@ https://gw.geneanet.org/lisetoxe?lang=fr&p=theophile+auguste&n=thierry;Théophil
 https://gw.geneanet.org/lisetoxe?lang=fr&p=auguste+henri&n=thierry;Auguste Henri THIERRY;BirthDate=1864
 https://gw.geneanet.org/lisetoxe?lang=fr&p=adrien&n=thierry;Adrien THIERRY;BirthDate=1866;DeathDate=1875
 https://gw.geneanet.org/lisetoxe?lang=fr&p=edme+victor&n=berton;Edme Victor BERTON;DeathPlace=La CHAPELLE sur AVEYRON;Missing Half Sibling : https://gw.geneanet.org/lisetoxe?lang=fr&p=marguerie+victoire&n=berton
-https://gw.geneanet.org/lisetoxe?lang=fr&p=francoise&n=chenon;Françoise CHENON;Marriage=Françoise CHENON;null;AILLANT sur MILLERON
 https://gw.geneanet.org/lisetoxe?lang=fr&p=edme&n=berton;Edme BERTON;familyName=BERTON;DeathDate=25/11/1838
 https://gw.geneanet.org/lisetoxe?lang=fr&p=marie+jeanne&n=gallet;Marie Jeanne GALLET;familyName=GALLET;DeathDate=14/01/1782;DeathPlace=OUZOUER-sur-TRÉZÉE
 https://gw.geneanet.org/lisetoxe?lang=fr&p=marguerite&n=despons;Marguerite DESPONS;familyName=DESPONS
@@ -207,18 +203,15 @@ https://gw.geneanet.org/lisetoxe?lang=fr&p=marie&n=meneau;Marie MENEAU;DeathPlac
 https://gw.geneanet.org/lisetoxe?lang=fr&p=germine&n=laurent;Germine LAURENT;firstName=Germine;DeathPlace=SAINT-FIRMIN-sur-LOIRE
 https://gw.geneanet.org/lisetoxe?lang=fr&p=francois&n=ouvret;François OUVRET;familyName=OUVRET;DeathDate=11/09/1775
 https://gw.geneanet.org/lisetoxe?lang=fr&p=jean&n=ouvret;Jean OUVRET;familyName=OUVRET
-https://gw.geneanet.org/lisetoxe?lang=fr&p=marie&n=herisse;Marie HERISSE;Marriage=Marie HERISSE;24/06/1657;null
-https://gw.geneanet.org/lisetoxe?lang=fr&p=pierre&n=boucheron;Pierre BOUCHERON;DeathDate=1694;Marriage=Pierre BOUCHERON;24/06/1657;null
+https://gw.geneanet.org/lisetoxe?lang=fr&p=pierre&n=boucheron;Pierre BOUCHERON;DeathDate=1694
 https://gw.geneanet.org/lisetoxe?lang=fr&p=etienne&n=herisse;Etienne HERISSE;DeathDate=1657
 https://gw.geneanet.org/lisetoxe?lang=fr&p=jeanine&n=berruet;Jeanine BERRUET;firstName=Jeanine
 https://gw.geneanet.org/lisetoxe?lang=fr&p=francoise&n=boucheron;Françoise BOUCHERON;DeathDate=1744;Marriage=Françoise BOUCHERON;01/02/1707;GIEN
 https://gw.geneanet.org/lisetoxe?lang=fr&p=pantaleon&n=tixier;Pantaleon TIXIER;Marriage=Pantaleon TIXIER;01/02/1707;GIEN
 https://gw.geneanet.org/lisetoxe?lang=fr&p=marie&n=boucheron;Marie BOUCHERON;Missing Sibling : https://gw.geneanet.org/lisetoxe?lang=fr&p=jeanne&n=boucheron
-https://gw.geneanet.org/lisetoxe?lang=fr&p=jeanne&n=parendeau;Jeanne PARENDEAU;Marriage=Jeanne PARENDEAU;27/11/1679;null
 https://gw.geneanet.org/lisetoxe?lang=fr&p=marguerite&n=brule;Marguerite BRULE;DeathDate=11/09/1775
 https://gw.geneanet.org/lisetoxe?lang=fr&p=marguerite+elisabeth&n=berton;Marguerite Elisabeth BERTON;BirthDate=29/01/1784
 https://gw.geneanet.org/lisetoxe?lang=fr&p=francois&n=berton;François BERTON;DeathPlace=CHATILLON COLIGNY
-https://gw.geneanet.org/lisetoxe?lang=fr&p=etienne&n=berton;Etienne BERTON;Marriage=Etienne BERTON;null;AILLANT sur MILLERON
 https://gw.geneanet.org/lisetoxe?lang=fr&p=marguerie&n=chevereau;Marguerie CHEVEREAU;Marriage=Marguerie CHEVEREAU;26/11/1782;MARCHAIS BETON
 https://gw.geneanet.org/lisetoxe?lang=fr&p=pierre&n=courty;Pierre COURTY;DeathDate=06/12/1782
 https://gw.geneanet.org/lisetoxe?lang=fr&p=antoine&n=courty;Antoine COURTY;DeathDate=07/04/1738;DeathPlace=ISSOUDUN-LÉTRIEIX
@@ -286,9 +279,8 @@ https://gw.geneanet.org/lisetoxe?lang=fr&p=claude&n=jusseaume;Claude JUSSEAUME;f
 https://gw.geneanet.org/lisetoxe?lang=fr&p=charles&n=jusseaume;Charles JUSSEAUME;familyName=JUSSEAUME;DeathPlace=CUDOT
 https://gw.geneanet.org/lisetoxe?lang=fr&p=claude&n=jusseaume&oc=1;Claude JUSSEAUME;familyName=JUSSEAUME
 https://gw.geneanet.org/lisetoxe?lang=fr&p=paul&n=jusseaume;Paul JUSSEAUME;familyName=JUSSEAUME;DeathPlace=CUDOT
-https://gw.geneanet.org/lisetoxe?lang=fr&p=jacques+sieur+du+fay&n=de+silliers;Jacques Sieur du Fay DE SILLIERS;firstName=Jacques Sieur du Fay;DeathPlace=Les SIÈGES;Marriage=Jacques Sieur du Fay DE SILLIERS;1644;null
-https://gw.geneanet.org/lisetoxe?lang=fr&p=jean&n=ouvret&oc=1;Jean OUVRET;familyName=OUVRET;Marriage=Jean OUVRET;04/02/1727;null
-https://gw.geneanet.org/lisetoxe?lang=fr&p=marie&n=vallee;Marie VALLEE;Marriage=Marie VALLEE;04/02/1727;null
+https://gw.geneanet.org/lisetoxe?lang=fr&p=jacques+sieur+du+fay&n=de+silliers;Jacques Sieur Du Fay DE SILLIERS;firstName=Jacques Sieur du Fay;DeathPlace=Les SIÈGES
+https://gw.geneanet.org/lisetoxe?lang=fr&p=jean&n=ouvret&oc=1;Jean OUVRET;familyName=OUVRET
 https://gw.geneanet.org/lisetoxe?lang=fr&p=jean+l+aine&n=ouvret;Jean L Aine OUVRET;firstName=Jean L Aine;familyName=OUVRET;DeathDate=1766;DeathPlace=GIEN 45 ST LAURENT
 https://gw.geneanet.org/lisetoxe?lang=fr&p=francois+etienne&n=ouvret;François Etienne OUVRET;familyName=OUVRET;BirthDate=06/06/1736;DeathPlace=CHÂTILLON-sur-LOIRE
 https://gw.geneanet.org/lisetoxe?lang=fr&p=pierre&n=courty&oc=1;Pierre COURTY;DeathPlace=SOMMECAISE
