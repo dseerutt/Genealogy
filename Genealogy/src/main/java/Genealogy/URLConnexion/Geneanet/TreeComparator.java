@@ -1030,7 +1030,7 @@ public class TreeComparator {
         removeAllFirst(replaceOnlyList, listReplacement);
         List<String> removeOnlyList = new ArrayList<>(listReplacement);
         removeAllFirst(removeOnlyList, listReplace);
-        if (!replaceOnlyList.isEmpty()) {
+        if (!replaceOnlyList.isEmpty() && replaceOnlyList.size() > 1 && !StringUtils.equals(replaceOnlyList.get(0), "null")) {
             removeReplacement = StringUtils.EMPTY + replaceOnlyList;
             logger.info(removeReplacement + " <- will be removed");
         }
