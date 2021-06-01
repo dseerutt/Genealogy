@@ -1014,6 +1014,10 @@ public class TreeComparator {
         return SPECIAL_REGEX_CHARS.matcher(str).replaceAll("\\\\$0");
     }
 
+    public void removeAllFirst(List<String> inputList, List<String> removeList) {
+        removeList.stream().forEach(element -> inputList.remove(element));
+    }
+
     public void analyseTree() {
         String[] replaceSplit = comparisonResultToReplace.split(";");
         if (comparisonResultToReplace.endsWith(";")) {
@@ -1023,10 +1027,10 @@ public class TreeComparator {
         List<String> listReplace = Arrays.asList(replaceSplit);
         List<String> listReplacement = Arrays.asList(comparisonResultReplacement.split(";"));
         List<String> replaceOnlyList = new ArrayList<>(listReplace);
-        replaceOnlyList.removeAll(listReplacement);
+        removeAllFirst(replaceOnlyList, listReplacement);
         List<String> removeOnlyList = new ArrayList<>(listReplacement);
-        removeOnlyList.removeAll(listReplace);
-        if (!replaceOnlyList.isEmpty() && !StringUtils.equals(replaceOnlyList.get(0), "null")) {
+        removeAllFirst(removeOnlyList, listReplace);
+        if (!replaceOnlyList.isEmpty()) {
             removeReplacement = StringUtils.EMPTY + replaceOnlyList;
             logger.info(removeReplacement + " <- will be removed");
         }
