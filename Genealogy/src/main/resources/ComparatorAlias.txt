@@ -31,6 +31,7 @@ margueritte;marguerite;name
 magdelaine;madeleine;name
 magdelenne;madeleine;name
 magdalene;madeleine;name
+marcelline;marceline;name
 caesar;cesar;name
 thoumine;toumine;name
 tollemer;tolmer;name
