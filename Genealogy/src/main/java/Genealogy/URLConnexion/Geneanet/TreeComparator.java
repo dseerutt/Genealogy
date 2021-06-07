@@ -692,9 +692,6 @@ public class TreeComparator {
         for (Map.Entry<GeneanetPerson, String> entry : differences2.entrySet()) {
             GeneanetPerson person = entry.getKey();
             printedUrl = person.getUrl();
-            if (printedUrl.contains("&p=x&n=x&oc=")) {
-                printedUrl = "Person " + cptUnknownPeople++;
-            }
             String valueTxt = entry.getValue();
             if (!person.isSearched()) {
                 person = peopleUrl.get(person.getUrl());
