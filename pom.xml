@@ -74,9 +74,6 @@
                 <executions>
                     <execution>
                         <phase>package</phase>
-                        <goals>
-                            <goal>attached</goal>
-                        </goals>
                     </execution>
                 </executions>
                 <configuration>
@@ -93,14 +90,6 @@
                     <archive>
                         <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
                     </archive>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.0</version>
-                <configuration>
-                    <release>11</release>
                 </configuration>
             </plugin>
             <plugin>
